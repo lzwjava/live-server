@@ -9,6 +9,12 @@
 class LiveDao extends BaseDao
 {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->helper('string');
+    }
+
     private function genLiveKey()
     {
         return random_string('alnum', 8);
@@ -29,5 +35,10 @@ class LiveDao extends BaseDao
     function getLive($id)
     {
         return $this->getOneFromTable(TABLE_LIVE, KEY_ID, $id);
+    }
+
+    function getLivingLives()
+    {
+        return $this->getListFromTable(TABLE_LIVE, KEY_STATUS, LIVE_STATUS_ON);
     }
 }

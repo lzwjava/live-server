@@ -1,15 +1,15 @@
 package codereview
 
 import (
-	"fmt"
-	"encoding/json"
-	"io"
 	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"strings"
-	"net/http/cookiejar"
 )
 
 type Client struct {
@@ -22,59 +22,59 @@ type Client struct {
 func NewClient() *Client {
 	cookieJar, _ := cookiejar.New(nil)
 	return &Client{
-		HTTPClient: &http.Client{Jar:cookieJar},
-		cookieJar: cookieJar,
-		admin: false,
+		HTTPClient: &http.Client{Jar: cookieJar},
+		cookieJar:  cookieJar,
+		admin:      false,
 	}
 }
 
-func (c *Client) post(path string, params url.Values) (map[string]interface{}) {
+func (c *Client) post(path string, params url.Values) map[string]interface{} {
 	return c.request("POST", path, params)
 }
 
-func (c *Client) get(path string, params url.Values) (map[string]interface{}) {
+func (c *Client) get(path string, params url.Values) map[string]interface{} {
 	return c.request("GET", path, params)
 }
 
-func (c *Client) delete(path string) (map[string]interface{}) {
-	return c.request("DELETE", path, url.Values{});
+func (c *Client) delete(path string) map[string]interface{} {
+	return c.request("DELETE", path, url.Values{})
 }
 
-func (c *Client) patch(path string, params url.Values) (map[string]interface{}) {
-	return c.request("PATCH", path, params);
+func (c *Client) patch(path string, params url.Values) map[string]interface{} {
+	return c.request("PATCH", path, params)
 }
 
-func (c *Client) patchData(path string, params url.Values) (map[string]interface{}) {
+func (c *Client) patchData(path string, params url.Values) map[string]interface{} {
 	res := c.patch(path, params)
 	return c.resultFromRes(res).(map[string]interface{})
 }
 
-func (c *Client) patchArrayData(path string, params url.Values) ([]interface{}) {
+func (c *Client) patchArrayData(path string, params url.Values) []interface{} {
 	res := c.patch(path, params)
 	return c.resultFromRes(res).([]interface{})
 }
 
-func (c *Client) postData(path string, params url.Values) (map[string]interface{}) {
+func (c *Client) postData(path string, params url.Values) map[string]interface{} {
 	res := c.post(path, params)
 	return c.resultFromRes(res).(map[string]interface{})
 }
 
-func (c *Client) postArrayData(path string, params url.Values) ([]interface{}) {
+func (c *Client) postArrayData(path string, params url.Values) []interface{} {
 	res := c.post(path, params)
 	return c.resultFromRes(res).([]interface{})
 }
 
-func (c *Client) deleteData(path string) (map[string]interface{}) {
+func (c *Client) deleteData(path string) map[string]interface{} {
 	var res = c.delete(path)
 	return c.resultFromRes(res).(map[string]interface{})
 }
 
-func (c *Client) deleteArrayData(path string) ([]interface{}) {
+func (c *Client) deleteArrayData(path string) []interface{} {
 	var res = c.delete(path)
 	return c.resultFromRes(res).([]interface{})
 }
 
-func (c *Client) getData(path string, params url.Values) (map[string]interface{}) {
+func (c *Client) getData(path string, params url.Values) map[string]interface{} {
 	var res = c.get(path, params)
 	return c.resultFromRes(res).(map[string]interface{})
 }
@@ -84,46 +84,37 @@ func (c *Client) getListData(path string, params url.Values) ([]interface{}, int
 	return c.resultFromRes(res).([]interface{}), toInt(res["total"])
 }
 
-func (c *Client) getArrayData(path string, params url.Values) ([]interface{}) {
+func (c *Client) getArrayData(path string, params url.Values) []interface{} {
 	var res = c.get(path, params)
 	return c.resultFromRes(res).([]interface{})
 }
 
-func baseUrl(path string) (string) {
+func baseUrl(path string) string {
 	var urlStr string
 	urlStr = "http://localhost:3005/" + path
-	//
-	//	prod := os.Getenv("PROD")
-	//
-	//	if prod != "" {
-	//		urlStr = "http://reviewcode.cn/" + path
-	//	} else {
-	//
-	//	}
-
 	return urlStr
 }
 
-func (c *Client) request(method string, path string, params url.Values) (map[string]interface{}) {
+func (c *Client) request(method string, path string, params url.Values) map[string]interface{} {
 	urlStr := baseUrl(path)
 	paramStr := bytes.NewBufferString(params.Encode())
 
-	var req *http.Request;
-	var err error;
-	if (method == "GET") {
+	var req *http.Request
+	var err error
+	if method == "GET" {
 		req, err = http.NewRequest(method, fmt.Sprintf("%s?%s", urlStr, paramStr), nil)
-	} else if (method == "POST" || method == "PATCH") {
+	} else if method == "POST" || method == "PATCH" {
 		req, err = http.NewRequest(method, urlStr, paramStr)
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	} else {
-		req, err = http.NewRequest(method, urlStr, paramStr);
+		req, err = http.NewRequest(method, urlStr, paramStr)
 	}
 	checkErr(err)
 	if len(c.sessionToken) > 0 {
 		req.Header.Set("X-Session", c.sessionToken)
 	}
-	if (c.admin) {
-		req.SetBasicAuth("admin", "Pwx9uVJM");
+	if c.admin {
+		req.SetBasicAuth("admin", "Pwx9uVJM")
 	}
 
 	fmt.Println("curl -X", method, urlStr, params)
@@ -149,8 +140,8 @@ func writeHtml(body io.ReadCloser) string {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(body)
 	bodyStr := buf.String()
-	ioutil.WriteFile("error.html", []byte(bodyStr), 0644);
-	return bodyStr;
+	ioutil.WriteFile("error.html", []byte(bodyStr), 0644)
+	return bodyStr
 }
 
 func (c *Client) postWithStr(path string, body string) map[string]interface{} {
@@ -168,7 +159,7 @@ func (c *Client) postWithStr(path string, body string) map[string]interface{} {
 
 	var dat map[string]interface{}
 
-	jsonErr := json.Unmarshal([]byte(bodyStr), &dat);
+	jsonErr := json.Unmarshal([]byte(bodyStr), &dat)
 	checkErr(jsonErr)
 
 	fmt.Println("response:", dat)
@@ -177,12 +168,12 @@ func (c *Client) postWithStr(path string, body string) map[string]interface{} {
 	return dat
 }
 
-func (c *Client)resultFromRes(res map[string]interface{}) interface{} {
-	if (res["status"] != "success") {
+func (c *Client) resultFromRes(res map[string]interface{}) interface{} {
+	if res["status"] != "success" {
 		panic("code is not 0")
 	}
 	var data interface{}
-	if (res["result"] != nil) {
+	if res["result"] != nil {
 		data = res["result"].(interface{})
 	}
 
@@ -224,9 +215,9 @@ func (c *Client) do(req *http.Request) (io.ReadCloser, error) {
 		res.Body.Close()
 	}
 
-	if (strings.Contains(kind, "text/html")) {
+	if strings.Contains(kind, "text/html") {
 
-		fmt.Println("PHP Error, Please see error.html");
+		fmt.Println("PHP Error, Please see error.html")
 		return res.Body, nil
 	}
 
@@ -239,7 +230,7 @@ func (c *Client) do(req *http.Request) (io.ReadCloser, error) {
 	return nil, e
 }
 
-func readString(reader io.ReadCloser) (string) {
+func readString(reader io.ReadCloser) string {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(reader)
 	s := buf.String()

@@ -1,13 +1,13 @@
 package codereview
+
 import (
-	"testing"
-	"os"
-	"fmt"
-	"crypto/md5"
 	"database/sql"
-	"strconv"
+	"fmt"
+	"os"
 	_ "reflect"
-	"net/url"
+	"strconv"
+	"testing"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -35,7 +35,7 @@ func checkErr(err error) {
 }
 
 func deleteTable(table string, noCheck bool) {
-	deleteRecord(table, "1", "1", noCheck);
+	deleteRecord(table, "1", "1", noCheck)
 }
 
 func runSql(sentence string, noCheck bool) {
@@ -55,7 +55,6 @@ func runSql(sentence string, noCheck bool) {
 		res, err = stmt.Exec()
 		checkErr(err)
 	}
-
 
 	stmt, err = db.Prepare(sentence)
 	checkErr(err)
@@ -84,7 +83,7 @@ func deleteRecord(table string, column string, id string, noCheck bool) {
 	runSql(sqlStr, noCheck)
 }
 
-func toInt(obj interface{}) (int) {
+func toInt(obj interface{}) int {
 	if _, isFloat := obj.(float64); isFloat {
 		return int(obj.(float64))
 	} else {

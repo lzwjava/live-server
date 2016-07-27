@@ -27,8 +27,18 @@ class Lives extends BaseController
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
         } else {
-            $live = $this->liveDao->getLive($id);
-            $this->succeed($live);
+            $this->succeed(array(KEY_ID => $id));
         }
+    }
+
+    function list_get()
+    {
+        $lives = $this->liveDao->getLivingLives();
+        $this->succeed($lives);
+    }
+
+    function alive_get()
+    {
+
     }
 }
