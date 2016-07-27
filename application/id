@@ -1,0 +1,16 @@
+config/mimes.php:110:	'pem'   =>	array('application/x-x509-user-cert', 'application/x-pem-file', 'application/octet-stream'),
+config/mimes.php:118:	'crt'   =>	array('application/x-x509-ca-cert', 'application/x-x509-user-cert', 'application/pkix-cert'),
+controllers/User.php:124:        setCookieForever(KEY_COOKIE_TOKEN, $user->sessionToken);
+controllers/User.php:163:            if ($username != $user->username) {
+libraries/REST_Controller.php:1765:            log_message('error', 'LDAP Auth: Failure, user-dn could not be fetched');
+models/UserDao.php:131:            $user->sessionToken = $token;
+models/UserDao.php:138:        $created = strtotime($user->sessionTokenCreated);
+models/UserDao.php:142:        if ($user->sessionToken == null || $user->sessionTokenCreated == null
+models/UserDao.php:154:        $this->db->where(KEY_USER_ID, $user->userId);
+models/UserDao.php:157:            return $this->findUser(KEY_USER_ID, $user->userId);
+models/UserDao.php:164:            unset($user->sessionTokenCreated);
+models/UserDao.php:165:            unset($user->password);
+models/UserDao.php:172:            unset($user->sessionToken);
+models/UserDao.php:173:            unset($user->mobilePhoneNumber);
+models/UserDao.php:174:            unset($user->created);
+models/UserDao.php:175:            unset($user->type);
