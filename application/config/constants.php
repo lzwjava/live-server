@@ -88,102 +88,26 @@ define('REQ_OK', 'success');
 
 define('ERROR_USERNAME_TAKEN', 'username_token');
 define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
-define('ERROR_SMS_WRONG', 'sms_wrong');
 define('ERROR_MISS_PARAMETERS', 'missing_parameters');
 define('ERROR_AT_LEAST_ONE_UPDATE', 'at_least_one_update');
-define('ERROR_NOT_IN_SESSION', 'not_in_session');
-define('ERROR_USER_NOT_EXIST', 'user_not_exists');
 define('ERROR_OBJECT_NOT_EXIST', 'object_not_exists');
 define('ERROR_LOGIN_FAILED', 'login_failed');
 define('ERROR_UNKNOWN_TYPE', 'unknown_type');
 define('ERROR_NOT_ALLOW_DO_IT', 'not_allow_do_it');
 define('ERROR_PARAMETER_ILLEGAL', 'parameter_illegal');
-define('ERROR_INVALID_IP', 'invalid_ip');
-define('ERROR_ALREADY_DO_IT', 'already_do_it');
-define('ERROR_PASSWORD_FORMAT', 'password_format_wrong');
-define('ERROR_RUN_SQL_FAILED', 'run_sql_failed');
-define('ERROR_URL_NOT_WORKING', 'url_not_working');
-
-define('TYPE_REVIEWER', 'reviewer');
-define('TYPE_LEARNER', 'learner');
-
-define('KEY_COOKIE_TOKEN', 'SessionToken');
-define('COOKIE_VID', 'vid');
-define('KEY_SESSION_HEADER', 'X-Session');
+define('ERROR_SQL_WRONG', 'sql_wrong');
 
 define('KEY_SKIP', 'skip');
 define('KEY_LIMIT', 'limit');
 
-define('KEY_SORT', 'sort');
+// live
+define('TABLE_LIVE', 'live');
 
-// users table
-define('KEY_MOBILE_PHONE_NUMBER', 'mobilePhoneNumber');
-define('KEY_AVATAR_URL', 'avatarUrl');
-define('KEY_SESSION_TOKEN', 'sessionToken');
-define('KEY_SESSION_TOKEN_CREATED', 'sessionTokenCreated');
-define('KEY_PASSWORD', 'password');
-define('KEY_USERNAME', 'username');
-define('KEY_TYPE', 'type');
-define('KEY_VALID', 'valid');
+define('KEY_ID', 'id');
+define('KEY_SUBJECT', 'subject');
+define('KEY_KEY', 'key');
+define('KEY_STATUS', 'status');
+define('KEY_BEGIN_TS', 'begin_ts');
 
-define('KEY_SMS_CODE', 'smsCode');
-
-define('KEY_TAGS', 'tags');
-
-define('KEY_CREATED', 'created');
-define('KEY_UPDATED', 'updated');
-
-define('TABLE_USERS', 'users');
-
-define('KEY_USER_ID', 'userId');
-
-// sms
-define('SMS_TEMPLATE', 'template');
-define('SMS_REVIEWER', 'reviewer');
-define('SMS_LEARNER', 'learner');
-define('SMS_CODE_URL', 'codeUrl');
-define('SMS_REVIEW_URL', 'reviewUrl');
-
-// images
-define('TABLE_IMAGES', 'images');
-define('KEY_IMAGE_ID', 'imageId');
-define('KEY_DESCRIPTION', 'description');
-define('KEY_LINK', 'link');
-define('KEY_TOPIC', 'topic');
-define('KEY_AUTHOR', 'author');
-define('KEY_TITLE', 'title');
-define('KEY_WIDTH', 'width');
-define('KEY_HEIGHT', 'height');
-
-define('KEY_IMAGE_IDS', 'imageIds');
-
-// posts, post_images
-define('KEY_POST_ID', 'postId');
-define('TABLE_POSTS', 'posts');
-define('KEY_SCORE', 'score');
-define('KEY_COVER', 'cover');
-
-define('KEY_UP', 'up');
-define('KEY_DOWN', 'down');
-
-define('TABLE_POST_IMAGES', 'post_images');
-
-// post_votes
-define('TABLE_POST_VOTES', 'post_votes');
-define('KEY_VOTE', 'vote');
-
-// comments
-define('TABLE_COMMENTS', 'comments');
-define('KEY_COMMENT_ID', 'commentId');
-define('KEY_PARENT_ID', 'parentId');
-define('KEY_CONTENT', 'content');
-define('KEY_AUTHOR_ID', 'authorId');
-
-// comment_votes
-define('TABLE_COMMENT_VOTES', 'comment_votes');
-
-define('KEY_POINTS', 'points');
-
-
-define('QN_ACCESS_KEY', '1qr0lyWewsDOAnSXqYOUPGWKJEGPGDhOgRgB_K7K');
-define('QN_SECRET_KEY', '1sEhu-pQJh8wbtgQnHe6caT81o1ATTGoI5u-i4-H');
+define('LIVE_STATUS_ON', 1);
+define('LIVE_STATUS_OFF', 2);
