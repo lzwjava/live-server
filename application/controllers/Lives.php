@@ -62,4 +62,15 @@ class Lives extends BaseController
         $this->succeed($ok);
     }
 
+    function end_get($id)
+    {
+        $live = $this->liveDao->getLive($id);
+        if (!$live) {
+            $this->failure(ERROR_OBJECT_NOT_EXIST);
+            return;
+        }
+        $this->statusDao->endLive($id);
+        $this->succeed();
+    }
+
 }

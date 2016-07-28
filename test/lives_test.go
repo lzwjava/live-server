@@ -47,3 +47,10 @@ func TestLives_alive(t *testing.T) {
 	res := c.getData("lives/"+liveId+"/alive", url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestLives_end(t *testing.T) {
+	c := NewClient()
+	liveId := createLive(c)
+	res := c.getData("lives/"+liveId+"/end", url.Values{})
+	assert.NotNil(t, res)
+}
