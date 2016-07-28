@@ -57,5 +57,6 @@ $route['translate_uri_dashes'] = FALSE;
 $route['lives']['POST'] = 'lives/create';
 $route['lives/on']['GET'] = 'lives/list';
 $route['lives/(\d+)']['GET'] = 'lives/one/$1';
+$route['lives/(\d+)/alive']['GET'] = 'lives/alive/$1';
 
 $route['jobs/alive']['GET'] = 'jobs/alive';

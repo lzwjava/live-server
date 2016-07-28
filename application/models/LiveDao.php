@@ -41,7 +41,8 @@ class LiveDao extends BaseDao
 
     function getLivingLives()
     {
-        $lives = $this->getListFromTable(TABLE_LIVE, KEY_STATUS, LIVE_STATUS_ON);
+        $lives = $this->getListFromTable(TABLE_LIVE, KEY_STATUS, LIVE_STATUS_ON,
+            '*', 'begin_ts desc');
         $this->assembleLives($lives);
         return $lives;
     }

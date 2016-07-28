@@ -36,7 +36,8 @@ class Lives extends BaseController
             $this->failure(ERROR_REDIS_WRONG);
             return;
         }
-        $this->succeed(array(KEY_ID => $id));
+        $live = $this->liveDao->getLive($id);
+        $this->succeed($live);
     }
 
     function list_get()

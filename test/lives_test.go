@@ -40,3 +40,10 @@ func TestLives_livings(t *testing.T) {
 	res := c.get("lives/on", url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestLives_alive(t *testing.T) {
+	c := NewClient()
+	liveId := createLive(c)
+	res := c.getData("lives/"+liveId+"/alive", url.Values{})
+	assert.NotNil(t, res)
+}
