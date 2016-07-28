@@ -96,6 +96,10 @@ define('ERROR_UNKNOWN_TYPE', 'unknown_type');
 define('ERROR_NOT_ALLOW_DO_IT', 'not_allow_do_it');
 define('ERROR_PARAMETER_ILLEGAL', 'parameter_illegal');
 define('ERROR_SQL_WRONG', 'sql_wrong');
+define('ERROR_REDIS_WRONG', 'redis_wrong');
+
+// live
+define('ERROR_ALIVE_FAIL', 'alive_fail');
 
 define('KEY_SKIP', 'skip');
 define('KEY_LIMIT', 'limit');
@@ -108,6 +112,7 @@ define('KEY_SUBJECT', 'subject');
 define('KEY_KEY', 'key');
 define('KEY_STATUS', 'status');
 define('KEY_BEGIN_TS', 'begin_ts');
+define('KEY_END_TS', 'end_ts');
 
 define('LIVE_STATUS_ON', 1);
 define('LIVE_STATUS_OFF', 2);

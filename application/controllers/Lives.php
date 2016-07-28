@@ -9,12 +9,15 @@
 class Lives extends BaseController
 {
     public $liveDao;
+    public $statusDao;
 
     function __construct()
     {
         parent::__construct();
         $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
+        $this->load->model(StatusDao::class);
+        $this->statusDao = new StatusDao();
     }
 
     function create_post()
@@ -26,9 +29,14 @@ class Lives extends BaseController
         $id = $this->liveDao->createLive($subject);
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
-        } else {
-            $this->succeed(array(KEY_ID => $id));
+            return;
         }
+        $ok = $this->statusDao->open($id);
+        if (!$ok) {
+            $this->failure(ERROR_REDIS_WRONG);
+            return;
+        }
+        $this->succeed(array(KEY_ID => $id));
     }
 
     function list_get()
@@ -43,8 +51,14 @@ class Lives extends BaseController
         $this->succeed($live);
     }
 
-    function alive_get()
+    function alive_get($id)
     {
-
+        $ok = $this->statusDao->alive($id);
+        if (!$ok) {
+            $this->failure(ERROR_ALIVE_FAIL);
+            return;
+        }
+        $this->succeed($ok);
     }
+
 }

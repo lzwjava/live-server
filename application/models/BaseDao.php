@@ -12,7 +12,7 @@ class BaseDao extends CI_Model
     {
         parent::__construct();
         $this->load->database();
-        $this->db->query("SET NAMES UTF8");
+        $this->db->query("SET NAMES UTF8MB4");
     }
 
     protected function mergeFields($fields, $prefixTableName = null)

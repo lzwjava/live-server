@@ -52,4 +52,20 @@ class LiveDao extends BaseDao
             $live->rtmpUrl = "rtmp://test.reviewcode.cn/live/" . $live->key;
         }
     }
+
+    function update($id, $data)
+    {
+        $this->db->where(KEY_ID, $id);
+        return $this->db->update(TABLE_LIVE, $data);
+    }
+
+    function endLive($id)
+    {
+        return $this->update($id, array(
+            KEY_END_TS => date('Y-m-d H:i:s'),
+            KEY_STATUS => LIVE_STATUS_OFF
+        ));
+    }
+
+
 }
