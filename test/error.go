@@ -1,4 +1,4 @@
-package codereview
+package liveserver
 
 // Error response.
 type Error struct {

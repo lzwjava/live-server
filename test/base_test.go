@@ -1,4 +1,4 @@
-package codereview
+package liveserver
 
 import (
 	"database/sql"
@@ -92,5 +92,9 @@ func toInt(obj interface{}) int {
 }
 
 func floatToStr(flt interface{}) string {
+	return strconv.Itoa(toInt(flt))
+}
+
+func toStr(flt interface{}) string {
 	return strconv.Itoa(toInt(flt))
 }

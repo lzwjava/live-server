@@ -34,11 +34,22 @@ class LiveDao extends BaseDao
 
     function getLive($id)
     {
-        return $this->getOneFromTable(TABLE_LIVE, KEY_ID, $id);
+        $live = $this->getOneFromTable(TABLE_LIVE, KEY_ID, $id);
+        $this->assembleLives(array($live));
+        return $live;
     }
 
     function getLivingLives()
     {
-        return $this->getListFromTable(TABLE_LIVE, KEY_STATUS, LIVE_STATUS_ON);
+        $lives = $this->getListFromTable(TABLE_LIVE, KEY_STATUS, LIVE_STATUS_ON);
+        $this->assembleLives($lives);
+        return $lives;
+    }
+
+    private function assembleLives($lives)
+    {
+        foreach ($lives as $live) {
+            $live->rtmpUrl = "rtmp://test.reviewcode.cn/live/" . $live->key;
+        }
     }
 }

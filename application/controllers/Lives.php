@@ -37,6 +37,12 @@ class Lives extends BaseController
         $this->succeed($lives);
     }
 
+    function one_get($id)
+    {
+        $live = $this->liveDao->getLive($id);
+        $this->succeed($live);
+    }
+
     function alive_get()
     {
 
