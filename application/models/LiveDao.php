@@ -36,7 +36,9 @@ class LiveDao extends BaseDao
     function getLive($id)
     {
         $live = $this->getOneFromTable(TABLE_LIVE, KEY_ID, $id);
-        $this->assembleLives(array($live));
+        if ($live != null) {
+            $this->assembleLives(array($live));
+        }
         return $live;
     }
 
@@ -51,7 +53,7 @@ class LiveDao extends BaseDao
     private function assembleLives($lives)
     {
         foreach ($lives as $live) {
-            $live->rtmpUrl = "rtmp://test.reviewcode.cn/live/" . $live->key;
+            $live->rtmpUrl = "rtmp://hotimg.cn/live/" . $live->key;
         }
     }
 
