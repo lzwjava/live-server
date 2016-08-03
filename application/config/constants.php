@@ -86,7 +86,7 @@ defined('EXIT__AUTO_MAX') OR define('EXIT__AUTO_MAX', 125); // highest automatic
 
 define('REQ_OK', 'success');
 
-define('ERROR_USERNAME_TAKEN', 'username_token');
+define('ERROR_USERNAME_TAKEN', 'username_taken');
 define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
 define('ERROR_MISS_PARAMETERS', 'missing_parameters');
 define('ERROR_AT_LEAST_ONE_UPDATE', 'at_least_one_update');
