@@ -22,11 +22,12 @@ class Lives extends BaseController
 
     function create_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_SUBJECT))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_SUBJECT, KEY_COVER_URL))) {
             return;
         }
         $subject = $this->post(KEY_SUBJECT);
-        $id = $this->liveDao->createLive($subject);
+        $coverUrl = $this->post(KEY_COVER_URL);
+        $id = $this->liveDao->createLive($subject, $coverUrl);
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
             return;

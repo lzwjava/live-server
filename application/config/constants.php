@@ -111,6 +111,7 @@ define('KEY_ID', 'id');
 define('KEY_SUBJECT', 'subject');
 define('KEY_KEY', 'key');
 define('KEY_STATUS', 'status');
+define('KEY_COVER_URL', 'coverUrl');
 define('KEY_BEGIN_TS', 'begin_ts');
 define('KEY_END_TS', 'end_ts');
 

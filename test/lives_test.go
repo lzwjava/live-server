@@ -4,19 +4,23 @@ import (
 	"net/url"
 	"testing"
 
+	"fmt"
+
 	"github.com/stretchr/testify/assert"
 )
 
 func TestLives_create(t *testing.T) {
 	c := NewClient()
-	res := c.postData("lives", url.Values{"subject": {"直播啦"}})
+	res := c.postData("lives", url.Values{"subject": {"直播啦"},
+		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"}})
 	assert.NotNil(t, res)
 	liveId := toStr(res.Get("id").MustInt())
 	assert.NotNil(t, liveId)
 }
 
 func createLive(c *Client) string {
-	res := c.postData("lives", url.Values{"subject": {"直播啦"}})
+	res := c.postData("lives", url.Values{"subject": {"直播啦"},
+		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"}})
 	liveId := toStr(res.Get("id").MustInt())
 	return liveId
 }
@@ -53,4 +57,8 @@ func TestLives_end(t *testing.T) {
 	liveId := createLive(c)
 	res := c.getData("lives/"+liveId+"/end", url.Values{})
 	assert.NotNil(t, res)
+}
+
+func TestLives_test(t *testing.T) {
+	fmt.Println(len("http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"))
 }
