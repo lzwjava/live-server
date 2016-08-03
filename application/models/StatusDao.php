@@ -53,6 +53,7 @@ class StatusDao extends BaseDao
     function cleanStatus()
     {
         $alives = $this->client->hgetall($this->alivesKey());
+        $total = 0;
         foreach ($alives as $id => $time) {
             $live = $this->liveDao->getLive($id);
             if (!$live) {
@@ -63,8 +64,10 @@ class StatusDao extends BaseDao
             if ($now - $time > $this->ttl) {
                 logInfo("end live because of ttl. liveId:" . $id);
                 $this->endLive($id);
+                $total++;
             }
         }
+        logInfo("total count of end live:" . $total);
     }
 
     function endLive($id)
