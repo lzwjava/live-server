@@ -6,6 +6,23 @@ SHOW VARIABLES LIKE 'collation_%';
 CREATE DATABASE `qulive`
   DEFAULT CHARACTER SET utf8mb4;
 
+CREATE TABLE `users` (
+  `userId`              INT(11)      NOT NULL AUTO_INCREMENT,
+  `username`            VARCHAR(127) NOT NULL DEFAULT '',
+  `mobilePhoneNumber`   VARCHAR(63)  NOT NULL DEFAULT '',
+  `avatarUrl`           VARCHAR(255) NOT NULL DEFAULT '',
+  `sessionToken`        VARCHAR(127) NOT NULL DEFAULT '',
+  `sessionTokenCreated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `password`            VARCHAR(127) NOT NULL DEFAULT '',
+  `created`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`userId`),
+  UNIQUE KEY `NAME_IDX` (`username`),
+  UNIQUE KEY `PHONE_IDX` (`mobilePhoneNumber`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
 CREATE TABLE `lives` (
   `liveId`   INT(11)       NOT NULL             AUTO_INCREMENT,
   `ownerId`  INT(11)       NOT NULL             DEFAULT 0,
@@ -28,25 +45,6 @@ CREATE TABLE `lives` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-
-CREATE TABLE `users` (
-  `userId`              INT(11)      NOT NULL AUTO_INCREMENT,
-  `username`            VARCHAR(127) NOT NULL DEFAULT '',
-  `mobilePhoneNumber`   VARCHAR(63)  NOT NULL DEFAULT '',
-  `avatarUrl`           VARCHAR(255) NOT NULL DEFAULT '',
-  `sessionToken`        VARCHAR(127) NOT NULL DEFAULT '',
-  `sessionTokenCreated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `password`            VARCHAR(127) NOT NULL DEFAULT '',
-  `created`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`userId`),
-  UNIQUE KEY `NAME_IDX` (`username`),
-  UNIQUE KEY `PHONE_IDX` (`mobilePhoneNumber`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
 
 CREATE TABLE `charges` (
   `chargeId`  INT(11)     NOT NULL AUTO_INCREMENT,
