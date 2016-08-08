@@ -12,14 +12,14 @@ func TestLives_create(t *testing.T) {
 	res := c.postData("lives", url.Values{"subject": {"直播啦"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"}, "amount": {"5000"}})
 	assert.NotNil(t, res)
-	liveId := toStr(res.Get("id").MustInt())
+	liveId := toStr(res.Get("liveId").MustInt())
 	assert.NotNil(t, liveId)
 }
 
 func createLive(c *Client) string {
 	res := c.postData("lives", url.Values{"subject": {"直播啦"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"}, "amount": {"5000"}})
-	liveId := toStr(res.Get("id").MustInt())
+	liveId := toStr(res.Get("liveId").MustInt())
 	return liveId
 }
 

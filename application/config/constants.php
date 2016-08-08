@@ -112,6 +112,10 @@ define('ERROR_LOGIN_FAILED', 'login_failed');
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
 
+// attendances
+define('ERROR_ALREADY_ATTEND', 'already_attend');
+define('ERROR_PINGPP_CHARGE', 'pingpp_failed');
+
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -132,7 +136,11 @@ if (!function_exists('errorInfos')) {
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
             ERROR_AMOUNT_TOO_LITTLE => '门票至少为 1 元',
-            ERROR_AMOUNT_TOO_MUCH => '门票最多为 1000 元'
+            ERROR_AMOUNT_TOO_MUCH => '门票最多为 1000 元',
+
+            // attendances
+            ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
+            ERROR_PINGPP_CHARGE => '创建支付失败',
         );
     }
 
@@ -149,10 +157,10 @@ define('KEY_CREATED', 'created');
 define('KEY_UPDATED', 'updated');
 
 // live
-define('TABLE_LIVE', 'lives');
-define('KEY_ID', 'id');
+define('TABLE_LIVES', 'lives');
+define('KEY_LIVE_ID', 'liveId');
 define('KEY_SUBJECT', 'subject');
-define('KEY_KEY', 'key');
+define('KEY_RTMP_KEY', 'rtmpKey');
 define('KEY_STATUS', 'status');
 define('KEY_COVER_URL', 'coverUrl');
 define('KEY_AMOUNT', 'amount');
@@ -178,6 +186,18 @@ define('KEY_SESSION_TOKEN_CREATED', 'sessionTokenCreated');
 define('KEY_PASSWORD', 'password');
 define('KEY_USERNAME', 'username');
 define('KEY_USER_ID', 'userId');
+
+// charges
+define('TABLE_CHARGES', 'charges');
+define('KEY_CHARGE_ID', 'chargeId');
+define('KEY_ORDER_NO', 'orderNo');
+define('KEY_PAID', 'paid');
+define('KEY_CREATOR', 'creator');
+define('KEY_CREATOR_IP', 'creatorIP');
+
+// attendances
+define('TABLE_ATTENDANCES', 'attendances');
+define('KEY_ATTENDANCE_ID', 'attendanceId');
 
 // cookie
 define('KEY_COOKIE_TOKEN', 'SessionToken');

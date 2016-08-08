@@ -91,3 +91,46 @@ if (!function_exists('amountToYuan')) {
         return $amount / 100;
     }
 }
+
+
+if (!function_exists('extractFields')) {
+    function extractFields($object, $fields, $prefix = null)
+    {
+        $newObj = new StdClass();
+        $hasSet = false;
+        foreach ($fields as $field) {
+            if (isset($object, $field)) {
+                if ($object->$field !== null) {
+                    $hasSet = true;
+                    $newField = $field;
+                    if ($prefix) {
+                        if (substr($field, 0, strlen($prefix)) == $prefix) {
+                            $newField = substr($field, strlen($prefix));
+                        }
+                    }
+                    $newObj->$newField = $object->$field;
+                }
+                unset($object->$field);
+            }
+        }
+        if ($hasSet) {
+            return $newObj;
+        } else {
+            return null;
+        }
+    }
+}
+
+if (!function_exists('truncate')) {
+    function truncate($string, $maxLength = 12)
+    {
+        if ($string == null) {
+            return $string;
+        }
+        if (strlen($string) > $maxLength) {
+            return substr($string, 0, $maxLength);
+        } else {
+            return $string;
+        }
+    }
+}

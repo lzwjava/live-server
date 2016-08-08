@@ -26,18 +26,18 @@ class LiveDao extends BaseDao
         $data = array(
             KEY_OWNER_ID => $ownerId,
             KEY_SUBJECT => $subject,
-            KEY_KEY => $key,
+            KEY_RTMP_KEY => $key,
             KEY_STATUS => LIVE_STATUS_PREPARE,
             KEY_AMOUNT => $amount,
             KEY_COVER_URL => $coverUrl
         );
-        $this->db->insert(TABLE_LIVE, $data);
+        $this->db->insert(TABLE_LIVES, $data);
         return $this->db->insert_id();
     }
 
     function getLive($id)
     {
-        $live = $this->getOneFromTable(TABLE_LIVE, KEY_ID, $id);
+        $live = $this->getOneFromTable(TABLE_LIVES, KEY_LIVE_ID, $id);
         if ($live != null) {
             $this->assembleLives(array($live));
         }
@@ -46,7 +46,7 @@ class LiveDao extends BaseDao
 
     function getLivingLives()
     {
-        $lives = $this->getListFromTable(TABLE_LIVE, KEY_STATUS, LIVE_STATUS_ON,
+        $lives = $this->getListFromTable(TABLE_LIVES, KEY_STATUS, LIVE_STATUS_ON,
             '*', 'begin_ts desc');
         $this->assembleLives($lives);
         return $lives;
@@ -55,14 +55,14 @@ class LiveDao extends BaseDao
     private function assembleLives($lives)
     {
         foreach ($lives as $live) {
-            $live->rtmpUrl = "rtmp://hotimg.cn/live/" . $live->key;
+            $live->rtmpUrl = "rtmp://hotimg.cn/live/" . $live->rtmpKey;
         }
     }
 
     function update($id, $data)
     {
-        $this->db->where(KEY_ID, $id);
-        return $this->db->update(TABLE_LIVE, $data);
+        $this->db->where(KEY_LIVE_ID, $id);
+        return $this->db->update(TABLE_LIVES, $data);
     }
 
     function endLive($id)

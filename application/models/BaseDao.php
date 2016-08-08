@@ -15,11 +15,15 @@ class BaseDao extends CI_Model
         $this->db->query("SET NAMES UTF8MB4");
     }
 
-    protected function mergeFields($fields, $prefixTableName = null)
+    protected function mergeFields($fields, $tableName = null, $alias = false)
     {
-        if ($prefixTableName) {
-            foreach ($fields as $index => $field) {
-                $fields[$index] = $prefixTableName . '.' . $field;
+        if ($tableName) {
+            foreach ($fields as &$field) {
+                $aliasPart = $tableName . $field;
+                $field = $tableName . '.' . $field;
+                if ($alias) {
+                    $field .= ' as ' . $aliasPart;
+                }
             }
         }
         return implode($fields, ',');
@@ -65,4 +69,32 @@ class BaseDao extends CI_Model
         return $newObj;
     }
 
+    protected function prefixFields($fields, $prefix)
+    {
+        foreach ($fields as &$field) {
+            $field = $prefix . $field;
+        }
+        return $fields;
+    }
+
+    protected function attendanceFields()
+    {
+        return array(KEY_ATTENDANCE_ID, KEY_USER_ID, KEY_LIVE_ID, KEY_CHARGE_ID, KEY_CREATED);
+    }
+
+    protected function attendancePublicFields($prefix = TABLE_ATTENDANCES, $alias = false)
+    {
+        return $this->mergeFields($this->attendanceFields(), $prefix, $alias);
+    }
+
+    protected function liveFields()
+    {
+        return array(KEY_LIVE_ID, KEY_SUBJECT, KEY_RTMP_KEY, KEY_STATUS,
+            KEY_COVER_URL, KEY_AMOUNT, KEY_BEGIN_TS, KEY_END_TS, KEY_OWNER_ID, KEY_DETAIL);
+    }
+
+    protected function livePublicFields($prefix = TABLE_LIVES, $alias = false)
+    {
+        return $this->mergeFields($this->liveFields(), $prefix, $alias);
+    }
 }
