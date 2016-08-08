@@ -54,6 +54,11 @@ class BaseController extends REST_Controller
 
     protected function failure($status, $error = null)
     {
+        if ($error == null) {
+            if (isset(errorInfos()[$status])) {
+                $error = errorInfos()[$status];
+            }
+        }
         $this->responseResult($status, null, $error);
     }
 
@@ -91,14 +96,14 @@ class BaseController extends REST_Controller
                 return false;
             }
         }
-        $this->failure(ERROR_AT_LEAST_ONE_UPDATE, "请至少提供一个可以修改的信息");
+        $this->failure(ERROR_AT_LEAST_ONE_UPDATE);
         return true;
     }
 
     protected function checkIfObjectNotExists($object)
     {
         if ($object == null) {
-            $this->failure(ERROR_OBJECT_NOT_EXIST, "object with that id not exits");
+            $this->failure(ERROR_OBJECT_NOT_EXIST);
             return true;
         } else {
             return false;
@@ -143,7 +148,7 @@ class BaseController extends REST_Controller
         return $limit;
     }
 
-    protected function castToNumber($genericStringNumber)
+    protected function toNumber($genericStringNumber)
     {
         return $genericStringNumber + 0;
     }
@@ -176,7 +181,7 @@ class BaseController extends REST_Controller
     {
         $user = $this->getSessionUser();
         if ($user == null) {
-            $this->failure(ERROR_NOT_IN_SESSION, "未登录");
+            $this->failure(ERROR_NOT_IN_SESSION);
             return null;
         } else {
             return $user;

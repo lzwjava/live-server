@@ -154,3 +154,8 @@ func registerUser2(c *Client) *simplejson.Json {
 func registerNewUser(c *Client) *simplejson.Json {
 	return registerUserWithPhone(c, randomMobile(), randomString())
 }
+
+func NewClientAndUser() (*Client, *simplejson.Json) {
+	c := NewClient()
+	return c, registerNewUser(c)
+}

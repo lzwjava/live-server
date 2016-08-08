@@ -20,13 +20,15 @@ class LiveDao extends BaseDao
         return random_string('alnum', 8);
     }
 
-    function createLive($subject, $coverUrl)
+    function createLive($ownerId, $subject, $coverUrl, $amount)
     {
         $key = $this->genLiveKey();
         $data = array(
+            KEY_OWNER_ID => $ownerId,
             KEY_SUBJECT => $subject,
             KEY_KEY => $key,
-            KEY_STATUS => LIVE_STATUS_ON,
+            KEY_STATUS => LIVE_STATUS_PREPARE,
+            KEY_AMOUNT => $amount,
             KEY_COVER_URL => $coverUrl
         );
         $this->db->insert(TABLE_LIVE, $data);
@@ -70,6 +72,5 @@ class LiveDao extends BaseDao
             KEY_STATUS => LIVE_STATUS_OFF
         ));
     }
-
 
 }

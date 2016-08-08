@@ -79,7 +79,7 @@ class Users extends BaseController
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
         } elseif ($this->userDao->checkIfMobilePhoneNumberUsed($mobilePhoneNumber)) {
-            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN, "手机号已被占用");
+            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
         } else if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
             return;
         } else if ($this->checkIfWrongPasswordFormat($password)) {
@@ -95,7 +95,7 @@ class Users extends BaseController
     private function checkIfUsernameUsedAndReponse($username)
     {
         if ($this->userDao->checkIfUsernameUsed($username)) {
-            $this->failure(ERROR_USERNAME_TAKEN, "用户名已存在");
+            $this->failure(ERROR_USERNAME_TAKEN);
             return true;
         } else {
             return false;
@@ -104,15 +104,15 @@ class Users extends BaseController
 
     public function login_post()
     {
-        if ($this->checkIfParamsNotExist($_POST, array(KEY_MOBILE_PHONE_NUMBER, KEY_PASSWORD))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER, KEY_PASSWORD))) {
             return;
         }
-        $mobilePhoneNumber = $_POST[KEY_MOBILE_PHONE_NUMBER];
-        $password = $_POST[KEY_PASSWORD];
+        $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
+        $password = $this->post(KEY_PASSWORD);
         if ($this->checkIfWrongPasswordFormat($password)) {
             return;
         } else if ($this->userDao->checkLogin($mobilePhoneNumber, $password) == false) {
-            $this->failure(ERROR_LOGIN_FAILED, "手机号码不存在或者密码错误");
+            $this->failure(ERROR_LOGIN_FAILED);
         } else {
             $this->loginOrRegisterSucceed($mobilePhoneNumber);
         }
@@ -131,7 +131,7 @@ class Users extends BaseController
         if ($user == null) {
             // $login_url = 'Location: /';
             // header($login_url);
-            $this->failure(ERROR_NOT_IN_SESSION, "当前没有用户登录");
+            $this->failure(ERROR_NOT_IN_SESSION);
         } else {
             $this->succeed($user);
         }

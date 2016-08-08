@@ -20,14 +20,38 @@ class Lives extends BaseController
         $this->statusDao = new StatusDao();
     }
 
+    protected function checkIfAmountWrong($amount)
+    {
+        if (is_int($amount) == false) {
+            $this->failure(ERROR_AMOUNT_UNIT);
+            return true;
+        }
+        if ($amount < LEAST_COMMON_PAY) {
+            $this->failure(ERROR_AMOUNT_TOO_LITTLE);
+            return true;
+        }
+        if ($amount > MAX_COMMON_PAY) {
+            $this->failure(ERROR_AMOUNT_TOO_MUCH);
+            return true;
+        }
+        return false;
+    }
+
     function create_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_SUBJECT, KEY_COVER_URL))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT))) {
             return;
         }
+        $user = $this->checkAndGetSessionUser();
         $subject = $this->post(KEY_SUBJECT);
         $coverUrl = $this->post(KEY_COVER_URL);
-        $id = $this->liveDao->createLive($subject, $coverUrl);
+        $amount = $this->toNumber($this->post(KEY_AMOUNT));
+
+        if ($this->checkIfAmountWrong($amount)) {
+            return;
+        }
+
+        $id = $this->liveDao->createLive($user->userId, $subject, $coverUrl, $amount);
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
             return;

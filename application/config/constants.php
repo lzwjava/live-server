@@ -96,6 +96,9 @@ define('ERROR_NOT_ALLOW_DO_IT', 'not_allow_do_it');
 define('ERROR_PARAMETER_ILLEGAL', 'parameter_illegal');
 define('ERROR_SQL_WRONG', 'sql_wrong');
 define('ERROR_REDIS_WRONG', 'redis_wrong');
+define('ERROR_AMOUNT_UNIT', 'amount_unit');
+define('ERROR_AMOUNT_TOO_LITTLE', 'amount_too_little');
+define('ERROR_AMOUNT_TOO_MUCH', 'amount_too_much');
 
 // error users
 define('ERROR_NOT_IN_SESSION', 'not_in_session');
@@ -108,28 +111,62 @@ define('ERROR_LOGIN_FAILED', 'login_failed');
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
 
+
+if (!function_exists('errorInfos')) {
+    function errorInfos()
+    {
+        return array(
+            // common
+            ERROR_AT_LEAST_ONE_UPDATE => '请至少提供一个可以修改的信息',
+            ERROR_OBJECT_NOT_EXIST => '对象不存在',
+            ERROR_SQL_WRONG => '数据库出错',
+            ERROR_REDIS_WRONG => 'Redis 出错',
+
+            // users
+            ERROR_USERNAME_TAKEN => '用户名已存在',
+            ERROR_NOT_IN_SESSION => '当前没有用户登录',
+            ERROR_LOGIN_FAILED => "手机号码不存在或者密码错误",
+            ERROR_MOBILE_PHONE_NUMBER_TAKEN => "手机号已被占用",
+
+            // lives
+            ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
+            ERROR_AMOUNT_TOO_LITTLE => '门票至少为 1 元',
+            ERROR_AMOUNT_TOO_MUCH => '门票最多为 1000 元'
+        );
+    }
+
+}
+
+// pay
+define('LEAST_COMMON_PAY', 100);
+define('MAX_COMMON_PAY', 100 * 1000);
+
+// common
 define('KEY_SKIP', 'skip');
 define('KEY_LIMIT', 'limit');
+define('KEY_CREATED', 'created');
+define('KEY_UPDATED', 'updated');
 
 // live
-define('TABLE_LIVE', 'live');
-
+define('TABLE_LIVE', 'lives');
 define('KEY_ID', 'id');
 define('KEY_SUBJECT', 'subject');
 define('KEY_KEY', 'key');
 define('KEY_STATUS', 'status');
 define('KEY_COVER_URL', 'coverUrl');
+define('KEY_AMOUNT', 'amount');
 define('KEY_BEGIN_TS', 'begin_ts');
 define('KEY_END_TS', 'end_ts');
+define('KEY_OWNER_ID', 'ownerId');
+define('KEY_DETAIL', 'detail');
 
-define('LIVE_STATUS_ON', 1);
-define('LIVE_STATUS_OFF', 2);
+define('LIVE_STATUS_PREPARE', 1);
+define('LIVE_STATUS_WAIT', 2);
+define('LIVE_STATUS_ON', 3);
+define('LIVE_STATUS_OFF', 4);
 
 define('SMS_TEMPLATE', 'template');
 define('KEY_SMS_CODE', 'smsCode');
-
-define('KEY_CREATED', 'created');
-define('KEY_UPDATED', 'updated');
 
 // users
 define('TABLE_USERS', 'users');

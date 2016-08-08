@@ -10,9 +10,9 @@ import (
 )
 
 func TestLives_create(t *testing.T) {
-	c := NewClient()
+	c, _ := NewClientAndUser()
 	res := c.postData("lives", url.Values{"subject": {"直播啦"},
-		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"}})
+		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"}, "amount": {"5000"}})
 	assert.NotNil(t, res)
 	liveId := toStr(res.Get("id").MustInt())
 	assert.NotNil(t, liveId)
@@ -20,13 +20,13 @@ func TestLives_create(t *testing.T) {
 
 func createLive(c *Client) string {
 	res := c.postData("lives", url.Values{"subject": {"直播啦"},
-		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"}})
+		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"}, "amount": {"5000"}})
 	liveId := toStr(res.Get("id").MustInt())
 	return liveId
 }
 
 func TestLives_get(t *testing.T) {
-	c := NewClient()
+	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 	live := c.getData("lives/"+liveId, url.Values{})
 	assert.NotNil(t, live)
@@ -46,14 +46,14 @@ func TestLives_livings(t *testing.T) {
 }
 
 func TestLives_alive(t *testing.T) {
-	c := NewClient()
+	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 	res := c.getData("lives/"+liveId+"/alive", url.Values{})
 	assert.NotNil(t, res)
 }
 
 func TestLives_end(t *testing.T) {
-	c := NewClient()
+	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 	res := c.getData("lives/"+liveId+"/end", url.Values{})
 	assert.NotNil(t, res)
