@@ -7,10 +7,13 @@ require_once APPPATH . '/libraries/REST_Controller.php';
 
 class BaseController extends REST_Controller
 {
+    public $userDao;
 
     function __construct()
     {
         parent::__construct();
+        $this->load->model(UserDao::class);
+        $this->userDao = new UserDao();
     }
 
     protected function responseResult($status, $result = null, $error = null, $total = null)
@@ -155,6 +158,39 @@ class BaseController extends REST_Controller
             }
         }
         return $toArray;
+    }
+
+    // users
+    protected function requestToken()
+    {
+        $token = $this->input->get_request_header(KEY_SESSION_HEADER, TRUE);
+        if (!$token) {
+            if (isset($_COOKIE[KEY_COOKIE_TOKEN])) {
+                $token = $_COOKIE[KEY_COOKIE_TOKEN];
+            }
+        }
+        return $token;
+    }
+
+    protected function checkAndGetSessionUser()
+    {
+        $user = $this->getSessionUser();
+        if ($user == null) {
+            $this->failure(ERROR_NOT_IN_SESSION, "未登录");
+            return null;
+        } else {
+            return $user;
+        }
+    }
+
+    protected function getSessionUser()
+    {
+        $token = $this->requestToken();
+        if ($token) {
+            return $this->userDao->findUserBySessionToken($token);
+        } else {
+            return null;
+        }
     }
 }
 

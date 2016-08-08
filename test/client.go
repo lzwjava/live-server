@@ -18,8 +18,9 @@ import (
 )
 
 type Client struct {
-	HTTPClient *http.Client
-	cookieJar  *cookiejar.Jar
+	HTTPClient   *http.Client
+	cookieJar    *cookiejar.Jar
+	SessionToken string
 }
 
 func NewClient() *Client {

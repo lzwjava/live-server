@@ -53,7 +53,14 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// users
+$route['self']['PATCH'] = 'users/update';
+$route['self']['GET'] = 'users/self';
+$route['users']['POST'] = 'users/register';
+$route['login']['POST'] = 'users/login';
+$route['requestSmsCode']['POST'] = 'users/requestSmsCode';
 
+// lives
 $route['lives']['POST'] = 'lives/create';
 $route['lives/on']['GET'] = 'lives/list';
 $route['lives/(\d+)']['GET'] = 'lives/one/$1';

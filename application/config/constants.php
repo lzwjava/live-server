@@ -86,17 +86,24 @@ defined('EXIT__AUTO_MAX') OR define('EXIT__AUTO_MAX', 125); // highest automatic
 
 define('REQ_OK', 'success');
 
-define('ERROR_USERNAME_TAKEN', 'username_taken');
-define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
+
+// error common
 define('ERROR_MISS_PARAMETERS', 'missing_parameters');
 define('ERROR_AT_LEAST_ONE_UPDATE', 'at_least_one_update');
 define('ERROR_OBJECT_NOT_EXIST', 'object_not_exists');
-define('ERROR_LOGIN_FAILED', 'login_failed');
 define('ERROR_UNKNOWN_TYPE', 'unknown_type');
 define('ERROR_NOT_ALLOW_DO_IT', 'not_allow_do_it');
 define('ERROR_PARAMETER_ILLEGAL', 'parameter_illegal');
 define('ERROR_SQL_WRONG', 'sql_wrong');
 define('ERROR_REDIS_WRONG', 'redis_wrong');
+
+// error users
+define('ERROR_NOT_IN_SESSION', 'not_in_session');
+define('ERROR_SMS_WRONG', 'sms_wrong');
+define('ERROR_PASSWORD_FORMAT', 'password_format_wrong');
+define('ERROR_USERNAME_TAKEN', 'username_taken');
+define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
+define('ERROR_LOGIN_FAILED', 'login_failed');
 
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
@@ -117,3 +124,28 @@ define('KEY_END_TS', 'end_ts');
 
 define('LIVE_STATUS_ON', 1);
 define('LIVE_STATUS_OFF', 2);
+
+define('SMS_TEMPLATE', 'template');
+define('KEY_SMS_CODE', 'smsCode');
+
+define('KEY_CREATED', 'created');
+define('KEY_UPDATED', 'updated');
+
+// users
+define('TABLE_USERS', 'users');
+define('KEY_MOBILE_PHONE_NUMBER', 'mobilePhoneNumber');
+define('KEY_AVATAR_URL', 'avatarUrl');
+define('KEY_SESSION_TOKEN', 'sessionToken');
+define('KEY_SESSION_TOKEN_CREATED', 'sessionTokenCreated');
+define('KEY_PASSWORD', 'password');
+define('KEY_USERNAME', 'username');
+define('KEY_USER_ID', 'userId');
+
+// cookie
+define('KEY_COOKIE_TOKEN', 'SessionToken');
+define('COOKIE_VID', 'vid');
+define('KEY_SESSION_HEADER', 'X-Session');
+
+// lc
+define('LC_APP_ID', 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz');
+define('LC_APP_KEY', 'V4FPFLSmSeO1HaIwPVyhO9P3');
