@@ -144,14 +144,14 @@ class Users extends BaseController
         $this->succeed();
     }
 
-    public function update_patch()
+    public function update_post()
     {
         $keys = array(KEY_AVATAR_URL, KEY_USERNAME);
-        if ($this->checkIfNotAtLeastOneParam($this->patch(), $keys)
+        if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
         ) {
             return;
         }
-        $data = $this->patchParams($keys);
+        $data = $this->postParams($keys);
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;

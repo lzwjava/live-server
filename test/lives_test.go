@@ -4,8 +4,6 @@ import (
 	"net/url"
 	"testing"
 
-	"fmt"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -59,6 +57,15 @@ func TestLives_end(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
-func TestLives_test(t *testing.T) {
-	fmt.Println(len("http://obcbndtjd.bkt.clouddn.com/3.pic_hd.jpg"))
+func TestLives_update(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	res := c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
+		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg"},
+		"amount":   {"30000"}, "detail": {"这次主要讲下多年来 C++ 的编程实战"}})
+	assert.NotNil(t, res)
+	assert.NotNil(t, res.Get("coverUrl"))
+	assert.Equal(t, res.Get("detail").MustString(), "这次主要讲下多年来 C++ 的编程实战")
+	assert.Equal(t, res.Get("coverUrl").MustString(), "http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg")
+	assert.NotNil(t, res.Get("amount").MustInt(), 30000)
 }

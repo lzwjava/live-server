@@ -108,6 +108,7 @@ define('ERROR_USERNAME_TAKEN', 'username_taken');
 define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
 define('ERROR_LOGIN_FAILED', 'login_failed');
 
+
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
 

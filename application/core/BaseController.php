@@ -153,11 +153,11 @@ class BaseController extends REST_Controller
         return $genericStringNumber + 0;
     }
 
-    protected function patchParams($selectedKeys)
+    protected function postParams($selectedKeys)
     {
         $toArray = array();
         foreach ($selectedKeys as $field) {
-            $value = $this->patch($field);
+            $value = $this->post($field);
             if ($value !== null) {
                 $toArray[$field] = $value;
             }

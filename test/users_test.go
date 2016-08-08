@@ -37,7 +37,7 @@ func TestUser_Update(t *testing.T) {
 	time.Sleep(time.Second)
 
 	newName := randomString()
-	res := c.patchData("self", url.Values{"username": {newName},
+	res := c.postData("self", url.Values{"username": {newName},
 		"avatarUrl": {avatarUrl}})
 
 	assert.Equal(t, newName, res.Get("username").MustString())
@@ -45,7 +45,7 @@ func TestUser_Update(t *testing.T) {
 	assert.NotEqual(t, updated, res.Get("updated").MustString())
 
 	// Same username
-	res = c.patchData("self", url.Values{"username": {newName}})
+	res = c.postData("self", url.Values{"username": {newName}})
 	assert.Equal(t, newName, res.Get("username").MustString())
 }
 

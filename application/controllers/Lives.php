@@ -65,6 +65,40 @@ class Lives extends BaseController
         $this->succeed($live);
     }
 
+    function update_post($liveId)
+    {
+        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT, KEY_DETAIL);
+        if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
+        ) {
+            return;
+        }
+        $data = $this->postParams($keys);
+        if (isset($data[KEY_AMOUNT])) {
+            $data[KEY_AMOUNT] = $this->toNumber($data[KEY_AMOUNT]);
+            if ($this->checkIfAmountWrong($data[KEY_AMOUNT])) {
+                return;
+            }
+        }
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        if ($user->userId != $live->ownerId) {
+            $this->failure(ERROR_NOT_ALLOW_DO_IT);
+            return;
+        }
+        $ok = $this->liveDao->update($liveId, $data);
+        if (!$ok) {
+            $this->failure(ERROR_SQL_WRONG);
+        }
+        $live = $this->liveDao->getLive($liveId);
+        $this->succeed($live);
+    }
+
     function list_get()
     {
         $lives = $this->liveDao->getLivingLives();
