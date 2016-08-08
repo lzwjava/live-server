@@ -76,7 +76,7 @@ class UserDao extends BaseDao
 
     function publicRawFields()
     {
-        return $this->mergeFields(array(KEY_USER_ID, KEY_AVATAR_URL, KEY_USERNAME, KEY_TYPE));
+        return array(KEY_USER_ID, KEY_AVATAR_URL, KEY_USERNAME);
     }
 
     private function getSessionUserFields()

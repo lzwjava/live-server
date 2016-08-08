@@ -7,19 +7,34 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/bitly/go-simplejson"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAttendances_create(t *testing.T) {
-	c, user := NewClientAndUser()
-	userId := toStr(user.Get("userId").MustInt())
+	c, _ := NewClientAndUser()
 	liveId := createLive(c)
-	res := c.post("attendances", url.Values{"liveId": {liveId}})
+
+	c2, user := NewClientAndUser()
+	userId := toStr(user.Get("userId").MustInt())
+	res := c2.post("attendances", url.Values{"liveId": {liveId}})
 	assert.NotNil(t, res)
+	_, exists := res.CheckGet("status")
+	assert.False(t, exists)
+
 	orderNo := res.Get("order_no").MustString()
 	callbackStr := liveCallbackStr(orderNo, liveId, userId, 5000)
-	callbackRes := c.postWithStr("rewards/callback", callbackStr)
+	callbackRes := c2.postWithStr("rewards/callback", callbackStr)
 	assert.NotNil(t, callbackRes)
+}
+
+func createAttendance(c *Client, user *simplejson.Json, liveId string) {
+	userId := toStr(user.Get("userId").MustInt())
+	res := c.post("attendances", url.Values{"liveId": {liveId}})
+
+	orderNo := res.Get("order_no").MustString()
+	callbackStr := liveCallbackStr(orderNo, liveId, userId, 5000)
+	c.postWithStr("rewards/callback", callbackStr)
 }
 
 func callbackStr(orderNo string, metaData map[string]interface{}, amount int) string {
@@ -36,4 +51,28 @@ func callbackStr(orderNo string, metaData map[string]interface{}, amount int) st
 func liveCallbackStr(orderNo string, liveId string, userId string, amount int) string {
 	meta := map[string]interface{}{"liveId": liveId, "userId": userId}
 	return callbackStr(orderNo, meta, amount)
+}
+
+func TestAttendances_liveList(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, user := NewClientAndUser()
+	createAttendance(c2, user, liveId)
+
+	res := c.getData("lives/"+liveId+"/attendances", url.Values{})
+	assert.NotNil(t, res)
+	assert.Equal(t, len(res.MustArray()), 1)
+}
+
+func TestAttendances_list(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, user := NewClientAndUser()
+	createAttendance(c2, user, liveId)
+
+	res := c2.getData("attendances", url.Values{})
+	assert.NotNil(t, res)
+	assert.Equal(t, len(res.MustArray()), 1)
 }

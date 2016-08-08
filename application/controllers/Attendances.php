@@ -37,6 +37,10 @@ class Attendances extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
+        if ($live->ownerId == $user->userId) {
+            $this->failure(ERROR_OWNER_CANNOT_ATTEND);
+            return;
+        }
         $attendance = $this->attendanceDao->getAttendance($user->userId, $liveId);
         if ($attendance != null) {
             $this->failure(ERROR_ALREADY_ATTEND);
@@ -102,13 +106,13 @@ class Attendances extends BaseController
         echo($ch);
     }
 
-    function one_get($eventId)
+    function one_get($liveId)
     {
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
         }
-        $attendance = $this->attendanceDao->getAttendance($user->id, $eventId);
+        $attendance = $this->attendanceDao->getAttendance($user->userId, $liveId);
         if ($this->checkIfObjectNotExists($attendance)) {
             return;
         }
@@ -123,11 +127,11 @@ class Attendances extends BaseController
         }
         $skip = $this->skip();
         $limit = $this->limit();
-        $attendances = $this->attendanceDao->getAttendancesByUserId($user->id, $skip, $limit);
+        $attendances = $this->attendanceDao->getAttendancesByUserId($user->userId, $skip, $limit);
         $this->succeed($attendances);
     }
 
-    function eventList_get($liveId)
+    function liveList_get($liveId)
     {
         $skip = $this->skip();
         $limit = $this->limit();

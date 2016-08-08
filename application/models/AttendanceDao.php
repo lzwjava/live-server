@@ -68,7 +68,7 @@ class AttendanceDao extends BaseDao
         $sql = "select $fields,$liveFields,$userFields
                 from attendances as a
                 left join lives as l USING(liveId)
-                left join users as u on u.id=a.userId
+                left join users as u on u.userId=a.userId
                 where a.$field=?
                 limit $limit offset $skip";
         $binds = array($value);

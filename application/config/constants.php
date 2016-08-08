@@ -108,9 +108,9 @@ define('ERROR_USERNAME_TAKEN', 'username_taken');
 define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
 define('ERROR_LOGIN_FAILED', 'login_failed');
 
-
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
+define('ERROR_OWNER_CANNOT_ATTEND', 'owner_cannot_attend');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -137,6 +137,7 @@ if (!function_exists('errorInfos')) {
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
             ERROR_AMOUNT_TOO_LITTLE => '门票至少为 1 元',
             ERROR_AMOUNT_TOO_MUCH => '门票最多为 1000 元',
+            ERROR_OWNER_CANNOT_ATTEND => '主播自己无法报名',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
