@@ -19,11 +19,12 @@ class Rewards extends BaseController
         $this->liveDao = new LiveDao();
         $this->load->model(ChargeDao::class);
         $this->chargeDao = new ChargeDao();
+        $this->load->model(AttendanceDao::class);
+        $this->attendanceDao = new AttendanceDao();
     }
 
     public function callback_post()
     {
-
         $content = file_get_contents("php://input");
         logInfo("content $content");
         $event = json_decode($content);
@@ -62,15 +63,14 @@ class Rewards extends BaseController
             return;
         }
         $metadata = $object->metadata;
-        if (isset($metadata->eventId)) {
-            $eventId = $metadata->eventId;
+        if (isset($metadata->liveId)) {
+            $liveId = $metadata->liveId;
             $userId = $metadata->userId;
             $this->db->trans_start();
             $this->chargeDao->updateChargeToPaid($orderNo);
             $charge = $this->chargeDao->getOneByOrderNo($orderNo);
-            $this->attendanceDao->addAttendance($userId, $eventId, $charge->chargeId);
+            $this->attendanceDao->addAttendance($userId, $liveId, $charge->chargeId);
             $this->db->trans_complete();
-            $this->notify->notifyAttended($userId, $eventId);
             if (!$this->db->trans_status()) {
                 $this->failure(ERROR_SQL_WRONG);
                 return;

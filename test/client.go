@@ -14,6 +14,8 @@ import (
 	"mime/multipart"
 	"path/filepath"
 
+	"strings"
+
 	"github.com/bitly/go-simplejson"
 )
 
@@ -109,6 +111,15 @@ func (c *Client) request(method string, path string, params url.Values) *simplej
 	}
 	checkErr(err)
 	fmt.Println("curl -X", method, urlStr, params)
+	return c.doRequest(req)
+}
+
+func (c *Client) postWithStr(path string, body string) *simplejson.Json {
+	urlStr := baseUrl(path)
+	req, err := http.NewRequest("POST", urlStr, strings.NewReader(body))
+	req.Header.Set("Content-Type", "plain/text")
+	checkErr(err)
+	fmt.Println("curl -X", "POST", urlStr, body)
 	return c.doRequest(req)
 }
 

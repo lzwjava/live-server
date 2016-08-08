@@ -37,14 +37,14 @@ class Attendances extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        $attendance = $this->attendanceDao->getAttendance($user->id, $liveId);
+        $attendance = $this->attendanceDao->getAttendance($user->userId, $liveId);
         if ($attendance != null) {
             $this->failure(ERROR_ALREADY_ATTEND);
             return;
         }
-        $subject = truncate($user->username, 18) . '参加直播' . $live->eventId;
-        $body = $user->username . ' 参加 ' . $live->name;
-        $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->id);
+        $subject = truncate($user->username, 18) . '参加直播' . $live->liveId;
+        $body = $user->username . ' 参加 ' . $live->subject;
+        $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
         $this->createChargeThenResponse($live->amount, $subject, $body, $metaData, $user);
     }
 
@@ -56,6 +56,11 @@ class Attendances extends BaseController
     protected function createChargeThenResponse($amount, $subject, $body, $metaData, $user)
     {
         $orderNo = $this->getOrderNo();
+        if (isLocalDebug()) {
+            \Pingpp\Pingpp::setApiKey('sk_test_nz9af5CKmb5CnXn10Ou1eHq5');
+        } else {
+            \Pingpp\Pingpp::setApiKey('sk_live_SSijL0KO8eHK5qzfPG0mjDW9');
+        }
         if (isLocalDebug()) {
             // CodeReviewTest
             $appId = 'app_nn9qHKPafHCSDKq5';
@@ -90,7 +95,7 @@ class Attendances extends BaseController
             $this->failure(ERROR_PINGPP_CHARGE);
             return;
         }
-        $this->chargeDao->add($orderNo, $amount, $user->id, $ipAddress);
+        $this->chargeDao->add($orderNo, $amount, $user->userId, $ipAddress);
 
         $this->output->set_status_header(200);
         $this->output->set_content_type('application/json', 'utf-8');

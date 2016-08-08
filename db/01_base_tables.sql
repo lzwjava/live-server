@@ -61,7 +61,7 @@ CREATE TABLE `charges` (
   UNIQUE KEY `ORDER_NO_IDX` (`orderNo`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+  DEFAULT CHARSET = utf8mb4;
 
 
 CREATE TABLE `attendances` (
