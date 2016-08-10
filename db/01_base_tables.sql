@@ -63,15 +63,16 @@ CREATE TABLE `charges` (
 
 
 CREATE TABLE `attendances` (
-  `attendanceId` INT(11)     NOT NULL AUTO_INCREMENT,
-  `userId`       VARCHAR(31) NOT NULL,
-  `liveId`       INT(11)     NOT NULL,
-  `chargeId`     INT(11)     NOT NULL,
-  `created`      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `attendanceId` INT(11)   NOT NULL AUTO_INCREMENT,
+  `userId`       INT(11)   NOT NULL,
+  `liveId`       INT(11)   NOT NULL,
+  `chargeId`     INT(11)   NOT NULL,
+  `created`      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`attendanceId`),
   UNIQUE KEY `userId` (`userId`, `liveId`),
   KEY `liveId` (`liveId`),
   KEY `chargeId` (`chargeId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
   FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
   FOREIGN KEY (`chargeId`) REFERENCES `charges` (`chargeId`)
 )
