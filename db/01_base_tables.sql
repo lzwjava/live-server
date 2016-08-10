@@ -61,7 +61,6 @@ CREATE TABLE `charges` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-
 CREATE TABLE `attendances` (
   `attendanceId` INT(11)   NOT NULL AUTO_INCREMENT,
   `userId`       INT(11)   NOT NULL,
