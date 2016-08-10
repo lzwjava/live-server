@@ -17,7 +17,7 @@ func TestAttendances_create(t *testing.T) {
 
 	c2, user := NewClientAndUser()
 	userId := toStr(user.Get("userId").MustInt())
-	res := c2.post("attendances", url.Values{"liveId": {liveId}})
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}})
 	assert.NotNil(t, res)
 	_, exists := res.CheckGet("status")
 	assert.False(t, exists)
@@ -30,7 +30,7 @@ func TestAttendances_create(t *testing.T) {
 
 func createAttendance(c *Client, user *simplejson.Json, liveId string) {
 	userId := toStr(user.Get("userId").MustInt())
-	res := c.post("attendances", url.Values{"liveId": {liveId}})
+	res := c.postData("attendances", url.Values{"liveId": {liveId}})
 
 	orderNo := res.Get("order_no").MustString()
 	callbackStr := liveCallbackStr(orderNo, liveId, userId, 5000)

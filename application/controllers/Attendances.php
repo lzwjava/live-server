@@ -49,7 +49,12 @@ class Attendances extends BaseController
         $subject = truncate($user->username, 18) . '参加直播' . $live->liveId;
         $body = $user->username . ' 参加 ' . $live->subject;
         $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
-        $this->createChargeThenResponse($live->amount, $subject, $body, $metaData, $user);
+        $ch = $this->createPingPPCharge($live->amount, $subject, $body, $metaData, $user);
+        if ($ch == null) {
+            $this->failure(ERROR_PINGPP_CHARGE);
+            return;
+        }
+        $this->succeed($ch);
     }
 
     private function getOrderNo()
@@ -57,7 +62,7 @@ class Attendances extends BaseController
         return getToken(16);
     }
 
-    protected function createChargeThenResponse($amount, $subject, $body, $metaData, $user)
+    protected function createPingPPCharge($amount, $subject, $body, $metaData, $user)
     {
         $orderNo = $this->getOrderNo();
         if (isLocalDebug()) {
@@ -96,14 +101,10 @@ class Attendances extends BaseController
             if ($ch != null) {
                 logInfo("reason $ch->failure_message");
             }
-            $this->failure(ERROR_PINGPP_CHARGE);
-            return;
+            return null;
         }
         $this->chargeDao->add($orderNo, $amount, $user->userId, $ipAddress);
-
-        $this->output->set_status_header(200);
-        $this->output->set_content_type('application/json', 'utf-8');
-        echo($ch);
+        return $ch;
     }
 
     function one_get($liveId)
