@@ -37,6 +37,10 @@ class Attendances extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
+        if ($live->status == LIVE_STATUS_PREPARE || $live->status == LIVE_STATUS_OFF) {
+            $this->failure(ERROR_NOT_ALLOW_ATTEND);
+            return;
+        }
         if ($live->ownerId == $user->userId) {
             $this->failure(ERROR_OWNER_CANNOT_ATTEND);
             return;

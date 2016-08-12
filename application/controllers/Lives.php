@@ -39,35 +39,34 @@ class Lives extends BaseController
 
     function create_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_SUBJECT))) {
             return;
         }
         $user = $this->checkAndGetSessionUser();
         $subject = $this->post(KEY_SUBJECT);
-        $coverUrl = $this->post(KEY_COVER_URL);
-        $amount = $this->toNumber($this->post(KEY_AMOUNT));
-
-        if ($this->checkIfAmountWrong($amount)) {
-            return;
-        }
-
-        $id = $this->liveDao->createLive($user->userId, $subject, $coverUrl, $amount);
+        $id = $this->liveDao->createLive($user->userId, $subject);
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
-            return;
-        }
-        $ok = $this->statusDao->open($id);
-        if (!$ok) {
-            $this->failure(ERROR_REDIS_WRONG);
             return;
         }
         $live = $this->liveDao->getLive($id);
         $this->succeed($live);
     }
 
+    function begin_get($liveId)
+    {
+        $ok = $this->statusDao->open($liveId);
+        if (!$ok) {
+            $this->failure(ERROR_REDIS_WRONG);
+            return;
+        }
+        $ok = $this->liveDao->beginLive($liveId);
+        $this->succeed($ok);
+    }
+
     function update_post($liveId)
     {
-        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT, KEY_DETAIL);
+        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT, KEY_DETAIL, KEY_PLAN_TS);
         if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
         ) {
             return;
@@ -124,12 +123,35 @@ class Lives extends BaseController
     function end_get($id)
     {
         $live = $this->liveDao->getLive($id);
-        if (!$live) {
-            $this->failure(ERROR_OBJECT_NOT_EXIST);
+        if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        $this->statusDao->endLive($id);
-        $this->succeed();
+        $ok = $this->statusDao->endLive($id);
+        $this->succeed($ok);
+    }
+
+    function publish_get($id)
+    {
+        $live = $this->liveDao->getLive($id);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        if (!$live->coverUrl || !trim($live->subject) || !trim($live->detail)) {
+            $this->failure(ERROR_FIELDS_EMPTY);
+            return;
+        }
+        if ($this->checkIfAmountWrong($live->amount)) {
+            return;
+        }
+        $planTs = date_create($live->plan_ts, new DateTimeZone('Asia/Shanghai'));
+        $now = date_create('now');
+        $diff = date_diff($planTs, $now);
+        if ($diff->invert == 0) {
+            $this->failure(ERROR_PLAN_TS_INVALID);
+            return;
+        }
+        $this->liveDao->publishLive($id);
+        $this->succeed(true);
     }
 
 }

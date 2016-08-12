@@ -72,8 +72,9 @@ class StatusDao extends BaseDao
 
     function endLive($id)
     {
-        $this->liveDao->endLive($id);
-        $this->client->hdel($this->alivesKey(), $id);
+        $ok = $this->liveDao->endLive($id);
+        $delOk = $this->client->hdel($this->alivesKey(), $id);
+        return $ok && $delOk;
     }
 
 }

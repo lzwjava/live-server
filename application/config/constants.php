@@ -111,10 +111,14 @@ define('ERROR_LOGIN_FAILED', 'login_failed');
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
 define('ERROR_OWNER_CANNOT_ATTEND', 'owner_cannot_attend');
+define('ERROR_FIELDS_EMPTY', 'live_fields_empty');
+define('ERROR_PLAN_TS_INVALID', 'plan_ts_invalid');
+
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
 define('ERROR_PINGPP_CHARGE', 'pingpp_failed');
+define('ERROR_NOT_ALLOW_ATTEND', 'not_allow_attend');
 
 
 if (!function_exists('errorInfos')) {
@@ -138,10 +142,13 @@ if (!function_exists('errorInfos')) {
             ERROR_AMOUNT_TOO_LITTLE => '门票至少为 1 元',
             ERROR_AMOUNT_TOO_MUCH => '门票最多为 1000 元',
             ERROR_OWNER_CANNOT_ATTEND => '主播自己无法报名',
+            ERROR_FIELDS_EMPTY => '需要封面图,主题,详情才能发布',
+            ERROR_PLAN_TS_INVALID => '预计的直播时间应该晚于现在',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
             ERROR_PINGPP_CHARGE => '创建支付失败',
+            ERROR_NOT_ALLOW_ATTEND => '直播尚在编辑之中或者已结束,无法报名'
         );
     }
 
@@ -165,6 +172,7 @@ define('KEY_RTMP_KEY', 'rtmpKey');
 define('KEY_STATUS', 'status');
 define('KEY_COVER_URL', 'coverUrl');
 define('KEY_AMOUNT', 'amount');
+define('KEY_PLAN_TS', 'plan_ts');
 define('KEY_BEGIN_TS', 'begin_ts');
 define('KEY_END_TS', 'end_ts');
 define('KEY_OWNER_ID', 'ownerId');
