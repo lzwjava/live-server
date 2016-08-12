@@ -14,5 +14,6 @@ Install dependencies: composer install, composer update
 示例:
 
 curl -X GET http://localhost:3005/users/isRegister map[mobilePhoneNumber:[13274100361]]
+
 response: {"status":"success","result":false,"error":""}
 
