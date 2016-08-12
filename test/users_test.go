@@ -68,4 +68,10 @@ func TestUser_isRegister(t *testing.T) {
 	mobile := randomMobile()
 	res := c.getData("users/isRegister", url.Values{"mobilePhoneNumber": {mobile}})
 	assert.False(t, res.MustBool())
+
+	res = registerUserWithPhone(c, mobile, randomString())
+	assert.NotNil(t, res)
+
+	res = c.getData("users/isRegister", url.Values{"mobilePhoneNumber": {mobile}})
+	assert.True(t, res.MustBool())
 }
