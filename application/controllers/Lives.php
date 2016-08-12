@@ -100,7 +100,9 @@ class Lives extends BaseController
 
     function list_get()
     {
-        $lives = $this->liveDao->getLivingLives();
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $lives = $this->liveDao->getLivingLives($skip, $limit);
         $this->succeed($lives);
     }
 

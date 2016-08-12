@@ -207,6 +207,7 @@ define('KEY_CREATOR_IP', 'creatorIP');
 // attendances
 define('TABLE_ATTENDANCES', 'attendances');
 define('KEY_ATTENDANCE_ID', 'attendanceId');
+define('KEY_ATTENDANCE_COUNT', 'attendanceCount');
 
 // cookie
 define('KEY_COOKIE_TOKEN', 'SessionToken');

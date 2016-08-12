@@ -35,17 +35,28 @@ class LiveDao extends BaseDao
 
     function getLive($id)
     {
-        $live = $this->getOneFromTable(TABLE_LIVES, KEY_LIVE_ID, $id);
-        if ($live != null) {
-            $this->assembleLives(array($live));
+        $lives = $this->getLives(KEY_LIVE_ID, $id, 0, 1);
+        if (count($lives) > 0) {
+            return $lives[0];
         }
-        return $live;
+        return null;
     }
 
-    function getLivingLives()
+    function getLivingLives($skip, $limit)
     {
-        $lives = $this->getListFromTable(TABLE_LIVES, KEY_STATUS, LIVE_STATUS_ON,
-            '*', 'begin_ts desc');
+        $lives = $this->getLives(KEY_STATUS, LIVE_STATUS_ON, $skip, $limit);
+        return $lives;
+    }
+
+    private function getLives($field, $value, $skip, $limit)
+    {
+        $fields = $this->livePublicFields('l');
+        $userFields = $this->userPublicFields('u', true);
+        $sql = "select $fields, $userFields from lives as l
+                left join users as u on u.userId=l.ownerId
+                where l.$field = ?
+                limit $limit offset $skip";
+        $lives = $this->db->query($sql, array($value))->result();
         $this->assembleLives($lives);
         return $lives;
     }
@@ -53,6 +64,8 @@ class LiveDao extends BaseDao
     private function assembleLives($lives)
     {
         foreach ($lives as $live) {
+            $us = $this->prefixFields($this->userPublicRawFields(), 'u');
+            $live->owner = extractFields($live, $us, 'u');
             $live->rtmpUrl = "rtmp://hotimg.cn/live/" . $live->rtmpKey;
         }
     }
@@ -84,6 +97,12 @@ class LiveDao extends BaseDao
         return $this->update($id, array(
             KEY_STATUS => LIVE_STATUS_WAIT
         ));
+    }
+
+    function incrementAttendanceCount()
+    {
+        $sql = "update lives set attendanceCount = attendanceCount+1";
+        return $this->db->query($sql);
     }
 
 }

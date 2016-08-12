@@ -81,3 +81,7 @@ CREATE TABLE `attendances` (
 ALTER TABLE `lives` ADD COLUMN `plan_ts` TIMESTAMP NOT NULL
   DEFAULT CURRENT_TIMESTAMP
 AFTER `status`;
+
+ALTER TABLE `lives` ADD COLUMN `attendanceCount` INT NOT NULL
+  DEFAULT 0
+AFTER `status`;

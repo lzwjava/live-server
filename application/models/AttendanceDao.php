@@ -8,14 +8,6 @@
  */
 class AttendanceDao extends BaseDao
 {
-    public $userDao;
-
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model(UserDao::class);
-        $this->userDao = new UserDao();
-    }
 
     function addAttendance($userId, $liveId, $chargeId)
     {
@@ -64,7 +56,7 @@ class AttendanceDao extends BaseDao
     {
         $fields = $this->attendancePublicFields('a');
         $liveFields = $this->livePublicFields('l', true);
-        $userFields = $this->userDao->publicFields('u', true);
+        $userFields = $this->userPublicFields('u', true);
         $sql = "select $fields,$liveFields,$userFields
                 from attendances as a
                 left join lives as l USING(liveId)
@@ -82,7 +74,7 @@ class AttendanceDao extends BaseDao
         foreach ($attendances as $attendance) {
             $ls = $this->prefixFields($this->liveFields(), 'l');
             $attendance->event = extractFields($attendance, $ls, 'l');
-            $us = $this->prefixFields($this->userDao->publicRawFields(), 'u');
+            $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $attendance->user = extractFields($attendance, $us, 'u');
         }
     }

@@ -89,7 +89,7 @@ class BaseDao extends CI_Model
 
     protected function liveFields()
     {
-        return array(KEY_LIVE_ID, KEY_SUBJECT, KEY_RTMP_KEY, KEY_STATUS,
+        return array(KEY_LIVE_ID, KEY_SUBJECT, KEY_RTMP_KEY, KEY_STATUS, KEY_ATTENDANCE_COUNT, KEY_PLAN_TS,
             KEY_COVER_URL, KEY_AMOUNT, KEY_BEGIN_TS, KEY_END_TS, KEY_OWNER_ID, KEY_DETAIL);
     }
 
@@ -97,4 +97,15 @@ class BaseDao extends CI_Model
     {
         return $this->mergeFields($this->liveFields(), $prefix, $alias);
     }
+
+    function userPublicRawFields()
+    {
+        return array(KEY_USER_ID, KEY_AVATAR_URL, KEY_USERNAME);
+    }
+
+    function userPublicFields($prefix = TABLE_USERS, $alias = false)
+    {
+        return $this->mergeFields($this->userPublicRawFields(), $prefix, $alias);
+    }
+
 }

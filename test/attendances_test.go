@@ -76,3 +76,14 @@ func TestAttendances_list(t *testing.T) {
 	assert.NotNil(t, res)
 	assert.Equal(t, len(res.MustArray()), 1)
 }
+
+func TestAttendances_count(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, user := NewClientAndUser()
+	createAttendance(c2, user, liveId)
+
+	live := getLive(c, liveId)
+	assert.Equal(t, live.Get("attendanceCount").MustInt(), 1)
+}

@@ -6,6 +6,7 @@ import (
 
 	"time"
 
+	"github.com/bitly/go-simplejson"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -54,6 +55,11 @@ func TestLives_get(t *testing.T) {
 	assert.NotNil(t, live.Get("end_ts"))
 	assert.NotNil(t, live.Get("begin_ts"))
 	assert.NotNil(t, live.Get("subject"))
+}
+
+func getLive(c *Client, liveId string) *simplejson.Json {
+	live := c.getData("lives/"+liveId, url.Values{})
+	return live
 }
 
 func TestLives_livings(t *testing.T) {

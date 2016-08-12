@@ -70,6 +70,7 @@ class Rewards extends BaseController
             $this->chargeDao->updateChargeToPaid($orderNo);
             $charge = $this->chargeDao->getOneByOrderNo($orderNo);
             $this->attendanceDao->addAttendance($userId, $liveId, $charge->chargeId);
+            $this->liveDao->incrementAttendanceCount();
             $this->db->trans_complete();
             if (!$this->db->trans_status()) {
                 $this->failure(ERROR_SQL_WRONG);
