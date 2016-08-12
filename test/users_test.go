@@ -62,3 +62,10 @@ func TestUser_requestSmsCode(t *testing.T) {
 	res := c.post("requestSmsCode", url.Values{"mobilePhoneNumber": {"xx"}})
 	assert.Equal(t, res.Get("status").MustString(), "sms_wrong")
 }
+
+func TestUser_isRegister(t *testing.T) {
+	c := NewClient()
+	mobile := randomMobile()
+	res := c.getData("users/isRegister", url.Values{"mobilePhoneNumber": {mobile}})
+	assert.False(t, res.MustBool())
+}

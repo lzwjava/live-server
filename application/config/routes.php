@@ -59,6 +59,7 @@ $route['self']['GET'] = 'users/self';
 $route['users']['POST'] = 'users/register';
 $route['login']['POST'] = 'users/login';
 $route['requestSmsCode']['POST'] = 'users/requestSmsCode';
+$route['users/isRegister']['GET'] = 'users/isRegister';
 
 // lives
 $route['lives']['POST'] = 'lives/create';

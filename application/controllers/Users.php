@@ -78,7 +78,7 @@ class Users extends BaseController
         $smsCode = $_POST[KEY_SMS_CODE];
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
-        } elseif ($this->userDao->checkIfMobilePhoneNumberUsed($mobilePhoneNumber)) {
+        } elseif ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
             $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
         } else if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
             return;
@@ -94,7 +94,7 @@ class Users extends BaseController
 
     private function checkIfUsernameUsedAndReponse($username)
     {
-        if ($this->userDao->checkIfUsernameUsed($username)) {
+        if ($this->userDao->isUsernameUsed($username)) {
             $this->failure(ERROR_USERNAME_TAKEN);
             return true;
         } else {
@@ -166,6 +166,16 @@ class Users extends BaseController
         }
         $user = $this->userDao->updateUser($user, $data);
         $this->succeed($user);
+    }
+
+    public function isRegister_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_MOBILE_PHONE_NUMBER))) {
+            return;
+        }
+        $mobile = $this->get(KEY_MOBILE_PHONE_NUMBER);
+        $used = $this->userDao->isMobilePhoneNumberUsed($mobile);
+        $this->succeed($used);
     }
 
 }

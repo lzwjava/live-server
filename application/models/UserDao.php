@@ -8,21 +8,21 @@
  */
 class UserDao extends BaseDao
 {
-    private function checkIfUserUsed($field, $value)
+    private function isUserUsed($field, $value)
     {
         $sql = "SELECT * FROM users WHERE $field =?";
         $array[] = $value;
         return $this->db->query($sql, $array)->num_rows() > 0;
     }
 
-    function checkIfUsernameUsed($username)
+    function isUsernameUsed($username)
     {
-        return $this->checkIfUserUsed(KEY_USERNAME, $username);
+        return $this->isUserUsed(KEY_USERNAME, $username);
     }
 
-    function checkIfMobilePhoneNumberUsed($mobilePhoneNumber)
+    function isMobilePhoneNumberUsed($mobilePhoneNumber)
     {
-        return $this->checkIfUserUsed(KEY_MOBILE_PHONE_NUMBER, $mobilePhoneNumber);
+        return $this->isUserUsed(KEY_MOBILE_PHONE_NUMBER, $mobilePhoneNumber);
     }
 
     function insertUser($username, $mobilePhoneNumber, $avatarUrl, $password)
