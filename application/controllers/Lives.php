@@ -145,7 +145,7 @@ class Lives extends BaseController
         if ($this->checkIfAmountWrong($live->amount)) {
             return;
         }
-        $planTs = date_create($live->plan_ts, new DateTimeZone('Asia/Shanghai'));
+        $planTs = date_create($live->planTs, new DateTimeZone('Asia/Shanghai'));
         $now = date_create('now');
         $diff = date_diff($planTs, $now);
         if ($diff->invert == 0) {

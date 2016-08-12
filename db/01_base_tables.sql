@@ -24,21 +24,22 @@ CREATE TABLE `users` (
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `lives` (
-  `liveId`   INT(11)       NOT NULL             AUTO_INCREMENT,
-  `ownerId`  INT(11)       NOT NULL             DEFAULT 0,
-  `rtmpKey`  VARCHAR(30)   NOT NULL             DEFAULT '',
-  `subject`  VARCHAR(60)   NOT NULL             DEFAULT '',
-  `coverUrl` VARCHAR(60)   NOT NULL             DEFAULT '',
-  `amount`   INT           NOT NULL             DEFAULT 0,
-  `detail`   VARCHAR(1023) NOT NULL             DEFAULT '',
-  `status`   TINYINT(4)    NOT NULL             DEFAULT 0,
-  `begin_ts` TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
-  `end_ts`   TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
-  `created`  TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
-  `updated`  TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `liveId`          INT(11)       NOT NULL             AUTO_INCREMENT,
+  `ownerId`         INT(11)       NOT NULL             DEFAULT 0,
+  `rtmpKey`         VARCHAR(30)   NOT NULL             DEFAULT '',
+  `subject`         VARCHAR(60)   NOT NULL             DEFAULT '',
+  `coverUrl`        VARCHAR(60)   NOT NULL             DEFAULT '',
+  `amount`          INT           NOT NULL             DEFAULT 0,
+  `detail`          VARCHAR(1023) NOT NULL             DEFAULT '',
+  `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
+  `attendanceCount` INT           NOT NULL             DEFAULT 0,
+  `planTs`          TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `beginTs`         TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `endTs`           TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `created`         TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `updated`         TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`liveId`),
   UNIQUE KEY (`rtmpKey`),
-  KEY `live_begin_ts` (`begin_ts`),
   KEY `live_status` (`status`),
   KEY `live_owner_id` (`ownerId`),
   FOREIGN KEY (`ownerId`) REFERENCES `users` (`userId`)
@@ -77,11 +78,3 @@ CREATE TABLE `attendances` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `lives` ADD COLUMN `plan_ts` TIMESTAMP NOT NULL
-  DEFAULT CURRENT_TIMESTAMP
-AFTER `status`;
-
-ALTER TABLE `lives` ADD COLUMN `attendanceCount` INT NOT NULL
-  DEFAULT 0
-AFTER `status`;

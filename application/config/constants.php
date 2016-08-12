@@ -112,7 +112,7 @@ define('ERROR_LOGIN_FAILED', 'login_failed');
 define('ERROR_ALIVE_FAIL', 'alive_fail');
 define('ERROR_OWNER_CANNOT_ATTEND', 'owner_cannot_attend');
 define('ERROR_FIELDS_EMPTY', 'live_fields_empty');
-define('ERROR_PLAN_TS_INVALID', 'plan_ts_invalid');
+define('ERROR_PLAN_TS_INVALID', 'planTs_invalid');
 
 
 // attendances
@@ -172,9 +172,9 @@ define('KEY_RTMP_KEY', 'rtmpKey');
 define('KEY_STATUS', 'status');
 define('KEY_COVER_URL', 'coverUrl');
 define('KEY_AMOUNT', 'amount');
-define('KEY_PLAN_TS', 'plan_ts');
-define('KEY_BEGIN_TS', 'begin_ts');
-define('KEY_END_TS', 'end_ts');
+define('KEY_PLAN_TS', 'planTs');
+define('KEY_BEGIN_TS', 'beginTs');
+define('KEY_END_TS', 'endTs');
 define('KEY_OWNER_ID', 'ownerId');
 define('KEY_DETAIL', 'detail');
 

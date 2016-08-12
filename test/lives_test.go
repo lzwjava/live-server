@@ -39,7 +39,7 @@ func updateLiveAndPublish(c *Client, liveId string) {
 	c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg"},
 		"amount":   {"30000"}, "detail": {"这次主要讲下多年来 C++ 的编程实战"},
-		"plan_ts": {planTs}})
+		"planTs": {planTs}})
 	c.getData("lives/"+liveId+"/publish", url.Values{})
 }
 
@@ -91,12 +91,12 @@ func TestLives_update(t *testing.T) {
 	res := c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg"},
 		"amount":   {"30000"}, "detail": {"这次主要讲下多年来 C++ 的编程实战"},
-		"plan_ts": {planTs}})
+		"planTs": {planTs}})
 	assert.NotNil(t, res)
 	assert.NotNil(t, res.Get("coverUrl"))
 	assert.Equal(t, res.Get("detail").MustString(), "这次主要讲下多年来 C++ 的编程实战")
 	assert.Equal(t, res.Get("coverUrl").MustString(), "http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg")
-	assert.Equal(t, res.Get("plan_ts").MustString(), planTs)
+	assert.Equal(t, res.Get("planTs").MustString(), planTs)
 	assert.NotNil(t, res.Get("amount").MustInt(), 30000)
 }
 
@@ -114,7 +114,7 @@ func TestLives_publish(t *testing.T) {
 	updateRes := c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg"},
 		"amount":   {"30000"}, "detail": {"这次主要讲下多年来 C++ 的编程实战"},
-		"plan_ts": {planTs}})
+		"planTs": {planTs}})
 	assert.NotNil(t, updateRes)
 	time.Sleep(time.Second)
 	res := c.getData("lives/"+liveId+"/publish", url.Values{})
