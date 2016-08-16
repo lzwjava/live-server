@@ -61,14 +61,9 @@ class Attendances extends BaseController
         $this->succeed($ch);
     }
 
-    private function getOrderNo()
-    {
-        return getToken(16);
-    }
-
     protected function createPingPPCharge($amount, $subject, $body, $metaData, $user)
     {
-        $orderNo = $this->getOrderNo();
+        $orderNo = $this->genOrderNo();
         if (isLocalDebug()) {
             \Pingpp\Pingpp::setApiKey('sk_test_nz9af5CKmb5CnXn10Ou1eHq5');
         } else {

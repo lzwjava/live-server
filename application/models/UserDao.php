@@ -85,7 +85,7 @@ class UserDao extends BaseDao
 
     function findPublicUser($field, $value)
     {
-        $fields = $this->userPublicRawFields();
+        $fields = $this->userPublicFields();
         return $this->getOneFromTable(TABLE_USERS, $field, $value, $fields);
     }
 

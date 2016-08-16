@@ -9,12 +9,12 @@
 class AttendanceDao extends BaseDao
 {
 
-    function addAttendance($userId, $liveId, $chargeId)
+    function addAttendance($userId, $liveId, $orderNo)
     {
         $data = array(
             KEY_USER_ID => $userId,
             KEY_LIVE_ID => $liveId,
-            KEY_CHARGE_ID => $chargeId
+            KEY_ORDER_NO => $orderNo
         );
         $this->db->insert(TABLE_ATTENDANCES, $data);
         return $this->db->insert_id();

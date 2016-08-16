@@ -63,18 +63,46 @@ CREATE TABLE `charges` (
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `attendances` (
-  `attendanceId` INT(11)   NOT NULL AUTO_INCREMENT,
-  `userId`       INT(11)   NOT NULL,
-  `liveId`       INT(11)   NOT NULL,
-  `chargeId`     INT(11)   NOT NULL,
-  `created`      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `attendanceId` INT(11)     NOT NULL AUTO_INCREMENT,
+  `userId`       INT(11)     NOT NULL,
+  `liveId`       INT(11)     NOT NULL,
+  `orderNo`      VARCHAR(31) NOT NULL DEFAULT '',
+  `created`      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`attendanceId`),
   UNIQUE KEY `userId` (`userId`, `liveId`),
   KEY `liveId` (`liveId`),
-  KEY `chargeId` (`chargeId`),
+  UNIQUE KEY `orderNo` (`orderNo`),
   FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
-  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
-  FOREIGN KEY (`chargeId`) REFERENCES `charges` (`chargeId`)
+  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `accounts` (
+  `accountId` INT(11)   NOT NULL AUTO_INCREMENT,
+  `userId`    INT(11)   NOT NULL,
+  `balance`   INT(11)   NOT NULL DEFAULT 0,
+  `created`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`accountId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `transactions` (
+  `transactionId` INT(11)     NOT NULL AUTO_INCREMENT,
+  `userId`        INT(11)     NOT NULL,
+  `orderNo`       VARCHAR(31) NOT NULL DEFAULT '',
+  `amount`        INT(11)     NOT NULL DEFAULT 0,
+  `oldBalance`    INT(11)     NOT NULL DEFAULT 0,
+  `type`          TINYINT(4)  NOT NULL DEFAULT 0,
+  `relatedId`     VARCHAR(31) NOT NULL DEFAULT '',
+  `remark`        VARCHAR(60) NOT NULL DEFAULT '',
+  `created`       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`transactionId`),
+  UNIQUE KEY `orderNo` (`orderNo`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

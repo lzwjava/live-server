@@ -197,5 +197,12 @@ class BaseController extends REST_Controller
             return null;
         }
     }
+
+
+    protected function genOrderNo()
+    {
+        return getToken(16);
+    }
+
 }
 

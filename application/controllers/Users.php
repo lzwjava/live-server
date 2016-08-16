@@ -85,7 +85,7 @@ class Users extends BaseController
         } else if ($this->checkIfWrongPasswordFormat($password)) {
             return;
         } else {
-            $defaultAvatarUrl = "http://7xotd0.com1.z0.glb.clouddn.com/android.png";
+            $defaultAvatarUrl = "http://obcbndtjd.bkt.clouddn.com/defaultAvatar1.png";
             $this->userDao->insertUser($username, $mobilePhoneNumber, $defaultAvatarUrl,
                 $password);
             $this->loginOrRegisterSucceed($mobilePhoneNumber);

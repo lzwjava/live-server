@@ -120,6 +120,10 @@ define('ERROR_ALREADY_ATTEND', 'already_attend');
 define('ERROR_PINGPP_CHARGE', 'pingpp_failed');
 define('ERROR_NOT_ALLOW_ATTEND', 'not_allow_attend');
 
+// transactions
+define('ERROR_BALANCE_INSUFFICIENT', 'balance_insufficient');
+define('ERROR_TRANS_FAILED', 'trans_failed');
+
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -148,7 +152,11 @@ if (!function_exists('errorInfos')) {
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
             ERROR_PINGPP_CHARGE => '创建支付失败',
-            ERROR_NOT_ALLOW_ATTEND => '直播尚在编辑之中或者已结束,无法报名'
+            ERROR_NOT_ALLOW_ATTEND => '直播尚在编辑之中或者已结束,无法报名',
+
+            // transactions
+            ERROR_BALANCE_INSUFFICIENT => '余额不足',
+            ERROR_TRANS_FAILED => '交易失败'
         );
     }
 
@@ -208,6 +216,28 @@ define('KEY_CREATOR_IP', 'creatorIP');
 define('TABLE_ATTENDANCES', 'attendances');
 define('KEY_ATTENDANCE_ID', 'attendanceId');
 define('KEY_ATTENDANCE_COUNT', 'attendanceCount');
+
+// transactions
+define('TABLE_TRANSACTIONS', 'transactions');
+define('KEY_TRANSACTION_ID', 'transactionId');
+define('KEY_OLD_BALANCE', 'oldBalance');
+define('KEY_RELATED_ID', 'relatedId');
+define('KEY_TYPE', 'type');
+define('KEY_REMARK', 'remark');
+
+// accounts
+define('TABLE_ACCOUNTS', 'accounts');
+define('KEY_ACCOUNT_ID', 'accountId');
+define('KEY_BALANCE', 'balance');
+
+define('TRANS_TYPE_RECHARGE', 1);
+define('TRANS_TYPE_PAY', 2);
+define('TRANS_TYPE_INCOME', 3);
+
+define('REMARK_ALIPAY', '支付宝充值');
+define('REMARK_WECHAT', '微信充值');
+define('REMARK_PAY', '参加%s的直播');
+define('REMARK_INCOME_LIVE', '%s报名直播');
 
 // cookie
 define('KEY_COOKIE_TOKEN', 'SessionToken');
