@@ -83,3 +83,4 @@ $route['attendances']['GET'] = 'attendances/list';
 // qrcodes
 $route['qrcodes']['POST'] = 'qrcodes/scanQrcode';
 $route['qrcodes/scanned']['GET'] = 'qrcodes/isQrcodeScanned';
+$route['qrcodes/gen']['GET'] = 'qrcodes/png';
