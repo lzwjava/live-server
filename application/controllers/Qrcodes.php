@@ -23,9 +23,13 @@ class Qrcodes extends BaseController
         $this->userDao = new UserDao();
     }
 
-    private function isCodeValid($code)
+    private function checkCodeInvalid($code)
     {
-        return preg_match('/quzhibo-[a-zA-Z0-9]{32}/', $code);
+        if (!preg_match('/quzhibo-[a-zA-Z0-9]{32}/', $code)) {
+            $this->failure(ERROR_QRCODE_INVALID);
+            return true;
+        }
+        return false;
     }
 
     function scanQrcode_post()
@@ -34,8 +38,7 @@ class Qrcodes extends BaseController
             return;
         }
         $code = $this->post(KEY_CODE);
-        if (!$this->isCodeValid($code)) {
-            $this->failure(ERROR_QRCODE_INVALID);
+        if ($this->checkCodeInvalid($code)) {
             return;
         }
         $user = $this->checkAndGetSessionUser();
@@ -71,6 +74,9 @@ class Qrcodes extends BaseController
             return;
         }
         $code = $this->get(KEY_CODE);
+        if ($this->checkCodeInvalid($code)) {
+            return;
+        }
         $qrcode = new QrCode();
         $qrcode
             ->setText($code)
