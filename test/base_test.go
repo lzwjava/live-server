@@ -120,6 +120,17 @@ func randomString() string {
 	return strconv.Itoa(rand.Intn(100000))
 }
 
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+func RandAlnum(n int) string {
+	rnd := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rnd.Intn(len(letters))]
+	}
+	return string(b)
+}
+
 func md5password(password string) string {
 	data := []byte(password)
 	return fmt.Sprintf("%x", md5.Sum(data))

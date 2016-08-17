@@ -123,9 +123,27 @@ class UserDao extends BaseDao
         }
     }
 
-    function updateSessionTokenIfNeeded($mobilePhoneNumber)
+    private function setLoginByUser($user)
     {
-        $user = $this->findUser(KEY_MOBILE_PHONE_NUMBER, $mobilePhoneNumber, false);
+        $newUser = $this->updateSessionTokenByUserIfNeeded($user);
+        setCookieForever(KEY_COOKIE_TOKEN, $newUser->sessionToken);
+        return $newUser;
+    }
+
+    function setLoginByMobilePhone($mobilePhone)
+    {
+        $user = $this->findUser(KEY_MOBILE_PHONE_NUMBER, $mobilePhone, false);
+        return $this->setLoginByUser($user);
+    }
+
+    function setLoginByUserId($userId)
+    {
+        $user = $this->findUser(KEY_USER_ID, $userId, false);
+        return $this->setLoginByUser($user);
+    }
+
+    private function updateSessionTokenByUserIfNeeded($user)
+    {
         $created = strtotime($user->sessionTokenCreated);
         $now = dateWithMs();
         $nowMillis = strtotime($now);

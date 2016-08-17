@@ -124,6 +124,9 @@ define('ERROR_NOT_ALLOW_ATTEND', 'not_allow_attend');
 define('ERROR_BALANCE_INSUFFICIENT', 'balance_insufficient');
 define('ERROR_TRANS_FAILED', 'trans_failed');
 
+// qrcodes
+define('ERROR_QRCODE_INVALID', 'qrcode_invalid');
+
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -156,7 +159,10 @@ if (!function_exists('errorInfos')) {
 
             // transactions
             ERROR_BALANCE_INSUFFICIENT => '余额不足',
-            ERROR_TRANS_FAILED => '交易失败'
+            ERROR_TRANS_FAILED => '交易失败',
+
+            // qrcodes
+            ERROR_QRCODE_INVALID => '不符合规范的二维码'
         );
     }
 
@@ -238,6 +244,13 @@ define('REMARK_ALIPAY', '支付宝充值');
 define('REMARK_WECHAT', '微信充值');
 define('REMARK_PAY', '参加%s的直播');
 define('REMARK_INCOME_LIVE', '%s报名直播');
+
+// qrcodes
+define('TABLE_SCANNED_QRCODES', 'scanned_qrcodes');
+define('KEY_QRCODE_ID', 'qrcodeId');
+define('KEY_CODE', 'code');
+
+define('KEY_SCANNED', 'scanned');
 
 // cookie
 define('KEY_COOKIE_TOKEN', 'SessionToken');

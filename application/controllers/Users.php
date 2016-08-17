@@ -120,8 +120,7 @@ class Users extends BaseController
 
     public function loginOrRegisterSucceed($mobilePhoneNumber)
     {
-        $user = $this->userDao->updateSessionTokenIfNeeded($mobilePhoneNumber);
-        setCookieForever(KEY_COOKIE_TOKEN, $user->sessionToken);
+        $user = $this->userDao->setLoginByMobilePhone($mobilePhoneNumber);
         $this->succeed($user);
     }
 

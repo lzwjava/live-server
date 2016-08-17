@@ -106,3 +106,15 @@ CREATE TABLE `transactions` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `scanned_qrcodes` (
+  `qrcodeId` INT(11)     NOT NULL AUTO_INCREMENT,
+  `code`     VARCHAR(60) NOT NULL DEFAULT '',
+  `userId`   INT(11)     NOT NULL DEFAULT 0,
+  `created`  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`qrcodeId`),
+  UNIQUE KEY (`code`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;

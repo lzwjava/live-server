@@ -79,3 +79,7 @@ $route['jobs/alive']['GET'] = 'jobs/alive';
 $route['attendances']['POST'] = 'attendances/create';
 $route['attendances/(\d+)']['GET'] = 'attendances/one/$1';
 $route['attendances']['GET'] = 'attendances/list';
+
+// qrcodes
+$route['qrcodes']['POST'] = 'qrcodes/scanQrcode';
+$route['qrcodes/scanned']['GET'] = 'qrcodes/isQrcodeScanned';
