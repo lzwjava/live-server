@@ -59,6 +59,16 @@ class Qrcodes extends BaseController
             return;
         }
         $code = $this->get(KEY_CODE);
+        $secs = 0;
+        while ($secs < 10) {
+            $qrcode = $this->qrcodeDao->getQrcode($code);
+            if (!$qrcode) {
+                sleep(1);
+                $secs++;
+            } else {
+                break;
+            }
+        }
         $qrcode = $this->qrcodeDao->getQrcode($code);
         if (!$qrcode) {
             $this->succeed(array(KEY_SCANNED => false));
