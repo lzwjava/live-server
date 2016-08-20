@@ -120,3 +120,14 @@ func TestLives_publish(t *testing.T) {
 	res := c.getData("lives/"+liveId+"/publish", url.Values{})
 	assert.True(t, res.MustBool())
 }
+
+func TestLives_lastPrepare(t *testing.T) {
+	c, _ := NewClientAndUser()
+	res := c.getData("lives/lastPrepare", url.Values{})
+	assert.NotNil(t, res)
+	liveId := res.Get("liveId").MustInt()
+	assert.NotNil(t, liveId)
+	res = c.getData("lives/lastPrepare", url.Values{})
+	newLiveId := res.Get("liveId").MustInt()
+	assert.Equal(t, liveId, newLiveId)
+}

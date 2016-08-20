@@ -70,6 +70,7 @@ $route['lives/(\d+)/alive']['GET'] = 'lives/alive/$1';
 $route['lives/(\d+)/end']['GET'] = 'lives/end/$1';
 $route['lives/(\d+)/begin']['GET'] = 'lives/begin/$1';
 $route['lives/(\d+)/publish']['GET'] = 'lives/publish/$1';
+$route['lives/lastPrepare']['GET'] = 'lives/lastPrepare';
 
 $route['lives/(\d+)/attendances']['GET'] = 'attendances/liveList/$1';
 

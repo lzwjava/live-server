@@ -156,4 +156,18 @@ class Lives extends BaseController
         $this->succeed(true);
     }
 
+    function lastPrepare_get()
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $live = $this->liveDao->lastPrepareLive($user);
+        if (!$live) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->succeed($live);
+    }
+
 }

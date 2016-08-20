@@ -104,5 +104,22 @@ class LiveDao extends BaseDao
         $sql = "UPDATE lives SET attendanceCount = attendanceCount+1";
         return $this->db->query($sql);
     }
-    
+
+    function lastPrepareLive($user)
+    {
+        $sql = "SELECT liveId FROM lives WHERE ownerId=? AND status=?";
+        $binds = array($user->userId, LIVE_STATUS_PREPARE);
+        $live = $this->db->query($sql, $binds)->row();
+        if ($live) {
+            return $this->getLive($live->liveId);
+        } else {
+            $liveId = $this->createLive($user->userId, $user->username . '的直播');
+            if (!$liveId) {
+                return null;
+            } else {
+                return $this->getLive($liveId);
+            }
+        }
+    }
+
 }
