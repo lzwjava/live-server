@@ -101,8 +101,8 @@ class LiveDao extends BaseDao
 
     function incrementAttendanceCount()
     {
-        $sql = "update lives set attendanceCount = attendanceCount+1";
+        $sql = "UPDATE lives SET attendanceCount = attendanceCount+1";
         return $this->db->query($sql);
     }
-
+    
 }
