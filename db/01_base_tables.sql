@@ -28,7 +28,7 @@ CREATE TABLE `lives` (
   `ownerId`         INT(11)       NOT NULL             DEFAULT 0,
   `rtmpKey`         VARCHAR(30)   NOT NULL             DEFAULT '',
   `subject`         VARCHAR(60)   NOT NULL             DEFAULT '',
-  `coverUrl`        VARCHAR(60)   NOT NULL             DEFAULT '',
+  `coverUrl`        VARCHAR(80)   NOT NULL             DEFAULT '',
   `amount`          INT           NOT NULL             DEFAULT 0,
   `detail`          VARCHAR(1023) NOT NULL             DEFAULT '',
   `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
