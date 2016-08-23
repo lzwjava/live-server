@@ -75,3 +75,11 @@ func TestUser_isRegister(t *testing.T) {
 	res = c.getData("users/isRegister", url.Values{"mobilePhoneNumber": {mobile}})
 	assert.True(t, res.MustBool())
 }
+
+func TestUser_logout(t *testing.T) {
+	c, _ := NewClientAndUser()
+	res := c.getData("logout", url.Values{})
+	assert.NotNil(t, res)
+	self := c.get("self", url.Values{})
+	assert.Equal(t, self.Get("status").MustString(), "not_in_session")
+}

@@ -58,6 +58,7 @@ $route['self']['POST'] = 'users/update';
 $route['self']['GET'] = 'users/self';
 $route['users']['POST'] = 'users/register';
 $route['login']['POST'] = 'users/login';
+$route['logout']['GET'] = 'users/logout';
 $route['requestSmsCode']['POST'] = 'users/requestSmsCode';
 $route['users/isRegister']['GET'] = 'users/isRegister';
 
