@@ -35,28 +35,34 @@ class LiveDao extends BaseDao
 
     function getLive($id)
     {
-        $lives = $this->getLives(KEY_LIVE_ID, $id, 0, 1);
+        $lives = $this->getLives(array($id));
         if (count($lives) > 0) {
             return $lives[0];
         }
         return null;
     }
 
-    function getLivingLives($skip, $limit)
+    function getHomeLives($skip, $limit)
     {
-        $lives = $this->getLives(KEY_STATUS, LIVE_STATUS_ON, $skip, $limit);
-        return $lives;
+        $sql = "SELECT liveId FROM lives
+                WHERE status!=? ORDER BY created
+                DESC limit $limit offset $skip";
+        $lives = $this->db->query($sql, array(LIVE_STATUS_PREPARE))->result();
+        $ids = array();
+        foreach ($lives as $live) {
+            array_push($ids, $live->liveId);
+        }
+        return $this->getLives($ids);
     }
 
-    private function getLives($field, $value, $skip, $limit)
+    private function getLives($liveIds)
     {
         $fields = $this->livePublicFields('l');
         $userFields = $this->userPublicFields('u', true);
         $sql = "select $fields, $userFields from lives as l
                 left join users as u on u.userId=l.ownerId
-                where l.$field = ?
-                limit $limit offset $skip";
-        $lives = $this->db->query($sql, array($value))->result();
+                where l.liveId in (" . implode(', ', $liveIds) . ")";
+        $lives = $this->db->query($sql)->result();
         $this->assembleLives($lives);
         return $lives;
     }

@@ -102,7 +102,7 @@ class Lives extends BaseController
     {
         $skip = $this->skip();
         $limit = $this->limit();
-        $lives = $this->liveDao->getLivingLives($skip, $limit);
+        $lives = $this->liveDao->getHomeLives($skip, $limit);
         $this->succeed($lives);
     }
 
