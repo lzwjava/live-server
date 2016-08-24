@@ -127,6 +127,8 @@ define('ERROR_TRANS_FAILED', 'trans_failed');
 // qrcodes
 define('ERROR_QRCODE_INVALID', 'qrcode_invalid');
 
+// alipay
+define('ERROR_PARTNER', 'partner_wrong');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -162,7 +164,10 @@ if (!function_exists('errorInfos')) {
             ERROR_TRANS_FAILED => '交易失败',
 
             // qrcodes
-            ERROR_QRCODE_INVALID => '不符合规范的二维码'
+            ERROR_QRCODE_INVALID => '不符合规范的二维码',
+
+            //alipay
+            ERROR_PARTNER => 'partner 或 service 参数错误'
         );
     }
 

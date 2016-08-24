@@ -85,3 +85,8 @@ $route['attendances/lives/(\d+)']['GET'] = 'attendances/liveList/$1';
 $route['qrcodes']['POST'] = 'qrcodes/scanQrcode';
 $route['qrcodes/scanned']['GET'] = 'qrcodes/isQrcodeScanned';
 $route['qrcodes/gen']['GET'] = 'qrcodes/png';
+
+// alipay
+$route['alipay/sign']['POST'] = 'alipay/sign';
+$route['alipay/return']['POST'] = 'alipay/return';
+$route['alipay/notify']['POST'] = 'alipay/notify';
