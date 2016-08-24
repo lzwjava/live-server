@@ -106,8 +106,12 @@ class Attendances extends BaseController
         return $ch;
     }
 
-    function one_get($liveId)
+    function one_get()
     {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_LIVE_ID))) {
+            return;
+        }
+        $liveId = $this->get(KEY_LIVE_ID);
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
@@ -119,7 +123,7 @@ class Attendances extends BaseController
         $this->succeed($attendance);
     }
 
-    function list_get()
+    function myList_get()
     {
         $user = $this->checkAndGetSessionUser();
         if (!$user) {

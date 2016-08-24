@@ -60,7 +60,7 @@ func TestAttendances_liveList(t *testing.T) {
 	c2, user := NewClientAndUser()
 	createAttendance(c2, user, liveId)
 
-	res := c.getData("lives/"+liveId+"/attendances", url.Values{})
+	res := c.getData("attendances/lives/"+liveId, url.Values{})
 	assert.NotNil(t, res)
 	assert.Equal(t, len(res.MustArray()), 1)
 }
@@ -72,7 +72,7 @@ func TestAttendances_list(t *testing.T) {
 	c2, user := NewClientAndUser()
 	createAttendance(c2, user, liveId)
 
-	res := c2.getData("attendances", url.Values{})
+	res := c2.getData("attendances/me", url.Values{})
 	assert.NotNil(t, res)
 	assert.Equal(t, len(res.MustArray()), 1)
 }
@@ -86,4 +86,19 @@ func TestAttendances_count(t *testing.T) {
 
 	live := getLive(c, liveId)
 	assert.Equal(t, live.Get("attendanceCount").MustInt(), 1)
+}
+
+func TestAttendances_oneByLiveId(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, user := NewClientAndUser()
+
+	res := c2.get("attendances/one", url.Values{"liveId": {liveId}})
+	assert.Equal(t, res.Get("status").MustString(), "object_not_exists")
+
+	createAttendance(c2, user, liveId)
+
+	attendance := c2.getData("attendances/one", url.Values{"liveId": {liveId}})
+	assert.NotNil(t, attendance)
 }

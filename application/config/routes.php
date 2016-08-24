@@ -73,14 +73,13 @@ $route['lives/(\d+)/begin']['GET'] = 'lives/begin/$1';
 $route['lives/(\d+)/publish']['GET'] = 'lives/publish/$1';
 $route['lives/lastPrepare']['GET'] = 'lives/lastPrepare';
 
-$route['lives/(\d+)/attendances']['GET'] = 'attendances/liveList/$1';
-
 $route['jobs/alive']['GET'] = 'jobs/alive';
 
 // attendances
 $route['attendances']['POST'] = 'attendances/create';
-$route['attendances/(\d+)']['GET'] = 'attendances/one/$1';
-$route['attendances']['GET'] = 'attendances/list';
+$route['attendances/one']['GET'] = 'attendances/one';
+$route['attendances/me']['GET'] = 'attendances/myList';
+$route['attendances/lives/(\d+)']['GET'] = 'attendances/liveList/$1';
 
 // qrcodes
 $route['qrcodes']['POST'] = 'qrcodes/scanQrcode';
