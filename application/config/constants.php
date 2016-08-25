@@ -129,6 +129,8 @@ define('ERROR_QRCODE_INVALID', 'qrcode_invalid');
 
 // alipay
 define('ERROR_PARTNER_OR_SERVICE', 'partner_or_service_wrong');
+define('ERROR_SIGN_FAILED', 'sign_failed');
+define('ERROR_ALREADY_NOTIFY', 'already_notify');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -168,6 +170,8 @@ if (!function_exists('errorInfos')) {
 
             //alipay
             ERROR_PARTNER_OR_SERVICE => 'partner 或 service 参数错误',
+            ERROR_SIGN_FAILED => '签名错误',
+            ERROR_ALREADY_NOTIFY => '重复的支付回调'
         );
     }
 
@@ -222,6 +226,7 @@ define('KEY_ORDER_NO', 'orderNo');
 define('KEY_PAID', 'paid');
 define('KEY_CREATOR', 'creator');
 define('KEY_CREATOR_IP', 'creatorIP');
+define('KEY_META_DATA', 'metaData');
 
 // attendances
 define('TABLE_ATTENDANCES', 'attendances');

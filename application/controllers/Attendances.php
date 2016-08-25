@@ -72,12 +72,14 @@ class Attendances extends BaseController
             // local debug case
             $ipAddress = '127.0.0.1';
         }
-        $ch = $this->alipayDao->createCharge($orderNo, 'alipay', $amount,
-            $ipAddress, $subject, $body, $metaData);
+        $ch = $this->alipayDao->createCharge($orderNo, 'alipay', $amount, $subject, $body);
         if ($ch == null) {
             return null;
         }
-        $this->chargeDao->add($orderNo, $amount, $user->userId, $ipAddress);
+        $id = $this->chargeDao->add($orderNo, $amount, $user->userId, $ipAddress, $metaData);
+        if (!$id) {
+            return null;
+        }
         return $ch;
     }
 

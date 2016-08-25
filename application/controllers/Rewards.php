@@ -12,6 +12,7 @@ class Rewards extends BaseController
     public $attendanceDao;
     public $chargeDao;
     public $transactionDao;
+    public $alipayDao;
 
     function __construct()
     {
@@ -24,13 +25,30 @@ class Rewards extends BaseController
         $this->attendanceDao = new AttendanceDao();
         $this->load->model(TransactionDao::class);
         $this->transactionDao = new TransactionDao();
+        $this->load->model(AlipayDao::class);
+        $this->alipayDao = new AlipayDao();
     }
 
     public function notify_post()
     {
         $content = file_get_contents("php://input");
         logInfo("notify $content");
-        echo 'success';
+        if ($this->alipayDao->isSignVerify($_POST, $_POST['sign'])) {
+            $outTradeNo = $_POST['out_trade_no'];
+            $trade_status = $_POST['trade_status'];
+            if ($trade_status == 'TRADE_SUCCESS') {
+                $error = $this->handleChargeSucceed($outTradeNo);
+                if ($error) {
+                    logInfo("error: " . $error);
+                    $this->failure($error);
+                    return;
+                }
+            }
+            echo 'success';
+        } else {
+            logInfo("sign failed");
+            $this->failure(ERROR_SIGN_FAILED);
+        }
     }
 
     public function callback_post()
@@ -45,7 +63,6 @@ class Rewards extends BaseController
         switch ($event->type) {
             case 'charge.succeeded':
                 // 开发者在此处加入对支付异步通知的处理代码
-                $this->handleChargeSucceed($event);
                 break;
             case "refund.succeeded":
                 // 开发者在此处加入对退款异步通知的处理代码
@@ -57,37 +74,28 @@ class Rewards extends BaseController
         }
     }
 
-    private function handleChargeSucceed($event)
+    private function handleChargeSucceed($orderNo)
     {
-        if (!isset($event->data) || !isset($event->data->object) ||
-            !isset($event->data->object->order_no)
-        ) {
-            $this->failure(ERROR_PARAMETER_ILLEGAL, "there are no orderNo in event");
-            return;
-        }
-        $object = $event->data->object;
-        $orderNo = $object->order_no;
         $charge = $this->chargeDao->getOneByOrderNo($orderNo);
         if ($charge == null) {
-            $this->failure(ERROR_OBJECT_NOT_EXIST);
-            return;
+            return ERROR_OBJECT_NOT_EXIST;
         }
-        $metadata = $object->metadata;
+        $metadata = json_decode($charge->metaData);
         if (isset($metadata->liveId)) {
             $liveId = $metadata->liveId;
             $userId = $metadata->userId;
-            $this->db->trans_begin();
-
-            $this->chargeDao->updateChargeToPaid($orderNo);
             $charge = $this->chargeDao->getOneByOrderNo($orderNo);
+            if ($charge->paid == 1) {
+                return ERROR_ALREADY_NOTIFY;
+            }
+            $this->db->trans_begin();
+            $this->chargeDao->updateChargeToPaid($orderNo);
             $amount = $charge->amount;
             $error = $this->transactionDao->newAlipayRecharge($userId, $orderNo, $amount, $charge->chargeId);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
-                $this->failure($error);
-                return;
+                return $error;
             }
-
             $this->attendanceDao->addAttendance($userId, $liveId, $orderNo);
             $this->liveDao->incrementAttendanceCount();
             $live = $this->liveDao->getLive($liveId);
@@ -95,21 +103,19 @@ class Rewards extends BaseController
                 -$amount, $liveId, $live->owner->username);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
-                $this->failure($error);
-                return;
+                return $error;
             }
             $user = $this->userDao->findPublicUserById($userId);
             $error = $this->transactionDao->newIncome($live->ownerId, $this->genOrderNo(), $amount, $liveId,
                 $user->username);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
-                $this->failure($error);
-                return;
+                return $error;
             }
             $this->db->trans_commit();
-            $this->succeed();
+            return null;
         } else {
-            $this->failure(ERROR_PARAMETER_ILLEGAL, "not set liveId in metadata");
+            return ERROR_PARAMETER_ILLEGAL;
         }
     }
 

@@ -4,53 +4,57 @@ import (
 	"net/url"
 	"testing"
 
-	"encoding/json"
 	"fmt"
 
 	"github.com/bitly/go-simplejson"
 	"github.com/stretchr/testify/assert"
 )
 
+func TestAttendances_onlyCreate(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, _ := NewClientAndUser()
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}})
+	assert.NotNil(t, res)
+	_, exists := res.CheckGet("status")
+	assert.False(t, exists)
+}
+
 func TestAttendances_create(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, user := NewClientAndUser()
-	userId := toStr(user.Get("userId").MustInt())
+	c2, _ := NewClientAndUser()
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}})
 	assert.NotNil(t, res)
 	_, exists := res.CheckGet("status")
 	assert.False(t, exists)
 
 	orderNo := res.Get("order_no").MustString()
-	callbackStr := liveCallbackStr(orderNo, liveId, userId, 5000)
-	callbackRes := c2.postWithStr("rewards/callback", callbackStr)
+	callbackStr := liveCallbackStr(orderNo)
+	callbackRes := c2.postWithStr("rewards/notify", callbackStr)
 	assert.NotNil(t, callbackRes)
 }
 
 func createAttendance(c *Client, user *simplejson.Json, liveId string) {
-	userId := toStr(user.Get("userId").MustInt())
 	res := c.postData("attendances", url.Values{"liveId": {liveId}})
 
 	orderNo := res.Get("order_no").MustString()
-	callbackStr := liveCallbackStr(orderNo, liveId, userId, 5000)
+	callbackStr := liveCallbackStr(orderNo)
 	c.postWithStr("rewards/callback", callbackStr)
 }
 
-func callbackStr(orderNo string, metaData map[string]interface{}, amount int) string {
-	metaString, err := json.Marshal(metaData)
-	checkErr(err)
-	const jsonStream = `{ "id": "evt_ugB6x3K43D16wXCcqbplWAJo", "created": 1427555101, "livemode": true, "type":"charge.succeeded", "data": { "object": { "id": "ch_Xsr7u35O3m1Gw4ed2ODmi4Lw", "object": "charge", "created":
-	1427555076, "livemode": true, "paid": true, "refunded": false, "app":"app_1Gqj58ynP0mHeX1q","channel":
-	"upacp", "metadata": %s, "order_no": "%s", "client_ip": "127.0.0.1", "amount": %d, "amount_settle":
-	0, "currency": "cny", "subject": "Your Subject", "body": "Your Body", "extra": {}, "time_paid": 1427555101, "time_expire": 1427641476, "time_settle": null, "transaction_no": "1224524301201505066067849274", "refunds": { "object": "list", "url": "/v1/charges/ch_L8qn10mLmr1GS8e5OODmHaL4/refunds", "has_more": false, "data": [] }, "amount_refunded": 0, "failure_code": null, "failure_msg": null, "credential": {}, "description": null } }, "object": "event", "pending_webhooks": 0, "request": "iar_qH4y1KbTy5eLGm1uHSTS00s" }`
-	out := fmt.Sprintf(jsonStream, metaString, orderNo, amount)
+func callbackStr(orderNo string) string {
+	const jsonStream = `discount=0.00&payment_type=1&subject=15245参加直播92&trade_no=2016082521001004950207073962
+	&buyer_email=lzwjava@gmail.com&gmt_create=2016-08-25
+	18:00:37¬ify_type=trade_status_sync&quantity=1&out_trade_no=%s&seller_id=2088421737526755¬ify_time=2016-08-25 18:00:38&body=15245 参加 C++ 编程&trade_status=TRADE_SUCCESS&is_total_fee_adjust=N&total_fee=10.00&gmt_payment=2016-08-25 18:00:37&seller_email=finance@quzhiboapp.com&price=10.00&buyer_id=2088402019259954¬ify_id=632e791af93ecd47ad3cac1d13895bfnby&use_coupon=N&sign_type=RSA&sign=Tg02aD2wq4jb99fpeEO5B4DaMN5DsGujmWoAF7BNbHpbXRlGKOOVUlt+V9OHfCH8tn8/2jHeAfyLV04IO7hn9Xi0rBdb0xwGwce2dEHOINLl/bbI5GeOaR8R/HPDxoIThhNhHxY8ektDt33CBR4Es8MgqEGwCkYoAdgjSMV9DdU=`
+	out := fmt.Sprintf(jsonStream, orderNo)
 	return out
 }
 
-func liveCallbackStr(orderNo string, liveId string, userId string, amount int) string {
-	meta := map[string]interface{}{"liveId": liveId, "userId": userId}
-	return callbackStr(orderNo, meta, amount)
+func liveCallbackStr(orderNo string) string {
+	return callbackStr(orderNo)
 }
 
 func TestAttendances_liveList(t *testing.T) {
@@ -102,4 +106,3 @@ func TestAttendances_oneByLiveId(t *testing.T) {
 	attendance := c2.getData("attendances/one", url.Values{"liveId": {liveId}})
 	assert.NotNil(t, attendance)
 }
-

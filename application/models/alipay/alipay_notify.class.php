@@ -63,7 +63,6 @@ class AlipayNotify
             default :
                 $isSgin = false;
         }
-
         return $isSgin;
     }
 

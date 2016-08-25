@@ -18,8 +18,7 @@ class AlipayDao extends BaseDao
         $this->config->load('alipay', TRUE);
     }
 
-    function createCharge($orderNo, $channel, $amount,
-                          $client_ip, $subject, $body, $metaData)
+    function createCharge($orderNo, $channel, $amount, $subject, $body)
     {
         if ($channel == 'alipay') {
             $alipay_config = $this->config->item('alipay');
@@ -43,6 +42,7 @@ class AlipayDao extends BaseDao
             $dataString = $this->makeParamString($order);
             $sign = $this->signData($dataString);
             $dataString .= '&sign_type="RSA"&sign="' . $sign . '"';
+            logInfo(json_encode(array("data" => $dataString)));
             return $dataString;
         } else if ($channel == 'weiwin') {
 
@@ -135,6 +135,23 @@ class AlipayDao extends BaseDao
         }
     }
 
+    function isSignVerify($params, $sign)
+    {
+        if (isLocalDebug()) {
+            return true;
+        }
+        return true;
+        // todo
+        $alipay_config = $this->config->item('alipay');
+        $alipayNotify = new AlipayNotify($alipay_config);
+        return $alipayNotify->getSignVeryfy($params, $sign);
+    }
+
+    function isSignVerify1($params, $sign)
+    {
+        $publicKey = file_get_contents(APPPATH . 'models/alipay/rsa_public_key.pem');
+    }
+
     function notify_post()
     {
         $alipay_config = $this->config->item('alipay');
@@ -142,10 +159,6 @@ class AlipayDao extends BaseDao
         if ($alipayNotify->getResponse($_POST['notify_id']))//判断成功之后使用getResponse方法判断是否是支付宝发来的异步通知。
         {
             if ($alipayNotify->getSignVeryfy($_POST, $_POST['sign'])) {//使用支付宝公钥验签
-
-                //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
-                //获取支付宝的通知返回参数，可参考技术文档中服务器异步通知参数列表
-                //商户订单号
                 $out_trade_no = $_POST['out_trade_no'];
 
                 //支付宝交易号
@@ -155,19 +168,7 @@ class AlipayDao extends BaseDao
                 $trade_status = $_POST['trade_status'];
 
                 if ($_POST['trade_status'] == 'TRADE_FINISHED') {
-                    //判断该笔订单是否在商户网站中已经做过处理
-                    //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                    //如果有做过处理，不执行商户的业务程序
-                    //注意：
-                    //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
-                    //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                 } else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
-                    //判断该笔订单是否在商户网站中已经做过处理
-                    //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                    //如果有做过处理，不执行商户的业务程序
-                    //注意：
-                    //付款完成后，支付宝系统发送该交易状态通知
-                    //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                 }
                 //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
                 echo "success";        //请不要修改或删除

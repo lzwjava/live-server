@@ -8,13 +8,14 @@
  */
 class ChargeDao extends BaseDao
 {
-    public function add($orderNo, $amount, $creator, $creatorIP)
+    public function add($orderNo, $amount, $creator, $creatorIP, $metaData)
     {
         $data = array(
             KEY_ORDER_NO => $orderNo,
             KEY_AMOUNT => $amount,
             KEY_CREATOR => $creator,
-            KEY_CREATOR_IP => $creatorIP
+            KEY_CREATOR_IP => $creatorIP,
+            KEY_META_DATA => json_encode($metaData)
         );
         $this->db->insert(TABLE_CHARGES, $data);
         $insertId = $this->db->insert_id();

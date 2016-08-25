@@ -38,7 +38,7 @@ func updateLiveAndPublish(c *Client, liveId string) {
 	planTs := time.Now().Add(1 * time.Hour).Format("2006-01-02 15:04:05")
 	c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg"},
-		"amount":   {"1000"}, "detail": {"这次主要讲下多年来 C++ 的编程实战"},
+		"amount":   {"100"}, "detail": {"这次主要讲下多年来 C++ 的编程实战"},
 		"planTs": {planTs}})
 	c.getData("lives/"+liveId+"/publish", url.Values{})
 }
