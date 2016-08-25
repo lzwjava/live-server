@@ -6,6 +6,8 @@ import (
 
 	"fmt"
 
+	"strings"
+
 	"github.com/bitly/go-simplejson"
 	"github.com/stretchr/testify/assert"
 )
@@ -21,6 +23,19 @@ func TestAttendances_onlyCreate(t *testing.T) {
 	assert.False(t, exists)
 }
 
+func parseOrderNo(res *simplejson.Json) string {
+	dataString := res.MustString()
+	strArr := strings.Split(dataString, "&")
+	var orderNo string
+	for _, str := range strArr {
+		arr := strings.Split(str, "=")
+		if arr[0] == "out_trade_no" {
+			orderNo = arr[1][1 : len(arr[1])-1]
+		}
+	}
+	return orderNo
+}
+
 func TestAttendances_create(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
@@ -30,19 +45,19 @@ func TestAttendances_create(t *testing.T) {
 	assert.NotNil(t, res)
 	_, exists := res.CheckGet("status")
 	assert.False(t, exists)
-
-	orderNo := res.Get("order_no").MustString()
+	orderNo := parseOrderNo(res)
 	callbackStr := liveCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("rewards/notify", callbackStr)
 	assert.NotNil(t, callbackRes)
+	assert.Equal(t, callbackRes, "success")
 }
 
 func createAttendance(c *Client, user *simplejson.Json, liveId string) {
 	res := c.postData("attendances", url.Values{"liveId": {liveId}})
 
-	orderNo := res.Get("order_no").MustString()
+	orderNo := parseOrderNo(res)
 	callbackStr := liveCallbackStr(orderNo)
-	c.postWithStr("rewards/callback", callbackStr)
+	c.postWithStr("rewards/notify", callbackStr)
 }
 
 func callbackStr(orderNo string) string {

@@ -80,14 +80,13 @@ class Rewards extends BaseController
         if ($charge == null) {
             return ERROR_OBJECT_NOT_EXIST;
         }
+        if ($charge->paid == 1) {
+            return ERROR_ALREADY_NOTIFY;
+        }
         $metadata = json_decode($charge->metaData);
         if (isset($metadata->liveId)) {
             $liveId = $metadata->liveId;
             $userId = $metadata->userId;
-            $charge = $this->chargeDao->getOneByOrderNo($orderNo);
-            if ($charge->paid == 1) {
-                return ERROR_ALREADY_NOTIFY;
-            }
             $this->db->trans_begin();
             $this->chargeDao->updateChargeToPaid($orderNo);
             $amount = $charge->amount;

@@ -114,13 +114,17 @@ func (c *Client) request(method string, path string, params url.Values) *simplej
 	return c.doRequest(req)
 }
 
-func (c *Client) postWithStr(path string, body string) *simplejson.Json {
+func (c *Client) postWithStr(path string, body string) string {
 	urlStr := baseUrl(path)
 	req, err := http.NewRequest("POST", urlStr, strings.NewReader(body))
-	req.Header.Set("Content-Type", "plain/text")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	checkErr(err)
 	fmt.Println("curl -X", "POST", urlStr, body)
-	return c.doRequest(req)
+	resp, err := c.HTTPClient.Do(req)
+	checkErr(err)
+	byteArr, err := ioutil.ReadAll(resp.Body)
+	checkErr(err)
+	return string(byteArr)
 }
 
 func (c *Client) doRequest(req *http.Request) *simplejson.Json {

@@ -31,7 +31,6 @@ function createLinkstring($para)
     return $arg;
 }
 
-
 /**
  * 对数组排序
  * @param $para 排序前的数组
