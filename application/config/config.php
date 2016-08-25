@@ -46,7 +46,7 @@ $config['index_page'] = 'index.php';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']	= 'REQUEST_URI';
+$config['uri_protocol'] = 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language'] = 'english';
 
 /*
 |--------------------------------------------------------------------------
@@ -234,7 +234,7 @@ if (isLocalDebug()) {
 if (isLocalDebug()) {
     $config['log_path'] = APPPATH . 'logs/';
 } else {
-    $config['log_path'] = '/home/code-review-logs/';
+    $config['log_path'] = '/home/live-server-logs/';
 }
 
 /*
@@ -401,11 +401,11 @@ $config['sess_regenerate_destroy'] = FALSE;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']	= '';
-$config['cookie_domain']	= '';
-$config['cookie_path']		= '/';
-$config['cookie_secure']	= FALSE;
-$config['cookie_httponly'] 	= FALSE;
+$config['cookie_prefix'] = '';
+$config['cookie_domain'] = '';
+$config['cookie_path'] = '/';
+$config['cookie_secure'] = FALSE;
+$config['cookie_httponly'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -524,18 +524,17 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 /**
-| -------------------------------------------------------------------
-|  Native Auto-load
-| -------------------------------------------------------------------
-|
-| Nothing to do with config/autoload.php, this allows PHP autoload to work
-| for base controllers and some third-party libraries.
-|
+ * | -------------------------------------------------------------------
+ * |  Native Auto-load
+ * | -------------------------------------------------------------------
+ * |
+ * | Nothing to do with config/autoload.php, this allows PHP autoload to work
+ * | for base controllers and some third-party libraries.
+ * |
  */
 function __autoload($class)
 {
-    if(strpos($class, 'CI_') !== 0)
-    {
-        @include_once( APPPATH . 'core/'. $class . EXT );
+    if (strpos($class, 'CI_') !== 0) {
+        @include_once(APPPATH . 'core/' . $class . EXT);
     }
 }
