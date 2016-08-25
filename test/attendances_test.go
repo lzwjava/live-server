@@ -102,3 +102,4 @@ func TestAttendances_oneByLiveId(t *testing.T) {
 	attendance := c2.getData("attendances/one", url.Values{"liveId": {liveId}})
 	assert.NotNil(t, attendance)
 }
+

@@ -117,7 +117,7 @@ define('ERROR_PLAN_TS_INVALID', 'planTs_invalid');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
-define('ERROR_PINGPP_CHARGE', 'pingpp_failed');
+define('ERROR_CHARGE_CREATE', 'create_charge_failed');
 define('ERROR_NOT_ALLOW_ATTEND', 'not_allow_attend');
 
 // transactions
@@ -128,7 +128,7 @@ define('ERROR_TRANS_FAILED', 'trans_failed');
 define('ERROR_QRCODE_INVALID', 'qrcode_invalid');
 
 // alipay
-define('ERROR_PARTNER', 'partner_wrong');
+define('ERROR_PARTNER_OR_SERVICE', 'partner_or_service_wrong');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -156,7 +156,7 @@ if (!function_exists('errorInfos')) {
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
-            ERROR_PINGPP_CHARGE => '创建支付失败',
+            ERROR_CHARGE_CREATE => '创建支付失败',
             ERROR_NOT_ALLOW_ATTEND => '直播尚在编辑之中或者已结束,无法报名',
 
             // transactions
@@ -167,7 +167,7 @@ if (!function_exists('errorInfos')) {
             ERROR_QRCODE_INVALID => '不符合规范的二维码',
 
             //alipay
-            ERROR_PARTNER => 'partner 或 service 参数错误'
+            ERROR_PARTNER_OR_SERVICE => 'partner 或 service 参数错误',
         );
     }
 

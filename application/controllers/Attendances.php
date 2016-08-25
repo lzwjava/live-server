@@ -11,6 +11,7 @@ class Attendances extends BaseController
     public $attendanceDao;
     public $liveDao;
     public $chargeDao;
+    public $alipayDao;
 
     function __construct()
     {
@@ -21,6 +22,8 @@ class Attendances extends BaseController
         $this->attendanceDao = new AttendanceDao();
         $this->load->model(ChargeDao::class);
         $this->chargeDao = new ChargeDao();
+        $this->load->model(AlipayDao::class);
+        $this->alipayDao = new AlipayDao();
     }
 
     function create_post()
@@ -53,53 +56,25 @@ class Attendances extends BaseController
         $subject = truncate($user->username, 18) . '参加直播' . $live->liveId;
         $body = $user->username . ' 参加 ' . $live->subject;
         $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
-        $ch = $this->createPingPPCharge($live->amount, $subject, $body, $metaData, $user);
+        $ch = $this->createChargeAndInsert($live->amount, $subject, $body, $metaData, $user);
         if ($ch == null) {
-            $this->failure(ERROR_PINGPP_CHARGE);
+            $this->failure(ERROR_CHARGE_CREATE);
             return;
         }
         $this->succeed($ch);
     }
 
-    protected function createPingPPCharge($amount, $subject, $body, $metaData, $user)
+    protected function createChargeAndInsert($amount, $subject, $body, $metaData, $user)
     {
         $orderNo = $this->genOrderNo();
-        if (isLocalDebug()) {
-            \Pingpp\Pingpp::setApiKey('sk_test_nz9af5CKmb5CnXn10Ou1eHq5');
-        } else {
-            \Pingpp\Pingpp::setApiKey('sk_live_SSijL0KO8eHK5qzfPG0mjDW9');
-        }
-        if (isLocalDebug()) {
-            // CodeReviewTest
-            $appId = 'app_nn9qHKPafHCSDKq5';
-        } else {
-            // CodeReviewProd
-            $appId = 'app_jTSKu5CmXbHC0q5q';
-        }
         $ipAddress = $this->input->ip_address();
         if ($ipAddress == '::1') {
             // local debug case
             $ipAddress = '127.0.0.1';
         }
-        $ch = \Pingpp\Charge::create(
-            array(
-                'order_no' => $orderNo,
-                'app' => array('id' => $appId),
-                'channel' => 'alipay_pc_direct',
-                'amount' => $amount,
-                'client_ip' => $ipAddress,
-                'currency' => 'cny',
-                'subject' => $subject,
-                'body' => $body,
-                'metadata' => $metaData,
-                'extra' => array('success_url' => 'http://api.reviewcode.cn/rewards/success')
-            )
-        );
-        if ($ch == null || $ch->failure_code != null) {
-            logInfo("charge create failed\n");
-            if ($ch != null) {
-                logInfo("reason $ch->failure_message");
-            }
+        $ch = $this->alipayDao->createCharge($orderNo, 'alipay', $amount,
+            $ipAddress, $subject, $body, $metaData);
+        if ($ch == null) {
             return null;
         }
         $this->chargeDao->add($orderNo, $amount, $user->userId, $ipAddress);

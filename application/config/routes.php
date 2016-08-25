@@ -90,3 +90,5 @@ $route['qrcodes/gen']['GET'] = 'qrcodes/png';
 $route['alipay/sign']['POST'] = 'alipay/sign';
 $route['alipay/return']['POST'] = 'alipay/return';
 $route['alipay/notify']['POST'] = 'alipay/notify';
+
+$route['rewards/notify']['POST'] = 'rewards/notify';

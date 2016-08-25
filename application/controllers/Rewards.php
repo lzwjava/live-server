@@ -26,6 +26,13 @@ class Rewards extends BaseController
         $this->transactionDao = new TransactionDao();
     }
 
+    public function notify_post()
+    {
+        $content = file_get_contents("php://input");
+        logInfo("notify $content");
+        echo 'success';
+    }
+
     public function callback_post()
     {
         $content = file_get_contents("php://input");
