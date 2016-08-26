@@ -1,1 +1,1 @@
-fab -H root@hotimg.cn deploy
+fab -H root@quzhiboapp.com deploy
