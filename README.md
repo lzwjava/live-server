@@ -41,4 +41,11 @@ response:
 
 result 为支付宝需要的 dataString。 直接调用支付宝 SDK 的 [Alipay payOrder:dataString] 即可。
 
+## attedances/one
+
+获取报名记录
+
+curl -X GET http://localhost:3005/attendances/one map[liveId:[133]]
+
+response: {"status":"success","result":{"attendanceId":25,"userId":468,"liveId":133,"orderNo":"qnJY0RtQOWBeZkrZ","created":"2016-08-26 19:44:08"},"error":""}
 

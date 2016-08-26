@@ -113,7 +113,7 @@ class LiveDao extends BaseDao
 
     function lastPrepareLive($user)
     {
-        $sql = "SELECT liveId FROM lives WHERE ownerId=? AND status=? OR status=?";
+        $sql = "SELECT liveId FROM lives WHERE ownerId=? AND (status=? OR status=?)";
         $binds = array($user->userId, LIVE_STATUS_PREPARE, LIVE_STATUS_WAIT);
         $live = $this->db->query($sql, $binds)->row();
         if ($live) {
