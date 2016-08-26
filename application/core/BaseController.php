@@ -54,10 +54,13 @@ class BaseController extends REST_Controller
 
     protected function failure($status, $error = null)
     {
-        if ($error == null) {
+        if (!$error) {
             if (isset(errorInfos()[$status])) {
                 $error = errorInfos()[$status];
             }
+        }
+        if (!$error) {
+            $error = $status;
         }
         $this->responseResult($status, null, $error);
     }

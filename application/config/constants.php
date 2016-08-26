@@ -141,6 +141,7 @@ if (!function_exists('errorInfos')) {
             ERROR_OBJECT_NOT_EXIST => '对象不存在',
             ERROR_SQL_WRONG => '数据库出错',
             ERROR_REDIS_WRONG => 'Redis 出错',
+            ERROR_NOT_ALLOW_DO_IT => '您没有相关的权限',
 
             // users
             ERROR_USERNAME_TAKEN => '用户名已存在',
@@ -172,6 +173,8 @@ if (!function_exists('errorInfos')) {
             ERROR_PARTNER_OR_SERVICE => 'partner 或 service 参数错误',
             ERROR_SIGN_FAILED => '签名错误',
             ERROR_ALREADY_NOTIFY => '重复的支付回调'
+
+
         );
     }
 
