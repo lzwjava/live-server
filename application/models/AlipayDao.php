@@ -28,7 +28,7 @@ class AlipayDao extends BaseDao
             $order = array(
                 'partner' => $partner,
                 'service' => $service,
-                'notify_url' => 'http://api.hotimg.cn/rewards/notify',
+                'notify_url' => ALIPAY_NOTIFY_URL,
                 '_input_charset' => 'utf-8',
                 'it_b_pay' => '30m',
                 'show_url' => 'm.alipay.com',

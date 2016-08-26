@@ -273,3 +273,6 @@ define('KEY_SESSION_HEADER', 'X-Session');
 // lc
 define('LC_APP_ID', 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz');
 define('LC_APP_KEY', 'V4FPFLSmSeO1HaIwPVyhO9P3');
+
+define('RTMP_URL_PREFIX', "rtmp://quzhiboapp.com/live/");
+define('ALIPAY_NOTIFY_URL', 'http://api.quzhiboapp.com/rewards/notify');

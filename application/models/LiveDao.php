@@ -72,7 +72,7 @@ class LiveDao extends BaseDao
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
-            $live->rtmpUrl = "rtmp://hotimg.cn/live/" . $live->rtmpKey;
+            $live->rtmpUrl = RTMP_URL_PREFIX . $live->rtmpKey;
         }
     }
 
