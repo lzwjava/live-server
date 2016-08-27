@@ -48,11 +48,17 @@ class LiveDao extends BaseDao
                 WHERE status!=? ORDER BY created
                 DESC limit $limit offset $skip";
         $lives = $this->db->query($sql, array(LIVE_STATUS_PREPARE))->result();
+        $ids = $this->extractLiveIds($lives);
+        return $this->getLives($ids, $user);
+    }
+
+    private function extractLiveIds($lives)
+    {
         $ids = array();
         foreach ($lives as $live) {
             array_push($ids, $live->liveId);
         }
-        return $this->getLives($ids, $user);
+        return $ids;
     }
 
     private function getLives($liveIds, $user)
@@ -60,6 +66,9 @@ class LiveDao extends BaseDao
         $userId = -1;
         if ($user) {
             $userId = $user->userId;
+        }
+        if (count($liveIds) == 0) {
+            return array();
         }
         $fields = $this->livePublicFields('l');
         $userFields = $this->userPublicFields('u', true);
@@ -139,6 +148,24 @@ class LiveDao extends BaseDao
                 return $this->getLive($liveId);
             }
         }
+    }
+
+    function getAttendedLives($user)
+    {
+        $sql = "SELECT a.liveId FROM attendances AS a WHERE a.userId=? ORDER BY created DESC";
+        $binds = array($user->userId);
+        $lives = $this->db->query($sql, $binds)->result();
+        $ids = $this->extractLiveIds($lives);
+        return $this->getLives($ids, $user);
+    }
+
+    function getMyLives($user)
+    {
+        $sql = "SELECT liveId FROM lives AS l WHERE l.ownerId=?  ORDER BY created DESC";
+        $binds = array($user->userId);
+        $lives = $this->db->query($sql, $binds)->result();
+        $ids = $this->extractLiveIds($lives);
+        return $this->getLives($ids, $user);
     }
 
 }

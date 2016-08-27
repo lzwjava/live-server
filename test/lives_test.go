@@ -149,3 +149,22 @@ func TestLives_lastPrepare(t *testing.T) {
 	newLiveId := res.Get("liveId").MustInt()
 	assert.Equal(t, liveId, newLiveId)
 }
+
+func TestLives_my(t *testing.T) {
+	c, _ := NewClientAndUser()
+	createLive(c)
+
+	res := c.getData("lives/me", url.Values{})
+	assert.Equal(t, len(res.MustArray()), 1)
+}
+
+func TestLives_attended(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, user := NewClientAndUser()
+	createAttendance(c2, user, liveId)
+
+	res := c2.getData("lives/attended", url.Values{})
+	assert.Equal(t, len(res.MustArray()), 1)
+}

@@ -172,4 +172,24 @@ class Lives extends BaseController
         $this->succeed($live);
     }
 
+    function attended_get()
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $lvs = $this->liveDao->getAttendedLives($user);
+        $this->succeed($lvs);
+    }
+
+    function my_get()
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $lvs = $this->liveDao->getMyLives($user);
+        $this->succeed($lvs);
+    }
+
 }

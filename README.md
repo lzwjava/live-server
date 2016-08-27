@@ -86,3 +86,50 @@ response:
 ```
 
 
+## lives/attended
+
+我报名过的直播
+
+curl -X GET http://localhost:3005/lives/attended map[]
+
+response: 
+
+```
+{
+    "error": "",
+    "result": [
+        {
+            "amount": 100,
+            "attendanceCount": 1,
+            "attendanceId": 43,
+            "beginTs": "2016-08-27 16:34:30",
+            "canJoin": true,
+            "coverUrl": "http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg",
+            "detail": "\u8fd9\u6b21\u4e3b\u8981\u8bb2\u4e0b\u591a\u5e74\u6765 C++ \u7684\u7f16\u7a0b\u5b9e\u6218",
+            "endTs": "2016-08-27 16:34:30",
+            "liveId": 181,
+            "owner": {
+                "avatarUrl": "http://obcbndtjd.bkt.clouddn.com/defaultAvatar1.png",
+                "userId": 546,
+                "username": "88090"
+            },
+            "ownerId": 546,
+            "planTs": "2016-08-27 17:34:30",
+            "rtmpKey": "TIiUM1fz",
+            "rtmpUrl": "rtmp://quzhiboapp.com/live/TIiUM1fz",
+            "status": 2,
+            "subject": "C++ \u7f16\u7a0b"
+        }
+    ],
+    "status": "success"
+}
+```
+
+## lives/me
+
+我发起的直播
+
+curl -X GET http://localhost:3005/lives/me map[]
+
+
+

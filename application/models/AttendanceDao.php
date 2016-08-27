@@ -73,7 +73,7 @@ class AttendanceDao extends BaseDao
     {
         foreach ($attendances as $attendance) {
             $ls = $this->prefixFields($this->liveFields(), 'l');
-            $attendance->event = extractFields($attendance, $ls, 'l');
+            $attendance->live = extractFields($attendance, $ls, 'l');
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $attendance->user = extractFields($attendance, $us, 'u');
         }
