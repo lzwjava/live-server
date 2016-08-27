@@ -102,13 +102,15 @@ class Lives extends BaseController
     {
         $skip = $this->skip();
         $limit = $this->limit();
-        $lives = $this->liveDao->getHomeLives($skip, $limit);
+        $user = $this->getSessionUser();
+        $lives = $this->liveDao->getHomeLives($skip, $limit, $user);
         $this->succeed($lives);
     }
 
     function one_get($id)
     {
-        $live = $this->liveDao->getLive($id);
+        $user = $this->checkAndGetSessionUser();
+        $live = $this->liveDao->getLive($id, $user);
         $this->succeed($live);
     }
 

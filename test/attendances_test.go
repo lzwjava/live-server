@@ -121,3 +121,14 @@ func TestAttendances_oneByLiveId(t *testing.T) {
 	attendance := c2.getData("attendances/one", url.Values{"liveId": {liveId}})
 	assert.NotNil(t, attendance)
 }
+
+func TestAttendances_attendanceId(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, user := NewClientAndUser()
+	createAttendance(c2, user, liveId)
+
+	live := getLive(c2, liveId)
+	assert.NotEqual(t, live.Get("attendanceId").MustInt(), 0)
+}

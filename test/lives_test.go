@@ -49,12 +49,26 @@ func TestLives_get(t *testing.T) {
 	live := c.getData("lives/"+liveId, url.Values{})
 	assert.NotNil(t, live)
 	assert.NotNil(t, live.Get("rtmpUrl"))
+	assert.NotNil(t, live.Get("rtmpKey"))
 	assert.NotNil(t, live.Get("status"))
 	assert.NotNil(t, live.Get("key"))
 	assert.NotNil(t, live.Get("id"))
 	assert.NotNil(t, live.Get("end_ts"))
 	assert.NotNil(t, live.Get("begin_ts"))
 	assert.NotNil(t, live.Get("subject"))
+}
+
+func TestLives_getPublic(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, _ := NewClientAndUser()
+	live := c2.getData("lives/"+liveId, url.Values{})
+
+	_, exists := live.CheckGet("rtmpUrl")
+	assert.False(t, exists)
+	_, exists = live.CheckGet("rtmpKey")
+	assert.False(t, exists)
 }
 
 func getLive(c *Client, liveId string) *simplejson.Json {

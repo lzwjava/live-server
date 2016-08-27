@@ -33,16 +33,16 @@ class LiveDao extends BaseDao
         return $this->db->insert_id();
     }
 
-    function getLive($id)
+    function getLive($id, $user = null)
     {
-        $lives = $this->getLives(array($id));
+        $lives = $this->getLives(array($id), $user);
         if (count($lives) > 0) {
             return $lives[0];
         }
         return null;
     }
 
-    function getHomeLives($skip, $limit)
+    function getHomeLives($skip, $limit, $user)
     {
         $sql = "SELECT liveId FROM lives
                 WHERE status!=? ORDER BY created
@@ -52,27 +52,37 @@ class LiveDao extends BaseDao
         foreach ($lives as $live) {
             array_push($ids, $live->liveId);
         }
-        return $this->getLives($ids);
+        return $this->getLives($ids, $user);
     }
 
-    private function getLives($liveIds)
+    private function getLives($liveIds, $user)
     {
+        $userId = -1;
+        if ($user) {
+            $userId = $user->userId;
+        }
         $fields = $this->livePublicFields('l');
         $userFields = $this->userPublicFields('u', true);
-        $sql = "select $fields, $userFields from lives as l
+        $sql = "select $fields, $userFields,a.attendanceId from lives as l
                 left join users as u on u.userId=l.ownerId
+                left join attendances as a on a.liveId = l.liveId and a.userId = $userId
                 where l.liveId in (" . implode(', ', $liveIds) . ")";
         $lives = $this->db->query($sql)->result();
-        $this->assembleLives($lives);
+        $this->assembleLives($lives, $userId);
         return $lives;
     }
 
-    private function assembleLives($lives)
+    private function assembleLives($lives, $userId)
     {
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
             $live->rtmpUrl = RTMP_URL_PREFIX . $live->rtmpKey;
+            if (!$live->attendanceId && $userId != $live->ownerId) {
+                // 没参加或非创建者
+                unset($live->rtmpUrl);
+                unset($live->rtmpKey);
+            }
         }
     }
 
