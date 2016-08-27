@@ -82,6 +82,9 @@ class LiveDao extends BaseDao
                 // 没参加或非创建者
                 unset($live->rtmpUrl);
                 unset($live->rtmpKey);
+                $live->canJoin = false;
+            } else {
+                $live->canJoin = true;
             }
         }
     }

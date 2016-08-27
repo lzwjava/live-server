@@ -41,11 +41,41 @@ response:
 
 result 为支付宝需要的 dataString。 直接调用支付宝 SDK 的 [Alipay payOrder:dataString] 即可。
 
-## attedances/one
+## lives/:liveId
 
-获取报名记录
+获取 live 详情。
 
-curl -X GET http://localhost:3005/attendances/one map[liveId:[133]]
+示例：
 
-response: {"status":"success","result":{"attendanceId":25,"userId":468,"liveId":133,"orderNo":"qnJY0RtQOWBeZkrZ","created":"2016-08-26 19:44:08"},"error":""}
+curl -X GET http://localhost:3005/lives/158 map[]
+
+response:
+{
+    "error": "",
+    "result": {
+        "amount": 100,
+        "attendanceCount": 0,
+        "attendanceId": null,  // 是否报名
+        "beginTs": "2016-08-27 16:04:44",
+        "canJoin": true,    // 表示是否可以加入直播间，主播和报名者可以进入
+        "coverUrl": "http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg",
+        "detail": "\u8fd9\u6b21\u4e3b\u8981\u8bb2\u4e0b\u591a\u5e74\u6765 C++ \u7684\u7f16\u7a0b\u5b9e\u6218",
+        "endTs": "2016-08-27 16:04:44",
+        "liveId": 174,
+        "owner": {
+            "avatarUrl": "http://obcbndtjd.bkt.clouddn.com/defaultAvatar1.png",
+            "userId": 534,
+            "username": "53916"
+        },
+        "ownerId": 534,
+        "planTs": "2016-08-27 17:04:44",
+        "rtmpKey": "yTOkfcEG",
+        "rtmpUrl": "rtmp://quzhiboapp.com/live/yTOkfcEG",
+        "status": 2,
+        "subject": "C++ \u7f16\u7a0b"
+    },
+    "status": "success"
+}
+
+
 

@@ -45,17 +45,20 @@ func updateLiveAndPublish(c *Client, liveId string) {
 
 func TestLives_get(t *testing.T) {
 	c, _ := NewClientAndUser()
-	liveId := createSimpleLive(c)
+	liveId := createLive(c)
 	live := c.getData("lives/"+liveId, url.Values{})
 	assert.NotNil(t, live)
-	assert.NotNil(t, live.Get("rtmpUrl"))
-	assert.NotNil(t, live.Get("rtmpKey"))
-	assert.NotNil(t, live.Get("status"))
-	assert.NotNil(t, live.Get("key"))
-	assert.NotNil(t, live.Get("id"))
-	assert.NotNil(t, live.Get("end_ts"))
-	assert.NotNil(t, live.Get("begin_ts"))
-	assert.NotNil(t, live.Get("subject"))
+	assert.NotNil(t, live.Get("rtmpUrl").Interface())
+	assert.NotNil(t, live.Get("rtmpKey").Interface())
+	assert.NotNil(t, live.Get("status").Interface())
+	assert.NotNil(t, live.Get("liveId").Interface())
+	assert.NotNil(t, live.Get("endTs").Interface())
+	assert.NotNil(t, live.Get("beginTs").Interface())
+	assert.NotNil(t, live.Get("subject").Interface())
+	assert.NotNil(t, live.Get("canJoin").Interface())
+	assert.NotNil(t, live.Get("planTs").Interface())
+	assert.NotNil(t, live.Get("attendanceCount").Interface())
+	assert.NotNil(t, live.Get("owner").Interface())
 }
 
 func TestLives_getPublic(t *testing.T) {
@@ -69,6 +72,7 @@ func TestLives_getPublic(t *testing.T) {
 	assert.False(t, exists)
 	_, exists = live.CheckGet("rtmpKey")
 	assert.False(t, exists)
+	assert.False(t, live.Get("canJoin").MustBool())
 }
 
 func getLive(c *Client, liveId string) *simplejson.Json {
