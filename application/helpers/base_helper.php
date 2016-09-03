@@ -134,3 +134,4 @@ if (!function_exists('truncate')) {
         }
     }
 }
+

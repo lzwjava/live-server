@@ -13,6 +13,7 @@ class LiveDao extends BaseDao
     {
         parent::__construct();
         $this->load->helper('string');
+        $this->load->helper('array');
     }
 
     private function genLiveKey()
@@ -81,12 +82,20 @@ class LiveDao extends BaseDao
         return $lives;
     }
 
+    private function electRtmpServer()
+    {
+        $serverIps = array('121.42.162.55');
+        $serverIp = random_element($serverIps);
+        return 'rtmp://' . $serverIp . '/live/';
+    }
+
     private function assembleLives($lives, $userId)
     {
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
-            $live->rtmpUrl = RTMP_URL_PREFIX . $live->rtmpKey;
+            $rtmpServer = $this->electRtmpServer();
+            $live->rtmpUrl = $rtmpServer . $live->rtmpKey;
             if (!$live->attendanceId && $userId != $live->ownerId) {
                 // 没参加或非创建者
                 unset($live->rtmpUrl);
