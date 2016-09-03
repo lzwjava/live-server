@@ -30,6 +30,7 @@ CREATE TABLE `lives` (
   `subject`         VARCHAR(60)   NOT NULL             DEFAULT '',
   `coverUrl`        VARCHAR(80)   NOT NULL             DEFAULT '',
   `amount`          INT           NOT NULL             DEFAULT 0,
+  `maxPeople`       INT           NOT NULL             DEFAULT 0,
   `detail`          VARCHAR(1023) NOT NULL             DEFAULT '',
   `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
   `attendanceCount` INT           NOT NULL             DEFAULT 0,

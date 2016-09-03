@@ -48,6 +48,10 @@ class Attendances extends BaseController
             $this->failure(ERROR_OWNER_CANNOT_ATTEND);
             return;
         }
+        if ($live->attendanceCount >= $live->maxPeople) {
+            $this->failure(ERROR_EXCEED_MAX_PEOPLE);
+            return;
+        }
         $attendance = $this->attendanceDao->getAttendance($user->userId, $liveId);
         if ($attendance != null) {
             $this->failure(ERROR_ALREADY_ATTEND);

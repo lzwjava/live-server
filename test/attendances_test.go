@@ -132,4 +132,3 @@ func TestAttendances_attendanceId(t *testing.T) {
 	live := getLive(c2, liveId)
 	assert.NotEqual(t, live.Get("attendanceId").MustInt(), 0)
 }
-

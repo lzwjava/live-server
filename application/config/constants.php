@@ -113,7 +113,7 @@ define('ERROR_ALIVE_FAIL', 'alive_fail');
 define('ERROR_OWNER_CANNOT_ATTEND', 'owner_cannot_attend');
 define('ERROR_FIELDS_EMPTY', 'live_fields_empty');
 define('ERROR_PLAN_TS_INVALID', 'planTs_invalid');
-
+define('ERROR_EXCEED_MAX_PEOPLE', 'exceed_max_people');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -156,6 +156,7 @@ if (!function_exists('errorInfos')) {
             ERROR_OWNER_CANNOT_ATTEND => '主播自己无法报名',
             ERROR_FIELDS_EMPTY => '需要封面图,主题,详情才能发布',
             ERROR_PLAN_TS_INVALID => '预计的直播时间应该晚于现在',
+            ERROR_EXCEED_MAX_PEOPLE => '抱歉,报名已满',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
@@ -198,6 +199,7 @@ define('KEY_RTMP_KEY', 'rtmpKey');
 define('KEY_STATUS', 'status');
 define('KEY_COVER_URL', 'coverUrl');
 define('KEY_AMOUNT', 'amount');
+define('KEY_MAX_PEOPLE', 'maxPeople');
 define('KEY_PLAN_TS', 'planTs');
 define('KEY_BEGIN_TS', 'beginTs');
 define('KEY_END_TS', 'endTs');
