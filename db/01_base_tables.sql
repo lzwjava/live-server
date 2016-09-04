@@ -32,6 +32,7 @@ CREATE TABLE `lives` (
   `amount`          INT           NOT NULL             DEFAULT 0,
   `maxPeople`       INT           NOT NULL             DEFAULT 0,
   `detail`          VARCHAR(1023) NOT NULL             DEFAULT '',
+  `conversationId`  VARCHAR(30)   NOT NULL             DEFAULT '',
   `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
   `attendanceCount` INT           NOT NULL             DEFAULT 0,
   `planTs`          TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
@@ -120,3 +121,6 @@ CREATE TABLE `scanned_qrcodes` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE lives ADD COLUMN `conversationId` VARCHAR(30) NOT NULL             DEFAULT ''
+AFTER `detail`;

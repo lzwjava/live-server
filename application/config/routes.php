@@ -63,7 +63,6 @@ $route['requestSmsCode']['POST'] = 'users/requestSmsCode';
 $route['users/isRegister']['GET'] = 'users/isRegister';
 
 // lives
-$route['lives']['POST'] = 'lives/create';
 $route['lives/on']['GET'] = 'lives/list';
 $route['lives/(\d+)']['GET'] = 'lives/one/$1';
 $route['lives/(\d+)']['POST'] = 'lives/update/$1';

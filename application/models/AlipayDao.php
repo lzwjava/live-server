@@ -70,7 +70,7 @@ class AlipayDao extends BaseDao
 
     function isSignVerify($params, $sign)
     {
-        if (isLocalDebug()) {
+        if (isDebug()) {
             return true;
         }
         return true;

@@ -27,14 +27,17 @@ class LeanCloud
         $result = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        if ($result != null || $result != '') {
+            $result = json_decode($result);
+        }
         if ($status < 200 || $status >= 300) {
-            $resultJson = json_decode($result);
-            if ($resultJson && isset($resultJson->error)) {
-                $result = $resultJson->error;
+            if ($result && isset($result->error)) {
+                $result = $result->error;
             }
         }
         if ($result === false) {
-            $result = 'Network error when send smsCode';
+            $result = 'Network error when curl LeanCloud';
         }
         return array(
             "status" => $status,
@@ -58,4 +61,19 @@ class LeanCloud
             logInfo("imitate requestSmsCode data: " . json_encode($data));
         }
     }
+
+    function createConversation($name, $userId)
+    {
+        $data = array('name' => $name, 'm' => array($userId . ''), 'c' => $userId,
+            'tr' => true, 'attr' => array('type' => 0));
+        $result = $this->curlLeanCloud('classes/_Conversation', $data);
+        if ($result['status'] < 200 | $result['status'] > 300) {
+            logInfo("createConversation error " . json_encode($result));
+            return null;
+        } else {
+            logInfo("createConversation succeed");
+            return $result['result']->objectId;
+        }
+    }
+
 }

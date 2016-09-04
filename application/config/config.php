@@ -209,14 +209,14 @@ $config['directory_trigger'] = 'd';
 |
 */
 
-if (!function_exists('isLocalDebug')) {
-    function isLocalDebug()
+if (!function_exists('isDebug')) {
+    function isDebug()
     {
         return ENVIRONMENT == 'development';
     }
 }
 
-if (isLocalDebug()) {
+if (isDebug()) {
     $config['log_threshold'] = 2;
 } else {
     $config['log_threshold'] = 1;
@@ -231,7 +231,7 @@ if (isLocalDebug()) {
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-if (isLocalDebug()) {
+if (isDebug()) {
     $config['log_path'] = APPPATH . 'logs/';
 } else {
     $config['log_path'] = '/home/live-server-logs/';

@@ -77,7 +77,7 @@ if (!function_exists('deleteCookie')) {
 if (!function_exists('logInfo')) {
     function logInfo($info)
     {
-        if (isLocalDebug()) {
+        if (isDebug()) {
             error_log($info);
         } else {
             log_message('error', $info);

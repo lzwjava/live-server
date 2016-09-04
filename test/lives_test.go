@@ -10,22 +10,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLives_create(t *testing.T) {
-	c, _ := NewClientAndUser()
-	res := c.postData("lives", url.Values{"subject": {"直播啦"}})
-	assert.NotNil(t, res)
-	liveId := toStr(res.Get("liveId").MustInt())
-	assert.NotNil(t, liveId)
-}
-
-func createSimpleLive(c *Client) string {
-	res := c.postData("lives", url.Values{"subject": {"直播啦"}})
+func lastPrepareLive(c *Client) string {
+	res := c.getData("lives/lastPrepare", url.Values{})
 	liveId := toStr(res.Get("liveId").MustInt())
 	return liveId
 }
 
 func createLive(c *Client) string {
-	liveId := createSimpleLive(c)
+	res := c.getData("lives/lastPrepare", url.Values{})
+	liveId := toStr(res.Get("liveId").MustInt())
 	updateLiveAndSubmitThenPublish(c, liveId)
 	return liveId
 }
@@ -106,7 +99,7 @@ func TestLives_end(t *testing.T) {
 
 func TestLives_update(t *testing.T) {
 	c, _ := NewClientAndUser()
-	liveId := createSimpleLive(c)
+	liveId := lastPrepareLive(c)
 	planTs := time.Now().Add(1 * time.Hour).Format("2006-01-02 15:04:05")
 	res := c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg"},
@@ -129,7 +122,7 @@ func TestLives_begin(t *testing.T) {
 
 func TestLives_submitReview(t *testing.T) {
 	c, _ := NewClientAndUser()
-	liveId := createSimpleLive(c)
+	liveId := lastPrepareLive(c)
 	planTs := time.Now().Add(1 * time.Hour).Format("2006-01-02 15:04:05")
 	updateRes := c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg"},

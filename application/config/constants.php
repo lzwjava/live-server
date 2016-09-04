@@ -115,6 +115,7 @@ define('ERROR_OWNER_CANNOT_ATTEND', 'owner_cannot_attend');
 define('ERROR_FIELDS_EMPTY', 'live_fields_empty');
 define('ERROR_PLAN_TS_INVALID', 'planTs_invalid');
 define('ERROR_EXCEED_MAX_PEOPLE', 'exceed_max_people');
+define('ERROR_CREATE_LIVE', 'create_live_failed');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -132,6 +133,10 @@ define('ERROR_QRCODE_INVALID', 'qrcode_invalid');
 define('ERROR_PARTNER_OR_SERVICE', 'partner_or_service_wrong');
 define('ERROR_SIGN_FAILED', 'sign_failed');
 define('ERROR_ALREADY_NOTIFY', 'already_notify');
+
+// leancloud
+define('ERROR_LC_CONVERSATION_FAILED', 'lc_conversation_failed');
+
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -159,6 +164,7 @@ if (!function_exists('errorInfos')) {
             ERROR_FIELDS_EMPTY => '需要封面图,主题,详情才能发布',
             ERROR_PLAN_TS_INVALID => '预计的直播时间应该晚于现在',
             ERROR_EXCEED_MAX_PEOPLE => '抱歉,报名已满',
+            ERROR_CREATE_LIVE => '创建直播失败',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
@@ -175,8 +181,10 @@ if (!function_exists('errorInfos')) {
             //alipay
             ERROR_PARTNER_OR_SERVICE => 'partner 或 service 参数错误',
             ERROR_SIGN_FAILED => '签名错误',
-            ERROR_ALREADY_NOTIFY => '重复的支付回调'
+            ERROR_ALREADY_NOTIFY => '重复的支付回调',
 
+            // leancloud
+            ERROR_LC_CONVERSATION_FAILED => '创建聊天室失败'
 
         );
     }
@@ -199,6 +207,7 @@ define('KEY_LIVE_ID', 'liveId');
 define('KEY_SUBJECT', 'subject');
 define('KEY_RTMP_KEY', 'rtmpKey');
 define('KEY_STATUS', 'status');
+define('KEY_CONVERSATION_ID', 'conversationId');
 define('KEY_COVER_URL', 'coverUrl');
 define('KEY_AMOUNT', 'amount');
 define('KEY_MAX_PEOPLE', 'maxPeople');
@@ -276,8 +285,14 @@ define('COOKIE_VID', 'vid');
 define('KEY_SESSION_HEADER', 'X-Session');
 
 // lc
-define('LC_APP_ID', 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz');
-define('LC_APP_KEY', 'V4FPFLSmSeO1HaIwPVyhO9P3');
+if (ENVIRONMENT == 'development') {
+    define('LC_APP_ID', 'YY3S7uNlnXUgX48BHTJlJx4i-gzGzoHsz');
+    define('LC_APP_KEY', 'h9zCqcPSi7nDgQTQE6YsOT0z');
+} else {
+    define('LC_APP_ID', 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz');
+    define('LC_APP_KEY', 'V4FPFLSmSeO1HaIwPVyhO9P3');
+}
+
 
 define('RTMP_URL_PREFIX', "rtmp://quzhiboapp.com/live/");
 define('ALIPAY_NOTIFY_URL', 'http://api.quzhiboapp.com/rewards/notify');

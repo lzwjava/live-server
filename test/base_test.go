@@ -109,15 +109,15 @@ func toStr(flt interface{}) string {
 // user
 
 func randomMobile() string {
-	var mobile = "132"
-	for i := 0; i < 8; i++ {
+	var mobile = "13"
+	for i := 0; i < 9; i++ {
 		mobile += strconv.Itoa(rand.Intn(10))
 	}
 	return mobile
 }
 
 func randomString() string {
-	return strconv.Itoa(rand.Intn(100000))
+	return strconv.Itoa(rand.Intn(1000000000))
 }
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")

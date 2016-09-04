@@ -9,11 +9,15 @@
 class LiveDao extends BaseDao
 {
 
+    public $leanCloud;
+
     function __construct()
     {
         parent::__construct();
         $this->load->helper('string');
         $this->load->helper('array');
+        $this->load->library('LeanCloud');
+        $this->leanCloud = new LeanCloud();
     }
 
     private function genLiveKey()
@@ -23,13 +27,24 @@ class LiveDao extends BaseDao
 
     function createLive($ownerId, $subject)
     {
+        $result = $this->leanCloud->createConversation($subject, $ownerId);
+        if ($result == null) {
+            return null;
+        }
+        $id = $this->createLiveRecord($ownerId, $subject, $result);
+        return $id;
+    }
+
+    function createLiveRecord($ownerId, $subject, $conversationId)
+    {
         $key = $this->genLiveKey();
         $data = array(
             KEY_OWNER_ID => $ownerId,
             KEY_SUBJECT => $subject,
             KEY_RTMP_KEY => $key,
             KEY_STATUS => LIVE_STATUS_PREPARE,
-            KEY_MAX_PEOPLE => 300
+            KEY_MAX_PEOPLE => 300,
+            KEY_CONVERSATION_ID => $conversationId
         );
         $this->db->insert(TABLE_LIVES, $data);
         return $this->db->insert_id();

@@ -37,22 +37,6 @@ class Lives extends BaseController
         return false;
     }
 
-    function create_post()
-    {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_SUBJECT))) {
-            return;
-        }
-        $user = $this->checkAndGetSessionUser();
-        $subject = $this->post(KEY_SUBJECT);
-        $id = $this->liveDao->createLive($user->userId, $subject);
-        if (!$id) {
-            $this->failure(ERROR_SQL_WRONG);
-            return;
-        }
-        $live = $this->liveDao->getLive($id);
-        $this->succeed($live);
-    }
-
     function begin_get($liveId)
     {
         $ok = $this->statusDao->open($liveId);
@@ -179,7 +163,7 @@ class Lives extends BaseController
         }
         $live = $this->liveDao->lastPrepareLive($user);
         if (!$live) {
-            $this->failure(ERROR_SQL_WRONG);
+            $this->failure(ERROR_CREATE_LIVE);
             return;
         }
         $this->succeed($live);
