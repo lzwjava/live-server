@@ -122,5 +122,3 @@ CREATE TABLE `scanned_qrcodes` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE lives ADD COLUMN `conversationId` VARCHAR(30) NOT NULL             DEFAULT ''
-AFTER `detail`;
