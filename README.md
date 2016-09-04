@@ -60,29 +60,30 @@ response:
 {
     "error": "",
     "result": {
-        "amount": 100,
+        "amount": 0,
         "attendanceCount": 0,
-        "attendanceId": null,  // 是否报名
-        "beginTs": "2016-08-27 16:04:44",
-        "canJoin": true,    // 表示是否可以加入直播间，主播和报名者可以进入
-        "coverUrl": "http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg",
-        "detail": "\u8fd9\u6b21\u4e3b\u8981\u8bb2\u4e0b\u591a\u5e74\u6765 C++ \u7684\u7f16\u7a0b\u5b9e\u6218",
-        "endTs": "2016-08-27 16:04:44",
-        "liveId": 174,
+        "attendanceId": null, // 是否报名
+        "beginTs": "2016-09-04 18:33:12",
+        "canJoin": false, //表示是否可以加入直播间，主播和报名者可以进入
+        "conversationId": "57cbf868a22b9d006b9e6cf2", // 聊天室 ID
+        "coverUrl": "",
+        "detail": "",
+        "endTs": "2016-09-04 18:33:12",
+        "liveId": 244,
+        "maxPeople": 300,
         "owner": {
             "avatarUrl": "http://obcbndtjd.bkt.clouddn.com/defaultAvatar1.png",
-            "userId": 534,
-            "username": "53916"
+            "userId": 637,
+            "username": "606473635"
         },
-        "ownerId": 534,
-        "planTs": "2016-08-27 17:04:44",
-        "rtmpKey": "yTOkfcEG",
-        "rtmpUrl": "rtmp://quzhiboapp.com/live/yTOkfcEG",
-        "status": 2,
-        "subject": "C++ \u7f16\u7a0b"
+        "ownerId": 637,
+        "planTs": "2016-09-04 18:33:12",
+        "status": 1,
+        "subject": "606473635\u7684\u76f4\u64ad"
     },
     "status": "success"
 }
+
 ```
 
 
