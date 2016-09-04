@@ -47,9 +47,9 @@ class LiveDao extends BaseDao
     function getHomeLives($skip, $limit, $user)
     {
         $sql = "SELECT liveId FROM lives
-                WHERE status!=? ORDER BY created
+                WHERE status>=? ORDER BY created
                 DESC limit $limit offset $skip";
-        $lives = $this->db->query($sql, array(LIVE_STATUS_PREPARE))->result();
+        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT))->result();
         $ids = $this->extractLiveIds($lives);
         return $this->getLives($ids, $user);
     }
@@ -130,11 +130,21 @@ class LiveDao extends BaseDao
         ));
     }
 
-    function publishLive($id)
+    private function setLiveStatus($id, $status)
     {
         return $this->update($id, array(
-            KEY_STATUS => LIVE_STATUS_WAIT
+            KEY_STATUS => $status
         ));
+    }
+
+    function setLiveReview($id)
+    {
+        return $this->setLiveStatus($id, LIVE_STATUS_REVIEW);
+    }
+
+    function setLivePrepare($id)
+    {
+        return $this->setLiveStatus($id, LIVE_STATUS_WAIT);
     }
 
     function incrementAttendanceCount()
@@ -145,8 +155,8 @@ class LiveDao extends BaseDao
 
     function lastPrepareLive($user)
     {
-        $sql = "SELECT liveId FROM lives WHERE ownerId=? AND (status=? OR status=?)";
-        $binds = array($user->userId, LIVE_STATUS_PREPARE, LIVE_STATUS_WAIT);
+        $sql = "SELECT liveId FROM lives WHERE ownerId=? AND status<=?";
+        $binds = array($user->userId, LIVE_STATUS_WAIT);
         $live = $this->db->query($sql, $binds)->row();
         if ($live) {
             return $this->getLive($live->liveId);

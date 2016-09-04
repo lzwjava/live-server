@@ -70,6 +70,7 @@ $route['lives/(\d+)']['POST'] = 'lives/update/$1';
 $route['lives/(\d+)/alive']['GET'] = 'lives/alive/$1';
 $route['lives/(\d+)/end']['GET'] = 'lives/end/$1';
 $route['lives/(\d+)/begin']['GET'] = 'lives/begin/$1';
+$route['lives/(\d+)/submitReview']['GET'] = 'lives/submitReview/$1';
 $route['lives/(\d+)/publish']['GET'] = 'lives/publish/$1';
 $route['lives/lastPrepare']['GET'] = 'lives/lastPrepare';
 $route['lives/attended']['GET'] = 'lives/attended';

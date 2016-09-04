@@ -134,7 +134,7 @@ class Lives extends BaseController
         $this->succeed($ok);
     }
 
-    function publish_get($id)
+    function submitReview_get($id)
     {
         $live = $this->liveDao->getLive($id);
         if ($this->checkIfObjectNotExists($live)) {
@@ -154,8 +154,21 @@ class Lives extends BaseController
             $this->failure(ERROR_PLAN_TS_INVALID);
             return;
         }
-        $this->liveDao->publishLive($id);
+        $this->liveDao->setLiveReview($id);
         $this->succeed(true);
+    }
+
+    function publish_get($id)
+    {
+        $live = $this->liveDao->getLive($id);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $this->liveDao->setLivePrepare($id);
+        $this->succeed();
     }
 
     function lastPrepare_get()

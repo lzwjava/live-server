@@ -26,7 +26,7 @@ func createSimpleLive(c *Client) string {
 
 func createLive(c *Client) string {
 	liveId := createSimpleLive(c)
-	updateLiveAndPublish(c, liveId)
+	updateLiveAndSubmitThenPublish(c, liveId)
 	return liveId
 }
 
@@ -34,12 +34,14 @@ func beginLive(c *Client, liveId string) {
 	c.getData("lives/"+liveId+"/begin", url.Values{})
 }
 
-func updateLiveAndPublish(c *Client, liveId string) {
+func updateLiveAndSubmitThenPublish(c *Client, liveId string) {
 	planTs := time.Now().Add(1 * time.Hour).Format("2006-01-02 15:04:05")
 	c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
 		"coverUrl": {"http://obcbndtjd.bkt.clouddn.com/2.pic_hd.jpg"},
 		"amount":   {"100"}, "detail": {"这次主要讲下多年来 C++ 的编程实战"},
 		"planTs": {planTs}})
+	c.getData("lives/"+liveId+"/submitReview", url.Values{})
+	c.admin = true
 	c.getData("lives/"+liveId+"/publish", url.Values{})
 }
 
@@ -125,7 +127,7 @@ func TestLives_begin(t *testing.T) {
 	assert.True(t, res.MustBool())
 }
 
-func TestLives_publish(t *testing.T) {
+func TestLives_submitReview(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createSimpleLive(c)
 	planTs := time.Now().Add(1 * time.Hour).Format("2006-01-02 15:04:05")
@@ -135,8 +137,13 @@ func TestLives_publish(t *testing.T) {
 		"planTs": {planTs}})
 	assert.NotNil(t, updateRes)
 	time.Sleep(time.Second)
-	res := c.getData("lives/"+liveId+"/publish", url.Values{})
+	res := c.getData("lives/"+liveId+"/submitReview", url.Values{})
 	assert.True(t, res.MustBool())
+}
+
+func TestLives_publish(t *testing.T) {
+	c, _ := NewClientAndUser()
+	createLive(c)
 }
 
 func TestLives_lastPrepare(t *testing.T) {

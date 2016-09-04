@@ -99,6 +99,7 @@ define('ERROR_REDIS_WRONG', 'redis_wrong');
 define('ERROR_AMOUNT_UNIT', 'amount_unit');
 define('ERROR_AMOUNT_TOO_LITTLE', 'amount_too_little');
 define('ERROR_AMOUNT_TOO_MUCH', 'amount_too_much');
+define('ERROR_NOT_ADMIN', 'not_admin');
 
 // error users
 define('ERROR_NOT_IN_SESSION', 'not_in_session');
@@ -142,6 +143,7 @@ if (!function_exists('errorInfos')) {
             ERROR_SQL_WRONG => '数据库出错',
             ERROR_REDIS_WRONG => 'Redis 出错',
             ERROR_NOT_ALLOW_DO_IT => '您没有相关的权限',
+            ERROR_NOT_ADMIN => '此操作只能管理员进行',
 
             // users
             ERROR_USERNAME_TAKEN => '用户名已存在',
@@ -207,9 +209,10 @@ define('KEY_OWNER_ID', 'ownerId');
 define('KEY_DETAIL', 'detail');
 
 define('LIVE_STATUS_PREPARE', 1);
-define('LIVE_STATUS_WAIT', 2);
-define('LIVE_STATUS_ON', 3);
-define('LIVE_STATUS_OFF', 4);
+define('LIVE_STATUS_REVIEW', 5);
+define('LIVE_STATUS_WAIT', 10);
+define('LIVE_STATUS_ON', 20);
+define('LIVE_STATUS_OFF', 30);
 
 define('SMS_TEMPLATE', 'template');
 define('KEY_SMS_CODE', 'smsCode');

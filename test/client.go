@@ -23,6 +23,7 @@ type Client struct {
 	HTTPClient   *http.Client
 	cookieJar    *cookiejar.Jar
 	SessionToken string
+	admin        bool
 }
 
 func NewClient() *Client {
@@ -110,6 +111,9 @@ func (c *Client) request(method string, path string, params url.Values) *simplej
 		req, err = http.NewRequest(method, urlStr, paramStr)
 	}
 	checkErr(err)
+	if c.admin {
+		req.SetBasicAuth("admin", "Pwx9uVJM")
+	}
 	fmt.Println("curl -X", method, urlStr, params)
 	return c.doRequest(req)
 }

@@ -207,5 +207,22 @@ class BaseController extends REST_Controller
         return getToken(16);
     }
 
+    protected function checkIfNotAdmin()
+    {
+        if (!isset($_SERVER['PHP_AUTH_USER'])) {
+            $this->failure(ERROR_NOT_ALLOW_DO_IT);
+            return true;
+        } else {
+            $user = $_SERVER['PHP_AUTH_USER'];
+            $password = $_SERVER['PHP_AUTH_PW'];
+            if ($user != 'admin' && $password != 't3P3iYqF') {
+                $this->failure(ERROR_NOT_ADMIN);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
 }
 
