@@ -6,7 +6,7 @@
  * Date: 9/5/16
  * Time: 5:26 PM
  */
-class WeChat extends BaseController
+class Wechat extends BaseController
 {
     public $jsSdk;
 
