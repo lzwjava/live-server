@@ -14,3 +14,9 @@ func TestWeChat_sign(t *testing.T) {
 	assert.NotNil(t, res.Get("appId").Interface())
 	assert.NotNil(t, res.Get("nonceStr").Interface())
 }
+
+func TestWeChat_register(t *testing.T) {
+	c := NewClient()
+	res := c.postData("wechat/register", url.Values{"code": {"001ONMjt1kPSE806Edjt18MSjt1ONMjS"}})
+	assert.NotNil(t, res)
+}

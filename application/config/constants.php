@@ -137,6 +137,9 @@ define('ERROR_ALREADY_NOTIFY', 'already_notify');
 // leancloud
 define('ERROR_LC_CONVERSATION_FAILED', 'lc_conversation_failed');
 
+// wechat
+define('ERROR_USER_INFO_FAILED', 'fail_get_user_info');
+define('ERROR_GET_ACCESS_TOKEN', 'fail_get_access_token');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -184,8 +187,11 @@ if (!function_exists('errorInfos')) {
             ERROR_ALREADY_NOTIFY => '重复的支付回调',
 
             // leancloud
-            ERROR_LC_CONVERSATION_FAILED => '创建聊天室失败'
+            ERROR_LC_CONVERSATION_FAILED => '创建聊天室失败',
 
+            // wechat
+            ERROR_GET_ACCESS_TOKEN => '获取令牌失败',
+            ERROR_USER_INFO_FAILED => '获取用户信息失败'
         );
     }
 
@@ -276,8 +282,14 @@ define('REMARK_INCOME_LIVE', '%s报名直播');
 define('TABLE_SCANNED_QRCODES', 'scanned_qrcodes');
 define('KEY_QRCODE_ID', 'qrcodeId');
 define('KEY_CODE', 'code');
-
 define('KEY_SCANNED', 'scanned');
+
+// sns_users
+define('TABLE_SNS_USERS', 'sns_users');
+define('KEY_SNS_USER_ID', 'snsUserId');
+define('KEY_OPEN_ID', 'openId');
+define('KEY_PLATFORM', 'platform');
+define('PLATFORM_WECHAT', 'wechat');
 
 // cookie
 define('KEY_COOKIE_TOKEN', 'SessionToken');

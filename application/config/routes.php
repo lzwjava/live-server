@@ -92,3 +92,4 @@ $route['rewards/notify']['POST'] = 'rewards/notify';
 
 // wechat
 $route['wechat/sign']['GET'] = 'wechat/sign';
+$route['wechat/register']['POST'] = 'wechat/register';

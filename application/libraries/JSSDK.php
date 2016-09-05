@@ -104,7 +104,7 @@ class JSSDK
         return $access_token;
     }
 
-    private function httpGet($url)
+    function httpGet($url)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

@@ -121,3 +121,16 @@ CREATE TABLE `scanned_qrcodes` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `sns_users` (
+  `snsUserId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `openId`    VARCHAR(63)      NOT NULL DEFAULT '',
+  `username`  VARCHAR(63)      NOT NULL DEFAULT '',
+  `avatarUrl` VARCHAR(255)     NOT NULL DEFAULT '',
+  `platform`  VARCHAR(10)      NOT NULL DEFAULT '',
+  `userId`    INT(11)          NOT NULL DEFAULT 0,
+  PRIMARY KEY (`snsUserId`),
+  UNIQUE KEY (`openId`, `platform`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
