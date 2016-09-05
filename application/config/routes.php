@@ -89,3 +89,6 @@ $route['qrcodes/scanned']['GET'] = 'qrcodes/isQrcodeScanned';
 $route['qrcodes/gen']['GET'] = 'qrcodes/png';
 
 $route['rewards/notify']['POST'] = 'rewards/notify';
+
+// wechat
+$route['wechat/sign']['GET'] = 'wechat/sign';

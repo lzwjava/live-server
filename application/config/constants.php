@@ -296,3 +296,6 @@ if (ENVIRONMENT == 'development') {
 
 define('RTMP_URL_PREFIX', "rtmp://quzhiboapp.com/live/");
 define('ALIPAY_NOTIFY_URL', 'http://api.quzhiboapp.com/rewards/notify');
+
+define('WECHAT_APP_ID', 'wx7b5f277707699557');
+define('WECHAT_APP_SECRET', '3d85c980817fd92eac4530b3c0ce667a');
