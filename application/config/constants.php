@@ -109,6 +109,7 @@ define('ERROR_USERNAME_TAKEN', 'username_taken');
 define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
 define('ERROR_LOGIN_FAILED', 'login_failed');
 define('ERROR_QINIU_UPLOAD', 'qiniu_upload');
+define('ERROR_USER_BIND', 'user_bind_failed');
 
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
@@ -160,6 +161,7 @@ if (!function_exists('errorInfos')) {
             ERROR_LOGIN_FAILED => "手机号码不存在或者密码错误",
             ERROR_MOBILE_PHONE_NUMBER_TAKEN => "手机号已被占用",
             ERROR_QINIU_UPLOAD => '七牛上传图片出错',
+            ERROR_USER_BIND => '用户绑定出错',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
