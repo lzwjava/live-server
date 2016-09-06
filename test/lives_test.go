@@ -168,3 +168,19 @@ func TestLives_attended(t *testing.T) {
 	res := c2.getData("lives/attended", url.Values{})
 	assert.Equal(t, len(res.MustArray()), 1)
 }
+
+func createLiveAndAttendance() (*Client, *Client, string) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, user := NewClientAndUser()
+	createAttendance(c2, user, liveId)
+	return c, c2, liveId
+}
+
+func TestLives_attendedUsers(t *testing.T) {
+	_, c2, liveId := createLiveAndAttendance()
+	res := c2.getData("lives/"+liveId+"/users", url.Values{})
+	assert.NotNil(t, res)
+	assert.Equal(t, len(res.MustArray()), 1)
+}

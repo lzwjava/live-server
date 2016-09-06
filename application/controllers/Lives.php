@@ -93,7 +93,7 @@ class Lives extends BaseController
 
     function one_get($id)
     {
-        $user = $this->checkAndGetSessionUser();
+        $user = $this->getSessionUser();
         $live = $this->liveDao->getLive($id, $user);
         $this->succeed($live);
     }
@@ -187,6 +187,16 @@ class Lives extends BaseController
         }
         $lvs = $this->liveDao->getMyLives($user);
         $this->succeed($lvs);
+    }
+
+    function attendedUsers_get($liveId)
+    {
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $users = $this->liveDao->getAttendedUsers($liveId);
+        $this->succeed($users);
     }
 
 }

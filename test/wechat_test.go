@@ -17,6 +17,6 @@ func TestWeChat_sign(t *testing.T) {
 
 func TestWeChat_register(t *testing.T) {
 	c := NewClient()
-	res := c.postData("wechat/register", url.Values{"code": {"001ONMjt1kPSE806Edjt18MSjt1ONMjS"}})
+	res := c.post("wechat/register", url.Values{"code": {"001ONMjt1kPSE806Edjt18MSjt1ONMjS"}})
 	assert.NotNil(t, res)
 }
