@@ -100,18 +100,20 @@ class LiveDao extends BaseDao
 
     private function electRtmpServer()
     {
-        $serverIps = array('121.42.162.55');
+        $serverIps = array('cheer.quzhiboapp.com');
         $serverIp = random_element($serverIps);
-        return 'rtmp://' . $serverIp . '/live/';
+        return $serverIp;
     }
+
 
     private function assembleLives($lives, $userId)
     {
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
-            $rtmpServer = $this->electRtmpServer();
-            $live->rtmpUrl = $rtmpServer . $live->rtmpKey;
+            $serverHost = $this->electRtmpServer();
+            $live->rtmpUrl = 'rtmp://' . $serverHost . '/live/' . $live->rtmpKey;
+            $live->hlsUrl = 'http://' . $serverHost . '/live/' . $live->rtmpKey . '_ff.m3u8';
             if (!$live->attendanceId && $userId != $live->ownerId) {
                 // 没参加或非创建者
                 unset($live->rtmpUrl);
