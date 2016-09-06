@@ -149,6 +149,7 @@ class Users extends BaseController
             $this->failure(ERROR_SQL_WRONG);
             return;
         }
+        $this->snsUserDao->bindUser($openId, $platform, $userId);
         $this->loginOrRegisterSucceed($mobile);
     }
 

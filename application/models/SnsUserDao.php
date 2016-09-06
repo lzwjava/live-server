@@ -29,4 +29,11 @@ class SnsUserDao extends BaseDao
         return $row;
     }
 
+    function bindUser($openId, $platform, $userId)
+    {
+        $sql = "UPDATE sns_users SET userId=? WHERE openId=? AND platform=?";
+        $binds = array($userId, $openId, $platform);
+        return $this->db->query($sql, $binds);
+    }
+    
 }
