@@ -46,7 +46,7 @@ func deleteTable(table string, noCheck bool) {
 }
 
 func runSql(sentence string, noCheck bool) {
-	db, err := sql.Open("mysql", "lzw:@/weimg")
+	db, err := sql.Open("mysql", "lzw:@/qulive")
 	checkErr(err)
 
 	err = db.Ping()

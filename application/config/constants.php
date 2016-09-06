@@ -108,6 +108,7 @@ define('ERROR_PASSWORD_FORMAT', 'password_format_wrong');
 define('ERROR_USERNAME_TAKEN', 'username_taken');
 define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
 define('ERROR_LOGIN_FAILED', 'login_failed');
+define('ERROR_QINIU_UPLOAD', 'qiniu_upload');
 
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
@@ -158,6 +159,7 @@ if (!function_exists('errorInfos')) {
             ERROR_NOT_IN_SESSION => '当前没有用户登录',
             ERROR_LOGIN_FAILED => "手机号码不存在或者密码错误",
             ERROR_MOBILE_PHONE_NUMBER_TAKEN => "手机号已被占用",
+            ERROR_QINIU_UPLOAD => '七牛上传图片出错',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
@@ -311,3 +313,7 @@ define('ALIPAY_NOTIFY_URL', 'http://api.quzhiboapp.com/rewards/notify');
 
 define('WECHAT_APP_ID', 'wx7b5f277707699557');
 define('WECHAT_APP_SECRET', '3d85c980817fd92eac4530b3c0ce667a');
+
+define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');
+define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
+define('QINIU_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');

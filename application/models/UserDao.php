@@ -30,14 +30,13 @@ class UserDao extends BaseDao
 
         $data = array(
             KEY_USERNAME => $username,
-            KEY_PASSWORD => sha1($password),
+            KEY_PASSWORD => $password,
             KEY_MOBILE_PHONE_NUMBER => $mobilePhoneNumber,
             KEY_AVATAR_URL => $avatarUrl,
             KEY_SESSION_TOKEN => $this->genSessionToken()
         );
-        $this->db->trans_start();
         $this->db->insert(TABLE_USERS, $data);
-        $this->db->trans_complete();
+        return $this->db->insert_id();
     }
 
     private function genId()

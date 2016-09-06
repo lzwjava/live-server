@@ -13,17 +13,24 @@ if (!defined('BASEPATH'))
 class Users extends BaseController
 {
     public $leancloud;
+    public $snsUserDao;
+    public $qiniuDao;
 
     function __construct()
     {
         parent::__construct();
         $this->load->library(LeanCloud::class);
         $this->leancloud = new LeanCloud();
+        $this->load->model(SnsUserDao::class);
+        $this->snsUserDao = new SnsUserDao();
+        $this->load->model(QiniuDao::class);
+        $this->qiniuDao = new QiniuDao();
+        $this->load->helper('string');
     }
 
     private function checkSmsCodeWrong($mobilePhoneNumber, $smsCode)
     {
-        if ($smsCode == '5555') {
+        if (isDebug() && $smsCode == '5555') {
             // for test
             return false;
         }
@@ -85,11 +92,64 @@ class Users extends BaseController
         } else if ($this->checkIfWrongPasswordFormat($password)) {
             return;
         } else {
-            $defaultAvatarUrl = "http://obcbndtjd.bkt.clouddn.com/defaultAvatar1.png";
+            $defaultAvatarUrl = QINIU_FILE_HOST . "/defaultAvatar1.png";
             $this->userDao->insertUser($username, $mobilePhoneNumber, $defaultAvatarUrl,
-                $password);
+                sha1($password));
             $this->loginOrRegisterSucceed($mobilePhoneNumber);
         }
+    }
+
+    private function genUsername($oldName)
+    {
+        $newUsername = $oldName;
+        $time = 0;
+        while ($this->userDao->isUsernameUsed($newUsername) && $time < 1000) {
+            $newUsername = $oldName . random_string('alnum', 3);
+            logInfo("newUsername: " . $newUsername);
+            $time++;
+        }
+        if ($time < 1000) {
+            return $newUsername;
+        } else {
+            return null;
+        }
+    }
+
+    public function registerBySns_post()
+    {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_OPEN_ID, KEY_PLATFORM,
+            KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))
+        ) {
+            return;
+        }
+        $mobile = $this->post(KEY_MOBILE_PHONE_NUMBER);
+        $openId = $this->post(KEY_OPEN_ID);
+        $platform = $this->post(KEY_PLATFORM);
+        $smsCode = $this->post(KEY_SMS_CODE);
+        if ($this->userDao->isMobilePhoneNumberUsed($mobile)) {
+            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
+            return;
+        }
+        if ($this->checkSmsCodeWrong($mobile, $smsCode)) {
+            return;
+        }
+        $snsUser = $this->snsUserDao->getSnsUser($openId, $platform);
+        list($imageUrl, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
+        if ($error) {
+            $this->failure(ERROR_QINIU_UPLOAD);
+            return;
+        }
+        $newUsername = $this->genUsername($snsUser->username);
+        if ($newUsername == null) {
+            $this->failure(ERROR_USERNAME_TAKEN);
+            return;
+        }
+        $userId = $this->userDao->insertUser($newUsername, $mobile, $imageUrl, '');
+        if (!$userId) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->loginOrRegisterSucceed($mobile);
     }
 
     private function checkIfUsernameUsedAndReponse($username)
