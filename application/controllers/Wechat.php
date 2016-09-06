@@ -46,7 +46,7 @@ class Wechat extends BaseController
                 $this->succeed($user);
                 return;
             } else {
-                $this->succeed();
+                $this->succeed($snsUser);
             }
         } else {
             $userResp = $this->httpGetUserInfo($respData->access_token, $respData->openid);
@@ -61,7 +61,8 @@ class Wechat extends BaseController
                 $this->failure(ERROR_SQL_WRONG);
                 return;
             }
-            $this->succeed();
+            $snsUser = $this->snsUserDao->getSnsUser($weUser->openid, PLATFORM_WECHAT);
+            $this->succeed($snsUser);
         }
     }
 
