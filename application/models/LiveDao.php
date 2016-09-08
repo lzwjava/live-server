@@ -105,7 +105,6 @@ class LiveDao extends BaseDao
         return $serverIp;
     }
 
-
     private function assembleLives($lives, $userId)
     {
         foreach ($lives as $live) {
@@ -118,6 +117,7 @@ class LiveDao extends BaseDao
                 // 没参加或非创建者
                 unset($live->rtmpUrl);
                 unset($live->rtmpKey);
+                unset($live->hlsUrl);
                 $live->canJoin = false;
             } else {
                 $live->canJoin = true;
