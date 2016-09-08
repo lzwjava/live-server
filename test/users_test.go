@@ -83,3 +83,10 @@ func TestUser_logout(t *testing.T) {
 	self := c.get("self", url.Values{})
 	assert.Equal(t, self.Get("status").MustString(), "not_in_session")
 }
+
+func TestUsers_get(t *testing.T) {
+	c, u := NewClientAndUser()
+	userId := u.Get("userId").MustInt()
+	res := c.getData("users/"+toStr(userId), url.Values{})
+	assert.NotNil(t, res.Get("username").Interface())
+}

@@ -232,7 +232,7 @@ class Users extends BaseController
         $this->succeed($user);
     }
 
-    public function isRegister_get()
+    function isRegister_get()
     {
         if ($this->checkIfParamsNotExist($this->get(), array(KEY_MOBILE_PHONE_NUMBER))) {
             return;
@@ -240,6 +240,15 @@ class Users extends BaseController
         $mobile = $this->get(KEY_MOBILE_PHONE_NUMBER);
         $used = $this->userDao->isMobilePhoneNumberUsed($mobile);
         $this->succeed($used);
+    }
+
+    function one_get($userId)
+    {
+        $user = $this->userDao->findPublicUserById($userId);
+        if ($this->checkIfObjectNotExists($user)) {
+            return;
+        }
+        $this->succeed($user);
     }
 
 }
