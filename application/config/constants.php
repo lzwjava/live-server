@@ -142,6 +142,7 @@ define('ERROR_LC_CONVERSATION_FAILED', 'lc_conversation_failed');
 // wechat
 define('ERROR_USER_INFO_FAILED', 'fail_get_user_info');
 define('ERROR_GET_ACCESS_TOKEN', 'fail_get_access_token');
+define('ERROR_ILLEGAL_REQUEST', 'illegal_request');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -195,7 +196,8 @@ if (!function_exists('errorInfos')) {
 
             // wechat
             ERROR_GET_ACCESS_TOKEN => '获取令牌失败',
-            ERROR_USER_INFO_FAILED => '获取用户信息失败'
+            ERROR_USER_INFO_FAILED => '获取用户信息失败',
+            ERROR_ILLEGAL_REQUEST => '非法的请求'
         );
     }
 
@@ -294,6 +296,11 @@ define('KEY_SNS_USER_ID', 'snsUserId');
 define('KEY_OPEN_ID', 'openId');
 define('KEY_PLATFORM', 'platform');
 define('PLATFORM_WECHAT', 'wechat');
+
+// states
+define('TABLE_STATES', 'states');
+define('KEY_HASH', 'hash');
+define('KEY_STATE', 'state');
 
 // cookie
 define('KEY_COOKIE_TOKEN', 'SessionToken');

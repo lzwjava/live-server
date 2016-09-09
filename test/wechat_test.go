@@ -34,3 +34,10 @@ func TestWeChat_registerBySns(t *testing.T) {
 	assert.NotNil(t, res)
 	assert.NotNil(t, res.Get("userId").Interface())
 }
+
+func TestWeChat_silentOauth(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	hash := createState(c, liveId)
+	c.get("wechat/silentOauth", url.Values{"code": {"001EoSyU0GATOR1nc9zU0qrTyU0EoSyB"}, "state": {hash}})
+}

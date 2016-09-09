@@ -11,6 +11,7 @@ class Wechat extends BaseController
     public $jsSdk;
     public $snsUserDao;
     public $userDao;
+    public $stateDao;
 
     function __construct()
     {
@@ -21,6 +22,8 @@ class Wechat extends BaseController
         $this->snsUserDao = new SnsUserDao();
         $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
+        $this->load->model(StateDao::class);
+        $this->stateDao = new StateDao();
     }
 
     function sign_get()
@@ -97,6 +100,49 @@ class Wechat extends BaseController
             WECHAT_APP_SECRET . '&grant_type=authorization_code&code=' . $code;
         $resp = $this->jsSdk->httpGet($url);
         return $this->parseResponse($resp);
+    }
+
+    function oauth_get()
+    {
+        $code = $this->get('code');
+        header('Location: http://m.quzhiboapp.com?code=' . $code);
+    }
+
+    function silentOauth_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE, KEY_STATE))) {
+            return;
+        }
+        $code = $this->get(KEY_CODE);
+        $hash = $this->get(KEY_STATE);
+        $state = $this->stateDao->getState($hash);
+        if (!$state) {
+            $this->failure(ERROR_ILLEGAL_REQUEST);
+            return;
+        }
+        $tokenResult = $this->httpGetAccessToken($code);
+        if ($tokenResult->error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+            return;
+        }
+        $respData = $tokenResult->data;
+        $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
+        if ($snsUser != null) {
+            if ($snsUser->userId != 0) {
+                $this->userDao->setLoginByUserId($snsUser->userId);
+            }
+        }
+        $host = $this->getMobileHost();
+        header('Location: http://' . $host . '/#intro/' . $state->liveId);
+    }
+
+    private function getMobileHost()
+    {
+        if (isDebug()) {
+            return 'localhost:9060';
+        } else {
+            return 'm.quzhiboapp.com';
+        }
     }
 
 }

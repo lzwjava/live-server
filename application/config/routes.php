@@ -96,3 +96,8 @@ $route['rewards/notify']['POST'] = 'rewards/notify';
 // wechat
 $route['wechat/sign']['GET'] = 'wechat/sign';
 $route['wechat/register']['POST'] = 'wechat/register';
+$route['wechat/oauth']['GET'] = 'wechat/oauth';
+$route['wechat/silentOauth']['GET'] = 'wechat/silentOauth';
+
+// states
+$route['states']['POST'] = 'states/create';
