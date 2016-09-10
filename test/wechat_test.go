@@ -16,9 +16,11 @@ func TestWeChat_sign(t *testing.T) {
 	assert.NotNil(t, res.Get("nonceStr").Interface())
 }
 
-func TestWeChat_register(t *testing.T) {
-	c := NewClient()
-	res := c.post("wechat/register", url.Values{"code": {"001ONMjt1kPSE806Edjt18MSjt1ONMjS"}})
+func TestWeChat_oauth(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	hash := createState(c, liveId)
+	res := c.get("wechat/oauth", url.Values{"code": {"021PuYDG1k5ZAd0qCxBG1ll2EG1PuYD6"}, "state": {hash}})
 	assert.NotNil(t, res)
 }
 

@@ -32,7 +32,7 @@ if (!function_exists('uuid')) {
 if (!function_exists('setCookieForever')) {
     function setCookieForever($name, $value)
     {
-        setcookie($name, $value, time() + 3600 * 24 * 365 * 20, "/");
+        setcookie($name, $value, time() + 3600 * 24 * 365 * 20, '/');
     }
 }
 

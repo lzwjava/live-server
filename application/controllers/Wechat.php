@@ -33,40 +33,7 @@ class Wechat extends BaseController
 
     function register_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_CODE))) ;
-        $code = $this->post(KEY_CODE);
-        $tokenResult = $this->httpGetAccessToken($code);
-        if ($tokenResult->error) {
-            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
-            return;
-        }
-        $respData = $tokenResult->data;
-        $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
-        if ($snsUser != null) {
-            if ($snsUser->userId != 0) {
-                // 已绑定手机
-                $user = $this->userDao->setLoginByUserId($snsUser->userId);
-                $this->succeed($user);
-                return;
-            } else {
-                $this->succeed($snsUser);
-            }
-        } else {
-            $userResp = $this->httpGetUserInfo($respData->access_token, $respData->openid);
-            if ($userResp->error) {
-                $this->failure(ERROR_USER_INFO_FAILED, $userResp->error);
-                return;
-            }
-            $weUser = $userResp->data;
-            $id = $this->snsUserDao->addSnsUser($weUser->openid, $weUser->nickname,
-                $weUser->headimgurl, PLATFORM_WECHAT);
-            if (!$id) {
-                $this->failure(ERROR_SQL_WRONG);
-                return;
-            }
-            $snsUser = $this->snsUserDao->getSnsUser($weUser->openid, PLATFORM_WECHAT);
-            $this->succeed($snsUser);
-        }
+
     }
 
     function httpGetUserInfo($accessToken, $openId)
@@ -104,8 +71,48 @@ class Wechat extends BaseController
 
     function oauth_get()
     {
-        $code = $this->get('code');
-        header('Location: http://m.quzhiboapp.com?code=' . $code);
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE, KEY_STATE))) {
+            return;
+        };
+        $code = $this->get(KEY_CODE);
+        $hash = $this->get(KEY_STATE);
+        $state = $this->stateDao->getState($hash);
+        if (!$state) {
+            $this->failure(ERROR_ILLEGAL_REQUEST);
+            return;
+        }
+        $tokenResult = $this->httpGetAccessToken($code);
+        if ($tokenResult->error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+            return;
+        }
+        $respData = $tokenResult->data;
+        $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
+        $host = $this->getMobileHost();
+        $redirectHeader = 'Location: http://' . $host . '/#register?liveId='
+            . $state->liveId . '&openId=' . $respData->openid;
+        if ($snsUser != null) {
+            if ($snsUser->userId != 0) {
+                $this->failure(ERROR_WECHAT_ALREADY_REGISTER);
+                return;
+            } else {
+                header($redirectHeader);
+            }
+        } else {
+            $userResp = $this->httpGetUserInfo($respData->access_token, $respData->openid);
+            if ($userResp->error) {
+                $this->failure(ERROR_USER_INFO_FAILED, $userResp->error);
+                return;
+            }
+            $weUser = $userResp->data;
+            $id = $this->snsUserDao->addSnsUser($weUser->openid, $weUser->nickname,
+                $weUser->headimgurl, PLATFORM_WECHAT);
+            if (!$id) {
+                $this->failure(ERROR_SQL_WRONG);
+                return;
+            }
+            header($redirectHeader);
+        }
     }
 
     function silentOauth_get()
@@ -138,7 +145,7 @@ class Wechat extends BaseController
 
     private function getMobileHost()
     {
-        if (isDebug()) {
+        if (true) {
             return 'localhost:9060';
         } else {
             return 'm.quzhiboapp.com';
