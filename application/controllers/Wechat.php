@@ -25,10 +25,14 @@ class Wechat extends BaseController
 
     function sign_get()
     {
-        $this->succeed($this->jsSdk->getSignPackage());
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_URL))) {
+            return;
+        }
+        $url = $this->get('url');
+        $this->succeed($this->jsSdk->getSignPackage($url));
     }
 
-    function httpGetUserInfo($accessToken, $openId)
+    private function httpGetUserInfo($accessToken, $openId)
     {
         $url = 'https://api.weixin.qq.com/sns/userinfo?access_token='
             . $accessToken . '&openid=' . $openId . '&lang=zh_CN';
@@ -53,7 +57,7 @@ class Wechat extends BaseController
         return $result;
     }
 
-    function httpGetAccessToken($code)
+    private function httpGetAccessToken($code)
     {
         $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . WECHAT_APP_ID . '&secret=' .
             WECHAT_APP_SECRET . '&grant_type=authorization_code&code=' . $code;

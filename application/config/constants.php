@@ -328,3 +328,5 @@ define('WECHAT_APP_SECRET', '3d85c980817fd92eac4530b3c0ce667a');
 define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');
 define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
 define('QINIU_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');
+
+define('KEY_URL', 'url');
