@@ -111,7 +111,7 @@ class LiveDao extends BaseDao
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
             $serverHost = $this->electRtmpServer();
-            $live->rtmpUrl = 'rtmp://' . $serverHost . '/live/' . $live->rtmpKey;
+            $live->rtmpUrl = 'rtmp://' . $serverHost . '/live/' . $live->rtmpKey . '_ff';
             $live->hlsUrl = 'http://' . $serverHost . '/live/' . $live->rtmpKey . '_ff.m3u8';
             if (!$live->attendanceId && $userId != $live->ownerId) {
                 // 没参加或非创建者
