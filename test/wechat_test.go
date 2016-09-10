@@ -18,9 +18,7 @@ func TestWeChat_sign(t *testing.T) {
 
 func TestWeChat_oauth(t *testing.T) {
 	c, _ := NewClientAndUser()
-	liveId := createLive(c)
-	hash := createState(c, liveId)
-	res := c.get("wechat/oauth", url.Values{"code": {"021PuYDG1k5ZAd0qCxBG1ll2EG1PuYD6"}, "state": {hash}})
+	res := c.get("wechat/oauth", url.Values{"code": {"021xQP7S0WdvMc2NIY5S0aTP7S0xQP7F"}})
 	assert.NotNil(t, res)
 }
 
@@ -39,7 +37,5 @@ func TestWeChat_registerBySns(t *testing.T) {
 
 func TestWeChat_silentOauth(t *testing.T) {
 	c, _ := NewClientAndUser()
-	liveId := createLive(c)
-	hash := createState(c, liveId)
-	c.get("wechat/silentOauth", url.Values{"code": {"001EoSyU0GATOR1nc9zU0qrTyU0EoSyB"}, "state": {hash}})
+	c.get("wechat/silentOauth", url.Values{"code": {"031zikUO0vadGf2h5bVO0gjjUO0zikUp"}})
 }

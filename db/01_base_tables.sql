@@ -134,14 +134,3 @@ CREATE TABLE `sns_users` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-CREATE TABLE `states` (
-  `stateId` INT         NOT NULL AUTO_INCREMENT,
-  `hash`    VARCHAR(31) NOT NULL DEFAULT '',
-  `liveId`  INT(11)     NOT NULL DEFAULT 0,
-  PRIMARY KEY (`stateId`),
-  UNIQUE KEY (`hash`),
-  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
