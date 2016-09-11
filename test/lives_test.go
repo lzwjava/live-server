@@ -162,8 +162,8 @@ func TestLives_attended(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, user := NewClientAndUser()
-	createAttendance(c2, user, liveId)
+	c2, _ := NewClientAndUser()
+	createAttendance(c2, liveId)
 
 	res := c2.getData("lives/attended", url.Values{})
 	assert.Equal(t, len(res.MustArray()), 1)
@@ -173,8 +173,8 @@ func createLiveAndAttendance() (*Client, *Client, string) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, user := NewClientAndUser()
-	createAttendance(c2, user, liveId)
+	c2, _ := NewClientAndUser()
+	createAttendance(c2, liveId)
 	return c, c2, liveId
 }
 

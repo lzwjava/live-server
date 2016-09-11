@@ -22,7 +22,7 @@ class Wechat extends BaseController
         $this->snsUserDao = new SnsUserDao();
         $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
-        $this->load->library(WxPay::class);
+        $this->load->library('wx/' . WxPay::class);
         $this->wxPay = new WxPay();
     }
 
@@ -128,9 +128,18 @@ class Wechat extends BaseController
         $this->succeed();
     }
 
-    function wxpayParams_get()
+    function wxpay_get()
     {
-        $this->succeed($this->wxPay->createWxOrder());
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $snsUser = $this->snsUserDao->getSnsUserByUserId($user->userId);
+        if (!$snsUser) {
+            $this->failure(ERROR_MUST_BIND_WECHAT);
+            return;
+        }
+        $this->succeed($this->wxPay->createWxOrder($snsUser->openId));
     }
 
 }

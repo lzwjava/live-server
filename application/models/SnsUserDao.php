@@ -35,5 +35,10 @@ class SnsUserDao extends BaseDao
         $binds = array($userId, $openId, $platform);
         return $this->db->query($sql, $binds);
     }
-    
+
+    function getSnsUserByUserId($userId)
+    {
+        return $this->getOneFromTable(TABLE_SNS_USERS, KEY_USER_ID, $userId);
+    }
+
 }

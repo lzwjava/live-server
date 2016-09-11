@@ -166,7 +166,8 @@ func registerNewUser(c *Client) *simplejson.Json {
 	return registerUserWithPhone(c, randomMobile(), randomString())
 }
 
-func NewClientAndUser() (*Client, *simplejson.Json) {
+func NewClientAndUser() (*Client, string) {
 	c := NewClient()
-	return c, registerNewUser(c)
+	user := registerNewUser(c)
+	return c, toStr(user.Get("userId").MustInt())
 }

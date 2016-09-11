@@ -52,7 +52,7 @@ func TestAttendances_create(t *testing.T) {
 	assert.Equal(t, callbackRes, "success")
 }
 
-func createAttendance(c *Client, user *simplejson.Json, liveId string) {
+func createAttendance(c *Client, liveId string) {
 	res := c.postData("attendances", url.Values{"liveId": {liveId}})
 
 	orderNo := parseOrderNo(res)
@@ -76,8 +76,8 @@ func TestAttendances_liveList(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, user := NewClientAndUser()
-	createAttendance(c2, user, liveId)
+	c2, _ := NewClientAndUser()
+	createAttendance(c2, liveId)
 
 	res := c.getData("attendances/lives/"+liveId, url.Values{})
 	assert.NotNil(t, res)
@@ -88,8 +88,8 @@ func TestAttendances_list(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, user := NewClientAndUser()
-	createAttendance(c2, user, liveId)
+	c2, _ := NewClientAndUser()
+	createAttendance(c2, liveId)
 
 	res := c2.getData("attendances/me", url.Values{})
 	assert.NotNil(t, res)
@@ -100,8 +100,8 @@ func TestAttendances_count(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, user := NewClientAndUser()
-	createAttendance(c2, user, liveId)
+	c2, _ := NewClientAndUser()
+	createAttendance(c2, liveId)
 
 	live := getLive(c, liveId)
 	assert.Equal(t, live.Get("attendanceCount").MustInt(), 1)
@@ -111,12 +111,12 @@ func TestAttendances_oneByLiveId(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, user := NewClientAndUser()
+	c2, _ := NewClientAndUser()
 
 	res := c2.get("attendances/one", url.Values{"liveId": {liveId}})
 	assert.Equal(t, res.Get("status").MustString(), "object_not_exists")
 
-	createAttendance(c2, user, liveId)
+	createAttendance(c2, liveId)
 
 	attendance := c2.getData("attendances/one", url.Values{"liveId": {liveId}})
 	assert.NotNil(t, attendance)
@@ -126,8 +126,8 @@ func TestAttendances_attendanceId(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, user := NewClientAndUser()
-	createAttendance(c2, user, liveId)
+	c2, _ := NewClientAndUser()
+	createAttendance(c2, liveId)
 
 	live := getLive(c2, liveId)
 	assert.NotEqual(t, live.Get("attendanceId").MustInt(), 0)

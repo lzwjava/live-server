@@ -144,6 +144,7 @@ define('ERROR_USER_INFO_FAILED', 'fail_get_user_info');
 define('ERROR_GET_ACCESS_TOKEN', 'fail_get_access_token');
 define('ERROR_ILLEGAL_REQUEST', 'illegal_request');
 define('ERROR_WECHAT_ALREADY_REGISTER', 'wechat_already_register');
+define('ERROR_MUST_BIND_WECHAT', 'must_bind_wechat');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -199,7 +200,8 @@ if (!function_exists('errorInfos')) {
             ERROR_GET_ACCESS_TOKEN => '获取令牌失败',
             ERROR_USER_INFO_FAILED => '获取用户信息失败',
             ERROR_ILLEGAL_REQUEST => '非法的请求',
-            ERROR_WECHAT_ALREADY_REGISTER => '微信早已注册'
+            ERROR_WECHAT_ALREADY_REGISTER => '微信早已注册',
+            ERROR_MUST_BIND_WECHAT => '必须先微信登录'
         );
     }
 

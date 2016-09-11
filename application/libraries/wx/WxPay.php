@@ -9,24 +9,17 @@
 
 require_once "lib/WxPay.Api.php";
 require_once "WxPay.JsApiPay.php";
-require_once 'log.php';
 
 class WxPay
 {
-    private $log;
-    private $logHandler;
-
     function __construct()
     {
         date_default_timezone_set('Asia/Shanghai');
-        $this->logHandler = new CLogFileHandler("../logs/" . date('Y-m-d') . '.log');
-        $this->log = Log::Init($this->logHandler, 15);
     }
 
-    function createWxOrder()
+    function createWxOrder($openId)
     {
         $tools = new JsApiPay();
-        $openId = $tools->GetOpenid();
         $input = new WxPayUnifiedOrder();
         $input->SetBody("test");
         $input->SetAttach("test");

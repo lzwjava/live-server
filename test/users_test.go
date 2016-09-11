@@ -85,8 +85,7 @@ func TestUser_logout(t *testing.T) {
 }
 
 func TestUsers_get(t *testing.T) {
-	c, u := NewClientAndUser()
-	userId := u.Get("userId").MustInt()
-	res := c.getData("users/"+toStr(userId), url.Values{})
+	c, userId := NewClientAndUser()
+	res := c.getData("users/"+userId, url.Values{})
 	assert.NotNil(t, res.Get("username").Interface())
 }
