@@ -10,7 +10,7 @@ import (
 
 func TestWeChat_sign(t *testing.T) {
 	c := NewClient()
-	res := c.getData("wechat/sign", url.Values{"url": {"http://localhost:9060"}})
+	res := c.getData("wechat/sign", url.Values{"url": {"http://localhost:9060/?code=04142OU20noPOy1tgZW20aLUU2042OUk&state=123"}})
 	assert.NotNil(t, res)
 	assert.NotNil(t, res.Get("appId").Interface())
 	assert.NotNil(t, res.Get("nonceStr").Interface())

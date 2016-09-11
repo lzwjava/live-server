@@ -11,6 +11,7 @@ class Wechat extends BaseController
     public $jsSdk;
     public $snsUserDao;
     public $userDao;
+    public $wxPay;
 
     function __construct()
     {
@@ -21,6 +22,8 @@ class Wechat extends BaseController
         $this->snsUserDao = new SnsUserDao();
         $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
+        $this->load->library(WxPay::class);
+        $this->wxPay = new WxPay();
     }
 
     function sign_get()
@@ -123,6 +126,11 @@ class Wechat extends BaseController
             }
         }
         $this->succeed();
+    }
+
+    function wxpayParams_get()
+    {
+        $this->succeed($this->wxPay->createWxOrder());
     }
 
 }
