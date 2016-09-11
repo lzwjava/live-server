@@ -118,10 +118,11 @@ class Rewards extends BaseController
         }
     }
 
-    public function success_get()
+    function success_get()
     {
         $params = $this->get();
         $paramsStr = json_encode($params);
         logInfo("reward success $paramsStr");
     }
+
 }

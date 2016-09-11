@@ -98,3 +98,4 @@ $route['wechat/sign']['GET'] = 'wechat/sign';
 $route['wechat/oauth']['GET'] = 'wechat/oauth';
 $route['wechat/silentOauth']['GET'] = 'wechat/silentOauth';
 $route['wechat/wxpay']['GET'] = 'wechat/wxpay';
+$route['wechat/wxpayNotify']['GET'] = 'wechat/wxpayNotify';
