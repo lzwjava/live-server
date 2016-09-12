@@ -64,7 +64,7 @@ class LeanCloud
 
     function createConversation($name, $userId)
     {
-        $data = array('name' => $name, 'm' => array($userId . ''), 'c' => $userId,
+        $data = array('name' => $name, 'm' => array($userId . ''), 'c' => $userId . '',
             'tr' => true, 'attr' => array('type' => 0));
         $result = $this->curlLeanCloud('classes/_Conversation', $data);
         if ($result['status'] < 200 | $result['status'] > 300) {
