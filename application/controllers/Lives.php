@@ -131,6 +131,10 @@ class Lives extends BaseController
         if ($this->checkIfAmountWrong($live->amount)) {
             return;
         }
+        if (mb_strlen($live->detail) < 300) {
+            $this->failure(ERROR_DETAIL_TOO_SHORT);
+            return;
+        }
         $planTs = date_create($live->planTs, new DateTimeZone('Asia/Shanghai'));
         $now = date_create('now');
         $diff = date_diff($planTs, $now);

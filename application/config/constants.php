@@ -118,6 +118,7 @@ define('ERROR_FIELDS_EMPTY', 'live_fields_empty');
 define('ERROR_PLAN_TS_INVALID', 'planTs_invalid');
 define('ERROR_EXCEED_MAX_PEOPLE', 'exceed_max_people');
 define('ERROR_CREATE_LIVE', 'create_live_failed');
+define('ERROR_DETAIL_TOO_SHORT', 'detail_too_short');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -175,6 +176,7 @@ if (!function_exists('errorInfos')) {
             ERROR_PLAN_TS_INVALID => '预计的直播时间应该晚于现在',
             ERROR_EXCEED_MAX_PEOPLE => '抱歉,报名已满',
             ERROR_CREATE_LIVE => '创建直播失败',
+            ERROR_DETAIL_TOO_SHORT => '直播详情至少要 300 字',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
