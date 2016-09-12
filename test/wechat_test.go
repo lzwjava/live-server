@@ -52,7 +52,7 @@ func TestWeChat_wxpay(t *testing.T) {
 }
 
 func TestWeChat_wxpayNotify(t *testing.T) {
-	c, _ := NewClientAndUser()
-	res := c.post("wechat/wxpayNotify", url.Values{})
-	assert.NotNil(t, res)
+	// c, _ := NewClientAndUser()
+	// res := c.post("wechat/wxpayNotify", url.Values{})
+	// assert.NotNil(t, res)
 }
