@@ -54,6 +54,7 @@ CREATE TABLE `charges` (
   `orderNo`   VARCHAR(31)  NOT NULL,
   `amount`    INT(11)      NOT NULL,
   `paid`      TINYINT(2)   NOT NULL DEFAULT '0',
+  `channel`   VARCHAR(31)  NOT NULL DEFAULT '',
   `creator`   VARCHAR(31)  NOT NULL,
   `creatorIP` VARCHAR(63)  NOT NULL,
   `metaData`  VARCHAR(127) NOT NULL DEFAULT '',
