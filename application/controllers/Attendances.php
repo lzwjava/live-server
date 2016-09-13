@@ -62,7 +62,7 @@ class Attendances extends BaseController
             return;
         }
         $openId = null;
-        if ($channel == PLATFORM_WECHAT) {
+        if ($channel == CHANNEL_WECHAT_H5) {
             $snsUser = $this->snsUserDao->getSnsUserByUserId($user->userId);
             if (!$snsUser) {
                 $this->failure(ERROR_MUST_BIND_WECHAT);

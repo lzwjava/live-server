@@ -203,7 +203,7 @@ if (!function_exists('errorInfos')) {
             ERROR_USER_INFO_FAILED => '获取用户信息失败',
             ERROR_ILLEGAL_REQUEST => '非法的请求',
             ERROR_WECHAT_ALREADY_REGISTER => '微信早已注册',
-            ERROR_MUST_BIND_WECHAT => '必须先微信登录'
+            ERROR_MUST_BIND_WECHAT => '必须先绑定微信'
         );
     }
 
