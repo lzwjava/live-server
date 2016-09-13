@@ -4,11 +4,16 @@ class JSSDK
 {
     private $appId;
     private $appSecret;
+    /** @var WxDao */
+    public $wxDao;
 
     public function __construct($appId = null, $appSecret = null)
     {
         $this->appId = $appId;
         $this->appSecret = $appSecret;
+        $ci = get_instance();
+        $ci->load->model(WxDao::class);
+        $this->wxDao = new WxDao();
     }
 
     public function getSignPackage($url)
@@ -45,14 +50,8 @@ class JSSDK
 
     private function getJsApiTicket()
     {
-        // jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
-        $cachePath = APPPATH . "cache/jsapi_ticket.php";
-        $fileData = $this->get_php_file($cachePath);
-        $data = null;
-        if ($fileData != null) {
-            $data = json_decode($fileData);
-        }
-        if ($data == null || $data->expire_time < time()) {
+        $ticket = $this->wxDao->getJSApiTicket();
+        if (!$ticket) {
             $accessToken = $this->getAccessToken();
             // 如果是企业号用以下 URL 获取 ticket
             // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
@@ -60,43 +59,30 @@ class JSSDK
             $res = json_decode($this->httpGet($url));
             $ticket = $res->ticket;
             if ($ticket) {
-                $data = new StdClass;
-                $data->expire_time = time() + 7000;
-                $data->jsapi_ticket = $ticket;
-                $this->set_php_file($cachePath, json_encode($data));
+                $this->wxDao->setJSApiTicket($ticket, 7000);
             }
         } else {
-            $ticket = $data->jsapi_ticket;
+            return $ticket;
         }
-
-        return $ticket;
     }
 
     private function getAccessToken()
     {
         // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
-        $cachePath = APPPATH . "cache/access_token.php";
-        $fileData = $this->get_php_file($cachePath);
-        $data = null;
-        if ($fileData != null) {
-            $data = json_decode($fileData);
-        }
-        if ($data == null || $data->expire_time < time()) {
+        $accessToken = $this->wxDao->getAccessToken();
+        if (!$accessToken) {
             // 如果是企业号用以下URL获取access_token
             // $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
             $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret=$this->appSecret";
             $res = json_decode($this->httpGet($url));
-            $access_token = $res->access_token;
-            if ($access_token) {
-                $data = new StdClass;
-                $data->expire_time = time() + 7000;
-                $data->access_token = $access_token;
-                $this->set_php_file($cachePath, json_encode($data));
+            $accessToken = $res->access_token;
+            if ($accessToken) {
+                $this->wxDao->setAccessToken($accessToken, $res->expires_in);
             }
+            return $accessToken;
         } else {
-            $access_token = $data->access_token;
+            return $accessToken;
         }
-        return $access_token;
     }
 
     function httpGet($url)
@@ -116,20 +102,5 @@ class JSSDK
         return $res;
     }
 
-    private function get_php_file($filename)
-    {
-        if (file_exists($filename)) {
-            return trim(substr(file_get_contents($filename), 15));
-        } else {
-            return null;
-        }
-    }
-
-    private function set_php_file($filename, $content)
-    {
-        $fp = fopen($filename, "w");
-        fwrite($fp, "<?php exit();?>" . $content);
-        fclose($fp);
-    }
 }
 

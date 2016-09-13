@@ -145,6 +145,8 @@ class Wechat extends BaseController
 
     function wxpayNotify_post()
     {
+        $content = file_get_contents("php://input");
+        logInfo("notify content : " . $content);
 //        $notify = new WxPayCallBack();
 //        $notify->Handle(false);
     }

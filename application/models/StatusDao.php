@@ -15,24 +15,14 @@ class StatusDao extends BaseDao
     function __construct()
     {
         parent::__construct();
-        $this->client = new Predis\Client([
-            'scheme' => 'tcp',
-            'host' => '127.0.0.1',
-            'port' => 6379,
-            'database' => 1
-        ]);
+        $this->client = $this->newRedisClient(1, 'status_');
         $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
     }
 
-    private function key($key)
-    {
-        return 'status_' . $key;
-    }
-
     private function alivesKey()
     {
-        return $this->key('alives');
+        return 'alives';
     }
 
     function open($id)

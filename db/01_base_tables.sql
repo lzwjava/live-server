@@ -134,3 +134,4 @@ CREATE TABLE `sns_users` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
