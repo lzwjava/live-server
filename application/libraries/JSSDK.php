@@ -59,8 +59,9 @@ class JSSDK
             $res = json_decode($this->httpGet($url));
             $ticket = $res->ticket;
             if ($ticket) {
-                $this->wxDao->setJSApiTicket($ticket, 7000);
+                $this->wxDao->setJSApiTicket($ticket, $res->expires_in);
             }
+            return $ticket;
         } else {
             return $ticket;
         }

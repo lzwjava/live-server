@@ -25,7 +25,6 @@ class WxDao extends BaseDao
 
     function setAccessToken($token, $ttl)
     {
-        logInfo("ttl" . $ttl);
         $this->client->set('access_token', $token, 'ex', $ttl);
     }
 
@@ -36,7 +35,6 @@ class WxDao extends BaseDao
 
     function setJSApiTicket($token, $ttl)
     {
-        logInfo("ticket ttl" . $ttl);
         $this->client->set('jsapi_ticket', $token, 'ex', $ttl);
     }
 
