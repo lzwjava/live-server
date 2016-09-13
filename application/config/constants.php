@@ -262,6 +262,9 @@ define('KEY_PAID', 'paid');
 define('KEY_CREATOR', 'creator');
 define('KEY_CREATOR_IP', 'creatorIP');
 define('KEY_META_DATA', 'metaData');
+define('KEY_CHANNEL', 'channel');
+define('CHANNEL_WECHAT_H5', 'wechat_h5');
+define('CHANNEL_ALIPAY_APP', 'alipay_app');
 
 // attendances
 define('TABLE_ATTENDANCES', 'attendances');
@@ -328,6 +331,8 @@ define('ALIPAY_NOTIFY_URL', 'http://api.quzhiboapp.com/rewards/notify');
 
 define('WECHAT_APP_ID', 'wx7b5f277707699557');
 define('WECHAT_APP_SECRET', '3d85c980817fd92eac4530b3c0ce667a');
+define('WECHAT_MCHID', '1387703002');
+
 
 define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');
 define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');

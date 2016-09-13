@@ -25,8 +25,8 @@ class Rewards extends BaseController
         $this->attendanceDao = new AttendanceDao();
         $this->load->model(TransactionDao::class);
         $this->transactionDao = new TransactionDao();
-        $this->load->model(AlipayDao::class);
-        $this->alipayDao = new AlipayDao();
+        $this->load->model(Alipay::class);
+        $this->alipayDao = new Alipay();
     }
 
     public function notify_post()

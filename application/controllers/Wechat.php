@@ -24,7 +24,7 @@ class Wechat extends BaseController
         $this->userDao = new UserDao();
         $this->load->library('wx/' . WxPay::class);
         $this->wxPay = new WxPay();
-        // $this->load->library('wx/' . WxPayCallback::class);
+//         $this->load->library('wx/' . WxPayCallback::class);
     }
 
     function sign_get()

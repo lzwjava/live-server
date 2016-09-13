@@ -11,7 +11,8 @@ class Attendances extends BaseController
     public $attendanceDao;
     public $liveDao;
     public $chargeDao;
-    public $alipayDao;
+    public $pay;
+    public $snsUserDao;
 
     function __construct()
     {
@@ -22,16 +23,19 @@ class Attendances extends BaseController
         $this->attendanceDao = new AttendanceDao();
         $this->load->model(ChargeDao::class);
         $this->chargeDao = new ChargeDao();
-        $this->load->model(AlipayDao::class);
-        $this->alipayDao = new AlipayDao();
+        $this->load->model(Pay::class);
+        $this->pay = new Pay();
+        $this->load->model(SnsUserDao::class);
+        $this->snsUserDao = new SnsUserDao();
     }
 
     function create_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID, KEY_CHANNEL))) {
             return;
         }
         $liveId = $this->post(KEY_LIVE_ID);
+        $channel = $this->post(KEY_CHANNEL);
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
@@ -57,10 +61,20 @@ class Attendances extends BaseController
             $this->failure(ERROR_ALREADY_ATTEND);
             return;
         }
+        $openId = null;
+        if ($channel == PLATFORM_WECHAT) {
+            $snsUser = $this->snsUserDao->getSnsUserByUserId($user->userId);
+            if (!$snsUser) {
+                $this->failure(ERROR_MUST_BIND_WECHAT);
+                return;
+            }
+            $openId = $snsUser->openId;
+        }
         $subject = truncate($user->username, 18) . '参加直播' . $live->liveId;
         $body = $user->username . ' 参加 ' . $live->subject;
         $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
-        $ch = $this->createChargeAndInsert($live->amount, $subject, $body, $metaData, $user);
+        $ch = $this->createChargeAndInsert($live->amount, $channel, $subject, $body,
+            $metaData, $user, $openId);
         if ($ch == null) {
             $this->failure(ERROR_CHARGE_CREATE);
             return;
@@ -68,7 +82,8 @@ class Attendances extends BaseController
         $this->succeed($ch);
     }
 
-    protected function createChargeAndInsert($amount, $subject, $body, $metaData, $user)
+    protected function createChargeAndInsert($amount, $channel, $subject, $body,
+                                             $metaData, $user, $openId)
     {
         $orderNo = $this->genOrderNo();
         $ipAddress = $this->input->ip_address();
@@ -76,7 +91,7 @@ class Attendances extends BaseController
             // local debug case
             $ipAddress = '127.0.0.1';
         }
-        $ch = $this->alipayDao->createCharge($orderNo, 'alipay', $amount, $subject, $body);
+        $ch = $this->pay->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
         if ($ch == null) {
             return null;
         }
