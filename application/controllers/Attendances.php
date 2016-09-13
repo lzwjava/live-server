@@ -85,7 +85,7 @@ class Attendances extends BaseController
     protected function createChargeAndInsert($amount, $channel, $subject, $body,
                                              $metaData, $user, $openId)
     {
-        $orderNo = $this->genOrderNo();
+        $orderNo = genOrderNo();
         $ipAddress = $this->input->ip_address();
         if ($ipAddress == '::1') {
             // local debug case
@@ -95,7 +95,7 @@ class Attendances extends BaseController
         if ($ch == null) {
             return null;
         }
-        $id = $this->chargeDao->add($orderNo, $amount, $user->userId, $ipAddress, $metaData);
+        $id = $this->chargeDao->add($orderNo, $amount, $channel, $user->userId, $ipAddress, $metaData);
         if (!$id) {
             return null;
         }

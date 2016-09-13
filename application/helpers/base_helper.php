@@ -135,3 +135,10 @@ if (!function_exists('truncate')) {
     }
 }
 
+if (!function_exists('genOrderNo')) {
+    function genOrderNo()
+    {
+        return getToken(16);
+    }
+}
+

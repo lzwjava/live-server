@@ -12,6 +12,7 @@ class Wechat extends BaseController
     public $snsUserDao;
     public $userDao;
     public $wxPay;
+    public $notify;
 
     function __construct()
     {
@@ -24,7 +25,8 @@ class Wechat extends BaseController
         $this->userDao = new UserDao();
         $this->load->library('wx/' . WxPay::class);
         $this->wxPay = new WxPay();
-//         $this->load->library('wx/' . WxPayCallback::class);
+        $this->load->library('wx/' . WxPayCallback::class);
+        $this->notify = new WxPayCallBack();
     }
 
     function sign_get()
@@ -147,8 +149,7 @@ class Wechat extends BaseController
     {
         $content = file_get_contents("php://input");
         logInfo("notify content : " . $content);
-//        $notify = new WxPayCallBack();
-//        $notify->Handle(false);
+        $this->notify->Handle(false);
     }
 
 }

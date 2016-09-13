@@ -204,12 +204,6 @@ class BaseController extends REST_Controller
         }
     }
 
-
-    protected function genOrderNo()
-    {
-        return getToken(16);
-    }
-
     protected function checkIfNotAdmin()
     {
         if (!isset($_SERVER['PHP_AUTH_USER'])) {

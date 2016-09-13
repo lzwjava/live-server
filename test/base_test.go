@@ -85,6 +85,23 @@ func runSql(sentence string, noCheck bool) {
 	db.Close()
 }
 
+func queryDb(sentence string) *sql.Rows {
+	db, err := sql.Open("mysql", "lzw:@/qulive")
+	checkErr(err)
+	defer db.Close()
+
+	var stmt *sql.Stmt
+	var res *sql.Rows
+
+	stmt, err = db.Prepare(sentence)
+	checkErr(err)
+
+	res, err = stmt.Query()
+	checkErr(err)
+
+	return res
+}
+
 func deleteRecord(table string, column string, id string, noCheck bool) {
 	sqlStr := fmt.Sprintf("delete from %s where %s=%s", table, column, id)
 	runSql(sqlStr, noCheck)

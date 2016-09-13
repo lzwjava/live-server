@@ -63,6 +63,32 @@ func TestAttendances_create(t *testing.T) {
 	assert.Equal(t, callbackRes, "success")
 }
 
+func TestAttendances_createByWeChat(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, userId := NewClientAndUser()
+	insertSnsUser(userId)
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
+	assert.NotNil(t, res)
+	orderNo := getLastOrderNo()
+	callbackStr := wechatCallbackStr(orderNo)
+	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
+	fmt.Println("callbackRes:" + callbackRes)
+	assert.NotNil(t, callbackRes)
+}
+
+func getLastOrderNo() string {
+	rows := queryDb("select orderNo from charges order by created desc limit 1")
+	defer rows.Close()
+	rows.Next()
+	var orderNo string
+	rows.Scan(&orderNo)
+	err := rows.Err()
+	checkErr(err)
+	return orderNo
+}
+
 func createAttendance(c *Client, liveId string) {
 	res := c.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"alipay_app"}})
 
@@ -81,6 +107,27 @@ func callbackStr(orderNo string) string {
 
 func liveCallbackStr(orderNo string) string {
 	return callbackStr(orderNo)
+}
+
+func wechatCallbackStr(orderNo string) string {
+	str := `<xml><appid><![CDATA[wx7b5f277707699557]]></appid>
+<bank_type><![CDATA[BOC_DEBIT]]></bank_type>
+<cash_fee><![CDATA[1000]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1387703002]]></mch_id>
+<nonce_str><![CDATA[uam0p1f6wie432svf6kiz5fg74nz1ra4]]></nonce_str>
+<openid><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></openid>
+<out_trade_no><![CDATA[%s]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[FE28FD8B4060F23C64D0A2B2C140493B]]></sign>
+<time_end><![CDATA[20160914000111]]></time_end>
+<total_fee>1000</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4002972001201609143886176463]]></transaction_id>
+</xml>`
+	return fmt.Sprintf(str, orderNo)
 }
 
 func TestAttendances_liveList(t *testing.T) {
