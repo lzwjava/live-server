@@ -445,6 +445,7 @@ class WxPayApi
 	 */
 	public static function replyNotify($xml)
 	{
+		logInfo("wechat notify reply:" . $xml);
 		echo $xml;
 	}
 	

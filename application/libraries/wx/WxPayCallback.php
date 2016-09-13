@@ -3,7 +3,7 @@
 require_once "lib/WxPay.Api.php";
 require_once 'lib/WxPay.Notify.php';
 
-class WxPayCallBack extends WxPayNotify
+class WxPayCallback extends WxPayNotify
 {
 
     public $payNotifyDao;
