@@ -12,7 +12,7 @@ class Rewards extends BaseController
     public $attendanceDao;
     public $chargeDao;
     public $transactionDao;
-    public $alipayDao;
+    public $alipay;
 
     function __construct()
     {
@@ -25,15 +25,15 @@ class Rewards extends BaseController
         $this->attendanceDao = new AttendanceDao();
         $this->load->model(TransactionDao::class);
         $this->transactionDao = new TransactionDao();
-        $this->load->model(Alipay::class);
-        $this->alipayDao = new Alipay();
+        $this->load->library(Alipay::class);
+        $this->alipay = new Alipay();
     }
 
     public function notify_post()
     {
         $content = file_get_contents("php://input");
         logInfo("notify $content");
-        if ($this->alipayDao->isSignVerify($_POST, $_POST['sign'])) {
+        if ($this->alipay->isSignVerify($_POST, $_POST['sign'])) {
             $outTradeNo = $_POST['out_trade_no'];
             $trade_status = $_POST['trade_status'];
             if ($trade_status == 'TRADE_SUCCESS') {

@@ -15,9 +15,9 @@ class Pay
     {
         $ci = get_instance();
         $ci->load->library('wx/' . WxPay::class);
-        $ci->wxpay = new WxPay();
+        $this->wxpay = new WxPay();
         $ci->load->library('alipay/' . Alipay::class);
-        $ci->alipay = new Alipay();
+        $this->alipay = new Alipay();
     }
 
     function createCharge($orderNo, $channel, $amount, $subject, $body, $openId)

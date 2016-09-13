@@ -17,7 +17,7 @@ func TestAttendances_onlyCreate(t *testing.T) {
 	liveId := createLive(c)
 
 	c2, _ := NewClientAndUser()
-	res := c2.postData("attendances", url.Values{"liveId": {liveId}})
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"alipay_app"}})
 	assert.NotNil(t, res)
 	_, exists := res.CheckGet("status")
 	assert.False(t, exists)
@@ -41,7 +41,7 @@ func TestAttendances_create(t *testing.T) {
 	liveId := createLive(c)
 
 	c2, _ := NewClientAndUser()
-	res := c2.postData("attendances", url.Values{"liveId": {liveId}})
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"alipay_app"}})
 	assert.NotNil(t, res)
 	_, exists := res.CheckGet("status")
 	assert.False(t, exists)
@@ -53,7 +53,7 @@ func TestAttendances_create(t *testing.T) {
 }
 
 func createAttendance(c *Client, liveId string) {
-	res := c.postData("attendances", url.Values{"liveId": {liveId}})
+	res := c.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"alipay_app"}})
 
 	orderNo := parseOrderNo(res)
 	callbackStr := liveCallbackStr(orderNo)

@@ -16,13 +16,18 @@ class Alipay
 
     function __construct()
     {
-        parent::__construct();
-        $this->config->load('alipay', TRUE);
+        $ci = get_instance();
+        $ci->config->load('alipay', TRUE);
+    }
+
+    private function alipayConfig()
+    {
+        return get_instance()->config->item('alipay');
     }
 
     function createCharge($orderNo, $channel, $amount, $subject, $body)
     {
-        $alipay_config = $this->config->item('alipay');
+        $alipay_config = $this->alipayConfig();
         $partner = $alipay_config['partner'];
         $service = $alipay_config['service'];
         $fee = sprintf('%.2f', $amount / 100.0);
@@ -49,7 +54,7 @@ class Alipay
 
     private function signData($dataString)
     {
-        $privateKey = file_get_contents(APPPATH . 'models/alipay/rsa_private_key.pem');
+        $privateKey = file_get_contents(APPPATH . 'libraries/alipay/lib/rsa_private_key.pem');
         $res = openssl_get_privatekey($privateKey);
         openssl_sign($dataString, $sign, $res);
         openssl_free_key($res);
@@ -73,7 +78,7 @@ class Alipay
         }
         return true;
         // todo
-        $alipay_config = $this->config->item('alipay');
+        $alipay_config = $this->alipayConfig();
         $alipayNotify = new AlipayNotify($alipay_config);
         return $alipayNotify->getSignVeryfy($params, $sign);
     }

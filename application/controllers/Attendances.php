@@ -23,7 +23,7 @@ class Attendances extends BaseController
         $this->attendanceDao = new AttendanceDao();
         $this->load->model(ChargeDao::class);
         $this->chargeDao = new ChargeDao();
-        $this->load->model(Pay::class);
+        $this->load->library(Pay::class);
         $this->pay = new Pay();
         $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
