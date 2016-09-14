@@ -131,19 +131,6 @@ class Wechat extends BaseController
         $this->succeed();
     }
 
-    function wxpay_get()
-    {
-        $user = $this->checkAndGetSessionUser();
-        if (!$user) {
-            return;
-        }
-        $snsUser = $this->snsUserDao->getSnsUserByUserId($user->userId);
-        if (!$snsUser) {
-            $this->failure(ERROR_MUST_BIND_WECHAT);
-            return;
-        }
-        $this->succeed($this->wxPay->createWxOrder($snsUser->openId));
-    }
 
     function wxpayNotify_post()
     {
