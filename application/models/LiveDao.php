@@ -157,11 +157,6 @@ class LiveDao extends BaseDao
         return $this->setLiveStatus($id, LIVE_STATUS_ON);
     }
 
-    function leaveLive($id)
-    {
-        return $this->setLiveStatus($id, LIVE_STATUS_LEAVE);
-    }
-
     private function setLiveStatus($id, $status)
     {
         return $this->update($id, array(
