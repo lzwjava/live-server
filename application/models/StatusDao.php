@@ -57,7 +57,7 @@ class StatusDao extends BaseDao
                 $total++;
             }
         }
-        logInfo("total count of end live:" . $total);
+        logInfo("total count of end live!!:" . $total);
     }
 
     function endLive($id)

@@ -97,6 +97,11 @@ func baseUrl(path string) string {
 }
 
 func (c *Client) request(method string, path string, params url.Values) *simplejson.Json {
+	req := c.genRequest(method, path, params)
+	return c.doRequest(req)
+}
+
+func (c *Client) genRequest(method string, path string, params url.Values) *http.Request {
 	urlStr := baseUrl(path)
 	paramStr := bytes.NewBufferString(params.Encode())
 
@@ -115,7 +120,18 @@ func (c *Client) request(method string, path string, params url.Values) *simplej
 		req.SetBasicAuth("admin", "Pwx9uVJM")
 	}
 	fmt.Println("curl -X", method, urlStr, params)
-	return c.doRequest(req)
+	return req
+}
+
+func (c *Client) postWithParams(path string, params url.Values) string {
+	req := c.genRequest("POST", path, params)
+	resp, err := c.HTTPClient.Do(req)
+	checkErr(err)
+	byteArr, err := ioutil.ReadAll(resp.Body)
+	checkErr(err)
+	bodyStr := string(byteArr)
+	fmt.Println("response:", bodyStr)
+	return bodyStr
 }
 
 func (c *Client) postWithStr(path string, body string) string {
@@ -128,7 +144,9 @@ func (c *Client) postWithStr(path string, body string) string {
 	checkErr(err)
 	byteArr, err := ioutil.ReadAll(resp.Body)
 	checkErr(err)
-	return string(byteArr)
+	bodyStr := string(byteArr)
+	fmt.Println("response:", bodyStr)
+	return bodyStr
 }
 
 func (c *Client) doRequest(req *http.Request) *simplejson.Json {

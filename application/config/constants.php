@@ -158,6 +158,7 @@ if (!function_exists('errorInfos')) {
             ERROR_REDIS_WRONG => 'Redis 出错',
             ERROR_NOT_ALLOW_DO_IT => '您没有相关的权限',
             ERROR_NOT_ADMIN => '此操作只能管理员进行',
+            ERROR_PARAMETER_ILLEGAL => '非法的参数',
 
             // users
             ERROR_USERNAME_TAKEN => '用户名已存在',
@@ -239,6 +240,7 @@ define('LIVE_STATUS_PREPARE', 1);
 define('LIVE_STATUS_REVIEW', 5);
 define('LIVE_STATUS_WAIT', 10);
 define('LIVE_STATUS_ON', 20);
+define('LIVE_STATUS_LEAVE', 25);
 define('LIVE_STATUS_OFF', 30);
 
 define('SMS_TEMPLATE', 'template');
@@ -339,3 +341,7 @@ define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
 define('QINIU_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');
 
 define('KEY_URL', 'url');
+
+// live hooks
+define('KEY_STREAM', 'stream');
+define('KEY_ACTION', 'action');

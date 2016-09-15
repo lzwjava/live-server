@@ -98,6 +98,11 @@ class LiveDao extends BaseDao
         return $lives;
     }
 
+    function getLiveByRtmpKey($key)
+    {
+        return $this->getOneFromTable(TABLE_LIVES, KEY_RTMP_KEY, $key);
+    }
+
     private function electRtmpServer()
     {
         $serverIps = array('cheer.quzhiboapp.com');
@@ -144,6 +149,13 @@ class LiveDao extends BaseDao
         return $this->update($id, array(
             KEY_BEGIN_TS => date('Y-m-d H:i:s'),
             KEY_STATUS => LIVE_STATUS_ON
+        ));
+    }
+
+    function leaveLive($id)
+    {
+        return $this->update($id, array(
+            KEY_STATUS => LIVE_STATUS_LEAVE
         ));
     }
 

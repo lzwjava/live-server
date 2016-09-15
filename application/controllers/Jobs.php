@@ -19,6 +19,6 @@ class Jobs extends BaseController
 
     function alive_get()
     {
-        $this->statusDao->cleanStatus();
+        //$this->statusDao->cleanStatus();
     }
 }
