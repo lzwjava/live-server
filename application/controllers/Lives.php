@@ -135,10 +135,7 @@ class Lives extends BaseController
             $this->failure(ERROR_DETAIL_TOO_SHORT);
             return;
         }
-        $planTs = date_create($live->planTs, new DateTimeZone('Asia/Shanghai'));
-        $now = date_create('now');
-        $diff = date_diff($planTs, $now);
-        if ($diff->invert == 0) {
+        if (isTimeBeforeNow($live->planTs)) {
             $this->failure(ERROR_PLAN_TS_INVALID);
             return;
         }

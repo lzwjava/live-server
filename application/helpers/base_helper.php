@@ -142,3 +142,12 @@ if (!function_exists('genOrderNo')) {
     }
 }
 
+if (!function_exists('isTimeBeforeNow')) {
+    function isTimeBeforeNow($time)
+    {
+        $dateTime = date_create($time, new DateTimeZone('Asia/Shanghai'));
+        $now = date_create('now');
+        $diff = date_diff($dateTime, $now);
+        return $diff->invert == 0;
+    }
+}

@@ -36,10 +36,29 @@ class LiveHooks extends BaseController
             if ($this->checkIfObjectNotExists($live)) {
                 return;
             }
-            $ok = $this->liveDao->beginLive($live->liveId);
-            if (!$ok) {
-                $this->failure(ERROR_SQL_WRONG);
-                return;
+            if (isTimeBeforeNow($live->planTs)) {
+                // test stream
+                logInfo("receive onPublish at test stream " . $stream);
+            } else {
+                if ($live->status == LIVE_STATUS_WAIT) {
+                    $ok = $this->liveDao->beginLive($live->liveId);
+                    if (!$ok) {
+                        $this->failure(ERROR_SQL_WRONG);
+                        return;
+                    } else {
+                        logInfo("begin live " . $stream . " at " . date('Y-m-d H:i:s'));
+                    }
+                } else if ($live->status == LIVE_STATUS_LEAVE) {
+                    $ok = $this->liveDao->resumeLive($live->liveId);
+                    if (!$ok) {
+                        $this->failure(ERROR_SQL_WRONG);
+                        return;
+                    } else {
+                        logInfo("resume live " . $stream . " at " . date('Y-m-d H:i:s'));
+                    }
+                } else {
+                    logInfo("receive onPublish at unknown status " . $live->status);
+                }
             }
         }
         echo 0;

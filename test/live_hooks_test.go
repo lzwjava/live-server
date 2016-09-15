@@ -30,3 +30,25 @@ func TestLiveHooks_onUnPublish(t *testing.T) {
 	newLive := getLive(c, liveId)
 	assert.Equal(t, newLive.Get("status").MustInt(), 25)
 }
+
+func publishStream(c *Client, liveId string) {
+	live := getLive(c, liveId)
+	c.postWithParams("liveHooks/onPublish", url.Values{
+		"stream": {live.Get("rtmpKey").MustString()},
+		"action": {"on_publish"}})
+}
+
+func unPublishStream(c *Client, liveId string) {
+	live := getLive(c, liveId)
+	c.postWithParams("liveHooks/onUnPublish", url.Values{
+		"stream": {live.Get("rtmpKey").MustString()},
+		"action": {"on_unpublish"}})
+}
+
+func TestLiveHooks_resumeLive(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	publishStream(c, liveId)
+	unPublishStream(c, liveId)
+	publishStream(c, liveId)
+}
