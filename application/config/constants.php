@@ -242,8 +242,10 @@ define('LIVE_STATUS_WAIT', 10);
 define('LIVE_STATUS_ON', 20);
 define('LIVE_STATUS_OFF', 30);
 
+// sms
 define('SMS_TEMPLATE', 'template');
-define('KEY_SMS_CODE', 'smsCode');
+define('SMS_NAME', 'name');
+define('SMS_OPEN_APP_WORDS', 'openAppWords');
 
 // users
 define('TABLE_USERS', 'users');
@@ -254,6 +256,7 @@ define('KEY_SESSION_TOKEN_CREATED', 'sessionTokenCreated');
 define('KEY_PASSWORD', 'password');
 define('KEY_USERNAME', 'username');
 define('KEY_USER_ID', 'userId');
+define('KEY_SMS_CODE', 'smsCode');
 
 // charges
 define('TABLE_CHARGES', 'charges');

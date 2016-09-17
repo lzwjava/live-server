@@ -184,3 +184,9 @@ func TestLives_attendedUsers(t *testing.T) {
 	assert.NotNil(t, res)
 	assert.Equal(t, len(res.MustArray()), 1)
 }
+
+func TestLives_notify(t *testing.T) {
+	c, _, liveId := createLiveAndAttendance()
+	res := c.getData("lives/"+liveId+"/notify", url.Values{})
+	assert.NotNil(t, res)
+}

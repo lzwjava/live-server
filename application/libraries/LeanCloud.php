@@ -54,11 +54,14 @@ class LeanCloud
             if ($result["status"] != 200) {
                 $string = json_encode($result["result"]);
                 logInfo("requestSmsCode error result: $string");
+                return false;
             } else {
                 logInfo("send sms code succeed. data: " . json_encode($data));
+                return true;
             }
         } else {
             logInfo("imitate requestSmsCode data: " . json_encode($data));
+            return true;
         }
     }
 

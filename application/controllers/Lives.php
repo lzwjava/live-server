@@ -10,6 +10,7 @@ class Lives extends BaseController
 {
     public $liveDao;
     public $statusDao;
+    public $sms;
 
     function __construct()
     {
@@ -18,6 +19,8 @@ class Lives extends BaseController
         $this->liveDao = new LiveDao();
         $this->load->model(StatusDao::class);
         $this->statusDao = new StatusDao();
+        $this->load->library(Sms::class);
+        $this->sms = new Sms();
     }
 
     protected function checkIfAmountWrong($amount)
@@ -198,6 +201,31 @@ class Lives extends BaseController
         }
         $users = $this->liveDao->getAttendedUsers($liveId);
         $this->succeed($users);
+    }
+
+    function notifyLiveStart_get($liveId)
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        if ($live->ownerId != $user->userId) {
+            $this->failure(ERROR_NOT_ALLOW_DO_IT);
+            return;
+        }
+        $users = $this->liveDao->getAttendedUsers($liveId);
+        $succeedCount = 0;
+        foreach ($users as $user) {
+            $ok = $this->sms->notifyLiveStart($user, $live);
+            if ($ok) {
+                $succeedCount++;
+            }
+        }
+        $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
     }
 
 }
