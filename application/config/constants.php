@@ -240,7 +240,6 @@ define('LIVE_STATUS_PREPARE', 1);
 define('LIVE_STATUS_REVIEW', 5);
 define('LIVE_STATUS_WAIT', 10);
 define('LIVE_STATUS_ON', 20);
-define('LIVE_STATUS_LEAVE', 25);
 define('LIVE_STATUS_OFF', 30);
 
 define('SMS_TEMPLATE', 'template');

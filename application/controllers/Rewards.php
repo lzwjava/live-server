@@ -14,7 +14,7 @@ class Rewards extends BaseController
     function __construct()
     {
         parent::__construct();
-        $this->load->library(Alipay::class);
+        $this->load->library('alipay/' . Alipay::class);
         $this->alipay = new Alipay();
         $this->load->model(PayNotifyDao::class);
         $this->payNotifyDao = new PayNotifyDao();
