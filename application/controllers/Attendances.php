@@ -70,8 +70,9 @@ class Attendances extends BaseController
             }
             $openId = $snsUser->openId;
         }
-        $subject = truncate($user->username, 18) . '参加直播' . $live->liveId;
-        $body = $user->username . ' 参加 ' . $live->subject;
+        // max 24 chars
+        $subject = truncate($user->username, 12) . '参加直播' . truncate($live->subject, 12);
+        $body = $user->username . ' 参加直播 ' . $live->subject;
         $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
         $ch = $this->createChargeAndInsert($live->amount, $channel, $subject, $body,
             $metaData, $user, $openId);

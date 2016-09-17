@@ -8,7 +8,9 @@
  */
 class Pay
 {
+    /** @var Alipay */
     public $alipay;
+    /** @var WxPay */
     public $wepay;
 
     function __construct()
@@ -23,7 +25,7 @@ class Pay
     function createCharge($orderNo, $channel, $amount, $subject, $body, $openId)
     {
         if ($channel == CHANNEL_ALIPAY_APP) {
-            return $this->alipay->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
+            return $this->alipay->createCharge($orderNo, $channel, $amount, $subject, $body);
         } else if ($channel == CHANNEL_WECHAT_H5) {
             return $this->wxpay->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
         }
