@@ -136,5 +136,3 @@ CREATE TABLE `sns_users` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE `charges` ADD COLUMN `channel` VARCHAR(31) NOT NULL DEFAULT ''
-AFTER `paid`;
