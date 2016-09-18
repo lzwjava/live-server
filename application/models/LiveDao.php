@@ -183,7 +183,7 @@ class LiveDao extends BaseDao
     function lastPrepareLive($user)
     {
         $sql = "SELECT liveId FROM lives WHERE ownerId=? AND status<=?";
-        $binds = array($user->userId, LIVE_STATUS_WAIT);
+        $binds = array($user->userId, LIVE_STATUS_ON);
         $live = $this->db->query($sql, $binds)->row();
         if ($live) {
             return $this->getLive($live->liveId);
@@ -218,8 +218,8 @@ class LiveDao extends BaseDao
     function getAttendedUsers($liveId)
     {
         $fields = $this->userPublicFields('u');
-        $sql = "SELECT $fields from users as u where u.userId in
-                (SELECT userId FROM attendances AS a WHERE a.liveId=? ORDER BY created DESC)";
+        $sql = "SELECT $fields from attendances as a left join users as u on u.userId = a.userId
+               where a.liveId=? order by a.created desc";
         $binds = array($liveId);
         $users = $this->db->query($sql, $binds)->result();
         return $users;
