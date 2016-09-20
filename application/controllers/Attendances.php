@@ -71,7 +71,7 @@ class Attendances extends BaseController
             $openId = $snsUser->openId;
         }
         // max 24 chars
-        $subject = truncate($user->username, 12) . '参加直播';
+        $subject = '参加直播';
         $body = $user->username . ' 参加直播 ' . $live->subject;
         $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
         $ch = $this->createChargeAndInsert($live->amount, $channel, $subject, $body,
@@ -92,6 +92,7 @@ class Attendances extends BaseController
             // local debug case
             $ipAddress = '127.0.0.1';
         }
+        logInfo("amount " . $amount . "subject " . $subject . "body " . $body . " openId" . $openId);
         $ch = $this->pay->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
         if ($ch == null) {
             return null;
