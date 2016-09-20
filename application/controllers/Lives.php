@@ -220,6 +220,7 @@ class Lives extends BaseController
         $users = $this->liveDao->getAttendedUsers($liveId);
         $succeedCount = 0;
         foreach ($users as $user) {
+            usleep(1000 * 20);
             $ok = $this->sms->notifyLiveStart($user, $live);
             if ($ok) {
                 $succeedCount++;

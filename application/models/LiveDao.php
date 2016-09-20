@@ -105,7 +105,8 @@ class LiveDao extends BaseDao
 
     private function electRtmpServer()
     {
-        $serverIps = array('cheer.quzhiboapp.com');
+        $serverIps = array('cheer.quzhiboapp.com',
+            'live1.quzhiboapp.com', 'live2.quzhiboapp.com', 'south.quzhiboapp.com');
         $serverIp = random_element($serverIps);
         return $serverIp;
     }
@@ -116,13 +117,15 @@ class LiveDao extends BaseDao
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
             $serverHost = $this->electRtmpServer();
-            $live->rtmpUrl = 'rtmp://' . $serverHost . '/live/' . $live->rtmpKey . '_ff';
-            $live->hlsUrl = 'http://' . $serverHost . '/live/' . $live->rtmpKey . '_ff.m3u8';
+            $live->pushUrl = 'rtmp://cheerpush.quzhiboapp.com/live/' . $live->rtmpKey;
+            $live->rtmpUrl = 'rtmp://' . $serverHost . '/live/' . $live->rtmpKey;
+            $live->hlsUrl = 'http://' . $serverHost . '/live/' . $live->rtmpKey . '.m3u8';
             if (!$live->attendanceId && $userId != $live->ownerId) {
                 // 没参加或非创建者
                 unset($live->rtmpUrl);
                 unset($live->rtmpKey);
                 unset($live->hlsUrl);
+                unset($live->pushUrl);
                 $live->canJoin = false;
             } else {
                 $live->canJoin = true;
