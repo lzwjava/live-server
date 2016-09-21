@@ -49,7 +49,7 @@ class PayNotifyDao extends BaseDao
                 return $error;
             }
             $this->attendanceDao->addAttendance($userId, $liveId, $orderNo);
-            $this->liveDao->incrementAttendanceCount();
+            $this->liveDao->incrementAttendanceCount($liveId);
             $live = $this->liveDao->getLive($liveId);
             $error = $this->transactionDao->newPay($userId, genOrderNo(),
                 -$amount, $liveId, $live->owner->username);

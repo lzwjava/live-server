@@ -48,10 +48,11 @@ class LeanCloud
     function sendTemplateSms($phone, $template, $data)
     {
         $data[SMS_TEMPLATE] = $template;
-        $data[KEY_MOBILE_PHONE_NUMBER] = $phone;
+        $data[KEY_MOBILE_PHONE_NUMBER] = $phone . '';
         if (ENVIRONMENT != 'development') {
             $result = $this->curlLeanCloud("requestSmsCode", $data);
             if ($result["status"] != 200) {
+                logInfo("phone number:" . $phone);
                 $string = json_encode($result["result"]);
                 logInfo("requestSmsCode error result: $string");
                 return false;
