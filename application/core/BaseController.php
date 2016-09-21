@@ -63,12 +63,14 @@ class BaseController extends REST_Controller
             $error = $status;
         }
         if ($error) {
-            $user = $this->getSessionUser();
-            if ($user) {
-                logInfo("server status: " . $status . " error:" . $error . " userId:" . $user->userId .
-                    " name:" . $user->username);
-            } else {
-                logInfo("server status: " . $status . " error:" . $error);
+            if ($status != ERROR_NOT_IN_SESSION) {
+                $user = $this->getSessionUser();
+                if ($user) {
+                    logInfo("server status: " . $status . " error:" . $error .
+                        " userId:" . $user->userId . " name:" . $user->username);
+                } else {
+                    logInfo("server status: " . $status . " error:" . $error);
+                }
             }
         }
         $this->responseResult($status, null, $error);

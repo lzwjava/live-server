@@ -6,7 +6,7 @@
  * Date: 9/17/16
  * Time: 2:59 PM
  */
-class Sms extends CI_Model
+class Sms extends BaseDao
 {
     /** @var LeanCloud */
     public $leancloud;
@@ -22,12 +22,12 @@ class Sms extends CI_Model
         $this->userDao = new UserDao();
     }
 
-    function notifyLiveStart($user, $live)
+    function notifyLiveStart($userId, $live)
     {
-        $realUser = $this->userDao->findUserById($user->userId);
+        $realUser = $this->userDao->findUserById($userId);
         $name = $realUser->username;
-        if (strlen($name) > 8) {
-            $name = substr($name, 0, 8);
+        if (mb_strlen($name) > 8) {
+            $name = mb_substr($name, 0, 8);
         }
         $data = array(
             SMS_NAME => $name,

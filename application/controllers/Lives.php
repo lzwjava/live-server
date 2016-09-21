@@ -221,7 +221,7 @@ class Lives extends BaseController
         $succeedCount = 0;
         foreach ($users as $user) {
             sleep(1);
-            $ok = $this->sms->notifyLiveStart($user, $live);
+            $ok = $this->sms->notifyLiveStart($user->userId, $live);
             if ($ok) {
                 $succeedCount++;
             }
@@ -231,10 +231,15 @@ class Lives extends BaseController
 
     function notifyOneUser_get($liveId)
     {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_USER_ID))) {
+            return;
+        }
         $userId = $this->get(KEY_USER_ID);
-        $user = $this->userDao->findPublicUserById($userId);
         $live = $this->liveDao->getLive($liveId);
-        $ok = $this->sms->notifyLiveStart($user, $live);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $ok = $this->sms->notifyLiveStart($userId, $live);
         if (!$ok) {
             $this->failure(ERROR_SMS_WRONG);
             return;
