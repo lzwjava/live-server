@@ -169,25 +169,31 @@ func TestLives_attended(t *testing.T) {
 	assert.Equal(t, len(res.MustArray()), 1)
 }
 
-func createLiveAndAttendance() (*Client, *Client, string) {
+func createLiveAndAttendance() (*Client, *Client, string, string) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, _ := NewClientAndUser()
+	c2, u2 := NewClientAndUser()
 	createAttendance(c2, liveId)
-	return c, c2, liveId
+	return c, c2, u2, liveId
 }
 
 func TestLives_attendedUsers(t *testing.T) {
-	_, c2, liveId := createLiveAndAttendance()
+	_, c2, _, liveId := createLiveAndAttendance()
 	res := c2.getData("lives/"+liveId+"/users", url.Values{})
 	assert.NotNil(t, res)
 	assert.Equal(t, len(res.MustArray()), 1)
 }
 
 func TestLives_notify(t *testing.T) {
-	c, _, liveId := createLiveAndAttendance()
+	c, _, _, liveId := createLiveAndAttendance()
 	res := c.getData("lives/"+liveId+"/notify", url.Values{})
+	assert.NotNil(t, res)
+}
+
+func TestLives_notifyOneUser(t *testing.T) {
+	c, _, userId, liveId := createLiveAndAttendance()
+	res := c.getData("lives/"+liveId+"/notifyOneUser", url.Values{"userId": {userId}})
 	assert.NotNil(t, res)
 }
 

@@ -224,11 +224,22 @@ class Lives extends BaseController
             $ok = $this->sms->notifyLiveStart($user, $live);
             if ($ok) {
                 $succeedCount++;
-            } else {
-                break;
             }
         }
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
+    }
+
+    function notifyOneUser_get($liveId)
+    {
+        $userId = $this->get(KEY_USER_ID);
+        $user = $this->userDao->findPublicUserById($userId);
+        $live = $this->liveDao->getLive($liveId);
+        $ok = $this->sms->notifyLiveStart($user, $live);
+        if (!$ok) {
+            $this->failure(ERROR_SMS_WRONG);
+            return;
+        }
+        $this->succeed();
     }
 
     function fixAttendanceCount_get()
