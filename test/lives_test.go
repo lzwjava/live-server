@@ -189,6 +189,7 @@ func TestLives_notify(t *testing.T) {
 	c, _, _, liveId := createLiveAndAttendance()
 	res := c.getData("lives/"+liveId+"/notify", url.Values{})
 	assert.NotNil(t, res)
+	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
 }
 
 func TestLives_notifyOneUser(t *testing.T) {

@@ -11,6 +11,7 @@ class Lives extends BaseController
     public $liveDao;
     public $statusDao;
     public $sms;
+    public $attendanceDao;
 
     function __construct()
     {
@@ -21,6 +22,8 @@ class Lives extends BaseController
         $this->statusDao = new StatusDao();
         $this->load->library(Sms::class);
         $this->sms = new Sms();
+        $this->load->model(AttendanceDao::class);
+        $this->attendanceDao = new AttendanceDao();
     }
 
     protected function checkIfAmountWrong($amount)
@@ -223,6 +226,7 @@ class Lives extends BaseController
             sleep(1);
             $ok = $this->sms->notifyLiveStart($user->userId, $live);
             if ($ok) {
+                $this->attendanceDao->updateToNotified($user->userId, $liveId);
                 $succeedCount++;
             }
         }
