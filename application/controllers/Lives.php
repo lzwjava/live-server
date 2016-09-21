@@ -231,4 +231,10 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
     }
 
+    function fixAttendanceCount_get()
+    {
+        $count = $this->liveDao->fixAttendanceCount();
+        $this->succeed(array('succeedCount' => $count));
+    }
+
 }

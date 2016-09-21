@@ -190,3 +190,9 @@ func TestLives_notify(t *testing.T) {
 	res := c.getData("lives/"+liveId+"/notify", url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestLives_fixAttedanceCount(t *testing.T) {
+	c := NewClient()
+	res := c.getData("lives/fixAttendanceCount", url.Values{})
+	assert.NotNil(t, res)
+}

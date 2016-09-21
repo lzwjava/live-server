@@ -179,8 +179,9 @@ class LiveDao extends BaseDao
 
     function incrementAttendanceCount($liveId)
     {
-        $sql = "UPDATE lives SET attendanceCount = attendanceCount+1 WHERE liveId=" . $liveId;
-        return $this->db->query($sql);
+        $sql = "UPDATE lives SET attendanceCount = attendanceCount+1 WHERE liveId=?";
+        $binds = array($liveId);
+        return $this->db->query($sql, $binds);
     }
 
     function lastPrepareLive($user)
@@ -226,6 +227,24 @@ class LiveDao extends BaseDao
         $binds = array($liveId);
         $users = $this->db->query($sql, $binds)->result();
         return $users;
+    }
+
+    function fixAttendanceCount()
+    {
+        $sql = "SELECT liveId FROM lives";
+        $lives = $this->db->query($sql)->result();
+        $count = 0;
+        foreach ($lives as $live) {
+            $liveId = $live->liveId;
+            $updateSql = "UPDATE lives SET attendanceCount=? WHERE liveId=?";
+            $users = $this->getAttendedUsers($liveId);
+            $binds = array(count($users), $liveId);
+            $ok = $this->db->query($updateSql, $binds);
+            if ($ok) {
+                $count++;
+            }
+        }
+        return $count;
     }
 
 }
