@@ -67,6 +67,7 @@ $route['users/(\d+)']['GET'] = 'users/one/$1';
 // lives
 $route['lives/on']['GET'] = 'lives/list';
 $route['lives/(\d+)']['GET'] = 'lives/one/$1';
+$route['lives']['POST'] = 'lives/create';
 $route['lives/(\d+)']['POST'] = 'lives/update/$1';
 $route['lives/(\d+)/alive']['GET'] = 'lives/alive/$1';
 $route['lives/(\d+)/end']['GET'] = 'lives/end/$1';

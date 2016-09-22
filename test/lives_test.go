@@ -203,3 +203,9 @@ func TestLives_fixAttedanceCount(t *testing.T) {
 	res := c.getData("lives/fixAttendanceCount", url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestLives_create(t *testing.T) {
+	c, _ := NewClientAndUser()
+	res := c.postData("lives/create", url.Values{})
+	assert.NotNil(t, res)
+}

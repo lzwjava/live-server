@@ -54,6 +54,21 @@ class Lives extends BaseController
         $this->succeed($ok);
     }
 
+    function create_post()
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $liveId = $this->liveDao->createLive($user->userId, $user->username . '的直播');
+        if (!$liveId) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $live = $this->liveDao->getLive($liveId, $user);
+        $this->succeed($live);
+    }
+
     function update_post($liveId)
     {
         $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT, KEY_DETAIL, KEY_PLAN_TS);
