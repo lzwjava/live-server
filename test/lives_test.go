@@ -44,6 +44,9 @@ func TestLives_get(t *testing.T) {
 	live := c.getData("lives/"+liveId, url.Values{})
 	assert.NotNil(t, live)
 	assert.NotNil(t, live.Get("rtmpUrl").Interface())
+	assert.NotNil(t, live.Get("pushUrl").Interface())
+	assert.NotNil(t, live.Get("hlsUrl").Interface())
+	assert.NotNil(t, live.Get("flvUrl").Interface())
 	assert.NotNil(t, live.Get("rtmpKey").Interface())
 	assert.NotNil(t, live.Get("status").Interface())
 	assert.NotNil(t, live.Get("liveId").Interface())
@@ -52,6 +55,7 @@ func TestLives_get(t *testing.T) {
 	assert.NotNil(t, live.Get("subject").Interface())
 	assert.NotNil(t, live.Get("canJoin").Interface())
 	assert.NotNil(t, live.Get("planTs").Interface())
+
 	assert.NotNil(t, live.Get("attendanceCount").Interface())
 	assert.NotNil(t, live.Get("owner").Interface())
 }

@@ -105,10 +105,16 @@ class LiveDao extends BaseDao
 
     private function electRtmpServer()
     {
-        $serverIps = array('cheer.quzhiboapp.com',
-            'live1.quzhiboapp.com', 'live2.quzhiboapp.com');
+        $serverIps = array('live1.quzhiboapp.com', 'live2.quzhiboapp.com');
         $serverIp = random_element($serverIps);
         return $serverIp;
+    }
+
+    private function electFlvServer()
+    {
+        $hosts = array('flv1.quzhiboapp.com');
+        $host = random_element($hosts);
+        return $host;
     }
 
     private function assembleLives($lives, $userId)
@@ -116,18 +122,20 @@ class LiveDao extends BaseDao
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
-            $serverHost = $this->electRtmpServer();
-            $live->pushUrl = 'rtmp://cheerpush.quzhiboapp.com/live/' . $live->rtmpKey;
-            $live->rtmpUrl = 'rtmp://' . $serverHost . '/live/' . $live->rtmpKey;
-            $live->hlsUrl = 'http://' . $serverHost . '/live/' . $live->rtmpKey . '.m3u8';
+
             if (!$live->attendanceId && $userId != $live->ownerId) {
                 // 没参加或非创建者
-                unset($live->rtmpUrl);
-                unset($live->rtmpKey);
-                unset($live->hlsUrl);
-                unset($live->pushUrl);
                 $live->canJoin = false;
+                unset($live->rtmpKey);
             } else {
+                $rtmpHost = $this->electRtmpServer();
+                $flvHost = $this->electFlvServer();
+                if ($userId == $live->ownerId) {
+                    $live->pushUrl = 'rtmp://cheerpush.quzhiboapp.com/live/' . $live->rtmpKey;
+                }
+                $live->rtmpUrl = 'rtmp://' . $rtmpHost . '/live/' . $live->rtmpKey;
+                $live->hlsUrl = 'http://' . $rtmpHost . '/live/' . $live->rtmpKey . '.m3u8';
+                $live->flvUrl = 'http://' . $flvHost . '/live/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
             }
         }
