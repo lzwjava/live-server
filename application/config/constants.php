@@ -302,6 +302,9 @@ define('TABLE_SCANNED_QRCODES', 'scanned_qrcodes');
 define('KEY_QRCODE_ID', 'qrcodeId');
 define('KEY_CODE', 'code');
 define('KEY_SCANNED', 'scanned');
+define('KEY_DATA', 'data');
+define('TYPE_CREATE', 0);
+define('TYPE_WATCH', 1);
 
 // sns_users
 define('TABLE_SNS_USERS', 'sns_users');

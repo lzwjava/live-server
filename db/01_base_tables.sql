@@ -141,3 +141,9 @@ ALTER TABLE `attendances` ADD COLUMN `updated` TIMESTAMP NOT NULL
 
 ALTER TABLE `attendances` ADD COLUMN `notified` TINYINT(2) NOT NULL DEFAULT 0
 AFTER `liveId`;
+
+ALTER TABLE `scanned_qrcodes` ADD COLUMN `type` TINYINT NOT NULL DEFAULT 0
+AFTER `code`;
+
+ALTER TABLE `scanned_qrcodes` ADD COLUMN `data` VARCHAR(128) DEFAULT ''
+AFTER `type`;

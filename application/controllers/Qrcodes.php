@@ -34,10 +34,12 @@ class Qrcodes extends BaseController
 
     function scanQrcode_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_CODE))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_CODE, KEY_TYPE))) {
             return;
         }
         $code = $this->post(KEY_CODE);
+        $type = $this->post(KEY_TYPE);
+        $data = $this->post(KEY_DATA);
         if ($this->checkCodeInvalid($code)) {
             return;
         }
@@ -45,7 +47,7 @@ class Qrcodes extends BaseController
         if (!$user) {
             return;
         }
-        $id = $this->qrcodeDao->addQrcode($code, $user->userId);
+        $id = $this->qrcodeDao->addQrcode($code, $type, $user->userId, $data);
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
             return;
@@ -74,7 +76,8 @@ class Qrcodes extends BaseController
             $this->succeed(array(KEY_SCANNED => false));
         } else {
             $this->userDao->setLoginByUserId($qrcode->userId);
-            $this->succeed(array(KEY_SCANNED => true));
+            $this->succeed(array(KEY_SCANNED => true, KEY_TYPE => $qrcode->type,
+                KEY_DATA => $qrcode->data));
         }
     }
 
