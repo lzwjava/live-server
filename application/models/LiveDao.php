@@ -112,7 +112,7 @@ class LiveDao extends BaseDao
 
     private function electFlvServer()
     {
-        $hosts = array('flv1.quzhiboapp.com');
+        $hosts = array('120.27.102.84:8080');
         $host = random_element($hosts);
         return $host;
     }
