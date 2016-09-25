@@ -119,6 +119,7 @@ define('ERROR_PLAN_TS_INVALID', 'planTs_invalid');
 define('ERROR_EXCEED_MAX_PEOPLE', 'exceed_max_people');
 define('ERROR_CREATE_LIVE', 'create_live_failed');
 define('ERROR_DETAIL_TOO_SHORT', 'detail_too_short');
+define('ERROR_ALREADY_REVIEW', 'already_review');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -178,6 +179,7 @@ if (!function_exists('errorInfos')) {
             ERROR_EXCEED_MAX_PEOPLE => '抱歉,报名已满',
             ERROR_CREATE_LIVE => '创建直播失败',
             ERROR_DETAIL_TOO_SHORT => '直播详情至少要 300 字',
+            ERROR_ALREADY_REVIEW => '已经在审核或审核过了',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
@@ -350,3 +352,11 @@ define('KEY_URL', 'url');
 // live hooks
 define('KEY_STREAM', 'stream');
 define('KEY_ACTION', 'action');
+
+
+if (!function_exists('specialPhones')) {
+    function specialPhones()
+    {
+        return array('817015130624');
+    }
+}

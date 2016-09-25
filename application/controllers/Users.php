@@ -34,6 +34,9 @@ class Users extends BaseController
             // for test
             return false;
         }
+        if (in_array($mobilePhoneNumber, specialPhones())) {
+            return false;
+        }
         $return = $this->leancloud->curlLeanCloud("verifySmsCode/" . $smsCode . "?mobilePhoneNumber=" .
             $mobilePhoneNumber,
             null);
@@ -52,6 +55,10 @@ class Users extends BaseController
             return;
         }
         $mobilePhoneNumber = $_POST[KEY_MOBILE_PHONE_NUMBER];
+        if (in_array($mobilePhoneNumber, specialPhones())) {
+            $this->succeed();
+            return;
+        }
         $data = array(
             KEY_MOBILE_PHONE_NUMBER => $mobilePhoneNumber
         );

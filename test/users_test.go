@@ -28,6 +28,16 @@ func TestUser_RegisterAndLogin(t *testing.T) {
 	assert.Equal(t, mobile, res.Get("mobilePhoneNumber").MustString())
 }
 
+func TestUser_SpecialPhone(t *testing.T) {
+	runSql("delete from users where mobilePhoneNumber='817015130624'", true)
+	c := NewClient()
+	md5Str := md5password("123456")
+	name := randomString()
+	res := c.postData("users", url.Values{"mobilePhoneNumber": {"817015130624"},
+		"username": {name}, "smsCode": {"123456"}, "password": {md5Str}})
+	assert.NotNil(t, res.Get("username").Interface())
+}
+
 func TestUser_Update(t *testing.T) {
 	c := NewClient()
 	user := registerNewUser(c)
@@ -61,6 +71,12 @@ func TestUser_requestSmsCode(t *testing.T) {
 	c := NewClient()
 	res := c.post("requestSmsCode", url.Values{"mobilePhoneNumber": {"xx"}})
 	assert.Equal(t, res.Get("status").MustString(), "sms_wrong")
+}
+
+func TestUser_requestSmsCode_SpecialPhone(t *testing.T) {
+	c := NewClient()
+	res := c.post("requestSmsCode", url.Values{"mobilePhoneNumber": {"817015130624"}})
+	assert.Equal(t, res.Get("status").MustString(), "success")
 }
 
 func TestUser_isRegister(t *testing.T) {

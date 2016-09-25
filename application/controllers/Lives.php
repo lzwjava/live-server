@@ -160,6 +160,10 @@ class Lives extends BaseController
             $this->failure(ERROR_PLAN_TS_INVALID);
             return;
         }
+        if ($live->status >= LIVE_STATUS_REVIEW) {
+            $this->failure(ERROR_ALREADY_REVIEW);
+            return;
+        }
         $this->liveDao->setLiveReview($id);
         $this->succeed(true);
     }

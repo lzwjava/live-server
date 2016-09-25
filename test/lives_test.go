@@ -136,6 +136,9 @@ func TestLives_submitReview(t *testing.T) {
 	time.Sleep(time.Second)
 	res := c.getData("lives/"+liveId+"/submitReview", url.Values{})
 	assert.True(t, res.MustBool())
+
+	res = c.get("lives/"+liveId+"/submitReview", url.Values{})
+	assert.Equal(t, res.Get("status").MustString(), "already_review")
 }
 
 func TestLives_publish(t *testing.T) {
