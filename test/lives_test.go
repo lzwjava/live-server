@@ -17,7 +17,7 @@ func lastPrepareLive(c *Client) string {
 }
 
 func createLive(c *Client) string {
-	res := c.getData("lives/lastPrepare", url.Values{})
+	res := c.postData("lives", url.Values{})
 	liveId := toStr(res.Get("liveId").MustInt())
 	updateLiveAndSubmitThenPublish(c, liveId)
 	return liveId
@@ -101,6 +101,13 @@ func TestLives_end(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
+func TestLives_end_error(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	res := c.get("lives/"+liveId+"/end", url.Values{})
+	assert.Equal(t, res.Get("status").MustString(), "live_not_start")
+}
+
 func TestLives_update(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := lastPrepareLive(c)
@@ -122,6 +129,14 @@ func TestLives_begin(t *testing.T) {
 	liveId := createLive(c)
 	res := c.getData("lives/"+liveId+"/begin", url.Values{})
 	assert.True(t, res.MustBool())
+}
+
+func TestLives_begin_error(t *testing.T) {
+	c, _ := NewClientAndUser()
+	res := c.postData("lives", url.Values{})
+	liveId := toStr(res.Get("liveId").MustInt())
+	beginRes := c.get("lives/"+liveId+"/begin", url.Values{})
+	assert.Equal(t, beginRes.Get("status").MustString(), "live_not_wait")
 }
 
 func TestLives_submitReview(t *testing.T) {
@@ -213,6 +228,6 @@ func TestLives_fixAttedanceCount(t *testing.T) {
 
 func TestLives_create(t *testing.T) {
 	c, _ := NewClientAndUser()
-	res := c.postData("lives/create", url.Values{})
+	res := c.postData("lives", url.Values{})
 	assert.NotNil(t, res)
 }

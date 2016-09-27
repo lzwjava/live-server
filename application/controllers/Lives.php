@@ -45,6 +45,14 @@ class Lives extends BaseController
 
     function begin_get($liveId)
     {
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        if ($live->status != LIVE_STATUS_WAIT) {
+            $this->failure(ERROR_LIVE_NOT_WAIT);
+            return;
+        }
         $ok = $this->statusDao->open($liveId);
         if (!$ok) {
             $this->failure(ERROR_REDIS_WRONG);
@@ -133,6 +141,10 @@ class Lives extends BaseController
     {
         $live = $this->liveDao->getLive($id);
         if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        if ($live->status != LIVE_STATUS_ON) {
+            $this->failure(ERROR_LIVE_NOT_START);
             return;
         }
         $ok = $this->statusDao->endLive($id);

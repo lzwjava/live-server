@@ -120,6 +120,8 @@ define('ERROR_EXCEED_MAX_PEOPLE', 'exceed_max_people');
 define('ERROR_CREATE_LIVE', 'create_live_failed');
 define('ERROR_DETAIL_TOO_SHORT', 'detail_too_short');
 define('ERROR_ALREADY_REVIEW', 'already_review');
+define('ERROR_LIVE_NOT_WAIT', 'live_not_wait');
+define('ERROR_LIVE_NOT_START', 'live_not_start');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -180,6 +182,8 @@ if (!function_exists('errorInfos')) {
             ERROR_CREATE_LIVE => '创建直播失败',
             ERROR_DETAIL_TOO_SHORT => '直播详情至少要 300 字',
             ERROR_ALREADY_REVIEW => '已经在审核或审核过了',
+            ERROR_LIVE_NOT_WAIT => '直播不是报名状态,无法开始',
+            ERROR_LIVE_NOT_START => '直播不是进行中状态,无法结束',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
