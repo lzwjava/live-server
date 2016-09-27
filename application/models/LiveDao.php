@@ -62,11 +62,12 @@ class LiveDao extends BaseDao
     function getHomeLives($skip, $limit, $user)
     {
         $sql = "SELECT liveId FROM lives
-                WHERE status>=? ORDER BY created
-                DESC limit $limit offset $skip";
+                WHERE status>=?
+                ORDER BY created DESC
+                limit $limit offset $skip";
         $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT))->result();
         $ids = $this->extractLiveIds($lives);
-        return $this->getLives($ids, $user);
+        return $this->getLivesWithoutDetail($ids, $user);
     }
 
     private function extractLiveIds($lives)
@@ -76,6 +77,15 @@ class LiveDao extends BaseDao
             array_push($ids, $live->liveId);
         }
         return $ids;
+    }
+
+    private function getLivesWithoutDetail($liveIds, $user)
+    {
+        $lvs = $this->getLives($liveIds, $user);
+        foreach ($lvs as $lv) {
+            unset($lv->detail);
+        }
+        return $lvs;
     }
 
     private function getLives($liveIds, $user)
@@ -92,7 +102,8 @@ class LiveDao extends BaseDao
         $sql = "select $fields, $userFields,a.attendanceId from lives as l
                 left join users as u on u.userId=l.ownerId
                 left join attendances as a on a.liveId = l.liveId and a.userId = $userId
-                where l.liveId in (" . implode(', ', $liveIds) . ")";
+                where l.liveId in (" . implode(', ', $liveIds) . ")
+                order by l.created desc";
         $lives = $this->db->query($sql)->result();
         $this->assembleLives($lives, $userId);
         return $lives;
@@ -215,7 +226,7 @@ class LiveDao extends BaseDao
         $binds = array($user->userId);
         $lives = $this->db->query($sql, $binds)->result();
         $ids = $this->extractLiveIds($lives);
-        return $this->getLives($ids, $user);
+        return $this->getLivesWithoutDetail($ids, $user);
     }
 
     function getMyLives($user)
@@ -224,7 +235,7 @@ class LiveDao extends BaseDao
         $binds = array($user->userId);
         $lives = $this->db->query($sql, $binds)->result();
         $ids = $this->extractLiveIds($lives);
-        return $this->getLives($ids, $user);
+        return $this->getLivesWithoutDetail($ids, $user);
     }
 
     function getAttendedUsers($liveId)
