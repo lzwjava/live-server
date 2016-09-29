@@ -153,20 +153,20 @@ func md5password(password string) string {
 	return fmt.Sprintf("%x", md5.Sum(data))
 }
 
-func login(c *Client, mobilePhoneNumber string, password string) *simplejson.Json {
+func login(c *Client, mobilePhoneNumber string) *simplejson.Json {
 	return c.postData("login", url.Values{"mobilePhoneNumber": {mobilePhoneNumber},
-		"password": {md5password(password)}})
+		"smsCode": {"5555"}})
 }
 
 func registerUserWithPhone(c *Client, mobilePhoneNumber string, username string) *simplejson.Json {
 	res := c.post("users", url.Values{"mobilePhoneNumber": {mobilePhoneNumber},
-		"username": {username}, "smsCode": {"5555"}, "password": {md5password("123456")}})
+		"username": {username}, "smsCode": {"5555"}})
 	if res.MustString("status") == "success" {
 		registerRes := res.Get("result")
 		c.SessionToken = registerRes.Get("sessionToken").MustString()
 		return registerRes
 	} else {
-		loginRes := login(c, mobilePhoneNumber, "123456")
+		loginRes := login(c, mobilePhoneNumber)
 		return loginRes
 	}
 }

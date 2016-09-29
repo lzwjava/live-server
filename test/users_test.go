@@ -12,18 +12,17 @@ import (
 
 func TestUser_RegisterAndLogin(t *testing.T) {
 	c := NewClient()
-	md5Str := md5password("123456")
 	name := randomString()
 	mobile := randomMobile()
 	res := c.postData("users", url.Values{"mobilePhoneNumber": {mobile},
-		"username": {name}, "smsCode": {"5555"}, "password": {md5Str}})
+		"username": {name}, "smsCode": {"5555"}})
 	assert.Equal(t, name, res.Get("username").MustString())
 	assert.NotNil(t, res.Get("userId"))
 	assert.NotNil(t, res.Get("created"))
 	assert.NotNil(t, res.Get("updated"))
 
 	res = c.postData("login", url.Values{"mobilePhoneNumber": {mobile},
-		"password": {md5password("123456")}})
+		"smsCode": {"5555"}})
 	assert.Equal(t, name, res.Get("username").MustString())
 	assert.Equal(t, mobile, res.Get("mobilePhoneNumber").MustString())
 }
@@ -31,10 +30,9 @@ func TestUser_RegisterAndLogin(t *testing.T) {
 func TestUser_SpecialPhone(t *testing.T) {
 	runSql("delete from users where mobilePhoneNumber='817015130624'", true)
 	c := NewClient()
-	md5Str := md5password("123456")
 	name := randomString()
 	res := c.postData("users", url.Values{"mobilePhoneNumber": {"817015130624"},
-		"username": {name}, "smsCode": {"123456"}, "password": {md5Str}})
+		"username": {name}, "smsCode": {"123456"}})
 	assert.NotNil(t, res.Get("username").Interface())
 }
 

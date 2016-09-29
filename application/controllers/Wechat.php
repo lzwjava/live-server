@@ -34,7 +34,8 @@ class Wechat extends BaseController
         if ($this->checkIfParamsNotExist($this->get(), array(KEY_URL))) {
             return;
         }
-        $url = $this->get('url');
+        $url = urldecode($this->get('url'));
+        //logInfo("sign url:" . $url);
         $this->succeed($this->jsSdk->getSignPackage($url));
     }
 

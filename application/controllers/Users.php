@@ -81,27 +81,28 @@ class Users extends BaseController
 
     public function register_post()
     {
-        if ($this->checkIfParamsNotExist($_POST, array(KEY_USERNAME, KEY_MOBILE_PHONE_NUMBER,
-            KEY_PASSWORD, KEY_SMS_CODE))
+        if ($this->checkIfParamsNotExist($_POST, array(KEY_USERNAME, KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))
         ) {
             return;
         }
         $mobilePhoneNumber = $_POST[KEY_MOBILE_PHONE_NUMBER];
         $username = $_POST[KEY_USERNAME];
-        $password = $_POST[KEY_PASSWORD];
         $smsCode = $_POST[KEY_SMS_CODE];
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
         } elseif ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
             $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
-        } else if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
             return;
-        } else if ($this->checkIfWrongPasswordFormat($password)) {
+        } else if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
             return;
         } else {
             $defaultAvatarUrl = QINIU_FILE_HOST . "/defaultAvatar1.png";
-            $this->userDao->insertUser($username, $mobilePhoneNumber, $defaultAvatarUrl,
-                sha1($password));
+            $ok = $this->userDao->insertUser($username, $mobilePhoneNumber, $defaultAvatarUrl,
+                '');
+            if (!$ok) {
+                $this->failure(ERROR_SQL_WRONG);
+                return;
+            }
             $this->loginOrRegisterSucceed($mobilePhoneNumber);
         }
     }
@@ -176,18 +177,15 @@ class Users extends BaseController
 
     public function login_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER, KEY_PASSWORD))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))) {
             return;
         }
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
-        $password = $this->post(KEY_PASSWORD);
-        if ($this->checkIfWrongPasswordFormat($password)) {
+        $smsCode = $this->post(KEY_SMS_CODE);
+        if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
             return;
-        } else if ($this->userDao->checkLogin($mobilePhoneNumber, $password) == false) {
-            $this->failure(ERROR_LOGIN_FAILED);
-        } else {
-            $this->loginOrRegisterSucceed($mobilePhoneNumber);
         }
+        $this->loginOrRegisterSucceed($mobilePhoneNumber);
     }
 
     public function loginOrRegisterSucceed($mobilePhoneNumber)

@@ -209,7 +209,7 @@ if (!function_exists('errorInfos')) {
             ERROR_GET_ACCESS_TOKEN => '获取令牌失败',
             ERROR_USER_INFO_FAILED => '获取用户信息失败',
             ERROR_ILLEGAL_REQUEST => '非法的请求',
-            ERROR_WECHAT_ALREADY_REGISTER => '微信早已注册',
+            ERROR_WECHAT_ALREADY_REGISTER => '微信早已注册,请退出并重新进入',
             ERROR_MUST_BIND_WECHAT => '必须先绑定微信'
         );
     }
