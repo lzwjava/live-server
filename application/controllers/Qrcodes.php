@@ -90,9 +90,14 @@ class Qrcodes extends BaseController
         if ($this->checkCodeInvalid($code)) {
             return;
         }
+        $this->renderQrcode($code);
+    }
+
+    private function renderQrcode($text)
+    {
         $qrcode = new QrCode();
         $qrcode
-            ->setText($code)
+            ->setText($text)
             ->setSize(300)
             ->setPadding(10)
             ->setErrorCorrection('high')
@@ -101,6 +106,15 @@ class Qrcodes extends BaseController
             ->setImageType(QrCode::IMAGE_TYPE_PNG);
         header('Content-Type: ' . $qrcode->getContentType());
         $qrcode->render();
+    }
+
+    function qrcode_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_TEXT))) {
+            return;
+        }
+        $text = $this->get(KEY_TEXT);
+        $this->renderQrcode($text);
     }
 
 }

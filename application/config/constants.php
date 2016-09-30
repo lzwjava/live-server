@@ -357,6 +357,8 @@ define('KEY_URL', 'url');
 define('KEY_STREAM', 'stream');
 define('KEY_ACTION', 'action');
 
+define('KEY_TEXT', 'text');
+
 
 if (!function_exists('specialPhones')) {
     function specialPhones()

@@ -94,6 +94,7 @@ $route['attendances/lives/(\d+)']['GET'] = 'attendances/liveList/$1';
 $route['qrcodes']['POST'] = 'qrcodes/scanQrcode';
 $route['qrcodes/scanned']['GET'] = 'qrcodes/isQrcodeScanned';
 $route['qrcodes/gen']['GET'] = 'qrcodes/png';
+$route['qrcodes/one']['GET'] = 'qrcodes/qrcode';
 
 $route['rewards/notify']['POST'] = 'rewards/notify';
 
