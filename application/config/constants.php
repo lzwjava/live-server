@@ -361,6 +361,6 @@ define('KEY_ACTION', 'action');
 if (!function_exists('specialPhones')) {
     function specialPhones()
     {
-        return array('817015130624');
+        return array('817015130624', '13942341609');
     }
 }
