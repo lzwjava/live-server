@@ -144,6 +144,7 @@ class LiveDao extends BaseDao
                 if ($userId == $live->ownerId) {
                     $live->pushUrl = 'rtmp://cheerpush.quzhiboapp.com/live/' . $live->rtmpKey;
                 }
+                $live->videoUrl = 'http://video.quzhiboapp.com/' . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHost . '/live/' . $live->rtmpKey;
                 $live->hlsUrl = 'http://' . $rtmpHost . '/live/' . $live->rtmpKey . '.m3u8';
                 $live->flvUrl = 'http://' . $flvHost . '/live/' . $live->rtmpKey . '.flv';
