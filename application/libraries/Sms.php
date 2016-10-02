@@ -40,16 +40,16 @@ class Sms extends BaseDao
 
     function groupSend($thirdUser, $live)
     {
-        $name = mb_substr($thirdUser->username, 0, 8);
+        $name = mb_substr($thirdUser[KEY_USERNAME], 0, 8);
         $data = array(
             SMS_NAME => $name,
             SMS_INTRO => '北林助手的作者李智维',
-            SMS_TIME => '10月3号晚上',
+            SMS_TIME => '明天10月3号晚上',
             SMS_OWNER_NAME => '北林校友与创业者程成',
             KEY_SUBJECT => '《' . $live->subject . '》',
-            SMS_LINK => 'http://m.quzhiboapp.com/?liveId=' . $live->liveId
+            SMS_LINK => 'http://m.quzhiboapp.com/?liveId=' . $live->liveId . '&from=sms'
         );
-        $this->leancloud->sendTemplateSms($thirdUser->mobilePhoneNumber, 'Invite', $data);
+        return $this->leancloud->sendTemplateSms($thirdUser[KEY_MOBILE_PHONE_NUMBER], 'Invite', $data);
     }
 
 }

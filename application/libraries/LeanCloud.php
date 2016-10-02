@@ -14,8 +14,8 @@ class LeanCloud
         curl_setopt($ch, CURLOPT_URL, "https://api.leancloud.cn/1.1/" . $path);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "X-LC-Id: " . LC_PROD_APP_ID,
-            "X-LC-Key: " . LC_PROD_APP_KEY,
+            "X-LC-Id: " . LC_APP_ID,
+            "X-LC-Key: " . LC_APP_KEY,
             "Content-Type: application/json"
         ));
         if ($data == null) {
@@ -49,7 +49,7 @@ class LeanCloud
     {
         $data[SMS_TEMPLATE] = $template;
         $data[KEY_MOBILE_PHONE_NUMBER] = $phone . '';
-        if (ENVIRONMENT == 'development') {
+        if (ENVIRONMENT != 'development') {
             $result = $this->curlLeanCloud("requestSmsCode", $data);
             if ($result["status"] != 200) {
                 $string = json_encode($result["result"]);

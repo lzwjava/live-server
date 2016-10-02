@@ -288,41 +288,43 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $count));
     }
 
+    private function getBjfuUsers()
+    {
+        $all = file_get_contents(FCPATH . 'data/bjfudata.txt');
+        $users = json_decode($all);
+        array_slice($users, 0, 100);
+        return $users;
+    }
+
+    private function getTestUsers()
+    {
+        return array(
+            array(
+                KEY_USERNAME => '李智维',
+                KEY_MOBILE_PHONE_NUMBER => '18928980893'
+            )
+        );
+    }
+
     function groupSend_get($liveId)
     {
         $live = $this->liveDao->getLive($liveId);
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-
-        $all = file_get_contents(FCPATH . 'data/bjfudata.txt');
-        $users = json_decode($all);
-        $items = explode(PHP_EOL, $all);
-
-        $users = array();
-        foreach ($items as $item) {
-            $json = json_decode($item);
-            if (isset($json->name) && mb_strlen($json->name) > 0 &&
-                isset($json->mobile) && strlen($json->mobile) > 0
-            ) {
-                $user = new StdClass;
-                $user->username = $json->name;
-                $user->mobilePhoneNumber = $json->mobile;
-                array_push($users, $user);
+        $this->getBjfuUsers();
+        $thirdUsers = $this->getTestUsers();
+        $succeedCount = 0;
+        foreach ($thirdUsers as $thirdUser) {
+            usleep(1000 * 100);
+            $ok = $this->sms->groupSend($thirdUser, $live);
+            if ($ok) {
+                $succeedCount++;
             }
         }
-        file_put_contents(FCPATH . 'data/bjfudata.txt', json_encode($users));
-        $this->succeed($users);
-//        $user = new StdClass;
-//        $user->username = '李智维';
-//        $user->mobilePhoneNumber = '18928980893';
-//        $thirdUsers = array(
-//            $user
-//        );
-//        foreach ($thirdUsers as $thirdUser) {
-//            $this->sms->groupSend($thirdUser, $live);
-//        }
-//        $this->succeed();
+        $total = count($thirdUsers);
+        logInfo("succeedCount: " . $succeedCount . ' total:' . $total);;
+        $this->succeed(array('succeedCount' => $succeedCount, 'total' => $total));
     }
 
 }
