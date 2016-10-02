@@ -231,3 +231,10 @@ func TestLives_create(t *testing.T) {
 	res := c.postData("lives", url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestLives_groupSend(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	res := c.getData("lives/"+liveId+"/groupSend", url.Values{})
+	assert.NotNil(t, res)
+}

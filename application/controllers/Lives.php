@@ -254,7 +254,7 @@ class Lives extends BaseController
         $users = $this->liveDao->getAttendedUsers($liveId);
         $succeedCount = 0;
         foreach ($users as $user) {
-            sleep(1);
+            usleep(1000 * 100);
             $ok = $this->sms->notifyLiveStart($user->userId, $live);
             if ($ok) {
                 $this->attendanceDao->updateToNotified($user->userId, $liveId);
@@ -286,6 +286,43 @@ class Lives extends BaseController
     {
         $count = $this->liveDao->fixAttendanceCount();
         $this->succeed(array('succeedCount' => $count));
+    }
+
+    function groupSend_get($liveId)
+    {
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+
+        $all = file_get_contents(FCPATH . 'data/bjfudata.txt');
+        $users = json_decode($all);
+        $items = explode(PHP_EOL, $all);
+
+        $users = array();
+        foreach ($items as $item) {
+            $json = json_decode($item);
+            if (isset($json->name) && mb_strlen($json->name) > 0 &&
+                isset($json->mobile) && strlen($json->mobile) > 0
+            ) {
+                $user = new StdClass;
+                $user->username = $json->name;
+                $user->mobilePhoneNumber = $json->mobile;
+                array_push($users, $user);
+            }
+        }
+        file_put_contents(FCPATH . 'data/bjfudata.txt', json_encode($users));
+        $this->succeed($users);
+//        $user = new StdClass;
+//        $user->username = '李智维';
+//        $user->mobilePhoneNumber = '18928980893';
+//        $thirdUsers = array(
+//            $user
+//        );
+//        foreach ($thirdUsers as $thirdUser) {
+//            $this->sms->groupSend($thirdUser, $live);
+//        }
+//        $this->succeed();
     }
 
 }

@@ -38,4 +38,18 @@ class Sms extends BaseDao
         return $this->leancloud->sendTemplateSms($phone, 'LiveStart', $data);
     }
 
+    function groupSend($thirdUser, $live)
+    {
+        $name = mb_substr($thirdUser->username, 0, 8);
+        $data = array(
+            SMS_NAME => $name,
+            SMS_INTRO => '北林助手的作者李智维',
+            SMS_TIME => '10月3号晚上',
+            SMS_OWNER_NAME => '北林校友与创业者程成',
+            KEY_SUBJECT => '《' . $live->subject . '》',
+            SMS_LINK => 'http://m.quzhiboapp.com/?liveId=' . $live->liveId
+        );
+        $this->leancloud->sendTemplateSms($thirdUser->mobilePhoneNumber, 'Invite', $data);
+    }
+
 }

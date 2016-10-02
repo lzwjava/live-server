@@ -252,6 +252,10 @@ define('LIVE_STATUS_OFF', 30);
 define('SMS_TEMPLATE', 'template');
 define('SMS_NAME', 'name');
 define('SMS_OPEN_APP_WORDS', 'openAppWords');
+define('SMS_INTRO', 'intro');
+define('SMS_TIME', 'time');
+define('SMS_OWNER_NAME', 'ownerName');
+define('SMS_LINK', 'link');
 
 // users
 define('TABLE_USERS', 'users');
@@ -329,13 +333,19 @@ define('KEY_COOKIE_TOKEN', 'SessionToken');
 define('COOKIE_VID', 'vid');
 define('KEY_SESSION_HEADER', 'X-Session');
 
+define('LC_TEST_APP_ID', 'YY3S7uNlnXUgX48BHTJlJx4i-gzGzoHsz');
+define('LC_TEST_APP_KEY', 'h9zCqcPSi7nDgQTQE6YsOT0z');
+
+define('LC_PROD_APP_ID', 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz');
+define('LC_PROD_APP_KEY', 'V4FPFLSmSeO1HaIwPVyhO9P3');
+
 // lc
 if (ENVIRONMENT == 'development') {
-    define('LC_APP_ID', 'YY3S7uNlnXUgX48BHTJlJx4i-gzGzoHsz');
-    define('LC_APP_KEY', 'h9zCqcPSi7nDgQTQE6YsOT0z');
+    define('LC_APP_ID', LC_TEST_APP_ID);
+    define('LC_APP_KEY', LC_TEST_APP_KEY);
 } else {
-    define('LC_APP_ID', 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz');
-    define('LC_APP_KEY', 'V4FPFLSmSeO1HaIwPVyhO9P3');
+    define('LC_APP_ID', LC_PROD_APP_ID);
+    define('LC_APP_KEY', LC_PROD_APP_KEY);
 }
 
 
@@ -363,6 +373,6 @@ define('KEY_TEXT', 'text');
 if (!function_exists('specialPhones')) {
     function specialPhones()
     {
-        return array('817015130624', '13942341609');
+        return array('817015130624', '13942341609', '18928980893');
     }
 }
