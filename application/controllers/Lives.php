@@ -290,19 +290,19 @@ class Lives extends BaseController
 
     private function getBjfuUsers()
     {
-        $all = file_get_contents(FCPATH . 'data/bjfudata.txt');
+        $all = file_get_contents(APPPATH . 'data/bjfudata.txt');
         $users = json_decode($all);
-        array_slice($users, 0, 100);
+        $users = array_slice($users, 300, 0);
         return $users;
     }
 
     private function getTestUsers()
     {
+        $user = new Stdclass();
+        $user->username = '李智维';
+        $user->mobilePhoneNumber = '18928980893';
         return array(
-            array(
-                KEY_USERNAME => '李智维',
-                KEY_MOBILE_PHONE_NUMBER => '18928980893'
-            )
+            $user
         );
     }
 
@@ -312,8 +312,13 @@ class Lives extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        $this->getBjfuUsers();
-        $thirdUsers = $this->getTestUsers();
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $bjfuUsers = $this->getBjfuUsers();
+        logInfo("bjfu count:" . count($bjfuUsers));
+        $thirdUsers = $bjfuUsers;
+        //$thirdUsers = $this->getTestUsers();
         $succeedCount = 0;
         foreach ($thirdUsers as $thirdUser) {
             usleep(1000 * 100);
