@@ -129,6 +129,15 @@ class LiveDao extends BaseDao
         return $host;
     }
 
+    private function calAmount($origin)
+    {
+        $amount = $origin - 100;
+        if ($amount <= 0) {
+            $amount = 1;
+        }
+        return $amount;
+    }
+
     private function assembleLives($lives, $userId)
     {
         foreach ($lives as $live) {
@@ -150,6 +159,11 @@ class LiveDao extends BaseDao
                 $live->hlsUrl = 'http://' . $rtmpHost . '/live/' . $live->rtmpKey . '.m3u8';
                 $live->flvUrl = 'http://' . $flvHost . '/live/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
+            }
+            if ($live->shareId) {
+                $live->realAmount = $this->calAmount($live->amount);
+            } else {
+                $live->realAmount = $live->amount;
             }
         }
     }

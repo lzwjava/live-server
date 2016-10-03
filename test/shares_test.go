@@ -26,6 +26,7 @@ func TestShares_create_testLive(t *testing.T) {
 
 	res = c2.getData("lives/"+liveId, url.Values{})
 	assert.NotNil(t, res.Get("shareId").MustInt() > 0)
+	assert.Equal(t, res.Get("realAmount").MustInt(), 1)
 }
 
 func TestShares_create_duplicate(t *testing.T) {
