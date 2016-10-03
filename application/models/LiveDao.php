@@ -116,7 +116,7 @@ class LiveDao extends BaseDao
 
     private function electRtmpServer()
     {
-        $serverIps = array('live1.quzhiboapp.com', 'live2.quzhiboapp.com');
+        $serverIps = array('live1.quzhiboapp.com', 'live2.quzhiboapp.com', 'live3.quzhiboapp.com');
         $serverIp = random_element($serverIps);
         return $serverIp;
     }

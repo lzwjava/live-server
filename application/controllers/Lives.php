@@ -314,7 +314,7 @@ class Lives extends BaseController
     {
         $all = file_get_contents(APPPATH . 'data/bjfudata.txt');
         $users = json_decode($all);
-        $users = array_slice($users, 300, 0);
+        $users = array_slice($users, 800, 100);
         return $users;
     }
 
@@ -340,7 +340,7 @@ class Lives extends BaseController
         $bjfuUsers = $this->getBjfuUsers();
         logInfo("bjfu count:" . count($bjfuUsers));
         $thirdUsers = $bjfuUsers;
-        //$thirdUsers = $this->getTestUsers();
+//        $thirdUsers = $this->getTestUsers();
         $succeedCount = 0;
         foreach ($thirdUsers as $thirdUser) {
             usleep(1000 * 100);
