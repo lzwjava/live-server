@@ -239,11 +239,13 @@ class LiveDao extends BaseDao
         return $this->getLivesWithoutDetail($ids, $user);
     }
 
-    function getAttendedUsers($liveId)
+    function getAttendedUsers($liveId, $skip, $limit)
     {
         $fields = $this->userPublicFields('u');
-        $sql = "SELECT $fields from attendances as a left join users as u on u.userId = a.userId
-               where a.liveId=? order by a.created desc";
+        $sql = "SELECT $fields from attendances as a
+               left join users as u on u.userId = a.userId
+               where a.liveId=? order by a.created desc
+               limit $limit OFFSET $skip";
         $binds = array($liveId);
         $users = $this->db->query($sql, $binds)->result();
         return $users;
