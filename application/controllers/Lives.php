@@ -193,6 +193,28 @@ class Lives extends BaseController
         $this->succeed();
     }
 
+    function setWait_get($id)
+    {
+        $live = $this->liveDao->getLive($id);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        if ($live->ownerId != $user->userId) {
+            $this->failure(ERROR_NOT_ALLOW_DO_IT);
+            return;
+        }
+        if ($live->status != LIVE_STATUS_ON) {
+            $this->failure(ERROR_LIVE_NOT_ON);
+            return;
+        }
+        $this->liveDao->setLivePrepare($id);
+        $this->succeed();
+    }
+
     function lastPrepare_get()
     {
         $user = $this->checkAndGetSessionUser();

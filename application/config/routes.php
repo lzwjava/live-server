@@ -82,6 +82,7 @@ $route['lives/(\d+)/notify'] = 'lives/notifyLiveStart/$1';
 $route['lives/fixAttendanceCount'] = 'lives/fixAttendanceCount';
 $route['lives/(\d+)/notifyOneUser'] = 'lives/notifyOneUser/$1';
 $route['lives/(\d+)/groupSend'] = 'lives/groupSend/$1';
+$route['lives/(\d+)/wait'] = 'lives/setWait/$1';
 
 $route['jobs/alive']['GET'] = 'jobs/alive';
 

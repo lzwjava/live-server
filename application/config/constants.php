@@ -122,6 +122,7 @@ define('ERROR_DETAIL_TOO_SHORT', 'detail_too_short');
 define('ERROR_ALREADY_REVIEW', 'already_review');
 define('ERROR_LIVE_NOT_WAIT', 'live_not_wait');
 define('ERROR_LIVE_NOT_START', 'live_not_start');
+define('ERROR_LIVE_NOT_ON', 'live_not_on');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -184,6 +185,7 @@ if (!function_exists('errorInfos')) {
             ERROR_ALREADY_REVIEW => '已经在审核或审核过了',
             ERROR_LIVE_NOT_WAIT => '直播不是报名状态,无法开始',
             ERROR_LIVE_NOT_START => '直播不是进行中状态,无法结束',
+            ERROR_LIVE_NOT_ON => '直播并不是测试开始状态,无法恢复到报名中',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
