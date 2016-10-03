@@ -42,7 +42,7 @@ class WxPayCallback extends WxPayNotify
         }
         logInfo("wechat notify data:" . json_encode($data));
         $outTradeNo = $data['out_trade_no'];
-        $error = $this->payNotifyDao->handleChargeSucceed($outTradeNo);
+        $error = $this->payNotifyDao->handleChargeSucceed($outTradeNo, CHANNEL_WECHAT_H5);
         if ($error) {
             logInfo("wechat charge notify failed: " . $error);
             $msg = $error;

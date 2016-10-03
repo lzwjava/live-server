@@ -131,14 +131,12 @@ class BaseController extends REST_Controller
 
     protected function checkIfNotInArray($value, $array)
     {
-        foreach ($array as $obj) {
-            if ($obj === $value) {
-                return false;
-            }
+        if (!in_array($value, $array)) {
+            $json = json_encode($array);
+            $this->failure(ERROR_PARAMETER_ILLEGAL, "$value 不在 $json 之中");
+            return true;
         }
-        $json = json_encode($array);
-        $this->failure(ERROR_PARAMETER_ILLEGAL, "$value 不在 $json 之中");
-        return true;
+        return false;
     }
 
     protected function skip()

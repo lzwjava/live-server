@@ -78,6 +78,22 @@ func TestAttendances_createByWeChat(t *testing.T) {
 	assert.NotNil(t, callbackRes)
 }
 
+func TestAttendances_createByWeChat_withShare(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLiveWithAmount(c, 1000)
+
+	c2, userId := NewClientAndUser()
+	insertSnsUser(userId)
+	createShare(c2, liveId)
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
+	assert.NotNil(t, res)
+	orderNo := getLastOrderNo()
+	callbackStr := wechatCallbackStr(orderNo)
+	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
+	fmt.Println("callbackRes:" + callbackRes)
+	assert.NotNil(t, callbackRes)
+}
+
 func getLastOrderNo() string {
 	rows := queryDb("select orderNo from charges order by created desc limit 1")
 	defer rows.Close()

@@ -109,3 +109,6 @@ $route['wechat/wxpayNotify']['GET'] = 'wechat/wxpayNotify';
 // live hooks
 $route['liveHooks/onPublish']['POST'] = 'liveHooks/onPublish';
 $route['liveHooks/onUnPublish']['POST'] = 'liveHooks/onUnPublish';
+
+// shares
+$route['shares']['POST'] = 'shares/create';

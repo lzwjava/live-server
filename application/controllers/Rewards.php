@@ -28,7 +28,7 @@ class Rewards extends BaseController
             $outTradeNo = $_POST['out_trade_no'];
             $trade_status = $_POST['trade_status'];
             if ($trade_status == 'TRADE_SUCCESS') {
-                $error = $this->payNotifyDao->handleChargeSucceed($outTradeNo);
+                $error = $this->payNotifyDao->handleChargeSucceed($outTradeNo, CHANNEL_ALIPAY_APP);
                 if ($error) {
                     logInfo("error: " . $error);
                     $this->failure($error);

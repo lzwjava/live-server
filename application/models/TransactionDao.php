@@ -58,20 +58,10 @@ class TransactionDao extends BaseDao
         return null;
     }
 
-    private function newCharge($userId, $orderNo, $amount, $chargeId, $remark)
+    function newCharge($userId, $orderNo, $amount, $chargeId, $remark)
     {
         return $this->newTransaction($userId, $orderNo, $amount,
             TRANS_TYPE_RECHARGE, 'chargeId:' . $chargeId, $remark);
-    }
-
-    function newWeChatRecharge($userId, $orderNo, $amount, $chargeId)
-    {
-        return $this->newCharge($userId, $orderNo, $amount, $chargeId, REMARK_WECHAT);
-    }
-
-    function newAlipayRecharge($userId, $orderNo, $amount, $chargeId)
-    {
-        return $this->newCharge($userId, $orderNo, $amount, $chargeId, REMARK_ALIPAY);
     }
 
     function newIncome($userId, $orderNo, $amount, $liveId, $attendeeName)

@@ -147,3 +147,20 @@ AFTER `code`;
 
 ALTER TABLE `scanned_qrcodes` ADD COLUMN `data` VARCHAR(128) DEFAULT ''
 AFTER `type`;
+
+CREATE TABLE `shares` (
+  `shareId`       INT(11)     NOT NULL AUTO_INCREMENT,
+  `shareTs`       INT(11)     NOT NULL DEFAULT 0,
+  `userId`        INT(11)     NOT NULL,
+  `liveId`        INT(11)     NOT NULL,
+  `channel`       VARCHAR(31) NOT NULL DEFAULT '',
+  `useToDiscount` TINYINT(4)  NOT NULL DEFAULT 0,
+  `created`       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
+  PRIMARY KEY (`shareId`),
+  UNIQUE KEY (`userId`, `liveId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;

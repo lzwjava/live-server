@@ -13,6 +13,7 @@ class Attendances extends BaseController
     public $chargeDao;
     public $pay;
     public $snsUserDao;
+    public $shareDao;
 
     function __construct()
     {
@@ -27,6 +28,21 @@ class Attendances extends BaseController
         $this->pay = new Pay();
         $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
+        $this->load->model(ShareDao::class);
+        $this->shareDao = new ShareDao();
+    }
+
+    private function calAmount($user, $live)
+    {
+        $share = $this->shareDao->getShare($user->userId, $live->liveId);
+        if (!$share) {
+            return $live->amount;
+        }
+        $amount = $live->amount - 100;
+        if ($amount <= 0) {
+            $amount = 1;
+        }
+        return $amount;
     }
 
     function create_post()
@@ -74,7 +90,10 @@ class Attendances extends BaseController
         $subject = '参加直播';
         $body = $user->username . ' 参加直播 ' . $live->subject;
         $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
-        $ch = $this->createChargeAndInsert($live->amount, $channel, $subject, $body,
+
+        $amount = $this->calAmount($user, $live);
+
+        $ch = $this->createChargeAndInsert($amount, $channel, $subject, $body,
             $metaData, $user, $openId);
         if ($ch == null) {
             $this->failure(ERROR_CHARGE_CREATE);
