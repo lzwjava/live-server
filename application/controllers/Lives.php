@@ -255,7 +255,9 @@ class Lives extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        $users = $this->liveDao->getAttendedUsers($liveId);
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $users = $this->liveDao->getAttendedUsers($liveId, $skip, $limit);
         $this->succeed($users);
     }
 
@@ -273,7 +275,7 @@ class Lives extends BaseController
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
-        $users = $this->liveDao->getAttendedUsers($liveId);
+        $users = $this->liveDao->getAttendedUsers($liveId, 0, 1000000);
         $succeedCount = 0;
         foreach ($users as $user) {
             usleep(1000 * 100);
