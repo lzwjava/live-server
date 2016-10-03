@@ -132,6 +132,15 @@ func TestLives_begin(t *testing.T) {
 	assert.True(t, res.MustBool())
 }
 
+func TestLives_begin_wait(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	res := c.getData("lives/"+liveId+"/begin", url.Values{})
+	res = c.getData("lives/"+liveId+"/wait", url.Values{})
+	res = c.getData("lives/"+liveId, url.Values{})
+	assert.Equal(t, res.Get("status").MustInt(), 10)
+}
+
 func TestLives_begin_error(t *testing.T) {
 	c, _ := NewClientAndUser()
 	res := c.postData("lives", url.Values{})
