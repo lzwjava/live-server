@@ -43,11 +43,11 @@ class Sms extends BaseDao
         $name = mb_substr($thirdUser->username, 0, 8);
         $data = array(
             SMS_NAME => $name,
-            SMS_INTRO => '北林助手的作者李智维',
-            SMS_TIME => '明天10月3号晚上',
+            SMS_INTRO => '北林助手作者李智维，也是大四的学生',
+            SMS_TIME => '今天晚上8点半',
             SMS_OWNER_NAME => '北林校友与创业者程成',
             KEY_SUBJECT => '《' . $live->subject . '》',
-            SMS_LINK => 'http://m.quzhiboapp.com/?liveId=' . $live->liveId . ' 感谢您。'
+            SMS_LINK => 'http://m.quzhiboapp.com/?liveId=' . $live->liveId . ' 感谢您。想和我交朋友的也可加微信哈。'
         );
         return $this->leancloud->sendTemplateSms($thirdUser->mobilePhoneNumber, 'Invite', $data);
     }
