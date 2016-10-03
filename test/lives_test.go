@@ -61,6 +61,9 @@ func TestLives_get(t *testing.T) {
 	assert.NotNil(t, live.Get("canJoin").Interface())
 	assert.NotNil(t, live.Get("planTs").Interface())
 
+	assert.NotNil(t, live.Get("amount").Interface())
+	assert.NotNil(t, live.Get("realAmount").Interface())
+
 	assert.NotNil(t, live.Get("attendanceCount").Interface())
 	assert.NotNil(t, live.Get("owner").Interface())
 }

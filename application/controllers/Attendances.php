@@ -32,19 +32,6 @@ class Attendances extends BaseController
         $this->shareDao = new ShareDao();
     }
 
-    private function calAmount($user, $live)
-    {
-        $share = $this->shareDao->getShare($user->userId, $live->liveId);
-        if (!$share) {
-            return $live->amount;
-        }
-        $amount = $live->amount - 100;
-        if ($amount <= 0) {
-            $amount = 1;
-        }
-        return $amount;
-    }
-
     function create_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID, KEY_CHANNEL))) {
@@ -56,7 +43,7 @@ class Attendances extends BaseController
         if (!$user) {
             return;
         }
-        $live = $this->liveDao->getLive($liveId);
+        $live = $this->liveDao->getLive($liveId, $user);
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
@@ -91,9 +78,7 @@ class Attendances extends BaseController
         $body = $user->username . ' 参加直播 ' . $live->subject;
         $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
 
-        $amount = $this->calAmount($user, $live);
-
-        $ch = $this->createChargeAndInsert($amount, $channel, $subject, $body,
+        $ch = $this->createChargeAndInsert($live->realAmount, $channel, $subject, $body,
             $metaData, $user, $openId);
         if ($ch == null) {
             $this->failure(ERROR_CHARGE_CREATE);
