@@ -13,6 +13,7 @@ class PayNotifyDao extends BaseDao
     public $attendanceDao;
     public $chargeDao;
     public $transactionDao;
+    public $shareDao;
 
     function __construct()
     {
@@ -25,9 +26,21 @@ class PayNotifyDao extends BaseDao
         $this->attendanceDao = new AttendanceDao();
         $this->load->model(TransactionDao::class);
         $this->transactionDao = new TransactionDao();
+        $this->load->model(ShareDao::class);
+        $this->shareDao = new ShareDao();
     }
 
-    function handleChargeSucceed($orderNo)
+    private function remarkFromChannel($channel)
+    {
+        if ($channel == CHANNEL_ALIPAY_APP) {
+            return REMARK_ALIPAY;
+        } else if ($channel == CHANNEL_WECHAT_H5) {
+            return REMARK_WECHAT;
+        }
+        return 'unknown';
+    }
+
+    function handleChargeSucceed($orderNo, $channel)
     {
         $charge = $this->chargeDao->getOneByOrderNo($orderNo);
         if ($charge == null) {
@@ -43,13 +56,24 @@ class PayNotifyDao extends BaseDao
             $this->db->trans_begin();
             $this->chargeDao->updateChargeToPaid($orderNo);
             $amount = $charge->amount;
-            $error = $this->transactionDao->newAlipayRecharge($userId, $orderNo, $amount, $charge->chargeId);
+            $remark = $this->remarkFromChannel($channel);
+            $error = $this->transactionDao->newCharge($userId, $orderNo, $amount, $charge->chargeId, $remark);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return $error;
             }
-            $this->attendanceDao->addAttendance($userId, $liveId, $orderNo);
-            $this->liveDao->incrementAttendanceCount($liveId);
+            $ok = $this->attendanceDao->addAttendance($userId, $liveId, $orderNo);
+            if (!$ok || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return ERROR_SQL_WRONG;
+            }
+
+            $ok = $this->liveDao->incrementAttendanceCount($liveId);
+            if (!$ok || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return ERROR_SQL_WRONG;
+            }
+
             $live = $this->liveDao->getLive($liveId);
             $error = $this->transactionDao->newPay($userId, genOrderNo(),
                 -$amount, $liveId, $live->owner->username);
@@ -64,6 +88,8 @@ class PayNotifyDao extends BaseDao
                 $this->db->trans_rollback();
                 return $error;
             }
+            $this->shareDao->useToDiscount($userId, $liveId);
+
             $this->db->trans_commit();
             return null;
         } else {

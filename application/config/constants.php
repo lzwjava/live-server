@@ -330,6 +330,11 @@ define('TABLE_STATES', 'states');
 define('KEY_HASH', 'hash');
 define('KEY_STATE', 'state');
 
+// shares
+define('TABLE_SHARES', 'shares');
+define('KEY_SHARE_TS', 'shareTs');
+define('SHARE_CHANNEL_WECHAT_TIMELINE', 'wechat_timeline');
+
 // cookie
 define('KEY_COOKIE_TOKEN', 'SessionToken');
 define('COOKIE_VID', 'vid');
