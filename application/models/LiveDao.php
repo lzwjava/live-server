@@ -99,9 +99,10 @@ class LiveDao extends BaseDao
         }
         $fields = $this->livePublicFields('l');
         $userFields = $this->userPublicFields('u', true);
-        $sql = "select $fields, $userFields,a.attendanceId from lives as l
+        $sql = "select $fields, $userFields,a.attendanceId,s.shareId from lives as l
                 left join users as u on u.userId=l.ownerId
                 left join attendances as a on a.liveId = l.liveId and a.userId = $userId
+                left join shares as s on s.liveId = l.liveId and s.userId= $userId
                 where l.liveId in (" . implode(', ', $liveIds) . ")
                 order by l.created desc";
         $lives = $this->db->query($sql)->result();
@@ -259,7 +260,7 @@ class LiveDao extends BaseDao
         foreach ($lives as $live) {
             $liveId = $live->liveId;
             $updateSql = "UPDATE lives SET attendanceCount=? WHERE liveId=?";
-            $users = $this->getAttendedUsers($liveId);
+            $users = $this->getAttendedUsers($liveId, 0, 100000);
             $binds = array(count($users), $liveId);
             $ok = $this->db->query($updateSql, $binds);
             if ($ok) {
