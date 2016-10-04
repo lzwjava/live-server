@@ -132,7 +132,6 @@ class Wechat extends BaseController
         $this->succeed();
     }
 
-
     function wxpayNotify_post()
     {
         $this->notify->Handle(false);

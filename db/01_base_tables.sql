@@ -164,3 +164,7 @@ CREATE TABLE `shares` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `lives` ADD COLUMN `previewUrl` VARCHAR(80) NOT NULL DEFAULT ''
+AFTER `coverUrl`;
+
