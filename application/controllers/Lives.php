@@ -79,7 +79,7 @@ class Lives extends BaseController
 
     function update_post($liveId)
     {
-        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT, KEY_DETAIL, KEY_PLAN_TS);
+        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT, KEY_DETAIL, KEY_PLAN_TS, KEY_PREVIEW_URL);
         if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
         ) {
             return;

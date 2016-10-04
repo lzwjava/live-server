@@ -236,6 +236,7 @@ define('KEY_RTMP_KEY', 'rtmpKey');
 define('KEY_STATUS', 'status');
 define('KEY_CONVERSATION_ID', 'conversationId');
 define('KEY_COVER_URL', 'coverUrl');
+define('KEY_PREVIEW_URL', 'previewUrl');
 define('KEY_AMOUNT', 'amount');
 define('KEY_MAX_PEOPLE', 'maxPeople');
 define('KEY_PLAN_TS', 'planTs');
