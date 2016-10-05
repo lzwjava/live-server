@@ -381,6 +381,6 @@ define('KEY_TEXT', 'text');
 if (!function_exists('specialPhones')) {
     function specialPhones()
     {
-        return array('817015130624', '13942341609', '18928980893', '13189049707', '12167851210');
+        return array('817015130624', '13942341609', '18928980893', '13189049707', '12167851210', '13091105688');
     }
 }
