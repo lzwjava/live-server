@@ -151,3 +151,23 @@ if (!function_exists('isTimeBeforeNow')) {
         return $diff->invert == 0;
     }
 }
+
+
+if (!function_exists("liveSort")) {
+    function liveSort($liveA, $liveB)
+    {
+        logInfo("encoded:" . json_encode($liveA));
+        if ($liveA->status != $liveB->status) {
+            return $liveA->status - $liveB->status;
+        } else {
+            $liveADate = date_create($liveA->created, new DateTimeZone('Asia/Shanghai'));
+            $liveBDate = date_create($liveB->created, new DateTimeZone('Asia/Shanghai'));
+            $diff = date_diff($liveADate, $liveBDate);
+            if ($diff->invert == 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+}

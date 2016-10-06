@@ -287,6 +287,7 @@ define('CHANNEL_ALIPAY_APP', 'alipay_app');
 define('TABLE_ATTENDANCES', 'attendances');
 define('KEY_ATTENDANCE_ID', 'attendanceId');
 define('KEY_ATTENDANCE_COUNT', 'attendanceCount');
+define('KEY_NOTIFIED', 'notified');
 
 // transactions
 define('TABLE_TRANSACTIONS', 'transactions');

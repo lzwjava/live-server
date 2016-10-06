@@ -67,7 +67,9 @@ class LiveDao extends BaseDao
                 limit $limit offset $skip";
         $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT))->result();
         $ids = $this->extractLiveIds($lives);
-        return $this->getLivesWithoutDetail($ids, $user);
+        $lives = $this->getLivesWithoutDetail($ids, $user);
+        usort($lives, "liveSort");
+        return $lives;
     }
 
     private function extractLiveIds($lives)
