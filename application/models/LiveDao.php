@@ -67,8 +67,7 @@ class LiveDao extends BaseDao
                 limit $limit offset $skip";
         $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT))->result();
         $ids = $this->extractLiveIds($lives);
-        $lives = $this->getLivesWithSort($ids, $user);
-        return $lives;
+        return $this->getLivesWithoutDetail($ids, $user, true);
     }
 
     private function extractLiveIds($lives)
@@ -80,23 +79,16 @@ class LiveDao extends BaseDao
         return $ids;
     }
 
-    private function getLivesWithoutDetail($liveIds, $user)
+    private function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false)
     {
-        $lvs = $this->getLives($liveIds, $user);
+        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs);
         foreach ($lvs as $lv) {
             unset($lv->detail);
         }
         return $lvs;
     }
 
-    private function getLivesWithSort($liveIds, $user)
-    {
-        $lives = $this->getLivesWithoutDetail($liveIds, $user);
-        usort($lives, "liveSort");
-        return $lives;
-    }
-
-    private function getLives($liveIds, $user)
+    private function getLives($liveIds, $user, $sortByPlanTs = false)
     {
         $userId = -1;
         if ($user) {
@@ -105,6 +97,12 @@ class LiveDao extends BaseDao
         if (count($liveIds) == 0) {
             return array();
         }
+        $sortField = null;
+        if ($sortByPlanTs) {
+            $sortField = "l.planTs";
+        } else {
+            $sortField = "l.created";
+        }
         $fields = $this->livePublicFields('l');
         $userFields = $this->userPublicFields('u', true);
         $sql = "select $fields, $userFields,a.attendanceId,s.shareId from lives as l
@@ -112,7 +110,7 @@ class LiveDao extends BaseDao
                 left join attendances as a on a.liveId = l.liveId and a.userId = $userId
                 left join shares as s on s.liveId = l.liveId and s.userId= $userId
                 where l.liveId in (" . implode(', ', $liveIds) . ")
-                order by l.created desc";
+                order by $sortField desc";
         $lives = $this->db->query($sql)->result();
         $this->assembleLives($lives, $userId);
         return $lives;
@@ -246,11 +244,11 @@ class LiveDao extends BaseDao
 
     function getAttendedLives($user)
     {
-        $sql = "SELECT a.liveId FROM attendances AS a WHERE a.userId=? ORDER BY created DESC";
+        $sql = "SELECT a.liveId FROM attendances AS a WHERE a.userId=?";
         $binds = array($user->userId);
         $lives = $this->db->query($sql, $binds)->result();
         $ids = $this->extractLiveIds($lives);
-        return $this->getLivesWithSort($ids, $user);
+        return $this->getLivesWithoutDetail($ids, $user, true);
     }
 
     function getMyLives($user)

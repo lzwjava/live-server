@@ -316,7 +316,7 @@ class Lives extends BaseController
     {
         $all = file_get_contents(APPPATH . 'data/bjfudata.txt');
         $users = json_decode($all);
-        $users = array_slice($users, 800, 100);
+        $users = array_slice($users, 800, 0);
         return $users;
     }
 
