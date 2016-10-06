@@ -29,9 +29,10 @@ CREATE TABLE `lives` (
   `rtmpKey`         VARCHAR(30)   NOT NULL             DEFAULT '',
   `subject`         VARCHAR(60)   NOT NULL             DEFAULT '',
   `coverUrl`        VARCHAR(80)   NOT NULL             DEFAULT '',
+  `previewUrl`      VARCHAR(80)   NOT NULL             DEFAULT '',
   `amount`          INT           NOT NULL             DEFAULT 0,
   `maxPeople`       INT           NOT NULL             DEFAULT 0,
-  `detail`          VARCHAR(1023) NOT NULL             DEFAULT '',
+  `detail`          VARCHAR(8000) NOT NULL             DEFAULT '',
   `conversationId`  VARCHAR(30)   NOT NULL             DEFAULT '',
   `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
   `attendanceCount` INT           NOT NULL             DEFAULT 0,
@@ -70,8 +71,10 @@ CREATE TABLE `attendances` (
   `attendanceId` INT(11)     NOT NULL AUTO_INCREMENT,
   `userId`       INT(11)     NOT NULL,
   `liveId`       INT(11)     NOT NULL,
+  `notified`     TINYINT(2)  NOT NULL DEFAULT 0,
   `orderNo`      VARCHAR(31) NOT NULL DEFAULT '',
   `created`      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`attendanceId`),
   UNIQUE KEY `userId` (`userId`, `liveId`),
   KEY `liveId` (`liveId`),
@@ -114,6 +117,8 @@ CREATE TABLE `transactions` (
 CREATE TABLE `scanned_qrcodes` (
   `qrcodeId` INT(11)     NOT NULL AUTO_INCREMENT,
   `code`     VARCHAR(60) NOT NULL DEFAULT '',
+  `type`     TINYINT     NOT NULL DEFAULT 0,
+  `data`     VARCHAR(128)         DEFAULT '',
   `userId`   INT(11)     NOT NULL DEFAULT 0,
   `created`  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`qrcodeId`),
@@ -130,23 +135,13 @@ CREATE TABLE `sns_users` (
   `avatarUrl` VARCHAR(255)     NOT NULL DEFAULT '',
   `platform`  VARCHAR(10)      NOT NULL DEFAULT '',
   `userId`    INT(11)          NOT NULL DEFAULT 0,
+  `created`   TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`   TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`snsUserId`),
   UNIQUE KEY (`openId`, `platform`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `attendances` ADD COLUMN `updated` TIMESTAMP NOT NULL
-  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
-
-ALTER TABLE `attendances` ADD COLUMN `notified` TINYINT(2) NOT NULL DEFAULT 0
-AFTER `liveId`;
-
-ALTER TABLE `scanned_qrcodes` ADD COLUMN `type` TINYINT NOT NULL DEFAULT 0
-AFTER `code`;
-
-ALTER TABLE `scanned_qrcodes` ADD COLUMN `data` VARCHAR(128) DEFAULT ''
-AFTER `type`;
 
 CREATE TABLE `shares` (
   `shareId`       INT(11)     NOT NULL AUTO_INCREMENT,
@@ -164,9 +159,3 @@ CREATE TABLE `shares` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `lives` ADD COLUMN `previewUrl` VARCHAR(80) NOT NULL DEFAULT ''
-AFTER `coverUrl`;
-
-ALTER TABLE `sns_users` ADD COLUMN `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE `sns_users` ADD COLUMN `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
