@@ -159,3 +159,6 @@ CREATE TABLE `shares` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `lives` ADD COLUMN `speakerIntro` VARCHAR(500) NOT NULL DEFAULT ''
+AFTER `maxPeople`;
