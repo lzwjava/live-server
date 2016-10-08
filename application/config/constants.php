@@ -123,6 +123,7 @@ define('ERROR_ALREADY_REVIEW', 'already_review');
 define('ERROR_LIVE_NOT_WAIT', 'live_not_wait');
 define('ERROR_LIVE_NOT_START', 'live_not_start');
 define('ERROR_LIVE_NOT_ON', 'live_not_on');
+define('ERROR_SPEAKER_INTRO_TOO_SHORT', 'speaker_intro_too_short');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -239,6 +240,7 @@ define('KEY_COVER_URL', 'coverUrl');
 define('KEY_PREVIEW_URL', 'previewUrl');
 define('KEY_AMOUNT', 'amount');
 define('KEY_MAX_PEOPLE', 'maxPeople');
+define('KEY_SPEAKER_INTRO', 'speakerIntro');
 define('KEY_PLAN_TS', 'planTs');
 define('KEY_BEGIN_TS', 'beginTs');
 define('KEY_END_TS', 'endTs');

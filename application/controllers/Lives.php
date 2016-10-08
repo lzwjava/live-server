@@ -79,7 +79,8 @@ class Lives extends BaseController
 
     function update_post($liveId)
     {
-        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT, KEY_DETAIL, KEY_PLAN_TS, KEY_PREVIEW_URL);
+        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT,
+            KEY_DETAIL, KEY_PLAN_TS, KEY_PREVIEW_URL, KEY_SPEAKER_INTRO);
         if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
         ) {
             return;
@@ -174,6 +175,10 @@ class Lives extends BaseController
         }
         if ($live->status >= LIVE_STATUS_REVIEW) {
             $this->failure(ERROR_ALREADY_REVIEW);
+            return;
+        }
+        if (mb_strlen($live->speakerIntro) < 50) {
+            $this->failure(ERROR_SPEAKER_INTRO_TOO_SHORT);
             return;
         }
         $this->liveDao->setLiveReview($id);
