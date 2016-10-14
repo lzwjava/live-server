@@ -84,6 +84,7 @@ class LiveDao extends BaseDao
         $lvs = $this->getLives($liveIds, $user, $sortByPlanTs);
         foreach ($lvs as $lv) {
             unset($lv->detail);
+            unset($lv->speakerIntro);
         }
         return $lvs;
     }
