@@ -122,18 +122,19 @@ class LiveDao extends BaseDao
         return $this->getOneFromTable(TABLE_LIVES, KEY_RTMP_KEY, $key);
     }
 
-    private function electRtmpServer()
+    private function electHlsServer()
     {
-        $serverIps = array('live1.quzhiboapp.com', 'live2.quzhiboapp.com', 'live3.quzhiboapp.com');
-        $serverIp = random_element($serverIps);
-        return $serverIp;
+        return random_element(array('live1.quzhiboapp.com', 'live2.quzhiboapp.com'));
     }
 
     private function electFlvServer()
     {
-        $hosts = array('120.27.102.84:8080');
-        $host = random_element($hosts);
-        return $host;
+        return random_element(array('flv1.quzhiboapp.com:8080'));
+    }
+
+    private function electRtmpServer()
+    {
+        return random_element(array('rtmp1.quzhiboapp.com'));
     }
 
     private function calAmount($origin)
@@ -156,14 +157,15 @@ class LiveDao extends BaseDao
                 $live->canJoin = false;
                 unset($live->rtmpKey);
             } else {
+                $hlsHost = $this->electHlsServer();
                 $rtmpHost = $this->electRtmpServer();
                 $flvHost = $this->electFlvServer();
                 if ($userId == $live->ownerId) {
-                    $live->pushUrl = 'rtmp://cheerpush.quzhiboapp.com/live/' . $live->rtmpKey;
+                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
                 }
                 $live->videoUrl = 'http://video.quzhiboapp.com/' . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHost . '/live/' . $live->rtmpKey;
-                $live->hlsUrl = 'http://' . $rtmpHost . '/live/' . $live->rtmpKey . '.m3u8';
+                $live->hlsUrl = 'http://' . $hlsHost . '/live/' . $live->rtmpKey . '.m3u8';
                 $live->flvUrl = 'http://' . $flvHost . '/live/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
             }
