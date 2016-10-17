@@ -124,7 +124,8 @@ class LiveDao extends BaseDao
 
     private function electHlsServer()
     {
-        return random_element(array('live1.quzhiboapp.com', 'live2.quzhiboapp.com', 'live3.quzhiboapp.com'));
+        return random_element(array('live1.quzhiboapp.com', 'live2.quzhiboapp.com',
+            'live3.quzhiboapp.com', 'live4.quzhiboapp.com'));
     }
 
     private function electFlvServer()
