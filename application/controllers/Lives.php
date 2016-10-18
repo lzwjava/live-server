@@ -281,15 +281,22 @@ class Lives extends BaseController
             return;
         }
         $users = $this->liveDao->getAttendedUsers($liveId, 0, 1000000);
+        logInfo("users count" . count($users));
         $succeedCount = 0;
         foreach ($users as $user) {
-            usleep(1000 * 100);
-            $ok = $this->sms->notifyLiveStart($user->userId, $live);
-            if ($ok) {
-                $this->attendanceDao->updateToNotified($user->userId, $liveId);
-                $succeedCount++;
+            if ($user->notified == 0) {
+                logInfo("notified 0");
+                $ok = $this->sms->notifyLiveStart($user->userId, $live);
+                usleep(1000 * 10);
+                if ($ok) {
+                    $this->attendanceDao->updateToNotified($user->userId, $liveId);
+                    $succeedCount++;
+                }
+            } else {
+                logInfo("notified 1");
             }
         }
+        logInfo("finished " . $succeedCount . " total " . count($users));
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
     }
 

@@ -48,6 +48,21 @@ func TestQrcodes_scanWithLiveId(t *testing.T) {
 	assert.Equal(t, res.Get("data").MustString(), "{liveId:1}")
 }
 
+func TestQrcodes_duplicate(t *testing.T) {
+	c, _ := NewClientAndUser()
+
+	code := code()
+
+	res := c.getData("qrcodes/scanned", url.Values{"code": {code}})
+	assert.False(t, res.Get("scanned").MustBool())
+
+	res = c.postData("qrcodes", url.Values{"code": {code}, "type": {"1"}, "data": {"{liveId:1}"}})
+	assert.NotNil(t, res)
+
+	res = c.post("qrcodes", url.Values{"code": {code}, "type": {"1"}, "data": {"{liveId:1}"}})
+	assert.Equal(t, res.Get("status").MustString(), "qrcode_duplicate")
+}
+
 func TestQrcodes_gen(t *testing.T) {
 	c, _ := NewClientAndUser()
 	code := code()
