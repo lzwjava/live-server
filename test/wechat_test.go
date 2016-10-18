@@ -18,8 +18,20 @@ func TestWeChat_sign(t *testing.T) {
 
 func TestWeChat_oauth(t *testing.T) {
 	c, _ := NewClientAndUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"021xQP7S0WdvMc2NIY5S0aTP7S0xQP7F"}})
+	res := c.get("wechat/oauth", url.Values{"code": {"0013U0ps1XUkNq0Dtels17A0ps13U0pH"}})
 	assert.NotNil(t, res)
+}
+
+func TestWeChat_oauth_then_register(t *testing.T) {
+	c, _ := NewClientAndUser()
+	res := c.get("wechat/oauth", url.Values{"code": {"0211P1Ji0CVBhk1wdnJi0Bu2Ji01P1J8"}})
+	assert.NotNil(t, res)
+	if res.Get("status").MustString() == "success" {
+		result := res.Get("result")
+		res := c.postData("users/registerBySns", url.Values{"openId": {result.Get("openId").MustString()},
+			"platform": {"wechat"}, "mobilePhoneNumber": {randomMobile()}, "smsCode": {"5555"}})
+		assert.NotNil(t, res)
+	}
 }
 
 func insertSnsUser(userId string) {
@@ -40,8 +52,14 @@ func TestWeChat_registerBySns(t *testing.T) {
 }
 
 func TestWeChat_silentOauth(t *testing.T) {
+	c := NewClient()
+	c.get("wechat/silentOauth", url.Values{"code": {"021Lk67R0nLLPa2PbA7R0fFa7R0Lk670"}})
+}
+
+func TestWeChat_silentOauth_web(t *testing.T) {
 	c, _ := NewClientAndUser()
-	c.get("wechat/silentOauth", url.Values{"code": {"031zikUO0vadGf2h5bVO0gjjUO0zikUp"}})
+	c.get("wechat/silentOauth", url.Values{"code": {"011JMd6j2iZUcH0H0D7j2RKe6j2JMd6b"},
+		"type": {"web"}})
 }
 
 func TestWeChat_wxpay(t *testing.T) {

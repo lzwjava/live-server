@@ -162,3 +162,9 @@ CREATE TABLE `shares` (
 
 ALTER TABLE `lives` ADD COLUMN `speakerIntro` VARCHAR(1000) NOT NULL DEFAULT ''
 AFTER `maxPeople`;
+
+ALTER TABLE `sns_users` ADD COLUMN `unionId` VARCHAR(63) NOT NULL DEFAULT ''
+AFTER `openId`;
+
+ALTER TABLE `users` ADD COLUMN `unionId` VARCHAR(63) NOT NULL DEFAULT ''
+AFTER `avatarUrl`;

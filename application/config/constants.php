@@ -152,6 +152,10 @@ define('ERROR_GET_ACCESS_TOKEN', 'fail_get_access_token');
 define('ERROR_ILLEGAL_REQUEST', 'illegal_request');
 define('ERROR_WECHAT_ALREADY_REGISTER', 'wechat_already_register');
 define('ERROR_MUST_BIND_WECHAT', 'must_bind_wechat');
+define('ERROR_GET_UNION_ID', 'fail_get_union_id');
+define('ERROR_BIND_UNION_ID', 'fail_bind_union_id');
+define('ERROR_UNION_ID_EMPTY', 'union_id_empty');
+define('ERROR_UNION_ID_USER_NOT_EXISTS', 'union_id_user_not_exists');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -215,7 +219,11 @@ if (!function_exists('errorInfos')) {
             ERROR_USER_INFO_FAILED => '获取用户信息失败',
             ERROR_ILLEGAL_REQUEST => '非法的请求',
             ERROR_WECHAT_ALREADY_REGISTER => '微信早已注册,请退出并重新进入',
-            ERROR_MUST_BIND_WECHAT => '必须先绑定微信'
+            ERROR_MUST_BIND_WECHAT => '必须先绑定微信',
+            ERROR_GET_UNION_ID => '获取微信统一ID失败',
+            ERROR_BIND_UNION_ID => '绑定微信统一ID失败',
+            ERROR_UNION_ID_EMPTY => '微信统一ID不能为空,请退出并重新进入',
+            ERROR_UNION_ID_USER_NOT_EXISTS => '微信统一ID对应的用户不存在'
         );
     }
 
@@ -328,6 +336,7 @@ define('TYPE_WATCH', 1);
 define('TABLE_SNS_USERS', 'sns_users');
 define('KEY_SNS_USER_ID', 'snsUserId');
 define('KEY_OPEN_ID', 'openId');
+define('KEY_UNION_ID', 'unionId');
 define('KEY_PLATFORM', 'platform');
 define('PLATFORM_WECHAT', 'wechat');
 
@@ -368,6 +377,9 @@ define('ALIPAY_NOTIFY_URL', 'http://api.quzhiboapp.com/rewards/notify');
 define('WECHAT_APP_ID', 'wx7b5f277707699557');
 define('WECHAT_APP_SECRET', '3d85c980817fd92eac4530b3c0ce667a');
 define('WECHAT_MCHID', '1387703002');
+
+define('WEB_WECHAT_APP_ID', 'wxe80a6d2b5d54985c');
+define('WEB_WECHAT_APP_SECRET', 'd4b8c9b89e8786c54b6ea66cbfccc5a8');
 
 
 define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');

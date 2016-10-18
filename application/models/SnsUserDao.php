@@ -8,13 +8,14 @@
  */
 class SnsUserDao extends BaseDao
 {
-    function addSnsUser($openId, $username, $avatarUrl, $platform)
+    function addSnsUser($openId, $username, $avatarUrl, $platform, $unionId)
     {
         $data = array(
             KEY_OPEN_ID => $openId,
             KEY_USERNAME => $username,
             KEY_AVATAR_URL => $avatarUrl,
-            KEY_PLATFORM => $platform
+            KEY_PLATFORM => $platform,
+            KEY_UNION_ID => $unionId
         );
         $this->db->insert(TABLE_SNS_USERS, $data);
         return $this->db->insert_id();
@@ -29,10 +30,22 @@ class SnsUserDao extends BaseDao
         return $row;
     }
 
+    function getSnsUserByUnionId($unionId)
+    {
+        return $this->getOneFromTable(TABLE_SNS_USERS, KEY_UNION_ID, $unionId);
+    }
+
     function bindUser($openId, $platform, $userId)
     {
         $sql = "UPDATE sns_users SET userId=? WHERE openId=? AND platform=?";
         $binds = array($userId, $openId, $platform);
+        return $this->db->query($sql, $binds);
+    }
+
+    function bindUnionIdToSnsUser($openId, $platform, $unionId)
+    {
+        $sql = "UPDATE sns_users SET unionId=? WHERE openId=? AND platform=?";
+        $binds = array($unionId, $openId, $platform);
         return $this->db->query($sql, $binds);
     }
 

@@ -25,15 +25,15 @@ class UserDao extends BaseDao
         return $this->isUserUsed(KEY_MOBILE_PHONE_NUMBER, $mobilePhoneNumber);
     }
 
-    function insertUser($username, $mobilePhoneNumber, $avatarUrl, $password)
+    function insertUser($username, $mobilePhoneNumber, $avatarUrl, $unionId = '')
     {
 
         $data = array(
             KEY_USERNAME => $username,
-            KEY_PASSWORD => $password,
             KEY_MOBILE_PHONE_NUMBER => $mobilePhoneNumber,
             KEY_AVATAR_URL => $avatarUrl,
-            KEY_SESSION_TOKEN => $this->genSessionToken()
+            KEY_SESSION_TOKEN => $this->genSessionToken(),
+            KEY_UNION_ID => $unionId
         );
         $this->db->insert(TABLE_USERS, $data);
         return $this->db->insert_id();
@@ -77,6 +77,7 @@ class UserDao extends BaseDao
             KEY_MOBILE_PHONE_NUMBER,
             KEY_SESSION_TOKEN_CREATED,
             KEY_SESSION_TOKEN,
+            KEY_UNION_ID,
             KEY_CREATED,
             KEY_UPDATED,
         ));
@@ -91,6 +92,11 @@ class UserDao extends BaseDao
     function findPublicUserById($id)
     {
         return $this->findPublicUser(KEY_USER_ID, $id);
+    }
+
+    function findUserByUnionId($unionId)
+    {
+        return $this->findUser(KEY_UNION_ID, $unionId);
     }
 
     private function findActualUser($field, $value)
@@ -164,6 +170,13 @@ class UserDao extends BaseDao
         if ($result) {
             return $this->findUser(KEY_USER_ID, $user->userId);
         }
+    }
+
+    function bindUnionIdToUser($userId, $unionId)
+    {
+        $sql = "UPDATE users SET unionId=? WHERE userId=?";
+        $binds = array($unionId, $userId);
+        return $this->db->query($sql, $binds);
     }
 
     private function cleanUserFieldsForAll($user)

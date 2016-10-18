@@ -57,6 +57,7 @@ class Wechat extends BaseController
         $data = json_decode($respStr);
         if (isset($data->errcode)) {
             $result->error = $data->errmsg;
+            $result->errorcode = $data->errcode;
         } else {
             $result->error = null;
             $result->data = $data;
@@ -64,12 +65,41 @@ class Wechat extends BaseController
         return $result;
     }
 
-    private function httpGetAccessToken($code)
+    private function baseHttpGetAccessToken($code, $wechatAppId, $wechatSecret)
     {
-        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . WECHAT_APP_ID . '&secret=' .
-            WECHAT_APP_SECRET . '&grant_type=authorization_code&code=' . $code;
+        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $wechatAppId .
+            '&secret=' . $wechatSecret . '&grant_type=authorization_code&code=' . $code;
         $resp = $this->jsSdk->httpGet($url);
         return $this->parseResponse($resp);
+    }
+
+    private function httpGetUnionId($accessToken, $openId)
+    {
+        $url = 'https://api.weixin.qq.com/sns/userinfo?access_token=' . $accessToken .
+            '&openid=' . $openId;
+        $resp = $this->jsSdk->httpGet($url);
+        return $this->parseResponse($resp);
+    }
+
+    private function getUnionId($accessToken, $openId)
+    {
+        $unionResult = $this->httpGetUnionId($accessToken, $openId);
+        if (!$unionResult->error && $unionResult->data->unionid) {
+            return $unionResult->data->unionid;
+        } else {
+            logInfo("failed union result: " . json_encode($unionResult));
+            return null;
+        }
+    }
+
+    private function httpGetAccessToken($code)
+    {
+        return $this->baseHttpGetAccessToken($code, WECHAT_APP_ID, WECHAT_APP_SECRET);
+    }
+
+    private function webHttpGetAccessToken($code)
+    {
+        return $this->baseHttpGetAccessToken($code, WEB_WECHAT_APP_ID, WEB_WECHAT_APP_SECRET);
     }
 
     function oauth_get()
@@ -87,6 +117,7 @@ class Wechat extends BaseController
         $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
         if ($snsUser != null) {
             if ($snsUser->userId != 0) {
+                $this->userDao->setLoginByUserId($snsUser->userId);
                 $this->failure(ERROR_WECHAT_ALREADY_REGISTER);
                 return;
             }
@@ -99,7 +130,7 @@ class Wechat extends BaseController
             }
             $weUser = $userResp->data;
             $id = $this->snsUserDao->addSnsUser($weUser->openid, $weUser->nickname,
-                $weUser->headimgurl, PLATFORM_WECHAT);
+                $weUser->headimgurl, PLATFORM_WECHAT, $weUser->unionid);
             if (!$id) {
                 $this->failure(ERROR_SQL_WRONG);
                 return;
@@ -121,6 +152,62 @@ class Wechat extends BaseController
             return;
         }
         $respData = $tokenResult->data;
+        $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
+        $unionId = null;
+        if ($snsUser != null) {
+            if (!$snsUser->unionId) {
+                $unionId = $this->getUnionId($respData->access_token, $respData->openid);
+                if (!$unionId) {
+                    $this->failure(ERROR_GET_UNION_ID);
+                    return;
+                }
+                $binds = $this->snsUserDao->bindUnionIdToSnsUser($respData->openid,
+                    PLATFORM_WECHAT, $unionId);
+                if (!$binds) {
+                    $this->failure(ERROR_BIND_UNION_ID);
+                    return;
+                }
+                if ($snsUser->userId != 0) {
+                    $userBinds = $this->userDao->bindUnionIdToUser($snsUser->userId, $unionId);
+                    if (!$userBinds) {
+                        $this->failure(ERROR_SQL_WRONG);
+                        return;
+                    }
+                }
+            } else {
+                $unionId = $snsUser->unionId;
+            }
+        }
+
+        if ($unionId) {
+            $findUser = $this->userDao->findUserByUnionId($unionId);
+            if (!$findUser) {
+                $this->failure(ERROR_UNION_ID_USER_NOT_EXISTS);
+                return;
+            }
+            $user = $this->userDao->setLoginByUserId($findUser->userId);
+            $this->succeed($user);
+            return;
+        }
+
+        $this->succeed();
+    }
+
+    function webOauth_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE))) {
+            return;
+        }
+        $code = $this->get(KEY_CODE);
+        $tokenResult = $this->webHttpGetAccessToken($code);
+        if ($tokenResult->error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+            return;
+        }
+        $respData = $tokenResult->data;
+        logInfo("resp " . json_encode($respData));
+        $unionResult = $this->httpGetUnionId($respData->access_token, $respData->openid);
+        logInfo("union result: " . json_encode($unionResult));
         $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
         if ($snsUser != null) {
             if ($snsUser->userId != 0) {

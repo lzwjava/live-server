@@ -105,6 +105,7 @@ $route['wechat/sign']['GET'] = 'wechat/sign';
 $route['wechat/oauth']['GET'] = 'wechat/oauth';
 $route['wechat/silentOauth']['GET'] = 'wechat/silentOauth';
 $route['wechat/wxpayNotify']['GET'] = 'wechat/wxpayNotify';
+$route['wechat/webOauth']['GET'] = 'wechat/webOauth';
 
 // live hooks
 $route['liveHooks/onPublish']['POST'] = 'liveHooks/onPublish';
