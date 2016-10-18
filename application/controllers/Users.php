@@ -97,8 +97,7 @@ class Users extends BaseController
             return;
         } else {
             $defaultAvatarUrl = QINIU_FILE_HOST . "/defaultAvatar1.png";
-            $ok = $this->userDao->insertUser($username, $mobilePhoneNumber, $defaultAvatarUrl,
-                '');
+            $ok = $this->userDao->insertUser($username, $mobilePhoneNumber, $defaultAvatarUrl);
             if (!$ok) {
                 $this->failure(ERROR_SQL_WRONG);
                 return;
@@ -152,7 +151,11 @@ class Users extends BaseController
             $this->failure(ERROR_USERNAME_TAKEN);
             return;
         }
-        $userId = $this->userDao->insertUser($newUsername, $mobile, $imageUrl, '');
+        if (!$snsUser->unionId) {
+            $this->failure(ERROR_UNION_ID_EMPTY);
+            return;
+        }
+        $userId = $this->userDao->insertUser($newUsername, $mobile, $imageUrl, $snsUser->unionId);
         if (!$userId) {
             $this->failure(ERROR_SQL_WRONG);
             return;
