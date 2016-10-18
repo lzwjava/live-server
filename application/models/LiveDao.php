@@ -267,7 +267,7 @@ class LiveDao extends BaseDao
     function getAttendedUsers($liveId, $skip, $limit)
     {
         $fields = $this->userPublicFields('u');
-        $sql = "SELECT $fields from attendances as a
+        $sql = "SELECT $fields,a.notified from attendances as a
                left join users as u on u.userId = a.userId
                where a.liveId=? order by a.created desc
                limit $limit OFFSET $skip";

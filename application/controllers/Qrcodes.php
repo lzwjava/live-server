@@ -47,6 +47,11 @@ class Qrcodes extends BaseController
         if (!$user) {
             return;
         }
+        $qrcode = $this->qrcodeDao->getQrcode($code);
+        if ($qrcode) {
+            $this->failure(ERROR_QRCODE_DUPLICATE);
+            return;
+        }
         $id = $this->qrcodeDao->addQrcode($code, $type, $user->userId, $data);
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
