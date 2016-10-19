@@ -167,15 +167,18 @@ class Wechat extends BaseController
                     $this->failure(ERROR_BIND_UNION_ID);
                     return;
                 }
-                if ($snsUser->userId != 0) {
+            } else {
+                $unionId = $snsUser->unionId;
+            }
+            if ($snsUser->userId != 0) {
+                $unionUser = $this->userDao->findUserByUnionId($unionId);
+                if (!$unionUser) {
                     $userBinds = $this->userDao->bindUnionIdToUser($snsUser->userId, $unionId);
                     if (!$userBinds) {
                         $this->failure(ERROR_SQL_WRONG);
                         return;
                     }
                 }
-            } else {
-                $unionId = $snsUser->unionId;
             }
         }
 
