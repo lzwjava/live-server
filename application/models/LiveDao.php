@@ -130,7 +130,7 @@ class LiveDao extends BaseDao
 
     private function electFlvServer()
     {
-        return random_element(array('flv1.quzhiboapp.com:8080'));
+        return random_element(array('flv1.quzhiboapp.com:8080', 'flv2.quzhiboapp.com:8080'));
     }
 
     private function electRtmpServer()
