@@ -156,6 +156,8 @@ define('ERROR_GET_UNION_ID', 'fail_get_union_id');
 define('ERROR_BIND_UNION_ID', 'fail_bind_union_id');
 define('ERROR_UNION_ID_EMPTY', 'union_id_empty');
 define('ERROR_UNION_ID_USER_NOT_EXISTS', 'union_id_user_not_exists');
+define('ERROR_SNS_USER_NOT_EXISTS', 'sns_user_not_exists');
+define('ERROR_GET_USER_INFO', 'fail_get_user_info');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -223,7 +225,9 @@ if (!function_exists('errorInfos')) {
             ERROR_GET_UNION_ID => '获取微信统一ID失败',
             ERROR_BIND_UNION_ID => '绑定微信统一ID失败',
             ERROR_UNION_ID_EMPTY => '微信统一ID不能为空,请退出并重新进入',
-            ERROR_UNION_ID_USER_NOT_EXISTS => '微信统一ID对应的用户不存在'
+            ERROR_UNION_ID_USER_NOT_EXISTS => '微信统一ID对应的用户不存在',
+            ERROR_SNS_USER_NOT_EXISTS => '请先关注「平方根平台」公众号, 并点击一个直播在手机端注册',
+            ERROR_GET_USER_INFO => '获取微信用户信息失败'
         );
     }
 

@@ -35,10 +35,10 @@ func TestWeChat_oauth_then_register(t *testing.T) {
 }
 
 func insertSnsUser(userId string) {
-	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId) values('%s','%s','%s','%s', '%s')",
+	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
 		"ol0AFwFe5jFoXcQby4J7AWJaWXIM", "李智维",
 		"http://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
-		"wechat", userId)
+		"wechat", userId, "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
 	runSql(sql, false)
 }
 
@@ -58,8 +58,12 @@ func TestWeChat_silentOauth(t *testing.T) {
 
 func TestWeChat_silentOauth_web(t *testing.T) {
 	c, _ := NewClientAndUser()
-	c.get("wechat/silentOauth", url.Values{"code": {"011JMd6j2iZUcH0H0D7j2RKe6j2JMd6b"},
-		"type": {"web"}})
+	c.get("wechat/silentOauth", url.Values{"code": {"011JMd6j2iZUcH0H0D7j2RKe6j2JMd6b"}})
+}
+
+func TestWeChat_webOauth(t *testing.T) {
+	c := NewClient()
+	c.get("wechat/webOauth", url.Values{"code": {"041SrCk916g2MS1RrKn91zbCk91SrCk6"}})
 }
 
 func TestWeChat_wxpay(t *testing.T) {

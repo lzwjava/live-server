@@ -208,18 +208,21 @@ class Wechat extends BaseController
             return;
         }
         $respData = $tokenResult->data;
-        logInfo("resp " . json_encode($respData));
-        $unionResult = $this->httpGetUnionId($respData->access_token, $respData->openid);
-        logInfo("union result: " . json_encode($unionResult));
-        $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
-        if ($snsUser != null) {
-            if ($snsUser->userId != 0) {
-                $user = $this->userDao->setLoginByUserId($snsUser->userId);
-                $this->succeed($user);
-                return;
-            }
+        $unionResp = $this->httpGetUnionId($respData->access_token, $respData->openid);
+        if ($unionResp->error) {
+            $this->failure(ERROR_GET_USER_INFO);
+            return;
         }
-        $this->succeed();
+        $unionResult = $unionResp->data;
+        // logInfo("union data:" . json_encode($unionResp));
+        $unionId = $unionResult->unionid;
+        $snsUser = $this->snsUserDao->getSnsUserByUnionId($unionId);
+        if (!$snsUser || !$snsUser->userId) {
+            $this->failure(ERROR_SNS_USER_NOT_EXISTS);
+            return;
+        }
+        $user = $this->userDao->setLoginByUserId($snsUser->userId);
+        $this->succeed($user);
     }
 
     function wxpayNotify_post()
