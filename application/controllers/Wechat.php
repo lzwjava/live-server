@@ -184,13 +184,13 @@ class Wechat extends BaseController
 
         if ($unionId) {
             $findUser = $this->userDao->findUserByUnionId($unionId);
-            if (!$findUser) {
-                $this->failure(ERROR_UNION_ID_USER_NOT_EXISTS);
+            if ($findUser) {
+                $user = $this->userDao->setLoginByUserId($findUser->userId);
+                $this->succeed($user);
                 return;
+            } else {
+                // 有的用户微信登录了,但没绑定手机
             }
-            $user = $this->userDao->setLoginByUserId($findUser->userId);
-            $this->succeed($user);
-            return;
         }
 
         $this->succeed();
