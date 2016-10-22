@@ -81,7 +81,7 @@ class Users extends BaseController
 
     public function register_post()
     {
-        if ($this->checkIfParamsNotExist($_POST, array(KEY_USERNAME, KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_USERNAME, KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))
         ) {
             return;
         }
