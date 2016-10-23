@@ -133,4 +133,9 @@ response:
 curl -X GET http://localhost:3005/lives/me map[]
 
 
+## wechat/bind
+
+绑定微信
+
+curl -X GET http://localhost:3005/wechat/bind map[code:[021mZiQa0Ralxu1L7kNa0RgeQa0mZiQP]]
 
