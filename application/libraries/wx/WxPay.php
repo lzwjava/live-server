@@ -19,7 +19,6 @@ class WxPay
 
     private function baseCreateCharge($orderNo, $amount, $subject, $body, $openId, $tradeType)
     {
-        $tools = new JsApiPay();
         $input = new WxPayUnifiedOrder();
         $input->SetBody($subject);
         $input->SetDetail($body);
@@ -32,13 +31,14 @@ class WxPay
         $input->SetNotify_url("http://api.quzhiboapp.com/wechat/wxpayNotify");
         $input->SetTrade_type($tradeType);
         if ($tradeType == "JSAPI") {
+            $tools = new JsApiPay();
             $input->SetOpenid($openId);
-            $order = WxPayApi::unifiedOrder($input);
+            $order = WxPayApi::unifiedOrder($input, 15);
             $jsApiParameters = $tools->GetJsApiParameters($order);
             return $jsApiParameters;
         } else {
             $input->SetProduct_id($orderNo);
-            $order = WxPayApi::unifiedOrder($input);
+            $order = WxPayApi::unifiedOrder($input, 15);
             // logInfo("order: " . json_encode($order));
             return array("code_url" => $order["code_url"]);
         }
