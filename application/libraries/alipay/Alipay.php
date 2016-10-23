@@ -25,7 +25,7 @@ class Alipay
         return get_instance()->config->item('alipay');
     }
 
-    function createCharge($orderNo, $channel, $amount, $subject, $body)
+    function createCharge($orderNo, $amount, $subject, $body)
     {
         $alipay_config = $this->alipayConfig();
         $partner = $alipay_config['partner'];

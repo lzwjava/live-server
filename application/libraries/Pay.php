@@ -25,9 +25,11 @@ class Pay
     function createCharge($orderNo, $channel, $amount, $subject, $body, $openId)
     {
         if ($channel == CHANNEL_ALIPAY_APP) {
-            return $this->alipay->createCharge($orderNo, $channel, $amount, $subject, $body);
+            return $this->alipay->createCharge($orderNo, $amount, $subject, $body);
         } else if ($channel == CHANNEL_WECHAT_H5) {
-            return $this->wxpay->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
+            return $this->wxpay->createCharge($orderNo, $amount, $subject, $body, $openId);
+        } else if ($channel == CHANNEL_WECHAT_QRCODE) {
+            return $this->wxpay->createQrcodeCharge($orderNo, $amount, $subject, $body);
         }
         return null;
     }

@@ -34,24 +34,27 @@ func TestWeChat_oauth_then_register(t *testing.T) {
 	}
 }
 
+func deleteSnsUser() {
+	deleteSql := fmt.Sprintf("delete from users where unionId='%s'", "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
+	runSql(deleteSql, true)
+	deleteSql2 := fmt.Sprintf("delete from sns_users where unionId='%s'", "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
+	runSql(deleteSql2, false)
+}
+
 func insertSnsUser(userId string) {
+	deleteSnsUser()
 	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
 		"ol0AFwFe5jFoXcQby4J7AWJaWXIM", "李智维",
 		"http://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
 		"wechat", userId, "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
 	runSql(sql, false)
-}
 
-func deleteSnsUser() {
-	deleteSql := fmt.Sprintf("delete from users where unionId='%s'", "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
-	runSql(deleteSql, false)
-	deleteSql2 := fmt.Sprintf("delete from sns_users where unionId='%s'", "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
-	runSql(deleteSql2, false)
+	updateSql := fmt.Sprintf("update users set unionId='%s' where userId='%s'", "oFRlVwXY7GkRhpKyfjvTo6oW7kw8", userId)
+	runSql(updateSql, false)
 }
 
 func TestWeChat_registerBySns(t *testing.T) {
 	c := NewClient()
-	deleteSnsUser()
 	insertSnsUser("0")
 	res := c.postData("users/registerBySns", url.Values{"openId": {"ol0AFwFe5jFoXcQby4J7AWJaWXIM"},
 		"platform": {"wechat"}, "mobilePhoneNumber": {randomMobile()}, "smsCode": {"5555"}})
