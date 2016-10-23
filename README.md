@@ -139,3 +139,4 @@ curl -X GET http://localhost:3005/lives/me map[]
 
 curl -X GET http://localhost:3005/wechat/bind map[code:[021mZiQa0Ralxu1L7kNa0RgeQa0mZiQP]]
 
+绑定成功，user 字段中会带有一个 `unionId`。
