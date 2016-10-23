@@ -102,6 +102,11 @@ class Wechat extends BaseController
         return $this->baseHttpGetAccessToken($code, WEB_WECHAT_APP_ID, WEB_WECHAT_APP_SECRET);
     }
 
+    private function appHttpGetAccessToken($code)
+    {
+        return $this->baseHttpGetAccessToken($code, MOBILE_WECHAT_APP_ID, MOBILE_WECHAT_APP_SECRET);
+    }
+
     function oauth_get()
     {
         if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE))) {
@@ -223,6 +228,46 @@ class Wechat extends BaseController
         }
         $user = $this->userDao->setLoginByUserId($snsUser->userId);
         $this->succeed($user);
+    }
+
+    function bind_get()
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE))) {
+            return;
+        }
+        $code = $this->get(KEY_CODE);
+        $tokenResult = $this->appHttpGetAccessToken($code);
+        if ($tokenResult->error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+            return;
+        }
+        $respData = $tokenResult->data;
+        $unionResp = $this->httpGetUnionId($respData->access_token, $respData->openid);
+        if ($unionResp->error) {
+            $this->failure(ERROR_GET_USER_INFO);
+            return;
+        }
+        $unionResult = $unionResp->data;
+        $unionId = $unionResult->unionid;
+        $snsUser = $this->snsUserDao->getSnsUser($unionResult->openid, PLATFORM_WECHAT_APP);
+        if ($snsUser) {
+            $this->failure(ERROR_WECHAT_ALREADY_BIND);
+            return;
+        }
+        $this->db->trans_start();
+        $this->snsUserDao->addSnsUser($unionResult->openid, $unionResult->nickname,
+            $unionResult->headimgurl, PLATFORM_WECHAT_APP, $unionId, $user->userId);
+        $this->userDao->bindUnionIdToUser($user->userId, $unionId);
+        $this->db->trans_complete();
+        if (!$this->db->trans_status()) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->succeed();
     }
 
     function wxpayNotify_post()

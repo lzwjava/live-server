@@ -168,3 +168,11 @@ AFTER `openId`;
 
 ALTER TABLE `users` ADD COLUMN `unionId` VARCHAR(63) NOT NULL DEFAULT ''
 AFTER `avatarUrl`;
+
+ALTER TABLE `users` MODIFY COLUMN `unionId` VARCHAR(63);
+
+UPDATE users
+SET unionId = NULL
+WHERE unionId = '';
+
+ALTER TABLE `users` ADD UNIQUE KEY `UNION_ID_IDX` (`unionId`);

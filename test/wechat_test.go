@@ -42,8 +42,16 @@ func insertSnsUser(userId string) {
 	runSql(sql, false)
 }
 
+func deleteSnsUser() {
+	deleteSql := fmt.Sprintf("delete from users where unionId='%s'", "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
+	runSql(deleteSql, false)
+	deleteSql2 := fmt.Sprintf("delete from sns_users where unionId='%s'", "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
+	runSql(deleteSql2, false)
+}
+
 func TestWeChat_registerBySns(t *testing.T) {
 	c := NewClient()
+	deleteSnsUser()
 	insertSnsUser("0")
 	res := c.postData("users/registerBySns", url.Values{"openId": {"ol0AFwFe5jFoXcQby4J7AWJaWXIM"},
 		"platform": {"wechat"}, "mobilePhoneNumber": {randomMobile()}, "smsCode": {"5555"}})
@@ -64,6 +72,13 @@ func TestWeChat_silentOauth_web(t *testing.T) {
 func TestWeChat_webOauth(t *testing.T) {
 	c := NewClient()
 	c.get("wechat/webOauth", url.Values{"code": {"041SrCk916g2MS1RrKn91zbCk91SrCk6"}})
+}
+
+func TestWeChat_bind(t *testing.T) {
+	c, _ := NewClientAndUser()
+	deleteSnsUser()
+	res := c.get("wechat/bind", url.Values{"code": {"021mZiQa0Ralxu1L7kNa0RgeQa0mZiQP"}})
+	assert.NotNil(t, res)
 }
 
 func TestWeChat_wxpay(t *testing.T) {
