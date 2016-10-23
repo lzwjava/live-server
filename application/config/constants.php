@@ -303,6 +303,7 @@ define('KEY_CREATOR_IP', 'creatorIP');
 define('KEY_META_DATA', 'metaData');
 define('KEY_CHANNEL', 'channel');
 define('CHANNEL_WECHAT_H5', 'wechat_h5');
+define('CHANNEL_WECHAT_QRCODE', 'wechat_qrcode');
 define('CHANNEL_ALIPAY_APP', 'alipay_app');
 
 // attendances

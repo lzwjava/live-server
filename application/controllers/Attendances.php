@@ -66,7 +66,7 @@ class Attendances extends BaseController
         }
         $openId = null;
         if ($channel == CHANNEL_WECHAT_H5) {
-            $snsUser = $this->snsUserDao->getSnsUserByUserId($user->userId);
+            $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);
             if (!$snsUser) {
                 $this->failure(ERROR_MUST_BIND_WECHAT);
                 return;

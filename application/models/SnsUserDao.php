@@ -50,9 +50,11 @@ class SnsUserDao extends BaseDao
         return $this->db->query($sql, $binds);
     }
 
-    function getSnsUserByUserId($userId)
+    function getWechatSnsUser($unionId)
     {
-        return $this->getOneFromTable(TABLE_SNS_USERS, KEY_USER_ID, $userId);
+        $sql = "SELECT * FROM sns_users WHERE unionId=? AND platform=?";
+        $binds = array($unionId, PLATFORM_WECHAT);
+        return $this->db->query($sql, $binds)->row();
     }
 
 }
