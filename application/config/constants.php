@@ -159,6 +159,8 @@ define('ERROR_UNION_ID_EMPTY', 'union_id_empty');
 define('ERROR_UNION_ID_USER_NOT_EXISTS', 'union_id_user_not_exists');
 define('ERROR_SNS_USER_NOT_EXISTS', 'sns_user_not_exists');
 define('ERROR_GET_USER_INFO', 'fail_get_user_info');
+define('ERROR_BIND_UNION_ID_TO_USER', 'fail_bind_union_id_to_user');
+define('ERROR_WECHAT_ALREADY_BIND', 'wechat_already_bind');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -229,7 +231,9 @@ if (!function_exists('errorInfos')) {
             ERROR_UNION_ID_EMPTY => '微信统一ID不能为空,请退出并重新进入',
             ERROR_UNION_ID_USER_NOT_EXISTS => '微信统一ID对应的用户不存在',
             ERROR_SNS_USER_NOT_EXISTS => '请先关注「平方根平台」公众号, 并点击一个直播在手机端注册',
-            ERROR_GET_USER_INFO => '获取微信用户信息失败'
+            ERROR_GET_USER_INFO => '获取微信用户信息失败',
+            ERROR_BIND_UNION_ID_TO_USER => '无法绑定微信统一ID到用户',
+            ERROR_WECHAT_ALREADY_BIND => '微信已经绑定过了,无需重复绑定'
         );
     }
 
@@ -345,6 +349,7 @@ define('KEY_OPEN_ID', 'openId');
 define('KEY_UNION_ID', 'unionId');
 define('KEY_PLATFORM', 'platform');
 define('PLATFORM_WECHAT', 'wechat');
+define('PLATFORM_WECHAT_APP', 'wechat_app');
 
 // states
 define('TABLE_STATES', 'states');
@@ -386,6 +391,9 @@ define('WECHAT_MCHID', '1387703002');
 
 define('WEB_WECHAT_APP_ID', 'wxe80a6d2b5d54985c');
 define('WEB_WECHAT_APP_SECRET', 'd4b8c9b89e8786c54b6ea66cbfccc5a8');
+
+define('MOBILE_WECHAT_APP_ID', 'wxcc3f309821d8cab5');
+define('MOBILE_WECHAT_APP_SECRET', 'eb4b16d73322bd06e41db5eda8549400');
 
 
 define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');

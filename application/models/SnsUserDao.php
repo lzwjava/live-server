@@ -8,14 +8,15 @@
  */
 class SnsUserDao extends BaseDao
 {
-    function addSnsUser($openId, $username, $avatarUrl, $platform, $unionId)
+    function addSnsUser($openId, $username, $avatarUrl, $platform, $unionId, $userId = 0)
     {
         $data = array(
             KEY_OPEN_ID => $openId,
             KEY_USERNAME => $username,
             KEY_AVATAR_URL => $avatarUrl,
             KEY_PLATFORM => $platform,
-            KEY_UNION_ID => $unionId
+            KEY_UNION_ID => $unionId,
+            KEY_USER_ID => $userId
         );
         $this->db->insert(TABLE_SNS_USERS, $data);
         return $this->db->insert_id();

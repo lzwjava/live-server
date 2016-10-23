@@ -25,7 +25,7 @@ class UserDao extends BaseDao
         return $this->isUserUsed(KEY_MOBILE_PHONE_NUMBER, $mobilePhoneNumber);
     }
 
-    function insertUser($username, $mobilePhoneNumber, $avatarUrl, $unionId = '')
+    function insertUser($username, $mobilePhoneNumber, $avatarUrl, $unionId = null)
     {
 
         $data = array(
