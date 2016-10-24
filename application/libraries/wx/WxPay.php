@@ -54,4 +54,20 @@ class WxPay
         return $this->baseCreateCharge($orderNo, $amount, $subject, $body, null, "NATIVE");
     }
 
+    function refund($charge)
+    {
+        $out_trade_no = $charge->orderNo;
+        $total_fee = $charge->amount;
+        $refund_fee = $charge->amount;
+        $input = new WxPayRefund();
+        $input->SetOut_trade_no($out_trade_no);
+        $input->SetTotal_fee($total_fee);
+        $input->SetRefund_fee($refund_fee);
+        $input->SetOut_refund_no(WxPayConfig::MCHID . date("YmdHis"));
+        $input->SetOp_user_id(WxPayConfig::MCHID);
+        $refundResult = WxPayApi::refund($input, 30);
+        logInfo("refundResult: " . json_encode($refundResult));
+        return $refundResult;
+    }
+
 }

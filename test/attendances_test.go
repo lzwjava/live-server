@@ -144,6 +144,14 @@ func createAttendance(c *Client, liveId string) {
 	c.postWithStr("rewards/notify", callbackStr)
 }
 
+func createWechatAttendance(c *Client, liveId string) {
+	c.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
+	orderNo := getLastOrderNo()
+	callbackStr := wechatCallbackStr(orderNo)
+	callbackRes := c.postWithStr("wechat/wxpayNotify", callbackStr)
+	fmt.Println("callbackRes:" + callbackRes)
+}
+
 func callbackStr(orderNo string) string {
 	const jsonStream = `discount=0.00&payment_type=1&subject=15245参加直播92&trade_no=2016082521001004950207073962
 	&buyer_email=lzwjava@gmail.com&gmt_create=2016-08-25
@@ -236,4 +244,17 @@ func TestAttendances_attendanceId(t *testing.T) {
 
 	live := getLive(c2, liveId)
 	assert.NotEqual(t, live.Get("attendanceId").MustInt(), 0)
+}
+
+func TestAttendances_refund(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, userId := NewClientAndUser()
+	insertSnsUser(userId)
+	createWechatAttendance(c2, liveId)
+
+	c.admin = true
+	res := c.getData("attendances/refund/"+liveId, url.Values{})
+	assert.NotNil(t, res)
 }

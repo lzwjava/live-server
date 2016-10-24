@@ -144,4 +144,20 @@ class Attendances extends BaseController
         $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, $skip, $limit);
         $this->succeed($attendances);
     }
+
+    function refund_get($liveId)
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, 0, 10000);
+        foreach ($attendances as $attendance) {
+            if ($attendance->userId == 1) {
+                $charge = $this->chargeDao->getOneByOrderNo($attendance->orderNo);
+                $this->pay->refund($charge);
+            }
+        }
+        $this->succeed();
+    }
+
 }
