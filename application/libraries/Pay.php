@@ -33,4 +33,13 @@ class Pay
         }
         return null;
     }
+
+    function refund($charge)
+    {
+        if ($charge->channel == CHANNEL_WECHAT_H5) {
+            return $this->wxpay->refund($charge);
+        } else {
+            logInfo("do not support refund " . json_encode($charge));
+        }
+    }
 }
