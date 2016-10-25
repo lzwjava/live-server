@@ -150,7 +150,7 @@ class Attendances extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-        $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, 0, 10000);
+        $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, 30, 10000);
         foreach ($attendances as $attendance) {
             if ($attendance->userId == 1) {
                 $charge = $this->chargeDao->getOneByOrderNo($attendance->orderNo);
