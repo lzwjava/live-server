@@ -12,6 +12,7 @@ class Lives extends BaseController
     public $statusDao;
     public $sms;
     public $attendanceDao;
+    public $weChatPlatform;
 
     function __construct()
     {
@@ -24,6 +25,8 @@ class Lives extends BaseController
         $this->sms = new Sms();
         $this->load->model(AttendanceDao::class);
         $this->attendanceDao = new AttendanceDao();
+        $this->load->library(WeChatPlatform::class);
+        $this->weChatPlatform = new WeChatPlatform();
     }
 
     protected function checkIfAmountWrong($amount)
@@ -268,6 +271,13 @@ class Lives extends BaseController
 
     function notifyLiveStart_get($liveId)
     {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_TYPE))) {
+            return;
+        }
+        $type = $this->get(KEY_TYPE);
+        if ($this->checkIfNotInArray($type, array(NOTIFY_TYPE_SMS, NOTIFY_TYPE_WECHAT))) {
+            return;
+        }
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
@@ -284,21 +294,35 @@ class Lives extends BaseController
         logInfo("users count" . count($users));
         $succeedCount = 0;
         foreach ($users as $user) {
-            if ($user->notified == 0) {
-                logInfo("notified 0");
-                $ok = $this->sms->notifyLiveStart($user->userId, $live);
-                usleep(1000 * 100);
-                if ($ok) {
-                    $this->attendanceDao->updateToNotified($user->userId, $liveId);
-                    $succeedCount++;
+            if ($type == NOTIFY_TYPE_SMS) {
+                if ($user->notified == 0) {
+                    logInfo("notified 0");
+                    $ok = $this->sms->notifyLiveStart($user->userId, $live);
+                    usleep(1000 * 100);
+                    if ($ok) {
+                        $this->attendanceDao->updateToNotified($user->userId, $live->liveId);
+                        $succeedCount++;
+                    }
+                } else {
+                    logInfo("notified 1");
                 }
             } else {
-                logInfo("notified 1");
+                if ($user->wechatNotified == 0) {
+                    logInfo("wechat notified 0");
+                    $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live);
+                    if ($ok) {
+                        $this->attendanceDao->updateToWeChatNotified($user->userId, $live->liveId);
+                        $succeedCount++;
+                    }
+                } else {
+                    logInfo("wechatNotified already 1");
+                }
             }
         }
         logInfo("finished " . $succeedCount . " total " . count($users));
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
     }
+
 
     function notifyOneUser_get($liveId)
     {

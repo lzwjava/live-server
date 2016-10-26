@@ -311,6 +311,7 @@ define('TABLE_ATTENDANCES', 'attendances');
 define('KEY_ATTENDANCE_ID', 'attendanceId');
 define('KEY_ATTENDANCE_COUNT', 'attendanceCount');
 define('KEY_NOTIFIED', 'notified');
+define('KEY_WECHAT_NOTIFIED', 'wechatNotified');
 
 // transactions
 define('TABLE_TRANSACTIONS', 'transactions');
@@ -401,6 +402,8 @@ define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');
 define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
 define('QINIU_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');
 
+define('WECHAT_TOKEN', 'mLYmAdMrVkKO');
+
 define('KEY_URL', 'url');
 
 // live hooks
@@ -409,6 +412,8 @@ define('KEY_ACTION', 'action');
 
 define('KEY_TEXT', 'text');
 
+define('NOTIFY_TYPE_SMS', 'sms');
+define('NOTIFY_TYPE_WECHAT', 'wechat');
 
 if (!function_exists('specialPhones')) {
     function specialPhones()

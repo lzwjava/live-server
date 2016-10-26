@@ -67,7 +67,7 @@ class JSSDK
         }
     }
 
-    private function getAccessToken()
+    function getAccessToken()
     {
         // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
         $accessToken = $this->wxDao->getAccessToken();
