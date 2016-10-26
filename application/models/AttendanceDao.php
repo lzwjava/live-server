@@ -86,4 +86,11 @@ class AttendanceDao extends BaseDao
         return $this->db->query($sql, $binds);
     }
 
+    function updateToWeChatNotified($userId, $liveId)
+    {
+        $binds = array($userId, $liveId);
+        $sql = "UPDATE attendances SET wechatNotified = 1 WHERE userId=? AND liveId=?";
+        return $this->db->query($sql, $binds);
+    }
+
 }

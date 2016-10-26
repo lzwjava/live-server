@@ -96,3 +96,15 @@ func TestWeChat_wxpayNotify(t *testing.T) {
 	// res := c.post("wechat/wxpayNotify", url.Values{})
 	// assert.NotNil(t, res)
 }
+
+func TestWeChat_valid(t *testing.T) {
+	c := NewClient()
+	res := c.get("wechat/valid", url.Values{})
+	assert.NotNil(t, res)
+}
+
+func TestWeChat_sendTmplMsg(t *testing.T) {
+	c := NewClient()
+	res := c.getData("wechat/sendTmplMsg", url.Values{})
+	assert.NotNil(t, res)
+}

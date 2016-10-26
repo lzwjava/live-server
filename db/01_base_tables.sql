@@ -176,3 +176,6 @@ SET unionId = NULL
 WHERE unionId = '';
 
 ALTER TABLE `users` ADD UNIQUE KEY `UNION_ID_IDX` (`unionId`);
+
+ALTER TABLE `attendances`  ADD `wechatNotified` TINYINT(2) NOT NULL DEFAULT 0
+AFTER `notified`;

@@ -222,6 +222,16 @@ func createLiveAndAttendance() (*Client, *Client, string, string) {
 	return c, c2, u2, liveId
 }
 
+func createLiveAndWeChatAttendance() (*Client, *Client, string, string) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, u2 := NewClientAndUser()
+	insertSnsUser(u2)
+	createWechatAttendance(c2, liveId)
+	return c, c2, u2, liveId
+}
+
 func TestLives_attendedUsers(t *testing.T) {
 	_, c2, _, liveId := createLiveAndAttendance()
 	res := c2.getData("lives/"+liveId+"/users", url.Values{})
@@ -231,7 +241,14 @@ func TestLives_attendedUsers(t *testing.T) {
 
 func TestLives_notify(t *testing.T) {
 	c, _, _, liveId := createLiveAndAttendance()
-	res := c.getData("lives/"+liveId+"/notify", url.Values{})
+	res := c.getData("lives/"+liveId+"/notify", url.Values{"type": {"sms"}})
+	assert.NotNil(t, res)
+	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
+}
+
+func TestLives_notifyByWeChat(t *testing.T) {
+	c, _, _, liveId := createLiveAndWeChatAttendance()
+	res := c.getData("lives/"+liveId+"/notify", url.Values{"type": {"wechat"}})
 	assert.NotNil(t, res)
 	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
 }

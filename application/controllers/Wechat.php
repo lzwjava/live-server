@@ -275,4 +275,74 @@ class Wechat extends BaseController
         $this->notify->Handle(false);
     }
 
+    function valid_get()
+    {
+        $echoStr = $this->get('echostr');
+
+        logInfo("wechat valid get str: " . json_encode($this->get()));
+
+        //valid signature , option
+        if ($this->checkSignature()) {
+            echo $echoStr;
+            exit;
+        }
+        $this->succeed();
+    }
+
+    function responseMsg()
+    {
+        //get post data, May be due to the different environments
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+
+        //extract post data
+        if (!empty($postStr)) {
+
+            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $fromUsername = $postObj->FromUserName;
+            $toUsername = $postObj->ToUserName;
+            $keyword = trim($postObj->Content);
+            $time = time();
+            $textTpl = "<xml>
+							<ToUserName><![CDATA[%s]]></ToUserName>
+							<FromUserName><![CDATA[%s]]></FromUserName>
+							<CreateTime>%s</CreateTime>
+							<MsgType><![CDATA[%s]]></MsgType>
+							<Content><![CDATA[%s]]></Content>
+							<FuncFlag>0</FuncFlag>
+							</xml>";
+            if (!empty($keyword)) {
+                $msgType = "text";
+                $contentStr = "Welcome to wechat world!";
+                $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
+                echo $resultStr;
+            } else {
+                echo "Input something...";
+            }
+
+        } else {
+            echo "";
+            exit;
+        }
+    }
+
+    function checkSignature()
+    {
+        $signature = $this->get('signature');
+        $timestamp = $this->get('timestamp');
+        $nonce = $this->get('nonce');
+
+        $token = WECHAT_TOKEN;
+        $tmpArr = array($token, $timestamp, $nonce);
+        sort($tmpArr);
+        $tmpStr = implode($tmpArr);
+        $tmpStr = sha1($tmpStr);
+
+        if ($tmpStr == $signature) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
