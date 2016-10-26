@@ -91,6 +91,7 @@ class Users extends BaseController
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
         } elseif ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
+            logInfo("mobilePhone is used: " . $mobilePhoneNumber);
             $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
             return;
         } else if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
@@ -134,6 +135,7 @@ class Users extends BaseController
         $platform = $this->post(KEY_PLATFORM);
         $smsCode = $this->post(KEY_SMS_CODE);
         if ($this->userDao->isMobilePhoneNumberUsed($mobile)) {
+            logInfo("mobilePhone is used: " . $mobile);
             $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
             return;
         }
