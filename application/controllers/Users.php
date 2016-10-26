@@ -85,6 +85,10 @@ class Users extends BaseController
         ) {
             return;
         }
+        if (!isDebug()) {
+            $this->failure(ERROR_NOT_ALLOW_APP_REGISTER);
+            return;
+        }
         $mobilePhoneNumber = $_POST[KEY_MOBILE_PHONE_NUMBER];
         $username = $_POST[KEY_USERNAME];
         $smsCode = $_POST[KEY_SMS_CODE];

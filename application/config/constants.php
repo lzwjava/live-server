@@ -182,7 +182,7 @@ if (!function_exists('errorInfos')) {
             ERROR_MOBILE_PHONE_NUMBER_TAKEN => "手机号已被占用",
             ERROR_QINIU_UPLOAD => '七牛上传图片出错',
             ERROR_USER_BIND => '用户绑定出错',
-            ERROR_NOT_ALLOW_APP_REGISTER => 'iOS 上注册暂时会影响微信版的使用,请先关注「平方根平台」公众号并注册',
+            ERROR_NOT_ALLOW_APP_REGISTER => 'iOS 上注册暂时会影响微信版的使用,请先关注「平方根平台」公众号并点开其中一个直播来注册',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
