@@ -40,14 +40,16 @@ class SnsUserDao extends BaseDao
     {
         $sql = "UPDATE sns_users SET userId=? WHERE openId=? AND platform=?";
         $binds = array($userId, $openId, $platform);
-        return $this->db->query($sql, $binds);
+        $this->db->query($sql, $binds);
+        return $this->db->affected_rows() > 0;
     }
 
     function bindUnionIdToSnsUser($openId, $platform, $unionId)
     {
         $sql = "UPDATE sns_users SET unionId=? WHERE openId=? AND platform=?";
         $binds = array($unionId, $openId, $platform);
-        return $this->db->query($sql, $binds);
+        $this->db->query($sql, $binds);
+        return $this->db->affected_rows() > 0;
     }
 
     function getWechatSnsUser($unionId)

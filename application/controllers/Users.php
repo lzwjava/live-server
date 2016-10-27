@@ -138,14 +138,36 @@ class Users extends BaseController
         $openId = $this->post(KEY_OPEN_ID);
         $platform = $this->post(KEY_PLATFORM);
         $smsCode = $this->post(KEY_SMS_CODE);
-        if ($this->userDao->isMobilePhoneNumberUsed($mobile)) {
-            logInfo("mobilePhone is used: " . $mobile);
-            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
-            return;
-        }
         if ($this->checkSmsCodeWrong($mobile, $smsCode)) {
             return;
         }
+
+        if ($this->userDao->isMobilePhoneNumberUsed($mobile)) {
+
+            $user = $this->userDao->findUserByMobile($mobile);
+            if ($user->unionId) {
+                // 之前绑定过了
+                logInfo("mobilePhone is used: " . $mobile);
+                $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
+                return;
+            } else {
+                // 自动绑定
+                $theSnsUser = $this->snsUserDao->getSnsUser($openId, $platform);
+                $this->db->trans_begin();
+                $ok = $this->userDao->bindUnionIdToUser($user->userId, $theSnsUser->unionId);
+                $bindOk = $this->snsUserDao->bindUser($openId, $platform, $user->userId);
+                if (!$ok || !$bindOk || !$this->db->trans_status()) {
+                    $this->db->trans_rollback();
+                    $this->failure(ERROR_BIND_WECHAT_FAILED);
+                    return;
+                }
+                $this->db->trans_commit();
+
+                $this->loginOrRegisterSucceed($mobile);
+                return;
+            }
+        }
+
         $snsUser = $this->snsUserDao->getSnsUser($openId, $platform);
         list($imageUrl, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
         if ($error) {

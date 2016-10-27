@@ -161,6 +161,7 @@ define('ERROR_SNS_USER_NOT_EXISTS', 'sns_user_not_exists');
 define('ERROR_GET_USER_INFO', 'fail_get_user_info');
 define('ERROR_BIND_UNION_ID_TO_USER', 'fail_bind_union_id_to_user');
 define('ERROR_WECHAT_ALREADY_BIND', 'wechat_already_bind');
+define('ERROR_BIND_WECHAT_FAILED', 'fail_bind_wechat');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -233,7 +234,8 @@ if (!function_exists('errorInfos')) {
             ERROR_SNS_USER_NOT_EXISTS => '请先关注「平方根平台」公众号, 并点击一个直播在手机端注册',
             ERROR_GET_USER_INFO => '获取微信用户信息失败',
             ERROR_BIND_UNION_ID_TO_USER => '无法绑定微信统一ID到用户',
-            ERROR_WECHAT_ALREADY_BIND => '微信已经绑定过了,无需重复绑定'
+            ERROR_WECHAT_ALREADY_BIND => '微信已经绑定过了,无需重复绑定',
+            ERROR_BIND_WECHAT_FAILED => '绑定微信与手机号失败'
         );
     }
 
