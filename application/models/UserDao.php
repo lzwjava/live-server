@@ -116,6 +116,11 @@ class UserDao extends BaseDao
         return $this->findUser(KEY_USER_ID, $id);
     }
 
+    function findUserByMobile($mobile)
+    {
+        return $this->findUser(KEY_MOBILE_PHONE_NUMBER, $mobile);
+    }
+
     private function updateSessionToken($user)
     {
         $token = $this->genSessionToken();
@@ -176,7 +181,8 @@ class UserDao extends BaseDao
     {
         $sql = "UPDATE users SET unionId=? WHERE userId=?";
         $binds = array($unionId, $userId);
-        return $this->db->query($sql, $binds);
+        $this->db->query($sql, $binds);
+        return $this->db->affected_rows() > 0;
     }
 
     private function cleanUserFieldsForAll($user)

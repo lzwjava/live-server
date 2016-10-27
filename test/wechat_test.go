@@ -62,6 +62,18 @@ func TestWeChat_registerBySns(t *testing.T) {
 	assert.NotNil(t, res.Get("userId").Interface())
 }
 
+func TestWeChat_autoBind(t *testing.T) {
+	c := NewClient()
+	user := registerNewUser(c)
+
+	insertSnsUser("0")
+
+	res := c.postData("users/registerBySns", url.Values{"openId": {"ol0AFwFe5jFoXcQby4J7AWJaWXIM"},
+		"platform": {"wechat"}, "mobilePhoneNumber": {user.Get("mobilePhoneNumber").MustString()}, "smsCode": {"5555"}})
+	assert.NotNil(t, res)
+	assert.NotNil(t, res.Get("userId").Interface())
+}
+
 func TestWeChat_silentOauth(t *testing.T) {
 	c := NewClient()
 	c.get("wechat/silentOauth", url.Values{"code": {"021Lk67R0nLLPa2PbA7R0fFa7R0Lk670"}})
