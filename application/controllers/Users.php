@@ -162,7 +162,8 @@ class Users extends BaseController
                     return;
                 }
                 $this->db->trans_commit();
-
+                logInfo("auto bind succeed userId:" . $user->userId);
+                
                 $this->loginOrRegisterSucceed($mobile);
                 return;
             }
