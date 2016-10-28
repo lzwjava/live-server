@@ -65,11 +65,15 @@ class Attendances extends BaseController
             return;
         }
         $openId = null;
+
         if ($channel == CHANNEL_WECHAT_H5) {
             $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);
             if (!$snsUser) {
-                $this->failure(ERROR_MUST_BIND_WECHAT);
-                return;
+                $snsUser = $this->snsUserDao->getWeChatSnsUserByUserId($user->userId);
+                if (!$snsUser) {
+                    $this->failure(ERROR_MUST_BIND_WECHAT);
+                    return;
+                }
             }
             $openId = $snsUser->openId;
         }
