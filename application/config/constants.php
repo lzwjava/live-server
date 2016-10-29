@@ -185,7 +185,7 @@ if (!function_exists('errorInfos')) {
             ERROR_QINIU_UPLOAD => '七牛上传图片出错',
             ERROR_USER_BIND => '用户绑定出错',
             ERROR_NOT_ALLOW_APP_REGISTER => '请关注平方根平台公众号来注册,iOS 上注册暂时会影响微信版的使用',
-            ERROR_NOT_ALLOW_APP_LOGIN => '请加微信 lzwjava,崩溃时常在iOS App 发生',
+            ERROR_NOT_ALLOW_APP_LOGIN => '请加微信lzwjava修复,iOS会崩溃',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
