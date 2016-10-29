@@ -29,6 +29,30 @@ class WeChatPlatform
     function notifyUserByWeChat($userId, $live)
     {
         $user = $this->userDao->findUserById($userId);
+        $tmplData = array(
+            'first' => array(
+                'value' => $user->username . '，您参与的直播即将开始啦',
+                'color' => '#000',
+            ),
+            'keyword1' => array(
+                'value' => $live->subject,
+                'color' => '#173177',
+            ),
+            'keyword2' => array(
+                'value' => $live->planTs,
+                'color' => '#173177',
+            ),
+            'remark' => array(
+                'value' => '点击进入直播，不见不散。',
+                'color' => '#000',
+            )
+        );
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+        return $this->notifyByWeChat($user, 'gKSNH1PPeKQqYC4yNPjXl-OrHNdoU1jkyv7468BM6R4', $url, $tmplData);
+    }
+
+    private function notifyByWeChat($user, $tempId, $url, $tmplData)
+    {
         if (!$user->unionId) {
             logInfo("the user $user->username do not have unionId fail send wechat msg");
             return false;
@@ -36,27 +60,10 @@ class WeChatPlatform
         $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);
         $data = array(
             'touser' => $snsUser->openId,
-            'template_id' => 'gKSNH1PPeKQqYC4yNPjXl-OrHNdoU1jkyv7468BM6R4',
-            'url' => 'http://m.quzhiboapp.com/?liveId=' . $live->liveId,
+            'template_id' => $tempId,
+            'url' => $url,
             'topcolor' => '#FF0000',
-            'data' => array(
-                'first' => array(
-                    'value' => $user->username . '，您参与的直播即将开始啦',
-                    'color' => '#000',
-                ),
-                'keyword1' => array(
-                    'value' => $live->subject,
-                    'color' => '#173177',
-                ),
-                'keyword2' => array(
-                    'value' => $live->planTs,
-                    'color' => '#173177',
-                ),
-                'remark' => array(
-                    'value' => '点击进入直播，不见不散。',
-                    'color' => '#000',
-                )
-            )
+            'data' => $tmplData
         );
         $accesstoken = $this->jsSdk->getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $accesstoken;
@@ -66,6 +73,12 @@ class WeChatPlatform
             logInfo('wechat notified failed');
         }
         return $res;
+    }
+
+
+    function notifyRefundByWeChat($userId)
+    {
+        $user = $this->userDao->findUserById($userId);
     }
 
     private function httpPost($url, $data)
