@@ -278,6 +278,10 @@ class Users extends BaseController
         if ($this->checkIfParamsNotExist($this->get(), array(KEY_MOBILE_PHONE_NUMBER))) {
             return;
         }
+        if (!isDebug()) {
+            $this->failure(ERROR_NOT_ALLOW_APP_LOGIN);
+            return;
+        }
         $mobile = $this->get(KEY_MOBILE_PHONE_NUMBER);
         $used = $this->userDao->isMobilePhoneNumberUsed($mobile);
         $this->succeed($used);
