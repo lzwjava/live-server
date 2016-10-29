@@ -298,7 +298,6 @@ class Lives extends BaseController
                 if ($user->notified == 0) {
                     logInfo("notified 0");
                     $ok = $this->sms->notifyLiveStart($user->userId, $live);
-                    usleep(1000 * 100);
                     if ($ok) {
                         $this->attendanceDao->updateToNotified($user->userId, $live->liveId);
                         $succeedCount++;
