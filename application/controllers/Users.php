@@ -163,7 +163,7 @@ class Users extends BaseController
                 }
                 $this->db->trans_commit();
                 logInfo("auto bind succeed userId:" . $user->userId);
-                
+
                 $this->loginOrRegisterSucceed($mobile);
                 return;
             }
@@ -210,6 +210,10 @@ class Users extends BaseController
     public function login_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))) {
+            return;
+        }
+        if (!isDebug()) {
+            $this->failure(ERROR_NOT_ALLOW_APP_LOGIN);
             return;
         }
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
