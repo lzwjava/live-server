@@ -71,8 +71,14 @@ class WeChatPlatform
         logInfo('res ' . $res);
         if (!$res) {
             logInfo('wechat notified failed');
+            return false;
         }
-        return $res;
+        $resp = json_decode($res);
+        if ($resp->errcode != 0) {
+            logInfo("wechat notified failed errcode != 0");
+            return false;
+        }
+        return true;
     }
 
 
