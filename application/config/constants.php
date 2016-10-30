@@ -184,7 +184,7 @@ if (!function_exists('errorInfos')) {
             ERROR_MOBILE_PHONE_NUMBER_TAKEN => "手机号已被占用",
             ERROR_QINIU_UPLOAD => '七牛上传图片出错',
             ERROR_USER_BIND => '用户绑定出错',
-            ERROR_NOT_ALLOW_APP_REGISTER => '请关注平方根平台公众号来注册,iOS 上注册暂时会影响微信版的使用',
+            ERROR_NOT_ALLOW_APP_REGISTER => '请加微信lzwjava来注册,iOS 上注册暂时会影响微信版的使用',
             ERROR_NOT_ALLOW_APP_LOGIN => '请加微信lzwjava修复,iOS会崩溃',
 
             // lives
@@ -233,7 +233,7 @@ if (!function_exists('errorInfos')) {
             ERROR_BIND_UNION_ID => '绑定微信统一ID失败',
             ERROR_UNION_ID_EMPTY => '微信统一ID不能为空,请退出并重新进入',
             ERROR_UNION_ID_USER_NOT_EXISTS => '微信统一ID对应的用户不存在',
-            ERROR_SNS_USER_NOT_EXISTS => '请先关注「平方根平台」公众号, 并点击一个直播在手机端注册',
+            ERROR_SNS_USER_NOT_EXISTS => '请加微信lzwjava来修复Bug,此Bug比较复杂',
             ERROR_GET_USER_INFO => '获取微信用户信息失败',
             ERROR_BIND_UNION_ID_TO_USER => '无法绑定微信统一ID到用户',
             ERROR_WECHAT_ALREADY_BIND => '微信已经绑定过了,无需重复绑定',
