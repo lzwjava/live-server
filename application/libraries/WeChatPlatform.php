@@ -87,11 +87,11 @@ class WeChatPlatform
         $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
         $tmplData = array(
             'first' => array(
-                'value' => $user->username . '，您好，由于正在进行优惠促销活动，退还部分金额。',
+                'value' => $user->username . '，您好，由于正在进行优惠促销活动，返现答谢您。感谢您的参与。',
                 'color' => '#000'
             ),
             'reason' => array(
-                'value' => '优惠促销',
+                'value' => '优惠促销，返现感恩用户',
                 'color' => '#173177'
             ),
             'refund' => array(
