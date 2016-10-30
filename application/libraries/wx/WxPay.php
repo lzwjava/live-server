@@ -67,7 +67,12 @@ class WxPay
         $input->SetOp_user_id(WxPayConfig::MCHID);
         $refundResult = WxPayApi::refund($input, 30);
         logInfo("refundResult: " . json_encode($refundResult));
-        return $refundResult;
+        if ($refundResult['return_code'] == 'SUCCESS') {
+            return true;
+        } else {
+            logInfo("refund failed!!!");
+            return false;
+        }
     }
 
 }

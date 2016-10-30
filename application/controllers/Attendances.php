@@ -14,6 +14,7 @@ class Attendances extends BaseController
     public $pay;
     public $snsUserDao;
     public $shareDao;
+    public $weChatPlatform;
 
     function __construct()
     {
@@ -30,6 +31,8 @@ class Attendances extends BaseController
         $this->snsUserDao = new SnsUserDao();
         $this->load->model(ShareDao::class);
         $this->shareDao = new ShareDao();
+        $this->load->library(WeChatPlatform::class);
+        $this->weChatPlatform = new WeChatPlatform();
     }
 
     function create_post()
@@ -154,11 +157,18 @@ class Attendances extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-        $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, 30, 10000);
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, 0, 10000);
         foreach ($attendances as $attendance) {
             if ($attendance->userId == 1) {
                 $charge = $this->chargeDao->getOneByOrderNo($attendance->orderNo);
-                $this->pay->refund($charge);
+                $ok = $this->pay->refund($charge);
+                if ($ok) {
+                    $this->weChatPlatform->notifyRefundByWeChat($attendance->userId, $live);
+                }
             }
         }
         $this->succeed();
