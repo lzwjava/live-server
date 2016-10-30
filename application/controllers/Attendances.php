@@ -163,7 +163,7 @@ class Attendances extends BaseController
         }
         $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, 0, 10000);
         foreach ($attendances as $attendance) {
-            if ($attendance->userId == 1) {
+            if ($attendance->userId != 1) {
                 $charge = $this->chargeDao->getOneByOrderNo($attendance->orderNo);
                 $ok = $this->pay->refund($charge);
                 if ($ok) {
