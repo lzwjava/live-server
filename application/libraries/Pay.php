@@ -41,5 +41,6 @@ class Pay
         } else {
             logInfo("do not support refund " . json_encode($charge));
         }
+        return false;
     }
 }

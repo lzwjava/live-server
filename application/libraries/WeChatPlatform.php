@@ -68,23 +68,42 @@ class WeChatPlatform
         $accesstoken = $this->jsSdk->getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $accesstoken;
         $res = $this->httpPost($url, $data);
-        logInfo('res ' . $res);
+        logInfo('notify wechat res ' . $res);
         if (!$res) {
-            logInfo('wechat notified failed');
+            logInfo('wechat notified failed user:' . json_encode($user));
             return false;
         }
         $resp = json_decode($res);
         if ($resp->errcode != 0) {
-            logInfo("wechat notified failed errcode != 0");
+            logInfo("wechat notified failed errcode != 0 user:" . json_encode($user));
             return false;
         }
         return true;
     }
 
-
-    function notifyRefundByWeChat($userId)
+    function notifyRefundByWeChat($userId, $live)
     {
         $user = $this->userDao->findUserById($userId);
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+        $tmplData = array(
+            'first' => array(
+                'value' => $user->username . '，您好，由于正在进行优惠促销活动，退还部分金额。',
+                'color' => '#000'
+            ),
+            'reason' => array(
+                'value' => '优惠促销',
+                'color' => '#173177'
+            ),
+            'refund' => array(
+                'value' => '10元',
+                'color' => '#173177',
+            ),
+            'remark' => array(
+                'value' => '如有疑问,请致电或加微信 13261630925 联系我们。点击可进入直播, 晚上见。',
+                'color' => '#000'
+            )
+        );
+        return $this->notifyByWeChat($user, '122IpqfLsQaKMxHR0IVhiJN0YTqgEusoyJfFof-nrvk', $url, $tmplData);
     }
 
     private function httpPost($url, $data)
