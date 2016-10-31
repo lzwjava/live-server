@@ -93,4 +93,12 @@ class AttendanceDao extends BaseDao
         return $this->db->query($sql, $binds);
     }
 
+    function updateToVideoNotified($userId, $liveId)
+    {
+        $binds = array($userId, $liveId);
+        $sql = "UPDATE attendances SET videoNotified = 1 WHERE userId=? AND liveId=?";
+        $this->db->query($sql, $binds);
+        return $this->db->affected_rows() > 0;
+    }
+
 }

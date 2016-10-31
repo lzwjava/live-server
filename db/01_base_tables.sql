@@ -182,3 +182,6 @@ AFTER `notified`;
 
 ALTER TABLE `charges` ADD COLUMN `refunded` TINYINT(2) NOT NULL DEFAULT '0'
 AFTER `paid`;
+
+ALTER TABLE `attendances` ADD `videoNotified` TINYINT(0) NOT NULL DEFAULT 0
+AFTER `wechatNotified`;

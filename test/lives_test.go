@@ -277,3 +277,10 @@ func TestLives_groupSend(t *testing.T) {
 	res := c.getData("lives/"+liveId+"/groupSend", url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestLives_notifyVideo(t *testing.T) {
+	c, _, _, liveId := createLiveAndWeChatAttendance()
+	res := c.getData("lives/"+liveId+"/notifyVideo", url.Values{})
+	assert.NotNil(t, res)
+	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
+}

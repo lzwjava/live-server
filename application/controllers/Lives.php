@@ -322,7 +322,6 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
     }
 
-
     function notifyOneUser_get($liveId)
     {
         if ($this->checkIfParamsNotExist($this->get(), array(KEY_USER_ID))) {
@@ -339,6 +338,31 @@ class Lives extends BaseController
             return;
         }
         $this->succeed();
+    }
+
+    function notifyVideo_get($liveId)
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, 0, 10000);
+        $succeedCount = 0;
+        $total = count($attendances);
+        foreach ($attendances as $attendance) {
+            if ($attendance->videoNotified == 0) {
+                $ok = $this->weChatPlatform->notifyVideoByWeChat($attendance->userId, $live);
+                if ($ok) {
+                    $this->attendanceDao->updateToVideoNotified($attendance->userId, $live->liveId);
+                    $succeedCount++;
+                }
+            }
+        }
+        logInfo('succeedCount:' . $succeedCount . ' total:' . $total);
+        $this->succeed(array('succeedCount' => $succeedCount, 'total' => $total));
     }
 
     function fixAttendanceCount_get()

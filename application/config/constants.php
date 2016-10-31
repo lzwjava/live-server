@@ -316,6 +316,7 @@ define('KEY_ATTENDANCE_ID', 'attendanceId');
 define('KEY_ATTENDANCE_COUNT', 'attendanceCount');
 define('KEY_NOTIFIED', 'notified');
 define('KEY_WECHAT_NOTIFIED', 'wechatNotified');
+define('KEY_VIDEO_NOTIFIED', 'videoNotified');
 
 // transactions
 define('TABLE_TRANSACTIONS', 'transactions');

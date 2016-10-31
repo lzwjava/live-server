@@ -106,6 +106,35 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, '122IpqfLsQaKMxHR0IVhiJN0YTqgEusoyJfFof-nrvk', $url, $tmplData);
     }
 
+    function notifyVideoByWeChat($userId, $live)
+    {
+        $user = $this->userDao->findUserById($userId);
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+        $tmplData = array(
+            'first' => array(
+                'value' => $user->username . '，您参与的直播已经可以收看回放。',
+                'color' => '#000'
+            ),
+            'keyword1' => array(
+                'value' => $live->owner->username,
+                'color' => '#000'
+            ),
+            'keyword2' => array(
+                'value' => $live->subject,
+                'color' => '#173177'
+            ),
+            'keyword3' => array(
+                'value' => $live->planTs,
+                'color' => '#000',
+            ),
+            'remark' => array(
+                'value' => '详情请点击。也可加主播微信 hockeychen 交流。',
+                'color' => '#000'
+            )
+        );
+        return $this->notifyByWeChat($user, '_uG1HsFgQABk9_gK502OIaTuPEcHUAUEfRlR1cyfVFE', $url, $tmplData);
+    }
+
     private function httpPost($url, $data)
     {
         $ch = curl_init();
