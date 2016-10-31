@@ -162,16 +162,18 @@ class Attendances extends BaseController
             return;
         }
         $attendances = $this->attendanceDao->getAttendancesByLiveId($liveId, 0, 10000);
+        $succeedCount = 0;
+        $total = count($attendances);
         foreach ($attendances as $attendance) {
-            if ($attendance->userId != 1) {
-                $charge = $this->chargeDao->getOneByOrderNo($attendance->orderNo);
-                $ok = $this->pay->refund($charge);
-                if ($ok) {
-                    $this->weChatPlatform->notifyRefundByWeChat($attendance->userId, $live);
-                }
+            $charge = $this->chargeDao->getOneByOrderNo($attendance->orderNo);
+            $ok = $this->pay->refund($charge);
+            if ($ok) {
+                $succeedCount++;
+                $this->weChatPlatform->notifyRefundByWeChat($attendance->userId, $live);
             }
         }
-        $this->succeed();
+        logInfo('succeedCount:' . $succeedCount . ' total:' . $total);
+        $this->succeed(array('succeedCount' => $succeedCount, 'total' => $total));
     }
 
 }
