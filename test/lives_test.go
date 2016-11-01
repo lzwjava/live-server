@@ -284,3 +284,15 @@ func TestLives_notifyVideo(t *testing.T) {
 	assert.NotNil(t, res)
 	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
 }
+
+func TestLives_convert(t *testing.T) {
+	c := NewClient()
+	res := c.getData("lives/convert", url.Values{})
+	assert.NotNil(t, res.Interface())
+}
+
+func TestLives_testExec(t *testing.T) {
+	c := NewClient()
+	res := c.getData("lives/testExec", url.Values{})
+	assert.NotNil(t, res.Interface())
+}

@@ -85,10 +85,10 @@ class Wechat extends BaseController
     {
         $unionResult = $this->httpGetUnionId($accessToken, $openId);
         if (!$unionResult->error && $unionResult->data->unionid) {
-            return $unionResult->data->unionid;
+            return array($unionResult->data->unionid, 0);
         } else {
             logInfo("failed union result: " . json_encode($unionResult));
-            return null;
+            return array(null, $unionResult->errorcode);
         }
     }
 
@@ -161,7 +161,12 @@ class Wechat extends BaseController
         $unionId = null;
         if ($snsUser != null) {
             if (!$snsUser->unionId) {
-                $unionId = $this->getUnionId($respData->access_token, $respData->openid);
+                list($unionId, $errcode) = $this->getUnionId($respData->access_token, $respData->openid);
+                if ($errcode == 48001) {
+                    // api unauthorized
+                    $this->succeed();
+                    return;
+                }
                 if (!$unionId) {
                     $this->failure(ERROR_GET_UNION_ID);
                     return;
