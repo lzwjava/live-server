@@ -76,7 +76,7 @@ func TestWeChat_autoBind(t *testing.T) {
 
 func TestWeChat_silentOauth(t *testing.T) {
 	c := NewClient()
-	c.get("wechat/silentOauth", url.Values{"code": {"021Lk67R0nLLPa2PbA7R0fFa7R0Lk670"}})
+	c.get("wechat/silentOauth", url.Values{"code": {"021nmcVB0w3SWd2oIwTB0RCbVB0nmcVI"}})
 }
 
 func TestWeChat_silentOauth_web(t *testing.T) {

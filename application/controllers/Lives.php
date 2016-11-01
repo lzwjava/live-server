@@ -404,7 +404,6 @@ class Lives extends BaseController
 //        $thirdUsers = $this->getTestUsers();
         $succeedCount = 0;
         foreach ($thirdUsers as $thirdUser) {
-            usleep(1000 * 100);
             $ok = $this->sms->groupSend($thirdUser, $live);
             if ($ok) {
                 $succeedCount++;
@@ -413,6 +412,45 @@ class Lives extends BaseController
         $total = count($thirdUsers);
         logInfo("succeedCount: " . $succeedCount . ' total:' . $total);;
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => $total));
+    }
+
+    function convert_get()
+    {
+        try {
+            $ffmpeg = FFMpeg\FFMpeg::create();
+            $video = $ffmpeg->open('/Users/lzw/Movies/example1.flv');
+            $format = new FFMpeg\Format\Video\X264('libvo_aacenc');
+            $format->on('progress', function ($video, $format, $percentage) {
+                logInfo("$percentage % transcoded");
+            });
+            $video
+                ->save($format, 'tmp/export-x264.mp4');
+        } catch (Exception $e) {
+            logInfo('exception:' . $e->getMessage());
+        }
+        $this->succeed();
+    }
+
+    function setTimeLimit($seconds)
+    {
+        if (function_exists('set_time_limit') && @ini_get('safe_mode') == 0
+            && php_sapi_name() !== 'cli'
+        ) {
+            logInfo("setTimeLimit");
+            @set_time_limit($seconds);
+        }
+    }
+
+
+    function testExec_get()
+    {
+        $time = ini_get('max_execution_time');
+        logInfo('max_execution_time:' . $time);
+        for ($i = 0; $i < 150; $i++) {
+            sleep(1);
+            logInfo("run at second " . $i);
+        }
+        $this->succeed();
     }
 
 }
