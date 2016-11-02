@@ -431,26 +431,4 @@ class Lives extends BaseController
         $this->succeed();
     }
 
-    function setTimeLimit($seconds)
-    {
-        if (function_exists('set_time_limit') && @ini_get('safe_mode') == 0
-            && php_sapi_name() !== 'cli'
-        ) {
-            logInfo("setTimeLimit");
-            @set_time_limit($seconds);
-        }
-    }
-
-
-    function testExec_get()
-    {
-        $time = ini_get('max_execution_time');
-        logInfo('max_execution_time:' . $time);
-        for ($i = 0; $i < 150; $i++) {
-            sleep(1);
-            logInfo("run at second " . $i);
-        }
-        $this->succeed();
-    }
-
 }
