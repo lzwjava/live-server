@@ -163,7 +163,7 @@ class LiveDao extends BaseDao
                 $flvHost = $this->electFlvServer();
                 if ($userId == $live->ownerId) {
                     $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
-                    $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com/live/' . $live->rtmpKey;
+                    $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
                 $live->videoUrl = 'http://video.quzhiboapp.com/' . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHost . '/live/' . $live->rtmpKey;
