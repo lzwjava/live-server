@@ -128,7 +128,7 @@ class WeChatPlatform
                 'color' => '#000',
             ),
             'remark' => array(
-                'value' => '详情请点击。也可加主播微信 hockeychen 交流。',
+                'value' => '详情请点击。',
                 'color' => '#000'
             )
         );
