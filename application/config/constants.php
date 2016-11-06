@@ -184,8 +184,8 @@ if (!function_exists('errorInfos')) {
             ERROR_MOBILE_PHONE_NUMBER_TAKEN => "手机号已被占用",
             ERROR_QINIU_UPLOAD => '七牛上传图片出错',
             ERROR_USER_BIND => '用户绑定出错',
-            ERROR_NOT_ALLOW_APP_REGISTER => '请加微信lzwjava来注册,iOS 上注册暂时会影响微信版的使用',
-            ERROR_NOT_ALLOW_APP_LOGIN => '请加微信lzwjava修复,iOS会崩溃',
+            ERROR_NOT_ALLOW_APP_REGISTER => '请从平方根平台公众号注册,iOS 上注册暂时会影响微信版的使用',
+            ERROR_NOT_ALLOW_APP_LOGIN => '请使用平方根平台公众号,iOS会崩溃',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
@@ -426,6 +426,6 @@ if (!function_exists('specialPhones')) {
         return array('817015130624', '13942341609', '18928980893', '13189049707', '12167851210', '13091105688',
             '85267142420', '0978632991', '4128889028', '0433567897', '64220361907', '61422231593', '61415093761',
             '18101070110', '07469289888', '2347169053', '033650122672', '6598586126', '16124811322', '2672546088',
-            '18621360072', '61414143183');
+            '18621360072', '61414143183', '8860921519977');
     }
 }

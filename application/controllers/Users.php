@@ -275,6 +275,7 @@ class Users extends BaseController
             return;
         }
         $mobile = $this->get(KEY_MOBILE_PHONE_NUMBER);
+
         $isSpecial = in_array($mobile, array('18928980893'));
         if (!$isSpecial) {
             if (!isDebug()) {
@@ -282,6 +283,7 @@ class Users extends BaseController
                 return;
             }
         }
+
         $used = $this->userDao->isMobilePhoneNumberUsed($mobile);
         $this->succeed($used);
     }
