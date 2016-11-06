@@ -56,12 +56,12 @@ class Lives extends BaseController
             $this->failure(ERROR_LIVE_NOT_WAIT);
             return;
         }
-        $ok = $this->statusDao->open($liveId);
+        $this->statusDao->open($liveId);
+        $ok = $this->liveDao->beginLive($liveId);
         if (!$ok) {
-            $this->failure(ERROR_REDIS_WRONG);
+            $this->failure(ERROR_SQL_WRONG);
             return;
         }
-        $ok = $this->liveDao->beginLive($liveId);
         $this->succeed($ok);
     }
 
