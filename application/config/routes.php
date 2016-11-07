@@ -85,6 +85,7 @@ $route['lives/(\d+)/groupSend'] = 'lives/groupSend/$1';
 $route['lives/(\d+)/wait'] = 'lives/setWait/$1';
 $route['lives/(\d+)/notifyVideo']['GET'] = 'lives/notifyVideo/$1';
 $route['lives/convert']['GET'] = 'lives/convert';
+$route['lives/(\d+)/import']['GET'] = 'lives/import/$1';
 
 $route['jobs/alive']['GET'] = 'jobs/alive';
 
@@ -118,3 +119,6 @@ $route['liveHooks/onUnPublish']['POST'] = 'liveHooks/onUnPublish';
 
 // shares
 $route['shares']['POST'] = 'shares/create';
+
+// coupons
+$route['coupons']['POST'] = 'coupons/create';

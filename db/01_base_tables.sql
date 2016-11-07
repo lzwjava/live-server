@@ -152,6 +152,7 @@ CREATE TABLE `shares` (
   `useToDiscount` TINYINT(4)  NOT NULL DEFAULT 0,
   `created`       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`shareId`),
   FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
   FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
   PRIMARY KEY (`shareId`),
@@ -185,3 +186,13 @@ AFTER `paid`;
 
 ALTER TABLE `attendances` ADD `videoNotified` TINYINT(0) NOT NULL DEFAULT 0
 AFTER `wechatNotified`;
+
+CREATE TABLE `coupons` (
+  `couponId` INT(11)     NOT NULL             AUTO_INCREMENT,
+  `liveId`   INT(11)     NOT NULL,
+  `phone`    VARCHAR(40) NOT NULL             DEFAULT '',
+  `userId`   INT(11)     NOT NULL             DEFAULT 0,
+  PRIMARY KEY (`couponId`),
+  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
+  UNIQUE KEY (`phone`, `liveId`)
+)

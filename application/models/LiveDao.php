@@ -10,6 +10,8 @@ class LiveDao extends BaseDao
 {
 
     public $leanCloud;
+    public $userDao;
+    public $couponDao;
 
     function __construct()
     {
@@ -18,6 +20,10 @@ class LiveDao extends BaseDao
         $this->load->helper('array');
         $this->load->library('LeanCloud');
         $this->leanCloud = new LeanCloud();
+        $this->load->model(UserDao::class);
+        $this->userDao = new UserDao();
+        $this->load->model(CouponDao::class);
+        $this->couponDao = new CouponDao();
     }
 
     private function genLiveKey()
@@ -113,7 +119,7 @@ class LiveDao extends BaseDao
                 where l.liveId in (" . implode(', ', $liveIds) . ")
                 order by $sortField desc";
         $lives = $this->db->query($sql)->result();
-        $this->assembleLives($lives, $userId);
+        $this->assembleLives($lives, $user);
         return $lives;
     }
 
@@ -138,22 +144,36 @@ class LiveDao extends BaseDao
         return random_element(array('rtmp1.quzhiboapp.com'));
     }
 
-    private function calAmount($origin)
+    private function calAmount($live, $user)
     {
-        $amount = $origin - 100;
-        if ($amount <= 0) {
-            $amount = 1;
+        $origin = $live->amount;
+        $shareId = $live->shareId;
+        if (!$user) {
+            return $origin;
         }
-        return $amount;
+        $user = $this->userDao->findUserById($user->userId);
+        $have = $this->couponDao->haveCoupon($user->mobilePhoneNumber, $live->liveId);
+        if ($have) {
+            $origin = 100;
+        }
+        if ($shareId) {
+            $amount = $origin - 100;
+            if ($amount <= 0) {
+                $amount = 1;
+            }
+            return $amount;
+        } else {
+            return $origin;
+        }
     }
 
-    private function assembleLives($lives, $userId)
+    private function assembleLives($lives, $user)
     {
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
 
-            if (!$live->attendanceId && $userId != $live->ownerId) {
+            if (!$live->attendanceId && $user && $user->userId != $live->ownerId) {
                 // 没参加或非创建者
                 $live->canJoin = false;
                 unset($live->rtmpKey);
@@ -161,7 +181,7 @@ class LiveDao extends BaseDao
                 $hlsHost = $this->electHlsServer();
                 $rtmpHost = $this->electRtmpServer();
                 $flvHost = $this->electFlvServer();
-                if ($userId == $live->ownerId) {
+                if ($user && $user->userId == $live->ownerId) {
                     $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
@@ -171,11 +191,7 @@ class LiveDao extends BaseDao
                 $live->flvUrl = 'http://' . $flvHost . '/live/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
             }
-            if ($live->shareId) {
-                $live->realAmount = $this->calAmount($live->amount);
-            } else {
-                $live->realAmount = $live->amount;
-            }
+            $live->realAmount = $this->calAmount($live, $user);
         }
     }
 
