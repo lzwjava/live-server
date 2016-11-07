@@ -27,9 +27,16 @@ class CouponDao extends BaseDao
         return $result->cnt > 0;
     }
 
-    function updateCouponUserId($phone, $userId)
+    function updateCouponUserId($phone, $liveId, $userId)
     {
-
+        $sql = "UPDATE coupons SET userId =? WHERE phone=? AND liveId=?";
+        $binds = array(
+            KEY_USER_ID => $userId,
+            KEY_PHONE => sha1($phone),
+            KEY_LIVE_ID => $liveId
+        );
+        $this->db->query($sql, $binds);
+        return $this->db->affected_rows() > 0;
     }
 
 }

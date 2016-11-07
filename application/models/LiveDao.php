@@ -154,6 +154,7 @@ class LiveDao extends BaseDao
         $user = $this->userDao->findUserById($user->userId);
         $have = $this->couponDao->haveCoupon($user->mobilePhoneNumber, $live->liveId);
         if ($have) {
+            $this->couponDao->updateCouponUserId($user->mobilePhoneNumber, $live->liveId, $user->userId);
             $origin = 100;
         }
         if ($shareId) {
