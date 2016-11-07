@@ -192,7 +192,11 @@ CREATE TABLE `coupons` (
   `liveId`   INT(11)     NOT NULL,
   `phone`    VARCHAR(40) NOT NULL             DEFAULT '',
   `userId`   INT(11)     NOT NULL             DEFAULT 0,
+  `created`  TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `updated`  TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`couponId`),
   FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
   UNIQUE KEY (`phone`, `liveId`)
 )
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
