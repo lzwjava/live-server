@@ -75,7 +75,8 @@ class WeChatPlatform
         }
         $resp = json_decode($res);
         if ($resp->errcode != 0) {
-            logInfo("wechat notified failed errcode != 0 user:" . json_encode($user));
+            logInfo("wechat notified failed errcode != 0 user:" . $user->userId
+                . ' name: ' . $user->username);
             return false;
         }
         return true;
@@ -87,15 +88,15 @@ class WeChatPlatform
         $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
         $tmplData = array(
             'first' => array(
-                'value' => $user->username . '，您好，由于正在进行优惠促销活动，返现答谢您。感谢您的参与。',
+                'value' => $user->username . '，您好，由于技术原因, 现退款第二天报名费给你',
                 'color' => '#000'
             ),
             'reason' => array(
-                'value' => '优惠促销，返现感恩用户',
+                'value' => '两天直播归为一天',
                 'color' => '#173177'
             ),
             'refund' => array(
-                'value' => '10元',
+                'value' => '59元',
                 'color' => '#173177',
             ),
             'remark' => array(

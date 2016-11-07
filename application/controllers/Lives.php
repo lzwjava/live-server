@@ -357,8 +357,11 @@ class Lives extends BaseController
                 $ok = $this->weChatPlatform->notifyVideoByWeChat($attendance->userId, $live);
                 if ($ok) {
                     $this->attendanceDao->updateToVideoNotified($attendance->userId, $live->liveId);
+                    logInfo("videoNotified " . $attendance->userId);
                     $succeedCount++;
                 }
+            } else {
+                logInfo("videoNotified 1");
             }
         }
         logInfo('succeedCount:' . $succeedCount . ' total:' . $total);
