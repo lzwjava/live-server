@@ -58,7 +58,7 @@ class WxPay
     {
         $out_trade_no = $charge->orderNo;
         $total_fee = $charge->amount;
-        $refund_fee = 1000;
+        $refund_fee = $charge->amount;
         $input = new WxPayRefund();
         $input->SetOut_trade_no($out_trade_no);
         $input->SetTotal_fee($total_fee);
