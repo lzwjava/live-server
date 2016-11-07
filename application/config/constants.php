@@ -379,6 +379,11 @@ define('LC_TEST_APP_KEY', 'h9zCqcPSi7nDgQTQE6YsOT0z');
 define('LC_PROD_APP_ID', 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz');
 define('LC_PROD_APP_KEY', 'V4FPFLSmSeO1HaIwPVyhO9P3');
 
+// coupons
+define('TABLE_COUPONS', 'coupons');
+define('KEY_PHONE', 'phone');
+define('COUPON_ID', 'couponId');
+
 // lc
 if (ENVIRONMENT == 'development') {
     define('LC_APP_ID', LC_TEST_APP_ID);

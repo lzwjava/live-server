@@ -13,6 +13,7 @@ class Lives extends BaseController
     public $sms;
     public $attendanceDao;
     public $weChatPlatform;
+    public $couponDao;
 
     function __construct()
     {
@@ -27,6 +28,8 @@ class Lives extends BaseController
         $this->attendanceDao = new AttendanceDao();
         $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
+        $this->load->model(CouponDao::class);
+        $this->couponDao = new CouponDao();
     }
 
     protected function checkIfAmountWrong($amount)
@@ -430,6 +433,23 @@ class Lives extends BaseController
                 ->save($format, 'tmp/export-x264.mp4');
         } catch (Exception $e) {
             logInfo('exception:' . $e->getMessage());
+        }
+        $this->succeed();
+    }
+
+    function import_get($liveId)
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $str = file_get_contents(APPPATH . 'data/iDev.json');
+        $orders = json_decode($str);
+        foreach ($orders as $order) {
+            $id = $this->couponDao->addCoupon($order->phone, $liveId);
+            if (!$id) {
+                $this->failure(ERROR_SQL_WRONG);
+                return;
+            }
         }
         $this->succeed();
     }
