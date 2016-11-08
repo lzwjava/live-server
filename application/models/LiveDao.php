@@ -174,7 +174,7 @@ class LiveDao extends BaseDao
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
 
-            if (!$live->attendanceId && $user->userId != $live->ownerId) {
+            if (!$live->attendanceId && (!$user || $user->userId != $live->ownerId)) {
                 // 没参加或非创建者
                 $live->canJoin = false;
                 unset($live->rtmpKey);
@@ -182,7 +182,7 @@ class LiveDao extends BaseDao
                 $hlsHost = $this->electHlsServer();
                 $rtmpHost = $this->electRtmpServer();
                 $flvHost = $this->electFlvServer();
-                if ($user->userId == $live->ownerId) {
+                if ($user && $user->userId == $live->ownerId) {
                     $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }

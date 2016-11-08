@@ -26,3 +26,19 @@ func TestLiveHooks_onUnPublish(t *testing.T) {
 		"action": {"on_unpublish"}})
 	assert.NotNil(t, res)
 }
+
+func TestLiveHooks_onDvr(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	live := getLive(c, liveId)
+	rtmpkey := live.Get("rtmpKey").MustString()
+	res := c.postWithParams("liveHooks/onDvr", url.Values{
+		"stream": {rtmpkey},
+		"action": {"on_dvr"},
+		"file":   {"./objs/nginx/html/live/" + rtmpkey + ".1420254068776.flv"}})
+	assert.NotNil(t, res)
+
+	videos := c.getArrayData("lives/"+liveId+"/videos", url.Values{})
+	video := videos.GetIndex(0)
+	assert.Equal(t, video.Get("endTs").MustString(), "1420254068776")
+}

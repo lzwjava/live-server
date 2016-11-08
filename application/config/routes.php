@@ -87,6 +87,9 @@ $route['lives/(\d+)/notifyVideo']['GET'] = 'lives/notifyVideo/$1';
 $route['lives/convert']['GET'] = 'lives/convert';
 $route['lives/(\d+)/import']['GET'] = 'lives/import/$1';
 
+// videos
+$route['lives/(\d+)/videos'] = 'videos/list/$1';
+
 $route['jobs/alive']['GET'] = 'jobs/alive';
 
 // attendances
@@ -116,6 +119,7 @@ $route['wechat/valid']['GET'] = 'wechat/valid';
 // live hooks
 $route['liveHooks/onPublish']['POST'] = 'liveHooks/onPublish';
 $route['liveHooks/onUnPublish']['POST'] = 'liveHooks/onUnPublish';
+$route['liveHooks/onDvr']['POST'] = 'liveHooks/onDvr';
 
 // shares
 $route['shares']['POST'] = 'shares/create';
