@@ -384,6 +384,13 @@ define('TABLE_COUPONS', 'coupons');
 define('KEY_PHONE', 'phone');
 define('COUPON_ID', 'couponId');
 
+// videos
+define('TABLE_VIDEOS', 'videos');
+define('KEY_VIDEO_ID', 'videoId');
+define('KEY_FILE_NAME', 'fileName');
+define('KEY_TRANSCODED', 'transcoded');
+define('KEY_TRANSCODED_TIME', 'transcodedTime');
+
 // lc
 if (ENVIRONMENT == 'development') {
     define('LC_APP_ID', LC_TEST_APP_ID);
@@ -419,6 +426,7 @@ define('KEY_URL', 'url');
 // live hooks
 define('KEY_STREAM', 'stream');
 define('KEY_ACTION', 'action');
+define('KEY_FILE', 'file');
 
 define('KEY_TEXT', 'text');
 

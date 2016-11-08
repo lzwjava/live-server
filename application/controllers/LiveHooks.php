@@ -10,12 +10,15 @@ class LiveHooks extends BaseController
 {
     /** @var LiveDao */
     public $liveDao;
+    public $videoDao;
 
     function __construct()
     {
         parent::__construct();
         $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
+        $this->load->model(VideoDao::class);
+        $this->videoDao = new VideoDao();
     }
 
     function onPublish_post()
@@ -51,6 +54,41 @@ class LiveHooks extends BaseController
             // transcode stream
         } else {
 
+        }
+        echo 0;
+    }
+
+    private function fileNameByPath($path)
+    {
+        $output = array();
+        $res = preg_match('/.*\/(.*\.flv)/', $path, $output);
+        if (!$res) {
+            return null;
+        }
+        return $output[1];
+    }
+
+    function onDvr_post()
+    {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_ACTION, KEY_STREAM))) {
+            return;
+        }
+        $action = $this->post(KEY_ACTION);
+        $stream = $this->post(KEY_STREAM);
+        $file = $this->post(KEY_FILE);
+        if ($action != 'on_dvr') {
+            $this->failure(ERROR_PARAMETER_ILLEGAL);
+            return;
+        }
+        $live = $this->liveDao->getLiveByRtmpKey($stream);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $fileName = $this->fileNameByPath($file);
+        $ok = $this->videoDao->addVideo($live->liveId, $fileName);
+        if (!$ok) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
         }
         echo 0;
     }

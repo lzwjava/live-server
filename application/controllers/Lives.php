@@ -422,6 +422,11 @@ class Lives extends BaseController
 
     function convert_get()
     {
+        $this->succeed();
+    }
+
+    private function convert()
+    {
         try {
             $ffmpeg = FFMpeg\FFMpeg::create();
             $video = $ffmpeg->open('/Users/lzw/Movies/example1.flv');
@@ -429,12 +434,10 @@ class Lives extends BaseController
             $format->on('progress', function ($video, $format, $percentage) {
                 logInfo("$percentage % transcoded");
             });
-            $video
-                ->save($format, 'tmp/export-x264.mp4');
+            $video->save($format, 'tmp/export-x264.mp4');
         } catch (Exception $e) {
             logInfo('exception:' . $e->getMessage());
         }
-        $this->succeed();
     }
 
     function import_get($liveId)

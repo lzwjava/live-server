@@ -200,3 +200,19 @@ CREATE TABLE `coupons` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `videos` (
+  `videoId`        INT(11)     NOT NULL             AUTO_INCREMENT,
+  `liveId`         INT(11)     NOT NULL,
+  `fileName`       VARCHAR(60) NOT NULL             DEFAULT '',
+  `endTs`          VARCHAR(20) NOT NULL             DEFAULT '',
+  `transcoded`     TINYINT(2)  NOT NULL             DEFAULT 0,
+  `transcodedTime` TIMESTAMP                        DEFAULT CURRENT_TIMESTAMP,
+  `created`        TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `updated`        TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`videoId`),
+  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
+  UNIQUE KEY (`fileName`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
