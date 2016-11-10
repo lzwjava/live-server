@@ -216,3 +216,6 @@ CREATE TABLE `videos` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `videos` ADD COLUMN `transcodedFileName` VARCHAR(60) NOT NULL             DEFAULT ''
+AFTER `transcodedTime`;

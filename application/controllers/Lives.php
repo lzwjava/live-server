@@ -420,26 +420,6 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => $total));
     }
 
-    function convert_get()
-    {
-        $this->succeed();
-    }
-
-    private function convert()
-    {
-        try {
-            $ffmpeg = FFMpeg\FFMpeg::create();
-            $video = $ffmpeg->open('/Users/lzw/Movies/example1.flv');
-            $format = new FFMpeg\Format\Video\X264('libvo_aacenc');
-            $format->on('progress', function ($video, $format, $percentage) {
-                logInfo("$percentage % transcoded");
-            });
-            $video->save($format, 'tmp/export-x264.mp4');
-        } catch (Exception $e) {
-            logInfo('exception:' . $e->getMessage());
-        }
-    }
-
     function import_get($liveId)
     {
         if ($this->checkIfNotAdmin()) {
