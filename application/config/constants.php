@@ -164,6 +164,12 @@ define('ERROR_BIND_UNION_ID_TO_USER', 'fail_bind_union_id_to_user');
 define('ERROR_WECHAT_ALREADY_BIND', 'wechat_already_bind');
 define('ERROR_BIND_WECHAT_FAILED', 'fail_bind_wechat');
 
+// videos
+define('ERROR_VIDEOS_NOT_GEN', 'video_not_gen');
+define('ERROR_FAIL_HANDLE_VIDEO', 'fail_handle_video');
+define('ERROR_CONVERT_VIDEO', 'fail_convert_video');
+define('ERROR_MERGE_VIDEO', 'fail_merge_video');
+
 if (!function_exists('errorInfos')) {
     function errorInfos()
     {
@@ -237,7 +243,13 @@ if (!function_exists('errorInfos')) {
             ERROR_GET_USER_INFO => '获取微信用户信息失败',
             ERROR_BIND_UNION_ID_TO_USER => '无法绑定微信统一ID到用户',
             ERROR_WECHAT_ALREADY_BIND => '微信已经绑定过了,无需重复绑定',
-            ERROR_BIND_WECHAT_FAILED => '绑定微信与手机号失败'
+            ERROR_BIND_WECHAT_FAILED => '绑定微信与手机号失败',
+
+            // videos
+            ERROR_VIDEOS_NOT_GEN => '回放视频还没有生成',
+            ERROR_FAIL_HANDLE_VIDEO => '处理视频失败',
+            ERROR_CONVERT_VIDEO => '转码视频失败',
+            ERROR_MERGE_VIDEO => '视频合并失败',
         );
     }
 
@@ -275,6 +287,7 @@ define('LIVE_STATUS_PREPARE', 1);
 define('LIVE_STATUS_REVIEW', 5);
 define('LIVE_STATUS_WAIT', 10);
 define('LIVE_STATUS_ON', 20);
+define('LIVE_STATUS_TRANSCODE', 25);
 define('LIVE_STATUS_OFF', 30);
 
 // sms
@@ -390,6 +403,7 @@ define('KEY_VIDEO_ID', 'videoId');
 define('KEY_FILE_NAME', 'fileName');
 define('KEY_TRANSCODED', 'transcoded');
 define('KEY_TRANSCODED_TIME', 'transcodedTime');
+define('KEY_TRANSCODED_FILE_NAME', 'transcodedFileName');
 
 // lc
 if (ENVIRONMENT == 'development') {
@@ -432,6 +446,20 @@ define('KEY_TEXT', 'text');
 
 define('NOTIFY_TYPE_SMS', 'sms');
 define('NOTIFY_TYPE_WECHAT', 'wechat');
+
+define('ORIGIN_VIDEO_DIR', '/root/srs/trunk/objs/nginx/html/live/');
+
+if (ENVIRONMENT == 'development') {
+    define('NGINX_VIDEO_DIR', '/home/www/test_videos/');
+} else {
+    define('NGINX_VIDEO_DIR', '/home/www/videos/');
+}
+
+if (ENVIRONMENT == 'development') {
+    define('VIDEO_WORKING_DIR', '/Users/lzw/square-root/videos/');
+} else {
+    define('VIDEO_WORKING_DIR', '/home/videos/');
+}
 
 if (!function_exists('specialPhones')) {
     function specialPhones()

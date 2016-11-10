@@ -36,4 +36,24 @@ class VideoDao extends BaseDao
         return $this->getListFromTable(TABLE_VIDEOS, KEY_LIVE_ID, $liveId);
     }
 
+    function getVideosAfterPlanTs($liveId, $planTs)
+    {
+        $dateTime = date_create($planTs, new DateTimeZone('Asia/Shanghai'));
+        $planTsStr = ($dateTime->getTimestamp() * 1000) . '';
+        $sql = "SELECT v.*,l.rtmpKey FROM videos AS v
+                LEFT JOIN lives AS l ON l.liveId=v.liveId
+                WHERE v.liveId=? AND v.endTs > ? ";
+        $binds = array($liveId, $planTsStr);
+        return $this->db->query($sql, $binds)->result();
+    }
+
+    function updateVideoToTranscoded($filename, $newFileName)
+    {
+        $sql = "UPDATE videos SET transcoded=1, transcodedTime=now(),
+                transcodedFileName=? WHERE fileName=?";
+        $binds = array($newFileName, $filename);
+        $this->db->query($sql, $binds);
+        return $this->db->affected_rows() > 0;
+    }
+
 }

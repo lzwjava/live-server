@@ -1,8 +1,10 @@
 package liveserver
 
 import (
+	"fmt"
 	"net/url"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -41,4 +43,17 @@ func TestLiveHooks_onDvr(t *testing.T) {
 	videos := c.getArrayData("lives/"+liveId+"/videos", url.Values{})
 	video := videos.GetIndex(0)
 	assert.Equal(t, video.Get("endTs").MustString(), "1420254068776")
+}
+
+func genVideo(c *Client, liveId string, originFileName string) {
+	live := getLive(c, liveId)
+	rtmpkey := live.Get("rtmpKey").MustString()
+	timeStr := fmt.Sprintf("%d", time.Now().Add(2*time.Hour).Unix()*1000)
+	fileName := fmt.Sprintf("%s.%s.flv", rtmpkey, timeStr)
+	fileName = originFileName
+	file := fmt.Sprintf("./objs/nginx/html/live/%s", fileName)
+	c.postWithParams("liveHooks/onDvr", url.Values{
+		"stream": {rtmpkey},
+		"action": {"on_dvr"},
+		"file":   {file}})
 }

@@ -128,6 +128,11 @@ class LiveDao extends BaseDao
         return $this->getOneFromTable(TABLE_LIVES, KEY_RTMP_KEY, $key);
     }
 
+    function getRawLive($liveId)
+    {
+        return $this->getOneFromTable(TABLE_LIVES, KEY_LIVE_ID, $liveId);
+    }
+
     private function electHlsServer()
     {
         return random_element(array('live1.quzhiboapp.com', 'live2.quzhiboapp.com',
@@ -202,10 +207,17 @@ class LiveDao extends BaseDao
         return $this->db->update(TABLE_LIVES, $data);
     }
 
-    function endLive($id)
+    function setLiveTranscode($id)
     {
         return $this->update($id, array(
             KEY_END_TS => date('Y-m-d H:i:s'),
+            KEY_STATUS => LIVE_STATUS_TRANSCODE
+        ));
+    }
+
+    function endLive($id)
+    {
+        return $this->update($id, array(
             KEY_STATUS => LIVE_STATUS_OFF
         ));
     }
