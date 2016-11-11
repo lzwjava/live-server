@@ -89,7 +89,9 @@ class Videos extends BaseController
         $conn = ssh2_connect('video.quzhiboapp.com', 22);
         ssh2_auth_password($conn, 'root', 'Quzhiboapp1314');
         ssh2_scp_send($conn, $mp4File, NGINX_VIDEO_DIR . $live->rtmpKey . '.mp4');
-        $this->liveDao->endLive($live->liveId);
+        if ($live->status == LIVE_STATUS_TRANSCODE) {
+            $this->liveDao->endLive($live->liveId);
+        }
         $this->succeed();
     }
 
