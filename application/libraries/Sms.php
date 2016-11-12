@@ -38,6 +38,22 @@ class Sms extends BaseDao
         return $this->leancloud->sendTemplateSms($phone, 'LiveStart', $data);
     }
 
+    function notifyVideoReady($userId, $live)
+    {
+        $realUser = $this->userDao->findUserById($userId);
+        $name = $realUser->username;
+        if (mb_strlen($name) > 8) {
+            $name = mb_substr($name, 0, 8);
+        }
+        $data = array(
+            SMS_NAME => $name,
+            KEY_SUBJECT => $live->subject,
+            KEY_REMARK => ''
+        );
+        $phone = $realUser->mobilePhoneNumber;
+        return $this->leancloud->sendTemplateSms($phone, 'VideoReady', $data);
+    }
+
     function groupSend($thirdUser, $live)
     {
         $name = mb_substr($thirdUser->username, 0, 8);
