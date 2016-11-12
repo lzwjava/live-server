@@ -169,6 +169,7 @@ define('ERROR_VIDEOS_NOT_GEN', 'video_not_gen');
 define('ERROR_FAIL_HANDLE_VIDEO', 'fail_handle_video');
 define('ERROR_CONVERT_VIDEO', 'fail_convert_video');
 define('ERROR_MERGE_VIDEO', 'fail_merge_video');
+define('ERROR_SCP_FAIL', 'fail_scp');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -250,6 +251,7 @@ if (!function_exists('errorInfos')) {
             ERROR_FAIL_HANDLE_VIDEO => '处理视频失败',
             ERROR_CONVERT_VIDEO => '转码视频失败',
             ERROR_MERGE_VIDEO => '视频合并失败',
+            ERROR_SCP_FAIL => '视频传输失败',
         );
     }
 
@@ -460,6 +462,8 @@ if (ENVIRONMENT == 'development') {
 } else {
     define('VIDEO_WORKING_DIR', '/home/videos/');
 }
+
+define('FFMPEG_PATH', '/home/srs/trunk/objs/ffmpeg/bin/ffmpeg');
 
 if (!function_exists('specialPhones')) {
     function specialPhones()

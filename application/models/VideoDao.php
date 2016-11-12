@@ -39,7 +39,7 @@ class VideoDao extends BaseDao
     function getVideosAfterPlanTs($liveId, $planTs)
     {
         $dateTime = date_create($planTs, new DateTimeZone('Asia/Shanghai'));
-        $planTsStr = ($dateTime->getTimestamp() * 1000) . '';
+        $planTsStr = (($dateTime->getTimestamp() - 60 * 30) * 1000) . '';
         $sql = "SELECT v.*,l.rtmpKey FROM videos AS v
                 LEFT JOIN lives AS l ON l.liveId=v.liveId
                 WHERE v.liveId=? AND v.endTs > ? ";
