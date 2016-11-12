@@ -240,24 +240,11 @@ func TestLives_attendedUsers(t *testing.T) {
 	assert.Equal(t, len(res.MustArray()), 1)
 }
 
-func TestLives_notify(t *testing.T) {
-	c, _, _, liveId := createLiveAndAttendance()
-	res := c.getData("lives/"+liveId+"/notify", url.Values{"type": {"sms"}})
-	assert.NotNil(t, res)
-	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
-}
-
-func TestLives_notifyByWeChat(t *testing.T) {
+func TestLives_notifyLiveStart(t *testing.T) {
 	c, _, _, liveId := createLiveAndWeChatAttendance()
-	res := c.getData("lives/"+liveId+"/notify", url.Values{"type": {"wechat"}})
+	res := c.getData("lives/"+liveId+"/notify", url.Values{})
 	assert.NotNil(t, res)
 	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
-}
-
-func TestLives_notifyOneUser(t *testing.T) {
-	c, _, userId, liveId := createLiveAndAttendance()
-	res := c.getData("lives/"+liveId+"/notifyOneUser", url.Values{"userId": {userId}})
-	assert.NotNil(t, res)
 }
 
 func TestLives_fixAttedanceCount(t *testing.T) {

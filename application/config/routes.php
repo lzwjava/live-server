@@ -80,7 +80,6 @@ $route['lives/me']['GET'] = 'lives/my';
 $route['lives/(\d+)/users']['GET'] = 'lives/attendedUsers/$1';
 $route['lives/(\d+)/notify'] = 'lives/notifyLiveStart/$1';
 $route['lives/fixAttendanceCount'] = 'lives/fixAttendanceCount';
-$route['lives/(\d+)/notifyOneUser'] = 'lives/notifyOneUser/$1';
 $route['lives/(\d+)/groupSend'] = 'lives/groupSend/$1';
 $route['lives/(\d+)/wait'] = 'lives/setWait/$1';
 $route['lives/(\d+)/notifyVideo']['GET'] = 'lives/notifyVideo/$1';
