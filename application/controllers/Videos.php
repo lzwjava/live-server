@@ -45,8 +45,14 @@ class Videos extends BaseController
             if (!$ok) {
                 return false;
             }
+            logInfo("scp file succeed " . $video->fileName);
         }
         return true;
+    }
+
+    function info_get()
+    {
+        phpinfo();
     }
 
     function convert_get()
@@ -88,7 +94,11 @@ class Videos extends BaseController
 
         $conn = ssh2_connect('video.quzhiboapp.com', 22);
         ssh2_auth_password($conn, 'root', 'Quzhiboapp1314');
-        ssh2_scp_send($conn, $mp4File, NGINX_VIDEO_DIR . $live->rtmpKey . '.mp4');
+        $ok = ssh2_scp_send($conn, $mp4File, NGINX_VIDEO_DIR . $live->rtmpKey . '.mp4');
+        if (!$ok) {
+            $this->failure(ERROR_SCP_FAIL);
+            return;
+        }
         if ($live->status == LIVE_STATUS_TRANSCODE) {
             $this->liveDao->endLive($live->liveId);
         }
@@ -109,18 +119,24 @@ class Videos extends BaseController
     {
         $allOk = true;
         foreach ($videos as $video) {
-            $fileName = $video->fileName;
-            $pureFileName = $this->pureFileName($fileName);
-            $input = VIDEO_WORKING_DIR . $fileName;
-            $newFileName = $pureFileName . '.mp4';
-            $output = VIDEO_WORKING_DIR . $newFileName;
-            $outputArr = array();
-            $returnVar = null;
-            exec("ffmpeg -i $input -y $output", $outputArr, $returnVar);
-            if ($returnVar != 0) {
-                $allOk = false;
+            if (!$video->transcoded) {
+                $fileName = $video->fileName;
+                $pureFileName = $this->pureFileName($fileName);
+                $input = VIDEO_WORKING_DIR . $fileName;
+                $newFileName = $pureFileName . '.mp4';
+                $output = VIDEO_WORKING_DIR . $newFileName;
+                $outputArr = array();
+                $returnVar = null;
+                $ffmpeg = FFMPEG_PATH;
+                logInfo("$ffmpeg -i $input -y $output");
+                exec("$ffmpeg -i $input -y $output", $outputArr, $returnVar);
+                logInfo("return var: $returnVar");
+                if ($returnVar != 0) {
+                    $allOk = false;
+                } else {
+                    $this->videoDao->updateVideoToTranscoded($fileName, $newFileName);
+                }
             }
-            $this->videoDao->updateVideoToTranscoded($fileName, $newFileName);
         }
         return $allOk;
     }
@@ -162,7 +178,9 @@ class Videos extends BaseController
         file_put_contents($concatFile, $mergeText);
         $output = array();
         $returnVar = null;
-        exec('ffmpeg -f concat -i ' . $concatFile . ' -c copy -y ' . $outputFile, $output, $returnVar);
+        $ffmpeg = FFMPEG_PATH;
+        logInfo("$ffmpeg -f concat -i $concatFile -c copy -y  $outputFile");
+        exec("$ffmpeg -f concat -i $concatFile -c copy -y  $outputFile", $output, $returnVar);
         return !$returnVar;
     }
 
