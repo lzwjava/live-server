@@ -9,7 +9,7 @@
 class RecordedVideos extends BaseController
 {
     public $liveDao;
-    public $videoDao;
+    public $recordedVideos;
 
     function __construct()
     {
@@ -17,7 +17,7 @@ class RecordedVideos extends BaseController
         $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
         $this->load->model(RecordedVideoDao::class);
-        $this->videoDao = new RecordedVideoDao();
+        $this->recordedVideos = new RecordedVideoDao();
     }
 
     function one_get()
@@ -31,7 +31,7 @@ class RecordedVideos extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        $list = $this->videoDao->getVideosByLiveId($liveId);
+        $list = $this->recordedVideos->getVideosByLiveId($liveId);
         $this->succeed($list);
     }
 
@@ -65,7 +65,7 @@ class RecordedVideos extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        $videos = $this->videoDao->getVideosAfterPlanTs($liveId, $live->planTs);
+        $videos = $this->recordedVideos->getVideosAfterPlanTs($liveId, $live->planTs);
         if (count($videos) == 0) {
             $this->failure(ERROR_VIDEOS_NOT_GEN);
             return;
@@ -80,7 +80,7 @@ class RecordedVideos extends BaseController
             $this->failure(ERROR_CONVERT_VIDEO);
             return;
         }
-        $newVideos = $this->videoDao->getVideosAfterPlanTs($liveId, $live->planTs);
+        $newVideos = $this->recordedVideos->getVideosAfterPlanTs($liveId, $live->planTs);
         if (count($newVideos) > 1) {
             $ok = $this->mergeVideos($newVideos, $live);
             if (!$ok) {
@@ -134,7 +134,7 @@ class RecordedVideos extends BaseController
                 if ($returnVar != 0) {
                     $allOk = false;
                 } else {
-                    $this->videoDao->updateVideoToTranscoded($fileName, $newFileName);
+                    $this->recordedVideos->updateVideoToTranscoded($fileName, $newFileName);
                 }
             }
         }
@@ -156,7 +156,7 @@ class RecordedVideos extends BaseController
                 });
                 $newFileName = $pureFileName . '.mp4';
                 $video->save($format, VIDEO_WORKING_DIR . $newFileName);
-                $this->videoDao->updateVideoToTranscoded($fileName, $newFileName);
+                $this->recordedVideos->updateVideoToTranscoded($fileName, $newFileName);
                 logInfo("convert $fileName finish");
             } catch (Exception $e) {
                 $allOk = false;

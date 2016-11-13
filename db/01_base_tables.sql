@@ -221,4 +221,18 @@ ALTER TABLE `videos` ADD COLUMN `transcodedFileName` VARCHAR(60) NOT NULL       
 AFTER `transcodedTime`;
 
 ALTER TABLE `videos` RENAME `recorded_videos`;
+ALTER TABLE `recorded_videos` CHANGE `videoId` `recordedVideoId` INT(11) NOT NULL             AUTO_INCREMENT;
 
+CREATE TABLE `videos` (
+  `videoId`  INT(11)     NOT NULL             AUTO_INCREMENT,
+  `liveId`   INT(11)     NOT NULL,
+  `title`    VARCHAR(60) NOT NULL             DEFAULT '',
+  `fileName` VARCHAR(20) NOT NULL             DEFAULT '',
+  `created`  TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `updated`  TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`videoId`),
+  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
+  UNIQUE KEY (`liveId`, `fileName`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;

@@ -84,9 +84,10 @@ $route['lives/(\d+)/groupSend'] = 'lives/groupSend/$1';
 $route['lives/(\d+)/wait'] = 'lives/setWait/$1';
 $route['lives/(\d+)/notifyVideo']['GET'] = 'lives/notifyVideo/$1';
 $route['lives/(\d+)/import']['GET'] = 'lives/import/$1';
+$route['lives/(\d+)/finish']['GET'] = 'lives/finish/$1';
 
 // recorded videos
-$route['lives/(\d+)/videos'] = 'recordedVideos/list/$1';
+$route['lives/(\d+)/recordedVideos'] = 'recordedVideos/list/$1';
 $route['recordedVideos/convert']['GET'] = 'recordedVideos/convert';
 
 $route['jobs/alive']['GET'] = 'jobs/alive';
@@ -125,3 +126,7 @@ $route['shares']['POST'] = 'shares/create';
 
 // coupons
 $route['coupons']['POST'] = 'coupons/create';
+
+// videos
+$route['videos/import']['GET'] = 'videos/import';
+$route['lives/(\d+)/videos']['GET'] = 'videos/list/$1';

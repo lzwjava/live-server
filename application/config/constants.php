@@ -401,11 +401,16 @@ define('COUPON_ID', 'couponId');
 
 // recorded videos
 define('TABLE_RECORDED_VIDEOS', 'recorded_videos');
-define('KEY_VIDEO_ID', 'videoId');
+define('KEY_RECORDED_VIDEO_ID', 'recordedVideoId');
 define('KEY_FILE_NAME', 'fileName');
 define('KEY_TRANSCODED', 'transcoded');
 define('KEY_TRANSCODED_TIME', 'transcodedTime');
 define('KEY_TRANSCODED_FILE_NAME', 'transcodedFileName');
+
+// videos
+define('TABLE_VIDEOS', 'videos');
+define('KEY_VIDEO_ID', 'videoId');
+define('KEY_TITLE', 'title');
 
 // lc
 if (ENVIRONMENT == 'development') {

@@ -53,14 +53,14 @@ class StatusDao extends BaseDao
             $now = time();
             if ($now - $time > $this->ttl) {
                 logInfo("end live because of ttl. liveId:" . $id);
-                $this->endLive($id);
+                $this->setLiveTranscode($id);
                 $total++;
             }
         }
         logInfo("total count of end live!!:" . $total);
     }
 
-    function endLive($id)
+    function setLiveTranscode($id)
     {
         $ok = $this->liveDao->setLiveTranscode($id);
         $delOk = $this->client->hdel($this->alivesKey(), $id);
