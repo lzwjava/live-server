@@ -29,3 +29,13 @@ func TestVideos_getList(t *testing.T) {
 	assert.NotNil(t, video.Get("updated").Interface())
 	assert.NotNil(t, video.Get("url").Interface())
 }
+
+func TestVideos_create(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	beginAndFinshLive(c, liveId)
+	live := getLive(c, liveId)
+	res := c.postData("lives/"+liveId+"/videos", url.Values{"fileName": {live.Get("rtmpKey").MustString() + "_1"},
+		"title": {"直播1"}})
+	assert.NotNil(t, res.Interface())
+}
