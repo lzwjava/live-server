@@ -53,4 +53,23 @@ class Videos extends BaseController
         $this->succeed($list);
     }
 
+    function create_post($liveId)
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_FILE_NAME, KEY_TITLE))
+        ) {
+            return;
+        }
+        $fileName = $this->post(KEY_FILE_NAME);
+        $title = $this->post(KEY_TITLE);
+        $id = $this->videoDao->addVideo($liveId, $title, $fileName);
+        if (!$id) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->succeed();
+    }
+
 }
