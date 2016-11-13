@@ -6,7 +6,7 @@
  * Date: 11/9/16
  * Time: 5:41 AM
  */
-class Videos extends BaseController
+class RecordedVideos extends BaseController
 {
     public $liveDao;
     public $videoDao;
@@ -16,8 +16,8 @@ class Videos extends BaseController
         parent::__construct();
         $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
-        $this->load->model(VideoDao::class);
-        $this->videoDao = new VideoDao();
+        $this->load->model(RecordedVideoDao::class);
+        $this->videoDao = new RecordedVideoDao();
     }
 
     function one_get()

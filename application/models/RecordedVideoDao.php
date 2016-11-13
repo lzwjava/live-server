@@ -6,7 +6,7 @@
  * Date: 11/9/16
  * Time: 4:55 AM
  */
-class VideoDao extends BaseDao
+class RecordedVideoDao extends BaseDao
 {
 
     private function endTsByFileName($fileName)
@@ -27,20 +27,20 @@ class VideoDao extends BaseDao
             KEY_FILE_NAME => $fileName,
             KEY_END_TS => $endTs
         );
-        $this->db->insert(TABLE_VIDEOS, $data);
+        $this->db->insert(TABLE_RECORDED_VIDEOS, $data);
         return $this->db->insert_id();
     }
 
     function getVideosByLiveId($liveId)
     {
-        return $this->getListFromTable(TABLE_VIDEOS, KEY_LIVE_ID, $liveId);
+        return $this->getListFromTable(TABLE_RECORDED_VIDEOS, KEY_LIVE_ID, $liveId);
     }
 
     function getVideosAfterPlanTs($liveId, $planTs)
     {
         $dateTime = date_create($planTs, new DateTimeZone('Asia/Shanghai'));
         $planTsStr = (($dateTime->getTimestamp() - 60 * 30) * 1000) . '';
-        $sql = "SELECT v.*,l.rtmpKey FROM videos AS v
+        $sql = "SELECT v.*,l.rtmpKey FROM recorded_videos AS v
                 LEFT JOIN lives AS l ON l.liveId=v.liveId
                 WHERE v.liveId=? AND v.endTs > ? ";
         $binds = array($liveId, $planTsStr);
@@ -49,7 +49,7 @@ class VideoDao extends BaseDao
 
     function updateVideoToTranscoded($filename, $newFileName)
     {
-        $sql = "UPDATE videos SET transcoded=1, transcodedTime=now(),
+        $sql = "UPDATE recorded_videos SET transcoded=1, transcodedTime=now(),
                 transcodedFileName=? WHERE fileName=?";
         $binds = array($newFileName, $filename);
         $this->db->query($sql, $binds);

@@ -10,15 +10,15 @@ class LiveHooks extends BaseController
 {
     /** @var LiveDao */
     public $liveDao;
-    public $videoDao;
+    public $recordedVideoDao;
 
     function __construct()
     {
         parent::__construct();
         $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
-        $this->load->model(VideoDao::class);
-        $this->videoDao = new VideoDao();
+        $this->load->model(RecordedVideoDao::class);
+        $this->recordedVideoDao = new RecordedVideoDao();
     }
 
     function onPublish_post()
@@ -85,7 +85,7 @@ class LiveHooks extends BaseController
             return;
         }
         $fileName = $this->fileNameByPath($file);
-        $ok = $this->videoDao->addVideo($live->liveId, $fileName);
+        $ok = $this->recordedVideoDao->addVideo($live->liveId, $fileName);
         if (!$ok) {
             $this->failure(ERROR_SQL_WRONG);
             return;
