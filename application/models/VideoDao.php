@@ -26,7 +26,7 @@ class VideoDao extends BaseDao
 
     function getVideosByLiveId($liveId)
     {
-        $videos = $this->getListFromTable(TABLE_VIDEOS, KEY_LIVE_ID, $liveId);
+        $videos = $this->getListFromTable(TABLE_VIDEOS, KEY_LIVE_ID, $liveId, '*', KEY_FILE_NAME);
         $this->assembleVideos($videos);
         return $videos;
     }
