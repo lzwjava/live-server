@@ -219,3 +219,6 @@ CREATE TABLE `videos` (
 
 ALTER TABLE `videos` ADD COLUMN `transcodedFileName` VARCHAR(60) NOT NULL             DEFAULT ''
 AFTER `transcodedTime`;
+
+ALTER TABLE `videos` RENAME `recorded_videos`;
+

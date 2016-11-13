@@ -85,9 +85,9 @@ $route['lives/(\d+)/wait'] = 'lives/setWait/$1';
 $route['lives/(\d+)/notifyVideo']['GET'] = 'lives/notifyVideo/$1';
 $route['lives/(\d+)/import']['GET'] = 'lives/import/$1';
 
-// videos
-$route['lives/(\d+)/videos'] = 'videos/list/$1';
-$route['videos/convert']['GET'] = 'videos/convert';
+// recorded videos
+$route['lives/(\d+)/videos'] = 'recordedVideos/list/$1';
+$route['recordedVideos/convert']['GET'] = 'recordedVideos/convert';
 
 $route['jobs/alive']['GET'] = 'jobs/alive';
 
