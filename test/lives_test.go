@@ -111,6 +111,29 @@ func TestLives_end(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
+func endLive(c *Client, liveId string) {
+	c.getData("lives/"+liveId+"/end", url.Values{})
+}
+
+func finishLive(c *Client, liveId string) {
+	c.getData("lives/"+liveId+"/finish", url.Values{})
+}
+
+func beginAndFinshLive(c *Client, liveId string) {
+	beginLive(c, liveId)
+	endLive(c, liveId)
+	finishLive(c, liveId)
+}
+
+func TestLives_finish(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	beginLive(c, liveId)
+	endLive(c, liveId)
+	res := c.getData("lives/"+liveId+"/finish", url.Values{})
+	assert.NotNil(t, res.Interface())
+}
+
 func TestLives_end_error(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)

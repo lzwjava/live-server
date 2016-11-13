@@ -14,6 +14,7 @@ class Lives extends BaseController
     public $attendanceDao;
     public $weChatPlatform;
     public $couponDao;
+    public $videoDao;
 
     function __construct()
     {
@@ -30,6 +31,8 @@ class Lives extends BaseController
         $this->weChatPlatform = new WeChatPlatform();
         $this->load->model(CouponDao::class);
         $this->couponDao = new CouponDao();
+        $this->load->model(VideoDao::class);
+        $this->videoDao = new VideoDao();
     }
 
     protected function checkIfAmountWrong($amount)
@@ -150,12 +153,46 @@ class Lives extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        if ($live->ownerId != $user->userId) {
+            $this->failure(ERROR_NOT_ALLOW_DO_IT);
+            return;
+        }
         if ($live->status != LIVE_STATUS_ON) {
             $this->failure(ERROR_LIVE_NOT_START);
             return;
         }
-        $ok = $this->statusDao->endLive($id);
+        $ok = $this->statusDao->setLiveTranscode($id);
+        if (!$ok) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
         $this->succeed($ok);
+    }
+
+    function finish_get($id)
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $live = $this->liveDao->getLive($id, $user);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        if ($live->ownerId != $user->userId) {
+            $this->failure(ERROR_NOT_ALLOW_DO_IT);
+            return;
+        }
+        $endOk = $this->liveDao->endLive($id);
+        $ok = $this->videoDao->addVideoByLive($live);
+        if (!$endOk || !$ok) {
+            $this->failure(ERROR_SQL_WRONG);
+        }
+        $this->succeed();
     }
 
     function submitReview_get($id)

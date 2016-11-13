@@ -112,6 +112,7 @@ class LiveDao extends BaseDao
         }
         $fields = $this->livePublicFields('l');
         $userFields = $this->userPublicFields('u', true);
+
         $sql = "select $fields, $userFields,a.attendanceId,s.shareId from lives as l
                 left join users as u on u.userId=l.ownerId
                 left join attendances as a on a.liveId = l.liveId and a.userId = $userId
@@ -131,6 +132,11 @@ class LiveDao extends BaseDao
     function getRawLive($liveId)
     {
         return $this->getOneFromTable(TABLE_LIVES, KEY_LIVE_ID, $liveId);
+    }
+
+    function getRawLivesByStatus($status)
+    {
+        return $this->getListFromTable(TABLE_LIVES, KEY_STATUS, $status);
     }
 
     private function electHlsServer()
