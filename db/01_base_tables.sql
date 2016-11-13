@@ -201,27 +201,24 @@ CREATE TABLE `coupons` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `videos` (
-  `videoId`        INT(11)     NOT NULL             AUTO_INCREMENT,
-  `liveId`         INT(11)     NOT NULL,
-  `fileName`       VARCHAR(60) NOT NULL             DEFAULT '',
-  `endTs`          VARCHAR(20) NOT NULL             DEFAULT '',
-  `transcoded`     TINYINT(2)  NOT NULL             DEFAULT 0,
-  `transcodedTime` TIMESTAMP                        DEFAULT CURRENT_TIMESTAMP,
-  `created`        TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
-  `updated`        TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`videoId`),
+CREATE TABLE `recorded_videos` (
+  `recordedVideoId` INT(11)     NOT NULL             AUTO_INCREMENT,
+  `liveId`          INT(11)     NOT NULL,
+  `fileName`        VARCHAR(60) NOT NULL             DEFAULT '',
+  `endTs`           VARCHAR(20) NOT NULL             DEFAULT '',
+  `transcoded`      TINYINT(2)  NOT NULL             DEFAULT 0,
+  `transcodedTime`  TIMESTAMP                        DEFAULT CURRENT_TIMESTAMP,
+  `created`         TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `updated`         TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`recordedVideoId`),
   FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
   UNIQUE KEY (`fileName`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE `videos` ADD COLUMN `transcodedFileName` VARCHAR(60) NOT NULL             DEFAULT ''
+ALTER TABLE `recorded_videos` ADD COLUMN `transcodedFileName` VARCHAR(60) NOT NULL             DEFAULT ''
 AFTER `transcodedTime`;
-
-ALTER TABLE `videos` RENAME `recorded_videos`;
-ALTER TABLE `recorded_videos` CHANGE `videoId` `recordedVideoId` INT(11) NOT NULL             AUTO_INCREMENT;
 
 CREATE TABLE `videos` (
   `videoId`  INT(11)     NOT NULL             AUTO_INCREMENT,
