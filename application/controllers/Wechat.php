@@ -227,8 +227,12 @@ class Wechat extends BaseController
         // logInfo("union data:" . json_encode($unionResp));
         $unionId = $unionResult->unionid;
         $snsUser = $this->snsUserDao->getSnsUserByUnionId($unionId);
-        if (!$snsUser || !$snsUser->userId) {
+        if (!$snsUser) {
             $this->failure(ERROR_SNS_USER_NOT_EXISTS);
+            return;
+        }
+        if (!$snsUser->userId) {
+            $this->failure(ERROR_SNS_USER_ID_EMPTY);
             return;
         }
         $user = $this->userDao->setLoginByUserId($snsUser->userId);
