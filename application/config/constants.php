@@ -159,6 +159,7 @@ define('ERROR_BIND_UNION_ID', 'fail_bind_union_id');
 define('ERROR_UNION_ID_EMPTY', 'union_id_empty');
 define('ERROR_UNION_ID_USER_NOT_EXISTS', 'union_id_user_not_exists');
 define('ERROR_SNS_USER_NOT_EXISTS', 'sns_user_not_exists');
+define('ERROR_SNS_USER_ID_EMPTY', 'sns_user_user_id_empty');
 define('ERROR_GET_USER_INFO', 'fail_get_user_info');
 define('ERROR_BIND_UNION_ID_TO_USER', 'fail_bind_union_id_to_user');
 define('ERROR_WECHAT_ALREADY_BIND', 'wechat_already_bind');
@@ -240,11 +241,12 @@ if (!function_exists('errorInfos')) {
             ERROR_BIND_UNION_ID => '绑定微信统一ID失败',
             ERROR_UNION_ID_EMPTY => '微信统一ID不能为空,请退出并重新进入',
             ERROR_UNION_ID_USER_NOT_EXISTS => '微信统一ID对应的用户不存在',
-            ERROR_SNS_USER_NOT_EXISTS => '请加微信lzwjava来修复Bug,此Bug比较复杂',
+            ERROR_SNS_USER_NOT_EXISTS => '还未注册趣直播, 请关注平方根平台公众号, 登录注册一下',
             ERROR_GET_USER_INFO => '获取微信用户信息失败',
             ERROR_BIND_UNION_ID_TO_USER => '无法绑定微信统一ID到用户',
             ERROR_WECHAT_ALREADY_BIND => '微信已经绑定过了,无需重复绑定',
             ERROR_BIND_WECHAT_FAILED => '绑定微信与手机号失败',
+            ERROR_SNS_USER_ID_EMPTY => '还没绑定手机, 请关注平方根平台公众号, 进入直播绑定一下',
 
             // videos
             ERROR_VIDEOS_NOT_GEN => '回放视频还没有生成',
