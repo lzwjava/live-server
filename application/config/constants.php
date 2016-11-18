@@ -172,6 +172,10 @@ define('ERROR_CONVERT_VIDEO', 'fail_convert_video');
 define('ERROR_MERGE_VIDEO', 'fail_merge_video');
 define('ERROR_SCP_FAIL', 'fail_scp');
 
+// rewards
+define('ERROR_REWARD_TOO_LITTLE', 'reward_too_little');
+define('ERROR_REWARD_TOO_MUCH', 'reward_too_much');
+
 if (!function_exists('errorInfos')) {
     function errorInfos()
     {
@@ -254,6 +258,10 @@ if (!function_exists('errorInfos')) {
             ERROR_CONVERT_VIDEO => '转码视频失败',
             ERROR_MERGE_VIDEO => '视频合并失败',
             ERROR_SCP_FAIL => '视频传输失败',
+
+            // rewards
+            ERROR_REWARD_TOO_LITTLE => '打赏最低为1元',
+            ERROR_REWARD_TOO_MUCH => '打赏最高为1000元'
         );
     }
 
@@ -357,6 +365,8 @@ define('REMARK_ALIPAY', '支付宝充值');
 define('REMARK_WECHAT', '微信充值');
 define('REMARK_PAY', '参加%s的直播');
 define('REMARK_INCOME_LIVE', '%s报名直播');
+define('REMARK_ATTEND', '%s参加%s的直播');
+define('REMARK_REWARD', '%s打赏%s的直播');
 
 // qrcodes
 define('TABLE_SCANNED_QRCODES', 'scanned_qrcodes');
@@ -415,6 +425,10 @@ define('TABLE_VIDEOS', 'videos');
 define('KEY_VIDEO_ID', 'videoId');
 define('KEY_TITLE', 'title');
 
+// rewards
+define('TABLE_REWARDS', 'rewards');
+define('KEY_REWARD_ID', 'rewardId');
+
 // lc
 if (ENVIRONMENT == 'development') {
     define('LC_APP_ID', LC_TEST_APP_ID);
@@ -472,6 +486,14 @@ if (ENVIRONMENT == 'development') {
 }
 
 define('FFMPEG_PATH', '/home/srs/trunk/objs/ffmpeg/bin/ffmpeg');
+
+// reward
+define('LEAST_COMMON_REWARD', 100);
+define('MAX_COMMON_REWARD', 100 * 1000);
+
+// charge type
+define('CHARGE_TYPE_ATTEND', 1);
+define('CHARGE_TYPE_REWARD', 2);
 
 if (!function_exists('specialPhones')) {
     function specialPhones()

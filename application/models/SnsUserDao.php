@@ -66,4 +66,17 @@ class SnsUserDao extends BaseDao
         return $this->db->query($sql, $binds)->row();
     }
 
+
+    function getSnsUserByUser($user)
+    {
+        $snsUser = null;
+        if ($user->unionId) {
+            $snsUser = $this->getWechatSnsUser($user->unionId);
+        }
+        if (!$snsUser) {
+            $snsUser = $this->getWeChatSnsUserByUserId($user->userId);
+        }
+        return $snsUser;
+    }
+
 }
