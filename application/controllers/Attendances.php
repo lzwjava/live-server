@@ -104,6 +104,7 @@ class Attendances extends BaseController
         } else {
             $id = $this->attendanceDao->addAttendance($user->userId, $live->liveId, null);
             $attendance = $this->attendanceDao->getAttendanceById($id);
+            $this->liveDao->incrementAttendanceCount($liveId);
             $this->succeed($attendance);
         }
     }
