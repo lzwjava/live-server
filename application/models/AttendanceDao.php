@@ -13,9 +13,11 @@ class AttendanceDao extends BaseDao
     {
         $data = array(
             KEY_USER_ID => $userId,
-            KEY_LIVE_ID => $liveId,
-            KEY_ORDER_NO => $orderNo
+            KEY_LIVE_ID => $liveId
         );
+        if ($orderNo) {
+            $data[KEY_ORDER_NO] = $orderNo;
+        }
         $this->db->insert(TABLE_ATTENDANCES, $data);
         return $this->db->insert_id();
     }

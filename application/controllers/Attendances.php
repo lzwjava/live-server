@@ -37,11 +37,10 @@ class Attendances extends BaseController
 
     function create_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID, KEY_CHANNEL))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID))) {
             return;
         }
         $liveId = $this->post(KEY_LIVE_ID);
-        $channel = $this->post(KEY_CHANNEL);
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
@@ -62,36 +61,51 @@ class Attendances extends BaseController
             $this->failure(ERROR_EXCEED_MAX_PEOPLE);
             return;
         }
+
         $attendance = $this->attendanceDao->getAttendance($user->userId, $liveId);
         if ($attendance != null) {
             $this->failure(ERROR_ALREADY_ATTEND);
             return;
         }
-        $openId = null;
 
-        if ($channel == CHANNEL_WECHAT_H5) {
-            $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);
-            if (!$snsUser) {
-                $snsUser = $this->snsUserDao->getWeChatSnsUserByUserId($user->userId);
-                if (!$snsUser) {
-                    $this->failure(ERROR_MUST_BIND_WECHAT);
-                    return;
-                }
+        if ($live->needPay) {
+            $channel = $this->post(KEY_CHANNEL);
+            if ($this->checkIfNotInArray($channel, array(CHANNEL_WECHAT_H5,
+                CHANNEL_WECHAT_QRCODE, CHANNEL_ALIPAY_APP))
+            ) {
+                return;
             }
-            $openId = $snsUser->openId;
-        }
-        // max 24 chars
-        $subject = '参加直播';
-        $body = $user->username . ' 参加直播 ' . $live->subject;
-        $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
 
-        $ch = $this->createChargeAndInsert($live->realAmount, $channel, $subject, $body,
-            $metaData, $user, $openId);
-        if ($ch == null) {
-            $this->failure(ERROR_CHARGE_CREATE);
-            return;
+            $openId = null;
+
+            if ($channel == CHANNEL_WECHAT_H5) {
+                $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);
+                if (!$snsUser) {
+                    $snsUser = $this->snsUserDao->getWeChatSnsUserByUserId($user->userId);
+                    if (!$snsUser) {
+                        $this->failure(ERROR_MUST_BIND_WECHAT);
+                        return;
+                    }
+                }
+                $openId = $snsUser->openId;
+            }
+            // max 24 chars
+            $subject = '参加直播';
+            $body = $user->username . ' 参加直播 ' . $live->subject;
+            $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
+
+            $ch = $this->createChargeAndInsert($live->realAmount, $channel, $subject, $body,
+                $metaData, $user, $openId);
+            if ($ch == null) {
+                $this->failure(ERROR_CHARGE_CREATE);
+                return;
+            }
+            $this->succeed($ch);
+        } else {
+            $id = $this->attendanceDao->addAttendance($user->userId, $live->liveId, null);
+            $attendance = $this->attendanceDao->getAttendanceById($id);
+            $this->succeed($attendance);
         }
-        $this->succeed($ch);
     }
 
     protected function createChargeAndInsert($amount, $channel, $subject, $body,
