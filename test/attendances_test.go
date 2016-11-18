@@ -63,6 +63,18 @@ func TestAttendances_create(t *testing.T) {
 	assert.Equal(t, callbackRes, "success")
 }
 
+func TestAttendances_createNoNeedPay(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLiveNotNeedPay(c)
+
+	c2, _ := NewClientAndUser()
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}})
+	assert.NotNil(t, res.Interface())
+
+	lv := c2.getData("lives/"+liveId, url.Values{})
+	assert.NotNil(t, lv.Get("rtmpKey").MustString())
+}
+
 func TestAttendances_createByWeChat(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLiveWithAmount(c, 5900)

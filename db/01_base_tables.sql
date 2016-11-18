@@ -233,3 +233,12 @@ CREATE TABLE `videos` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `lives`ADD COLUMN `needPay` TINYINT(1) NOT NULL DEFAULT 0
+AFTER `previewUrl`;
+
+UPDATE `lives`
+SET `needPay` = 1
+WHERE created < '2016-11-19 00:00:00';
+
+ALTER TABLE `attendances` MODIFY COLUMN `orderNo` VARCHAR(31) DEFAULT NULL;
