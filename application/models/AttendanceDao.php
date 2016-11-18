@@ -9,7 +9,7 @@
 class AttendanceDao extends BaseDao
 {
 
-    function addAttendance($userId, $liveId, $orderNo)
+    private function addAttendance($userId, $liveId, $orderNo)
     {
         $data = array(
             KEY_USER_ID => $userId,
@@ -20,6 +20,27 @@ class AttendanceDao extends BaseDao
         }
         $this->db->insert(TABLE_ATTENDANCES, $data);
         return $this->db->insert_id();
+    }
+
+    function addAttendanceAndIncreaseCount($userId, $liveId, $orderNo)
+    {
+        $id = $this->addAttendance($userId, $liveId, $orderNo);
+        if (!$id) {
+            return null;
+        }
+        $ok = $this->incrementAttendanceCount($liveId);
+        if (!$ok) {
+            return null;
+        }
+        return $id;
+    }
+
+    function incrementAttendanceCount($liveId)
+    {
+        $sql = "UPDATE lives SET attendanceCount = attendanceCount+1 WHERE liveId=?";
+        $binds = array($liveId);
+        $this->db->query($sql, $binds);
+        return $this->db->affected_rows() > 0;
     }
 
     function getAttendance($userId, $liveId)

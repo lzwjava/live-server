@@ -13,6 +13,8 @@ class Pay
     /** @var WxPay */
     public $wepay;
 
+    public $chargeDao;
+
     function __construct()
     {
         $ci = get_instance();
@@ -20,9 +22,33 @@ class Pay
         $this->wxpay = new WxPay();
         $ci->load->library('alipay/' . Alipay::class);
         $this->alipay = new Alipay();
+        $ci->load->model(ChargeDao::class);
+        $this->chargeDao = new ChargeDao();
     }
 
-    function createCharge($orderNo, $channel, $amount, $subject, $body, $openId)
+    function createChargeAndInsert($amount, $channel, $subject, $body,
+                                   $metaData, $user, $openId)
+    {
+        $orderNo = genOrderNo();
+        $ipAddress = $this->input->ip_address();
+        if ($ipAddress == '::1') {
+            // local debug case
+            $ipAddress = '127.0.0.1';
+        }
+        logInfo("amount " . $amount . "subject " . $subject . "body " . $body . " openId" . $openId);
+        $ch = $this->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
+        if ($ch == null) {
+            return null;
+        }
+        $id = $this->chargeDao->add($orderNo, $amount, $channel, $user->userId, $ipAddress, $metaData);
+        if (!$id) {
+            return null;
+        }
+        return $ch;
+    }
+
+
+    private function createCharge($orderNo, $channel, $amount, $subject, $body, $openId)
     {
         if ($channel == CHANNEL_ALIPAY_APP) {
             return $this->alipay->createCharge($orderNo, $amount, $subject, $body);

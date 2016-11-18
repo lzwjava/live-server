@@ -14,6 +14,8 @@ class PayNotifyDao extends BaseDao
     public $chargeDao;
     public $transactionDao;
     public $shareDao;
+    public $userDao;
+    public $rewardDao;
 
     function __construct()
     {
@@ -28,6 +30,10 @@ class PayNotifyDao extends BaseDao
         $this->transactionDao = new TransactionDao();
         $this->load->model(ShareDao::class);
         $this->shareDao = new ShareDao();
+        $this->load->model(UserDao::class);
+        $this->userDao = new UserDao();
+        $this->load->model(RewardDao::class);
+        $this->rewardDao = new RewardDao();
     }
 
     private function remarkFromChannel($channel)
@@ -40,9 +46,20 @@ class PayNotifyDao extends BaseDao
         return 'unknown';
     }
 
-    function handleChargeSucceed($orderNo, $channel)
+    private function updatePaidAndNewCharge($orderNo, $charge, $channel, $userId)
+    {
+        $this->chargeDao->updateChargeToPaid($orderNo);
+        $amount = $charge->amount;
+        $remark = $this->remarkFromChannel($channel);
+        $error = $this->transactionDao->newCharge($userId, $orderNo, $amount, $charge->chargeId, $remark);
+        return $error;
+    }
+
+    function handleChargeSucceed($orderNo)
     {
         $charge = $this->chargeDao->getOneByOrderNo($orderNo);
+        $channel = $charge->channel;
+        $amount = $charge->amount;
         if ($charge == null) {
             return ERROR_OBJECT_NOT_EXIST;
         }
@@ -50,45 +67,61 @@ class PayNotifyDao extends BaseDao
             return ERROR_ALREADY_NOTIFY;
         }
         $metadata = json_decode($charge->metaData);
-        if (isset($metadata->liveId)) {
+        $type = $metadata->type;
+        if ($type == CHARGE_TYPE_ATTEND) {
             $liveId = $metadata->liveId;
             $userId = $metadata->userId;
             $this->db->trans_begin();
-            $this->chargeDao->updateChargeToPaid($orderNo);
-            $amount = $charge->amount;
-            $remark = $this->remarkFromChannel($channel);
-            $error = $this->transactionDao->newCharge($userId, $orderNo, $amount, $charge->chargeId, $remark);
+            $error = $this->updatePaidAndNewCharge($orderNo, $charge, $channel, $userId);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return $error;
             }
-            $ok = $this->attendanceDao->addAttendance($userId, $liveId, $orderNo);
-            if (!$ok || !$this->db->trans_status()) {
-                $this->db->trans_rollback();
-                return ERROR_SQL_WRONG;
-            }
 
-            $ok = $this->liveDao->incrementAttendanceCount($liveId);
+            $ok = $this->attendanceDao->addAttendanceAndIncreaseCount($userId,
+                $liveId, $orderNo);
             if (!$ok || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return ERROR_SQL_WRONG;
             }
 
             $live = $this->liveDao->getLive($liveId);
-            $error = $this->transactionDao->newPay($userId, genOrderNo(),
-                -$amount, $liveId, $live->owner->username);
-            if ($error || !$this->db->trans_status()) {
-                $this->db->trans_rollback();
-                return $error;
-            }
-            $user = $this->userDao->findPublicUserById($userId);
-            $error = $this->transactionDao->newIncome($live->ownerId, genOrderNo(), $amount, $liveId,
-                $user->username);
+            $fromUser = $this->userDao->findPublicUserById($userId);
+            $toUser = $live->owner;
+            $error = $this->transactionDao->payUser($fromUser, $toUser, $liveId, $amount, $type);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return $error;
             }
             $this->shareDao->useToDiscount($userId, $liveId);
+
+            $this->db->trans_commit();
+            return null;
+        } else if ($type == CHARGE_TYPE_REWARD) {
+            $liveId = $metadata->liveId;
+            $userId = $metadata->userId;
+            $this->db->trans_begin();
+            $error = $this->updatePaidAndNewCharge($orderNo, $charge, $channel, $userId);
+            if ($error || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return $error;
+            }
+            $ok = $this->rewardDao->addReward($userId, $liveId, $orderNo);
+            if (!$ok || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return ERROR_SQL_WRONG;
+            }
+
+            $amount = $charge->amount;
+
+            $live = $this->liveDao->getLive($liveId);
+            $fromUser = $this->userDao->findPublicUserById($userId);
+            $toUser = $live->owner;
+            $error = $this->transactionDao->payUser($fromUser, $toUser, $liveId, $amount, $type);
+            if ($error || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return $error;
+            }
 
             $this->db->trans_commit();
             return null;

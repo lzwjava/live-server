@@ -242,3 +242,18 @@ SET `needPay` = 1
 WHERE created < '2016-11-19 00:00:00';
 
 ALTER TABLE `attendances` MODIFY COLUMN `orderNo` VARCHAR(31) DEFAULT NULL;
+
+CREATE TABLE `rewards` (
+  `rewardId` INT(11)     NOT NULL AUTO_INCREMENT,
+  `userId`   INT(11)     NOT NULL,
+  `liveId`   INT(11)     NOT NULL,
+  `orderNo`  VARCHAR(31) NOT NULL DEFAULT '',
+  `created`  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`rewardId`),
+  UNIQUE KEY `orderNo` (`orderNo`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
+  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;

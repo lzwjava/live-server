@@ -64,16 +64,36 @@ class TransactionDao extends BaseDao
             TRANS_TYPE_RECHARGE, 'chargeId:' . $chargeId, $remark);
     }
 
-    function newIncome($userId, $orderNo, $amount, $liveId, $attendeeName)
+    function newIncome($userId, $orderNo, $amount, $liveId, $remark)
     {
         return $this->newTransaction($userId, $orderNo, $amount, TRANS_TYPE_INCOME,
-            'liveId:' . $liveId, sprintf(REMARK_INCOME_LIVE, $attendeeName));
+            'liveId:' . $liveId, $remark);
     }
 
-    function newPay($userId, $orderNo, $amount, $liveId, $liveOwner)
+    function newPay($userId, $orderNo, $amount, $liveId, $remark)
     {
         return $this->newTransaction($userId, $orderNo, $amount, TRANS_TYPE_PAY,
-            'liveId:' . $liveId, sprintf(REMARK_PAY, $liveOwner));
+            'liveId:' . $liveId, $remark);
+    }
+
+    function payUser($fromUser, $toUser, $liveId, $amount, $type)
+    {
+        $remark = null;
+        if ($type == CHARGE_TYPE_ATTEND) {
+            $remark = sprintf(REMARK_ATTEND, $fromUser->username, $toUser->username);
+        } else if ($type == CHARGE_TYPE_REWARD) {
+            $remark = sprintf(REMARK_REWARD, $fromUser->username, $toUser->username);
+        }
+        $error = $this->newPay($fromUser->userId, genOrderNo(),
+            -$amount, $liveId, $remark);
+        if ($error) {
+            return $error;
+        }
+        $error = $this->newIncome($toUser->userId, genOrderNo(), $amount, $liveId, $remark);
+        if ($error) {
+            return $error;
+        }
+        return null;
     }
 
 }

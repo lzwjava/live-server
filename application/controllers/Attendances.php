@@ -79,22 +79,19 @@ class Attendances extends BaseController
             $openId = null;
 
             if ($channel == CHANNEL_WECHAT_H5) {
-                $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);
+                $snsUser = $this->snsUserDao->getSnsUserByUser($user);
                 if (!$snsUser) {
-                    $snsUser = $this->snsUserDao->getWeChatSnsUserByUserId($user->userId);
-                    if (!$snsUser) {
-                        $this->failure(ERROR_MUST_BIND_WECHAT);
-                        return;
-                    }
+                    $this->failure(ERROR_MUST_BIND_WECHAT);
+                    return;
                 }
                 $openId = $snsUser->openId;
             }
             // max 24 chars
             $subject = '参加直播';
             $body = $user->username . ' 参加直播 ' . $live->subject;
-            $metaData = array(KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
+            $metaData = array(KEY_TYPE => CHARGE_TYPE_ATTEND, KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
 
-            $ch = $this->createChargeAndInsert($live->realAmount, $channel, $subject, $body,
+            $ch = $this->pay->createChargeAndInsert($live->realAmount, $channel, $subject, $body,
                 $metaData, $user, $openId);
             if ($ch == null) {
                 $this->failure(ERROR_CHARGE_CREATE);
@@ -102,32 +99,10 @@ class Attendances extends BaseController
             }
             $this->succeed($ch);
         } else {
-            $id = $this->attendanceDao->addAttendance($user->userId, $live->liveId, null);
-            $attendance = $this->attendanceDao->getAttendanceById($id);
-            $this->liveDao->incrementAttendanceCount($liveId);
+            $id = $this->attendanceDao->addAttendanceAndIncreaseCount($user->userId,
+                $live->liveId, null);
             $this->succeed($attendance);
         }
-    }
-
-    protected function createChargeAndInsert($amount, $channel, $subject, $body,
-                                             $metaData, $user, $openId)
-    {
-        $orderNo = genOrderNo();
-        $ipAddress = $this->input->ip_address();
-        if ($ipAddress == '::1') {
-            // local debug case
-            $ipAddress = '127.0.0.1';
-        }
-        logInfo("amount " . $amount . "subject " . $subject . "body " . $body . " openId" . $openId);
-        $ch = $this->pay->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
-        if ($ch == null) {
-            return null;
-        }
-        $id = $this->chargeDao->add($orderNo, $amount, $channel, $user->userId, $ipAddress, $metaData);
-        if (!$id) {
-            return null;
-        }
-        return $ch;
     }
 
     function one_get()

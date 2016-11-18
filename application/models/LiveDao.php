@@ -260,13 +260,6 @@ class LiveDao extends BaseDao
         return $this->setLiveStatus($id, LIVE_STATUS_WAIT);
     }
 
-    function incrementAttendanceCount($liveId)
-    {
-        $sql = "UPDATE lives SET attendanceCount = attendanceCount+1 WHERE liveId=?";
-        $binds = array($liveId);
-        return $this->db->query($sql, $binds);
-    }
-
     function lastPrepareLive($user)
     {
         $sql = "SELECT liveId FROM lives WHERE ownerId=? AND status<=?";
