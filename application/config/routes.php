@@ -105,7 +105,10 @@ $route['qrcodes/scanned']['GET'] = 'qrcodes/isQrcodeScanned';
 $route['qrcodes/gen']['GET'] = 'qrcodes/png';
 $route['qrcodes/one']['GET'] = 'qrcodes/qrcode';
 
+// rewards
 $route['rewards/notify']['POST'] = 'rewards/notify';
+$route['rewards']['POST'] = 'rewards/create';
+$route['lives/(\d+)/rewards'] = 'rewards/list/$1';
 
 // wechat
 $route['wechat/sign']['GET'] = 'wechat/sign';

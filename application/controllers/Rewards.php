@@ -13,6 +13,7 @@ class Rewards extends BaseController
     public $liveDao;
     public $pay;
     public $snsUserDao;
+    public $rewardDao;
 
     function __construct()
     {
@@ -27,6 +28,8 @@ class Rewards extends BaseController
         $this->pay = new Pay();
         $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
+        $this->load->model(RewardDao::class);
+        $this->rewardDao = new RewardDao();
     }
 
     protected function checkIfRewardAmountWrong($amount)
@@ -48,12 +51,15 @@ class Rewards extends BaseController
 
     public function create_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID, KEY_AMOUNT, KEY_CHANNEL))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID,
+            KEY_AMOUNT, KEY_CHANNEL))
+        ) {
             return;
         }
         $liveId = $this->post(KEY_LIVE_ID);
         $amount = $this->post(KEY_AMOUNT);
         $channel = $this->post(KEY_CHANNEL);
+        $amount = $this->toNumber($amount);
         if ($this->checkIfRewardAmountWrong($amount)) {
             return;
         }
@@ -68,6 +74,14 @@ class Rewards extends BaseController
         if ($this->checkIfNotInArray($channel, array(CHANNEL_ALIPAY_APP,
             CHANNEL_WECHAT_QRCODE, CHANNEL_WECHAT_H5))
         ) {
+            return;
+        }
+        if ($user->userId == $live->owner->userId) {
+            $this->failure(ERROR_REWARD_YOURSELF);
+            return;
+        }
+        if (!$live->canJoin) {
+            $this->failure(ERROR_NOT_ATTEND);
             return;
         }
         $metaData = array(KEY_TYPE => CHARGE_TYPE_REWARD,
@@ -86,12 +100,19 @@ class Rewards extends BaseController
             $openId = $snsUser->openId;
         }
 
-        $ch = $this->pay->createChargeAndInsert($amount, $channel, $subject, $body, $metaData, $user, $openId);
+        $ch = $this->pay->createChargeAndInsert($amount, $channel, $subject, $body,
+            $metaData, $user, $openId);
         if (!$ch) {
             $this->failure(ERROR_CHARGE_CREATE);
             return;
         }
         $this->succeed($ch);
+    }
+
+    function list_get($liveId)
+    {
+        $rewards = $this->rewardDao->getList($liveId);
+        $this->succeed($rewards);
     }
 
     public function notify_post()

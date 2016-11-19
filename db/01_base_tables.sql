@@ -252,6 +252,7 @@ CREATE TABLE `rewards` (
   `updated`  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`rewardId`),
   UNIQUE KEY `orderNo` (`orderNo`),
+  UNIQUE KEY (`userId`, `liveId`, `created`),
   FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
   FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`)
 )

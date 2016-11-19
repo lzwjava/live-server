@@ -175,6 +175,8 @@ define('ERROR_SCP_FAIL', 'fail_scp');
 // rewards
 define('ERROR_REWARD_TOO_LITTLE', 'reward_too_little');
 define('ERROR_REWARD_TOO_MUCH', 'reward_too_much');
+define('ERROR_REWARD_YOURSELF', 'reward_yourself');
+define('ERROR_NOT_ATTEND', 'not_attend');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -261,7 +263,9 @@ if (!function_exists('errorInfos')) {
 
             // rewards
             ERROR_REWARD_TOO_LITTLE => '打赏最低为1元',
-            ERROR_REWARD_TOO_MUCH => '打赏最高为1000元'
+            ERROR_REWARD_TOO_MUCH => '打赏最高为1000元',
+            ERROR_REWARD_YOURSELF => '不能打赏自己',
+            ERROR_NOT_ATTEND => '尚未参与该场直播'
         );
     }
 
