@@ -30,7 +30,7 @@ class Pay
                                    $metaData, $user, $openId)
     {
         $orderNo = genOrderNo();
-        $ipAddress = $this->input->ip_address();
+        $ipAddress = get_instance()->input->ip_address();
         if ($ipAddress == '::1') {
             // local debug case
             $ipAddress = '127.0.0.1';
