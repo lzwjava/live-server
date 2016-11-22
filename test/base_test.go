@@ -160,7 +160,7 @@ func login(c *Client, mobilePhoneNumber string) *simplejson.Json {
 
 func registerUserWithPhone(c *Client, mobilePhoneNumber string, username string) *simplejson.Json {
 	res := c.post("users", url.Values{"mobilePhoneNumber": {mobilePhoneNumber},
-		"username": {username}, "smsCode": {"5555"}})
+		"username": {username}, "smsCode": {"5555"}, "avatarUrl": {"http://i.quzhiboapp.com/defaultAvatar1.png"}})
 	if res.MustString("status") == "success" {
 		registerRes := res.Get("result")
 		c.SessionToken = registerRes.Get("sessionToken").MustString()

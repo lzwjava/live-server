@@ -15,7 +15,7 @@ func TestUser_RegisterAndLogin(t *testing.T) {
 	name := randomString()
 	mobile := randomMobile()
 	res := c.postData("users", url.Values{"mobilePhoneNumber": {mobile},
-		"username": {name}, "smsCode": {"5555"}})
+		"username": {name}, "smsCode": {"5555"}, "avatarUrl": {"http://i.quzhiboapp.com/defaultAvatar1.png"}})
 	assert.Equal(t, name, res.Get("username").MustString())
 	assert.NotNil(t, res.Get("userId"))
 	assert.NotNil(t, res.Get("created"))
@@ -25,6 +25,7 @@ func TestUser_RegisterAndLogin(t *testing.T) {
 		"smsCode": {"5555"}})
 	assert.Equal(t, name, res.Get("username").MustString())
 	assert.Equal(t, mobile, res.Get("mobilePhoneNumber").MustString())
+	assert.Equal(t, "http://i.quzhiboapp.com/defaultAvatar1.png", res.Get("avatarUrl").MustString())
 }
 
 func TestUser_SpecialPhone(t *testing.T) {
@@ -32,7 +33,7 @@ func TestUser_SpecialPhone(t *testing.T) {
 	c := NewClient()
 	name := randomString()
 	res := c.postData("users", url.Values{"mobilePhoneNumber": {"817015130624"},
-		"username": {name}, "smsCode": {"123456"}})
+		"username": {name}, "smsCode": {"123456"}, "avatarUrl": {"http://i.quzhiboapp.com/defaultAvatar1.png"}})
 	assert.NotNil(t, res.Get("username").Interface())
 }
 
