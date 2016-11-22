@@ -81,17 +81,15 @@ class Users extends BaseController
 
     public function register_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_USERNAME, KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_USERNAME,
+            KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE, KEY_AVATAR_URL))
         ) {
             return;
         }
-        if (!isDebug()) {
-            $this->failure(ERROR_NOT_ALLOW_APP_REGISTER);
-            return;
-        }
-        $mobilePhoneNumber = $_POST[KEY_MOBILE_PHONE_NUMBER];
-        $username = $_POST[KEY_USERNAME];
-        $smsCode = $_POST[KEY_SMS_CODE];
+        $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
+        $username = $this->post(KEY_USERNAME);
+        $smsCode = $this->post(KEY_SMS_CODE);
+        $avatarUrl = $this->post(KEY_AVATAR_URL);
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
         } elseif ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
@@ -101,8 +99,7 @@ class Users extends BaseController
         } else if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
             return;
         } else {
-            $defaultAvatarUrl = QINIU_FILE_HOST . "/defaultAvatar1.png";
-            $ok = $this->userDao->insertUser($username, $mobilePhoneNumber, $defaultAvatarUrl);
+            $ok = $this->userDao->insertUser($username, $mobilePhoneNumber, $avatarUrl);
             if (!$ok) {
                 $this->failure(ERROR_SQL_WRONG);
                 return;
