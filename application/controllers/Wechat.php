@@ -378,7 +378,7 @@ class Wechat extends BaseController
 
         $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT_APP);
         if ($snsUser) {
-            $this->succeed(array(KEY_TYPE => OAUTH_RESULT_REGISTER, 'snsUser' => $snsUser));
+            $this->succeed(array(KEY_TYPE => OAUTH_RESULT_REGISTER, OAUTH_SNS_USER => $snsUser));
         } else {
             $id = $this->snsUserDao->addSnsUser($unionResult->openid, $unionResult->nickname,
                 $unionResult->headimgurl, PLATFORM_WECHAT_APP, $unionId, 0);
@@ -386,6 +386,7 @@ class Wechat extends BaseController
                 $this->failure(ERROR_SQL_WRONG);
                 return;
             }
+            $snsUser = $this->snsUserDao->getSnsUser($unionResult->openid, PLATFORM_WECHAT_APP);
             $this->succeed(array(KEY_TYPE => OAUTH_RESULT_REGISTER, OAUTH_SNS_USER => $snsUser));
         }
     }

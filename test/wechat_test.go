@@ -117,6 +117,24 @@ func TestWeChat_wxpayNotify(t *testing.T) {
 
 func TestWeChat_appOauth(t *testing.T) {
 	c, _ := NewClientAndUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"0013U0ps1XUkNq0Dtels17A0ps13U0pH"}})
+	res := c.get("wechat/appOauth", url.Values{"code": {"031ABkdx1MXBwd0hllbx1DQGdx1ABkdW"}})
 	assert.NotNil(t, res)
+}
+
+func TestWeChat_appOauth_then_register(t *testing.T) {
+	c, _ := NewClientAndUser()
+	res := c.get("wechat/appOauth", url.Values{"code": {"041o6tpH01IN7j2pJPoH0T2npH0o6tp3"}})
+	assert.NotNil(t, res)
+	if res.Get("status").MustString() == "success" {
+		loginType := res.Get("type").MustString()
+		if loginType == "register" {
+			result := res.Get("result").Get("snsUser")
+			res := c.postData("users/registerBySns", url.Values{"openId": {result.Get("openId").MustString()},
+				"platform": {"wechat_app"}, "mobilePhoneNumber": {randomMobile()}, "smsCode": {"5555"}})
+			assert.NotNil(t, res)
+		} else if loginType == "login" {
+			user := res.Get("result").Get("user")
+			assert.NotNil(t, user.Get("userId").MustInt())
+		}
+	}
 }
