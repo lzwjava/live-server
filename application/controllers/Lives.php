@@ -187,6 +187,10 @@ class Lives extends BaseController
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
+        if ($live->status != LIVE_STATUS_TRANSCODE) {
+            $this->failure(ERROR_LIVE_NOT_TRANSCODE);
+            return;
+        }
         $endOk = $this->liveDao->endLive($id);
         $ok = $this->videoDao->addVideoByLive($live);
         if (!$endOk || !$ok) {
