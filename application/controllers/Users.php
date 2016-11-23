@@ -50,11 +50,11 @@ class Users extends BaseController
 
     public function requestSmsCode_post()
     {
-        if ($this->checkIfParamsNotExist($_POST, array(KEY_MOBILE_PHONE_NUMBER))
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER))
         ) {
             return;
         }
-        $mobilePhoneNumber = $_POST[KEY_MOBILE_PHONE_NUMBER];
+        $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
         if (in_array($mobilePhoneNumber, specialPhones())) {
             $this->succeed();
             return;
