@@ -245,6 +245,10 @@ class Wechat extends BaseController
         if (!$user) {
             return;
         }
+        if ($user->unionId) {
+            $this->failure(ERROR_WECHAT_ALREADY_BIND);
+            return;
+        }
         if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE))) {
             return;
         }
@@ -262,17 +266,20 @@ class Wechat extends BaseController
         }
         $unionResult = $unionResp->data;
         $unionId = $unionResult->unionid;
+
         $snsUser = $this->snsUserDao->getSnsUser($unionResult->openid, PLATFORM_WECHAT_APP);
-        if ($snsUser) {
-            $this->failure(ERROR_WECHAT_ALREADY_BIND);
-            return;
+        if (!$snsUser) {
+            $snsId = $this->snsUserDao->addSnsUser($unionResult->openid, $unionResult->nickname,
+                $unionResult->headimgurl, PLATFORM_WECHAT_APP, $unionId, $user->userId);
+            if (!$snsId) {
+                $this->failure(ERROR_SQL_WRONG);
+                return;
+            }
+        } else {
+            $this->snsUserDao->bindUser($unionResult->openid, PLATFORM_WECHAT_APP, $user->userId);
         }
-        $this->db->trans_start();
-        $this->snsUserDao->addSnsUser($unionResult->openid, $unionResult->nickname,
-            $unionResult->headimgurl, PLATFORM_WECHAT_APP, $unionId, $user->userId);
-        $this->userDao->bindUnionIdToUser($user->userId, $unionId);
-        $this->db->trans_complete();
-        if (!$this->db->trans_status()) {
+        $ok = $this->userDao->bindUnionIdToUser($user->userId, $unionId);
+        if (!$ok) {
             $this->failure(ERROR_SQL_WRONG);
             return;
         }
