@@ -123,6 +123,7 @@ define('ERROR_CREATE_LIVE', 'create_live_failed');
 define('ERROR_DETAIL_TOO_SHORT', 'detail_too_short');
 define('ERROR_ALREADY_REVIEW', 'already_review');
 define('ERROR_LIVE_NOT_WAIT', 'live_not_wait');
+define('ERROR_LIVE_NOT_TRANSCODE', 'live_not_transcode');
 define('ERROR_LIVE_NOT_START', 'live_not_start');
 define('ERROR_LIVE_NOT_ON', 'live_not_on');
 define('ERROR_SPEAKER_INTRO_TOO_SHORT', 'speaker_intro_too_short');
@@ -215,6 +216,7 @@ if (!function_exists('errorInfos')) {
             ERROR_LIVE_NOT_WAIT => '直播不是报名状态,无法开始',
             ERROR_LIVE_NOT_START => '直播不是进行中状态,无法结束',
             ERROR_LIVE_NOT_ON => '直播并不是测试开始状态,无法恢复到报名中',
+            ERROR_LIVE_NOT_TRANSCODE => '直播没有在转码状态,无法结束',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
