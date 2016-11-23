@@ -501,6 +501,12 @@ define('MAX_COMMON_REWARD', 100 * 1000);
 define('CHARGE_TYPE_ATTEND', 1);
 define('CHARGE_TYPE_REWARD', 2);
 
+// oauth type
+define('OAUTH_RESULT_LOGIN', 'login');
+define('OAUTH_RESULT_REGISTER', 'register');
+define('OAUTH_USER', 'user');
+define('OAUTH_SNS_USER', 'snsUser');
+
 if (!function_exists('specialPhones')) {
     function specialPhones()
     {

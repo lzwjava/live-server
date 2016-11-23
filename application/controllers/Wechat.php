@@ -353,5 +353,42 @@ class Wechat extends BaseController
         }
     }
 
+    function appOauth_get()
+    {
+        $code = $this->get(KEY_CODE);
+        $tokenResult = $this->appHttpGetAccessToken($code);
+        if ($tokenResult->error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+            return;
+        }
+        $respData = $tokenResult->data;
+        $unionResp = $this->httpGetUnionId($respData->access_token, $respData->openid);
+        if ($unionResp->error) {
+            $this->failure(ERROR_GET_USER_INFO);
+            return;
+        }
+        $unionResult = $unionResp->data;
+        $unionId = $unionResult->unionid;
+        $user = $this->userDao->findUserByUnionId($unionId);
+        if ($user) {
+            $user = $this->userDao->setLoginByUserId($user->userId);
+            $this->succeed(array(KEY_TYPE => OAUTH_RESULT_LOGIN, OAUTH_USER => $user));
+            return;
+        }
+
+        $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT_APP);
+        if ($snsUser) {
+            $this->succeed(array(KEY_TYPE => OAUTH_RESULT_REGISTER, 'snsUser' => $snsUser));
+        } else {
+            $id = $this->snsUserDao->addSnsUser($unionResult->openid, $unionResult->nickname,
+                $unionResult->headimgurl, PLATFORM_WECHAT_APP, $unionId, 0);
+            if (!$id) {
+                $this->failure(ERROR_SQL_WRONG);
+                return;
+            }
+            $this->succeed(array(KEY_TYPE => OAUTH_RESULT_REGISTER, OAUTH_SNS_USER => $snsUser));
+        }
+    }
+
 
 }

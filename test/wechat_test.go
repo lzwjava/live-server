@@ -114,3 +114,9 @@ func TestWeChat_wxpayNotify(t *testing.T) {
 // 	res := c.get("wechat/valid", url.Values{})
 // 	assert.NotNil(t, res)
 // }
+
+func TestWeChat_appOauth(t *testing.T) {
+	c, _ := NewClientAndUser()
+	res := c.get("wechat/oauth", url.Values{"code": {"0013U0ps1XUkNq0Dtels17A0ps13U0pH"}})
+	assert.NotNil(t, res)
+}

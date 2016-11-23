@@ -118,6 +118,7 @@ $route['wechat/wxpayNotify']['GET'] = 'wechat/wxpayNotify';
 $route['wechat/webOauth']['GET'] = 'wechat/webOauth';
 $route['wechat/bind']['GET'] = 'wechat/bind';
 $route['wechat/valid']['GET'] = 'wechat/valid';
+$route['wechat/appOauth']['GET'] = 'wechat/appOauth';
 
 // live hooks
 $route['liveHooks/onPublish']['POST'] = 'liveHooks/onPublish';
