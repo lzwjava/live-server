@@ -26,8 +26,8 @@ class Sms extends BaseDao
     {
         $realUser = $this->userDao->findUserById($userId);
         $name = $realUser->username;
-        if (mb_strlen($name) > 8) {
-            $name = mb_substr($name, 0, 8);
+        if (mb_strlen($name) > LC_MAX_NAME_LEN) {
+            $name = mb_substr($name, 0, LC_MAX_NAME_LEN);
         }
         $data = array(
             SMS_NAME => $name,
@@ -42,8 +42,8 @@ class Sms extends BaseDao
     {
         $realUser = $this->userDao->findUserById($userId);
         $name = $realUser->username;
-        if (mb_strlen($name) > 8) {
-            $name = mb_substr($name, 0, 8);
+        if (mb_strlen($name) > LC_MAX_NAME_LEN) {
+            $name = mb_substr($name, 0, LC_MAX_NAME_LEN);
         }
         $data = array(
             SMS_NAME => $name,
