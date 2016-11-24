@@ -507,6 +507,8 @@ define('OAUTH_RESULT_REGISTER', 'register');
 define('OAUTH_USER', 'user');
 define('OAUTH_SNS_USER', 'snsUser');
 
+define('LC_MAX_NAME_LEN', 5);
+
 if (!function_exists('specialPhones')) {
     function specialPhones()
     {
