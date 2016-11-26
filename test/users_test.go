@@ -104,3 +104,9 @@ func TestUsers_get(t *testing.T) {
 	res := c.getData("users/"+userId, url.Values{})
 	assert.NotNil(t, res.Get("username").Interface())
 }
+
+func TestUsers_upload(t *testing.T) {
+	c, _ := NewClientAndUser()
+	res := c.getData("users/upload", url.Values{})
+	assert.NotNil(t, res)
+}
