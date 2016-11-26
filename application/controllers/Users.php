@@ -262,7 +262,7 @@ class Users extends BaseController
                 }
             }
         }
-        $user = $this->userDao->updateUser($user, $data);
+        $user = $this->userDao->updateUserAndGet($user, $data);
         $this->succeed($user);
     }
 
@@ -294,11 +294,24 @@ class Users extends BaseController
         $this->succeed($user);
     }
 
-    function upload_get()
+    function fixAvatarUrl_get()
     {
-        $url = $this->qiniuDao->fetchImageAndUpload(
-            'http://wx.qlogo.cn/mmopen/dZJib48NdoovSYMfopWLzqXR4PVYgcw2akfOuoWfsmElyTAk6NHuSoHshBJop4e91AuUy5oDp7YvG6EOZ5RWiaU0aPvfCZib3S3/0');
-        $this->succeed($url);
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $users = $this->userDao->findWxlogoUsers();
+        $succeedCount = 0;
+        foreach ($users as $user) {
+            list($imageUrl, $error) = $this->qiniuDao->fetchImageAndUpload($user->avatarUrl);
+            if ($error) {
+                continue;
+            }
+            $ok = $this->userDao->updateUser($user->userId, array(KEY_AVATAR_URL => $imageUrl));
+            if ($ok) {
+                $succeedCount++;
+            }
+        }
+        $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
     }
 
 }

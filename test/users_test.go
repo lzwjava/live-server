@@ -105,8 +105,9 @@ func TestUsers_get(t *testing.T) {
 	assert.NotNil(t, res.Get("username").Interface())
 }
 
-func TestUsers_upload(t *testing.T) {
-	c, _ := NewClientAndUser()
-	res := c.getData("users/upload", url.Values{})
+func TestUsers_fixAvatarUrl(t *testing.T) {
+	c := NewClient()
+	c.admin = true
+	res := c.getData("users/fixAvatarUrl", url.Values{})
 	assert.NotNil(t, res)
 }
