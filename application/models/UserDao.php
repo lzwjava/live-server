@@ -124,7 +124,7 @@ class UserDao extends BaseDao
     private function updateSessionToken($user)
     {
         $token = $this->genSessionToken();
-        $result = $this->updateUser($user, array(
+        $result = $this->updateUserAndGet($user, array(
             KEY_SESSION_TOKEN => $token,
             KEY_SESSION_TOKEN_CREATED => dateWithMs()
         ));
@@ -167,14 +167,17 @@ class UserDao extends BaseDao
         return $user;
     }
 
-    function updateUser($user, $data)
+    function updateUser($userId, $data)
     {
-        $tableName = TABLE_USERS;
-        $this->db->where(KEY_USER_ID, $user->userId);
-        $result = $this->db->update($tableName, $data);
-        if ($result) {
-            return $this->findUser(KEY_USER_ID, $user->userId);
-        }
+        $this->db->where(KEY_USER_ID, $userId);
+        $this->db->update(TABLE_USERS, $data);
+        return $this->db->affected_rows() > 0;
+    }
+
+    function updateUserAndGet($user, $data)
+    {
+        $this->updateUser($user->userId, $data);
+        return $this->findUser(KEY_USER_ID, $user->userId);
     }
 
     function bindUnionIdToUser($userId, $unionId)
@@ -201,6 +204,12 @@ class UserDao extends BaseDao
             unset($user->created);
             unset($user->type);
         }
+    }
+
+    function findWxlogoUsers()
+    {
+        $sql = "SELECT * FROM users WHERE avatarUrl LIKE 'http://wx.qlogo.cn%'";
+        return $this->db->query($sql)->result();
     }
 
 }
