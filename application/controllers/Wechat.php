@@ -398,5 +398,4 @@ class Wechat extends BaseController
         }
     }
 
-
 }

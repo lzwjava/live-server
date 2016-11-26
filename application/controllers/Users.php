@@ -296,8 +296,8 @@ class Users extends BaseController
 
     function upload_get()
     {
-        $url = $this->qiniuDao->fetchImageAndUpload('http://wx.qlogo
-        .cn/mmopen/dZJib48NdoovSYMfopWLzqXR4PVYgcw2akfOuoWfsmElyTAk6NHuSoHshBJop4e91AuUy5oDp7YvG6EOZ5RWiaU0aPvfCZib3S3/0');
+        $url = $this->qiniuDao->fetchImageAndUpload(
+            'http://wx.qlogo.cn/mmopen/dZJib48NdoovSYMfopWLzqXR4PVYgcw2akfOuoWfsmElyTAk6NHuSoHshBJop4e91AuUy5oDp7YvG6EOZ5RWiaU0aPvfCZib3S3/0');
         $this->succeed($url);
     }
 
