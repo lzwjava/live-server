@@ -95,10 +95,13 @@ class Lives extends BaseController
             return;
         }
         $data = $this->postParams($keys);
+        $needPay = $this->toNumber($data[KEY_NEED_PAY]);
         if (isset($data[KEY_AMOUNT])) {
             $data[KEY_AMOUNT] = $this->toNumber($data[KEY_AMOUNT]);
-            if ($this->checkIfAmountWrong($data[KEY_AMOUNT])) {
-                return;
+            if ($needPay) {
+                if ($this->checkIfAmountWrong($data[KEY_AMOUNT])) {
+                    return;
+                }
             }
         }
         $user = $this->checkAndGetSessionUser();
