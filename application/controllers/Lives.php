@@ -212,7 +212,7 @@ class Lives extends BaseController
             $this->failure(ERROR_FIELDS_EMPTY);
             return;
         }
-        if ($this->checkIfAmountWrong($live->amount)) {
+        if ($live->needPay && $this->checkIfAmountWrong($live->amount)) {
             return;
         }
         if (mb_strlen($live->detail) < 100) {
