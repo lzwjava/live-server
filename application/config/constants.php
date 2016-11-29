@@ -204,7 +204,7 @@ if (!function_exists('errorInfos')) {
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
-            ERROR_AMOUNT_TOO_LITTLE => '门票至少为 1 元',
+            ERROR_AMOUNT_TOO_LITTLE => '门票至少为 1 分钱',
             ERROR_AMOUNT_TOO_MUCH => '门票最多为 1000 元',
             ERROR_OWNER_CANNOT_ATTEND => '主播自己无法报名',
             ERROR_FIELDS_EMPTY => '需要封面图,主题,详情才能发布',
@@ -274,7 +274,7 @@ if (!function_exists('errorInfos')) {
 }
 
 // pay
-define('LEAST_COMMON_PAY', 100);
+define('LEAST_COMMON_PAY', 1);
 define('MAX_COMMON_PAY', 100 * 1000);
 
 // common
