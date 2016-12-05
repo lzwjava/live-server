@@ -136,3 +136,8 @@ $route['coupons']['POST'] = 'coupons/create';
 $route['videos/import']['GET'] = 'videos/import';
 $route['lives/(\d+)/videos']['GET'] = 'videos/list/$1';
 $route['lives/(\d+)/videos']['POST'] = 'videos/create/$1';
+
+// live views
+$route['liveViews']['POST'] = 'liveViews/create';
+$route['liveViews/(\d+)/end']['GET'] = 'liveViews/end/$1';
+

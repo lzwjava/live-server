@@ -230,3 +230,20 @@ CREATE TABLE `rewards` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+CREATE TABLE `live_views` (
+  `liveViewId` INT(11)     NOT NULL             AUTO_INCREMENT,
+  `userId`     INT(11)     NOT NULL,
+  `liveId`     INT(11)     NOT NULL,
+  `platform`   VARCHAR(20) NOT NULL             DEFAULT '',
+  `liveStatus` TINYINT(4)  NOT NULL             DEFAULT 0,
+  `created`    TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `ended`      TINYINT(2)  NOT NULL             DEFAULT 0,
+  `endTs`      TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `updated`    TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`liveViewId`),
+  UNIQUE KEY (`userId`, `liveId`, `created`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
+  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
