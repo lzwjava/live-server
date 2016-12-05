@@ -11,6 +11,7 @@ CREATE TABLE `users` (
   `username`            VARCHAR(127) NOT NULL DEFAULT '',
   `mobilePhoneNumber`   VARCHAR(63)  NOT NULL DEFAULT '',
   `avatarUrl`           VARCHAR(255) NOT NULL DEFAULT '',
+  `unionId`             VARCHAR(63)           DEFAULT NULL,
   `sessionToken`        VARCHAR(127) NOT NULL DEFAULT '',
   `sessionTokenCreated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `password`            VARCHAR(127) NOT NULL DEFAULT '',
@@ -18,7 +19,8 @@ CREATE TABLE `users` (
   `updated`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `NAME_IDX` (`username`),
-  UNIQUE KEY `PHONE_IDX` (`mobilePhoneNumber`)
+  UNIQUE KEY `PHONE_IDX` (`mobilePhoneNumber`),
+  UNIQUE KEY `UNION_ID_IDX` (`unionId`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
@@ -30,8 +32,10 @@ CREATE TABLE `lives` (
   `subject`         VARCHAR(60)   NOT NULL             DEFAULT '',
   `coverUrl`        VARCHAR(80)   NOT NULL             DEFAULT '',
   `previewUrl`      VARCHAR(80)   NOT NULL             DEFAULT '',
+  `needPay`         TINYINT(1)    NOT NULL             DEFAULT 0,
   `amount`          INT           NOT NULL             DEFAULT 0,
   `maxPeople`       INT           NOT NULL             DEFAULT 0,
+  `speakerIntro`    VARCHAR(1000) NOT NULL             DEFAULT '',
   `detail`          VARCHAR(8000) NOT NULL             DEFAULT '',
   `conversationId`  VARCHAR(30)   NOT NULL             DEFAULT '',
   `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
@@ -55,6 +59,7 @@ CREATE TABLE `charges` (
   `orderNo`   VARCHAR(31)  NOT NULL,
   `amount`    INT(11)      NOT NULL,
   `paid`      TINYINT(2)   NOT NULL DEFAULT '0',
+  `refunded`  TINYINT(2)   NOT NULL DEFAULT '0',
   `channel`   VARCHAR(31)  NOT NULL DEFAULT '',
   `creator`   VARCHAR(31)  NOT NULL,
   `creatorIP` VARCHAR(63)  NOT NULL,
@@ -68,13 +73,15 @@ CREATE TABLE `charges` (
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `attendances` (
-  `attendanceId` INT(11)     NOT NULL AUTO_INCREMENT,
-  `userId`       INT(11)     NOT NULL,
-  `liveId`       INT(11)     NOT NULL,
-  `notified`     TINYINT(2)  NOT NULL DEFAULT 0,
-  `orderNo`      VARCHAR(31) NOT NULL DEFAULT '',
-  `created`      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `attendanceId`   INT(11)    NOT NULL AUTO_INCREMENT,
+  `userId`         INT(11)    NOT NULL,
+  `liveId`         INT(11)    NOT NULL,
+  `notified`       TINYINT(2) NOT NULL DEFAULT 0,
+  `wechatNotified` TINYINT(2) NOT NULL DEFAULT 0,
+  `videoNotified`  TINYINT(0) NOT NULL DEFAULT 0,
+  `orderNo`        VARCHAR(31)         DEFAULT NULL,
+  `created`        TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`        TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`attendanceId`),
   UNIQUE KEY `userId` (`userId`, `liveId`),
   KEY `liveId` (`liveId`),
@@ -131,6 +138,7 @@ CREATE TABLE `scanned_qrcodes` (
 CREATE TABLE `sns_users` (
   `snsUserId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `openId`    VARCHAR(63)      NOT NULL DEFAULT '',
+  `unionId`   VARCHAR(63)      NOT NULL DEFAULT '',
   `username`  VARCHAR(63)      NOT NULL DEFAULT '',
   `avatarUrl` VARCHAR(255)     NOT NULL DEFAULT '',
   `platform`  VARCHAR(10)      NOT NULL DEFAULT '',
@@ -161,32 +169,6 @@ CREATE TABLE `shares` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE `lives` ADD COLUMN `speakerIntro` VARCHAR(1000) NOT NULL DEFAULT ''
-AFTER `maxPeople`;
-
-ALTER TABLE `sns_users` ADD COLUMN `unionId` VARCHAR(63) NOT NULL DEFAULT ''
-AFTER `openId`;
-
-ALTER TABLE `users` ADD COLUMN `unionId` VARCHAR(63) NOT NULL DEFAULT ''
-AFTER `avatarUrl`;
-
-ALTER TABLE `users` MODIFY COLUMN `unionId` VARCHAR(63);
-
-UPDATE users
-SET unionId = NULL
-WHERE unionId = '';
-
-ALTER TABLE `users` ADD UNIQUE KEY `UNION_ID_IDX` (`unionId`);
-
-ALTER TABLE `attendances`  ADD `wechatNotified` TINYINT(2) NOT NULL DEFAULT 0
-AFTER `notified`;
-
-ALTER TABLE `charges` ADD COLUMN `refunded` TINYINT(2) NOT NULL DEFAULT '0'
-AFTER `paid`;
-
-ALTER TABLE `attendances` ADD `videoNotified` TINYINT(0) NOT NULL DEFAULT 0
-AFTER `wechatNotified`;
-
 CREATE TABLE `coupons` (
   `couponId` INT(11)     NOT NULL             AUTO_INCREMENT,
   `liveId`   INT(11)     NOT NULL,
@@ -202,23 +184,21 @@ CREATE TABLE `coupons` (
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `recorded_videos` (
-  `recordedVideoId` INT(11)     NOT NULL             AUTO_INCREMENT,
-  `liveId`          INT(11)     NOT NULL,
-  `fileName`        VARCHAR(60) NOT NULL             DEFAULT '',
-  `endTs`           VARCHAR(20) NOT NULL             DEFAULT '',
-  `transcoded`      TINYINT(2)  NOT NULL             DEFAULT 0,
-  `transcodedTime`  TIMESTAMP                        DEFAULT CURRENT_TIMESTAMP,
-  `created`         TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
-  `updated`         TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `recordedVideoId`    INT(11)     NOT NULL             AUTO_INCREMENT,
+  `liveId`             INT(11)     NOT NULL,
+  `fileName`           VARCHAR(60) NOT NULL             DEFAULT '',
+  `endTs`              VARCHAR(20) NOT NULL             DEFAULT '',
+  `transcoded`         TINYINT(2)  NOT NULL             DEFAULT 0,
+  `transcodedTime`     TIMESTAMP                        DEFAULT CURRENT_TIMESTAMP,
+  `transcodedFileName` VARCHAR(60) NOT NULL             DEFAULT '',
+  `created`            TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  `updated`            TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`recordedVideoId`),
   FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
   UNIQUE KEY (`fileName`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `recorded_videos` ADD COLUMN `transcodedFileName` VARCHAR(60) NOT NULL             DEFAULT ''
-AFTER `transcodedTime`;
 
 CREATE TABLE `videos` (
   `videoId`  INT(11)     NOT NULL             AUTO_INCREMENT,
@@ -233,15 +213,6 @@ CREATE TABLE `videos` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `lives`ADD COLUMN `needPay` TINYINT(1) NOT NULL DEFAULT 0
-AFTER `previewUrl`;
-
-UPDATE `lives`
-SET `needPay` = 1
-WHERE created < '2016-11-19 00:00:00';
-
-ALTER TABLE `attendances` MODIFY COLUMN `orderNo` VARCHAR(31) DEFAULT NULL;
 
 CREATE TABLE `rewards` (
   `rewardId` INT(11)     NOT NULL AUTO_INCREMENT,
@@ -258,3 +229,4 @@ CREATE TABLE `rewards` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
