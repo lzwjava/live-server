@@ -309,6 +309,14 @@ define('LIVE_STATUS_ON', 20);
 define('LIVE_STATUS_TRANSCODE', 25);
 define('LIVE_STATUS_OFF', 30);
 
+if (!function_exists('liveStatusSet')) {
+    function liveStatusSet()
+    {
+        return array(LIVE_STATUS_PREPARE, LIVE_STATUS_REVIEW, LIVE_STATUS_WAIT,
+            LIVE_STATUS_ON, LIVE_STATUS_TRANSCODE, LIVE_STATUS_OFF);
+    }
+}
+
 // sms
 define('SMS_TEMPLATE', 'template');
 define('SMS_NAME', 'name');
@@ -434,6 +442,24 @@ define('KEY_TITLE', 'title');
 // rewards
 define('TABLE_REWARDS', 'rewards');
 define('KEY_REWARD_ID', 'rewardId');
+
+define('TABLE_LIVE_VIEWS', 'live_views');
+define('KEY_LIVE_VIEW_ID', 'liveViewId');
+define('KEY_LIVE_STATUS', 'liveStatus');
+define('KEY_ENDED', 'ended');
+
+define('VIEW_PLATFORM_WECHAT', 'wechat');
+define('VIEW_PLATFORM_PC', 'pc');
+define('VIEW_PLATFORM_IOS', 'ios');
+define('VIEW_PLATFORM_ANDROID', 'android');
+
+if (!function_exists('viewPlatformSet')) {
+    function viewPlatformSet()
+    {
+        return array(VIEW_PLATFORM_WECHAT, VIEW_PLATFORM_PC,
+            VIEW_PLATFORM_IOS, VIEW_PLATFORM_ANDROID);
+    }
+}
 
 // lc
 if (ENVIRONMENT == 'development') {
