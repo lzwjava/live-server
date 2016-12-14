@@ -313,3 +313,9 @@ func TestLives_import(t *testing.T) {
 	res := c.getData("lives/"+liveId+"/import", url.Values{})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestLives_recommend(t *testing.T) {
+	c := NewClient()
+	res := c.get("lives/recommend", url.Values{"skipLiveId": {"10"}})
+	assert.NotNil(t, res)
+}

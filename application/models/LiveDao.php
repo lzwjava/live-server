@@ -76,6 +76,17 @@ class LiveDao extends BaseDao
         return $this->getLivesWithoutDetail($ids, $user, true);
     }
 
+    function getRecommendLives($skip, $limit, $user, $skipLiveId)
+    {
+        $sql = "SELECT liveId FROM lives
+                WHERE status>=? and liveId != ?
+                ORDER BY created DESC
+                limit $limit offset $skip";
+        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, $skipLiveId))->result();
+        $ids = $this->extractLiveIds($lives);
+        return $this->getLivesWithoutDetail($ids, $user, true);
+    }
+
     private function extractLiveIds($lives)
     {
         $ids = array();

@@ -133,6 +133,19 @@ class Lives extends BaseController
         $this->succeed($lives);
     }
 
+    function recommend_get()
+    {
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $skipLiveId = $this->get(KEY_SKIP_LIVE_ID);
+        if (!$skipLiveId) {
+            $skipLiveId = 0;
+        }
+        $user = $this->getSessionUser();
+        $lives = $this->liveDao->getRecommendLives($skip, $limit, $user, $skipLiveId);
+        $this->succeed($lives);
+    }
+
     function one_get($id)
     {
         $user = $this->getSessionUser();
