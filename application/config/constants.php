@@ -535,6 +535,8 @@ define('OAUTH_SNS_USER', 'snsUser');
 
 define('LC_MAX_NAME_LEN', 5);
 
+define('KEY_SKIP_LIVE_ID', 'skipLiveId');
+
 if (!function_exists('specialPhones')) {
     function specialPhones()
     {

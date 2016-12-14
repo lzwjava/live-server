@@ -67,6 +67,7 @@ $route['users/fixAvatarUrl']['GET'] = 'users/fixAvatarUrl';
 
 // lives
 $route['lives/on']['GET'] = 'lives/list';
+$route['lives/recommend']['GET'] = 'lives/recommend';
 $route['lives/(\d+)']['GET'] = 'lives/one/$1';
 $route['lives']['POST'] = 'lives/create';
 $route['lives/(\d+)']['POST'] = 'lives/update/$1';
