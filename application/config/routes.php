@@ -91,6 +91,7 @@ $route['lives/(\d+)/finish']['GET'] = 'lives/finish/$1';
 // recorded videos
 $route['lives/(\d+)/recordedVideos'] = 'recordedVideos/list/$1';
 $route['recordedVideos/convert']['GET'] = 'recordedVideos/convert';
+$route['recordedVideos/replay']['GET'] = 'recordedVideos/replay';
 
 $route['jobs/alive']['GET'] = 'jobs/alive';
 

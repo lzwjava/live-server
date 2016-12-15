@@ -200,6 +200,8 @@ CREATE TABLE `recorded_videos` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+ALTER TABLE `recorded_videos` CHANGE `endTs` `beginTs` VARCHAR(20) NOT NULL  DEFAULT '';
+
 CREATE TABLE `videos` (
   `videoId`  INT(11)     NOT NULL             AUTO_INCREMENT,
   `liveId`   INT(11)     NOT NULL,
