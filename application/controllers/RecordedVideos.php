@@ -56,9 +56,9 @@ class RecordedVideos extends BaseController
         $ok = ssh2_scp_recv($conn, $fromFile,
             $toFile);
         if (!$ok) {
-            logInfo("scp succeed");
-        } else {
             logInfo("scp failed");
+        } else {
+            logInfo("scp succeed");
         }
         return $ok;
     }
@@ -110,7 +110,7 @@ class RecordedVideos extends BaseController
                 $command = "$ffmpeg -re -i $localFile -vcodec copy -acodec copy -f flv -y $rtmpUrl";
                 logInfo($command);
                 exec($command, $outputArr, $returnVar);
-                logInfo("ffmpeg return var: $returnVar");
+                logInfo("replay return var: $returnVar");
             } else {
                 logInfo("live status off, transcoded finish");
                 break;
