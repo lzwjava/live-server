@@ -69,7 +69,7 @@ class LiveDao extends BaseDao
     {
         $sql = "SELECT liveId FROM lives
                 WHERE status>=?
-                ORDER BY created DESC
+                ORDER BY planTs DESC
                 limit $limit offset $skip";
         $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT))->result();
         $ids = $this->extractLiveIds($lives);
@@ -80,7 +80,7 @@ class LiveDao extends BaseDao
     {
         $sql = "SELECT liveId FROM lives
                 WHERE status>=? and liveId != ?
-                ORDER BY created DESC
+                ORDER BY planTs DESC
                 limit $limit offset $skip";
         $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, $skipLiveId))->result();
         $ids = $this->extractLiveIds($lives);
