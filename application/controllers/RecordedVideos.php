@@ -106,9 +106,11 @@ class RecordedVideos extends BaseController
                 $rtmpUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
                 $outputArr = array();
                 $returnVar = null;
-                $command = "ffmpeg -re -i $localFile -vcodec copy -acodec copy -f flv -y $rtmpUrl";
+                $ffmpeg = FFMPEG_PATH;
+                $command = "$ffmpeg -re -i $localFile -vcodec copy -acodec copy -f flv -y $rtmpUrl";
                 logInfo($command);
                 exec($command, $outputArr, $returnVar);
+                logInfo("ffmpeg return var: $returnVar");
             } else {
                 logInfo("live status off, transcoded finish");
                 break;
