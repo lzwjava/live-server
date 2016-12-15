@@ -537,6 +537,8 @@ define('LC_MAX_NAME_LEN', 5);
 
 define('KEY_SKIP_LIVE_ID', 'skipLiveId');
 
+define('TRANSCODE_QUEUE', 100);
+
 if (!function_exists('specialPhones')) {
     function specialPhones()
     {
