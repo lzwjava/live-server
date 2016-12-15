@@ -517,6 +517,15 @@ if (ENVIRONMENT == 'development') {
     define('VIDEO_WORKING_DIR', '/home/videos/');
 }
 
+if (ENVIRONMENT == 'development') {
+    define('REPLAY_WORKING_DIR', '/Users/lzw/square-root/replay_videos/');
+} else {
+    define('REPLAY_WORKING_DIR', '/home/replay_videos/');
+}
+
+define('CHEER_HOST_PASSWORD', 'Quzhiboapp2046');
+define('VIDEO_HOST_PASSWORD', 'Quzhiboapp1314');
+
 define('FFMPEG_PATH', '/home/srs/trunk/objs/ffmpeg/bin/ffmpeg');
 
 // reward

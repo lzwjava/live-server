@@ -37,22 +37,85 @@ class RecordedVideos extends BaseController
 
     private function copyVideos($videos)
     {
+        $this->mkdirIfNotExists(VIDEO_WORKING_DIR);
         foreach ($videos as $video) {
-            $conn = ssh2_connect('cheer.quzhiboapp.com', 22);
-            ssh2_auth_password($conn, 'root', 'Quzhiboapp2046');
-            $ok = ssh2_scp_recv($conn, ORIGIN_VIDEO_DIR . $video->fileName,
+            $ok = $this->copyFromCheerHost(ORIGIN_VIDEO_DIR . $video->fileName,
                 VIDEO_WORKING_DIR . $video->fileName);
             if (!$ok) {
                 return false;
             }
-            logInfo("scp file succeed " . $video->fileName);
         }
         return true;
     }
 
-    function info_get()
+    private function copyFromCheerHost($fromFile, $toFile)
     {
-        phpinfo();
+        logInfo("begin scp $fromFile $toFile");
+        $conn = ssh2_connect('cheer.quzhiboapp.com', 22);
+        ssh2_auth_password($conn, 'root', CHEER_HOST_PASSWORD);
+        $ok = ssh2_scp_recv($conn, $fromFile,
+            $toFile);
+        if (!$ok) {
+            logInfo("scp succeed");
+        } else {
+            logInfo("scp failed");
+        }
+        return $ok;
+    }
+
+    private function mkdirIfNotExists($dir)
+    {
+        if (!file_exists($dir)) {
+            mkdir($dir, 0777, true);
+        }
+    }
+
+    private function copyReplayVideo($video)
+    {
+        $this->mkdirIfNotExists(REPLAY_WORKING_DIR);
+        $ok = $this->copyFromCheerHost(ORIGIN_VIDEO_DIR . $video->fileName,
+            REPLAY_WORKING_DIR . $video->fileName);
+        return $ok;
+    }
+
+    function replay_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_LIVE_ID))) {
+            return;
+        }
+        $liveId = $this->get(KEY_LIVE_ID);
+        $live = $this->liveDao->getRawLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $videos = $this->recordedVideos->getVideosAfterPlanTs($liveId, $live->planTs);
+        if (count($videos) == 0) {
+            $this->failure(ERROR_VIDEOS_NOT_GEN);
+            return;
+        }
+        $lastVideo = $videos[count($videos) - 1];
+        $ok = $this->copyReplayVideo($lastVideo);
+        if (!$ok) {
+            $this->failure(ERROR_SCP_FAIL);
+            return;
+        }
+        $localFile = REPLAY_WORKING_DIR . $lastVideo->fileName;
+        for (; ;) {
+            $live = $this->liveDao->getRawLive($liveId);
+            if ($live->status != LIVE_STATUS_OFF) {
+                $rtmpUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
+                $outputArr = array();
+                $returnVar = null;
+                $command = "ffmpeg -re -i $localFile -vcodec copy -acodec copy -f flv -y $rtmpUrl";
+                logInfo($command);
+                exec($command, $outputArr, $returnVar);
+            } else {
+                logInfo("live status off, transcoded finish");
+                break;
+            }
+            sleep(1);
+        }
+        $this->succeed();
     }
 
     function convert_get()
@@ -130,12 +193,14 @@ class RecordedVideos extends BaseController
                 $ffmpeg = FFMPEG_PATH;
                 logInfo("$ffmpeg -i $input -y $output");
                 exec("$ffmpeg -i $input -y $output", $outputArr, $returnVar);
-                logInfo("return var: $returnVar");
+                logInfo("convert video return var: $returnVar");
                 if ($returnVar != 0) {
                     $allOk = false;
                 } else {
                     $this->recordedVideos->updateVideoToTranscoded($fileName, $newFileName);
                 }
+            } else {
+                logInfo("video already transcoded");
             }
         }
         return $allOk;
@@ -181,6 +246,7 @@ class RecordedVideos extends BaseController
         $ffmpeg = FFMPEG_PATH;
         logInfo("$ffmpeg -f concat -i $concatFile -c copy -y  $outputFile");
         exec("$ffmpeg -f concat -i $concatFile -c copy -y  $outputFile", $output, $returnVar);
+        logInfo("concat return var " . $returnVar);
         return !$returnVar;
     }
 

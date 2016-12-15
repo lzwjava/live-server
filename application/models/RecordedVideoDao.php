@@ -9,7 +9,7 @@
 class RecordedVideoDao extends BaseDao
 {
 
-    private function endTsByFileName($fileName)
+    private function beginTsByFileName($fileName)
     {
         $output = array();
         $res = preg_match('/.*\.([0-9]*)\.flv/', $fileName, $output);
@@ -21,11 +21,11 @@ class RecordedVideoDao extends BaseDao
 
     function addVideo($liveId, $fileName)
     {
-        $endTs = $this->endTsByFileName($fileName);
+        $beginTs = $this->beginTsByFileName($fileName);
         $data = array(
             KEY_LIVE_ID => $liveId,
             KEY_FILE_NAME => $fileName,
-            KEY_END_TS => $endTs
+            KEY_BEGIN_TS => $beginTs
         );
         $this->db->insert(TABLE_RECORDED_VIDEOS, $data);
         return $this->db->insert_id();
@@ -39,11 +39,11 @@ class RecordedVideoDao extends BaseDao
     function getVideosAfterPlanTs($liveId, $planTs)
     {
         $dateTime = date_create($planTs, new DateTimeZone('Asia/Shanghai'));
-        $planTsStr = (($dateTime->getTimestamp() - 60 * 30) * 1000) . '';
+        $planTsNum = ($dateTime->getTimestamp() - 60 * 30) * 1000;
         $sql = "SELECT v.*,l.rtmpKey FROM recorded_videos AS v
                 LEFT JOIN lives AS l ON l.liveId=v.liveId
-                WHERE v.liveId=? AND v.endTs > ? ";
-        $binds = array($liveId, $planTsStr);
+                WHERE v.liveId=? AND v.beginTs > ? ORDER BY v.beginTs";
+        $binds = array($liveId, $planTsNum);
         return $this->db->query($sql, $binds)->result();
     }
 
