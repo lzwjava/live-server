@@ -200,11 +200,6 @@ class LiveDao extends BaseDao
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
-            if ($user) {
-                logInfo("userId: $user->userId");
-            } else {
-                logInfo("no user");
-            }
             if ($live->attendanceId || ($user && $user->userId == $live->ownerId)) {
                 // 参加了或是创建者
                 $hlsHost = $this->electHlsServer();
