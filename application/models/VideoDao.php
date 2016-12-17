@@ -34,7 +34,7 @@ class VideoDao extends BaseDao
     private function assembleVideos($videos)
     {
         foreach ($videos as $video) {
-            $video->url = 'http://video.quzhiboapp.com/' . $video->fileName . '.mp4';
+            $video->url = 'http://video-cdn.quzhiboapp.com/' . $video->fileName . '.mp4';
         }
     }
 
