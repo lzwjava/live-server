@@ -210,7 +210,7 @@ class LiveDao extends BaseDao
                         . '?vhost=live-cdn.quzhiboapp.com';
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
-                $live->videoUrl = 'http://video.quzhiboapp.com/' . $live->rtmpKey . '.mp4';
+                $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHost . '/live/' . $live->rtmpKey;
                 $live->hlsUrl = 'http://' . $hlsHost . '/live/' . $live->rtmpKey . '.m3u8';
                 $live->flvUrl = 'http://' . $flvHost . '/live/' . $live->rtmpKey . '.flv';

@@ -558,3 +558,5 @@ if (!function_exists('specialPhones')) {
             '15129342293', '13888888888', '15718810378', '17034342233', '13121222685');
     }
 }
+
+define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
