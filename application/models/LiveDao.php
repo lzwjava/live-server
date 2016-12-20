@@ -154,19 +154,22 @@ class LiveDao extends BaseDao
     {
 //        return random_element(array('live1.quzhiboapp.com', 'live2.quzhiboapp.com'));
 //        return 'hls-cdn.quzhiboapp.com';
-        return 'live-cdn.quzhiboapp.com';
+//        return 'live-cdn.quzhiboapp.com';
+        return 'hls-xycdn.quzhiboapp.com';
     }
 
     private function electFlvServer()
     {
 //        return random_element(array('flv1.quzhiboapp.com:8080', 'flv2.quzhiboapp.com:8080'));
-        return 'live-cdn.quzhiboapp.com';
+//        return 'live-cdn.quzhiboapp.com';
+        return 'flv-xycdn.quzhiboapp.com';
     }
 
     private function electRtmpServer()
     {
 //        return random_element(array('rtmp1.quzhiboapp.com'));
-        return 'live-cdn.quzhiboapp.com';
+//        return 'live-cdn.quzhiboapp.com';
+        return 'xycdn.quzhiboapp.com';
     }
 
     private function calAmount($live, $user)
@@ -206,8 +209,9 @@ class LiveDao extends BaseDao
                 $rtmpHost = $this->electRtmpServer();
                 $flvHost = $this->electFlvServer();
                 if ($user && $user->userId == $live->ownerId) {
-                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey
-                        . '?vhost=live-cdn.quzhiboapp.com';
+//                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey
+//                        . '?vhost=live-cdn.quzhiboapp.com';
+                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
                 $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
