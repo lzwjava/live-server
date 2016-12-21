@@ -47,6 +47,14 @@ class Wechat extends BaseController
         return $this->parseResponse($resp);
     }
 
+    private function httpGetUserInfoByPlatform($accessToken, $openId)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='
+            . $accessToken . '&openid=' . $openId . '&lang=zh_CN';
+        $resp = $this->jsSdk->httpGet($url);
+        return $this->parseResponse($resp);
+    }
+
     private function parseResponse($respStr)
     {
         $result = new StdClass;
@@ -396,6 +404,33 @@ class Wechat extends BaseController
             $snsUser = $this->snsUserDao->getSnsUser($unionResult->openid, PLATFORM_WECHAT_APP);
             $this->succeed(array(KEY_TYPE => OAUTH_RESULT_REGISTER, OAUTH_SNS_USER => $snsUser));
         }
+    }
+
+    function isSubscribe_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_USER_ID))) {
+            return;
+        }
+        $userId = $this->get(KEY_USER_ID);
+        $snsUser = $this->snsUserDao->getWeChatSnsUserByUserId($userId);
+        if (!$snsUser) {
+            $this->failure(ERROR_SNS_USER_NOT_EXISTS);
+            return;
+        }
+        $accessToken = $this->jsSdk->getAccessToken();
+        $userResp = $this->httpGetUserInfoByPlatform($accessToken, $snsUser->openId);
+        if ($userResp->error) {
+            $this->failure(ERROR_USER_INFO_FAILED, $userResp->error);
+            return;
+        }
+        $weUser = $userResp->data;
+        $result = null;
+        if ($weUser->subscribe) {
+            $result = true;
+        } else {
+            $result = false;
+        }
+        $this->succeed($result);
     }
 
 }

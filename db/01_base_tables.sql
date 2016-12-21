@@ -249,3 +249,4 @@ CREATE TABLE `live_views` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
