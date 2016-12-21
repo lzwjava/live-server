@@ -122,6 +122,7 @@ $route['wechat/webOauth']['GET'] = 'wechat/webOauth';
 $route['wechat/bind']['GET'] = 'wechat/bind';
 $route['wechat/valid']['GET'] = 'wechat/valid';
 $route['wechat/appOauth']['GET'] = 'wechat/appOauth';
+$route['wechat/isSubscribe']['GET'] = 'wechat/isSubscribe';
 
 // live hooks
 $route['liveHooks/onPublish']['POST'] = 'liveHooks/onPublish';

@@ -560,3 +560,9 @@ if (!function_exists('specialPhones')) {
 }
 
 define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
+
+define('TMP_WECHAT_ACCESS_TOKEN',
+'o4YERd3a6u_NvtpV8BaKptkSvrufX93JLJ7P5Bl5T1-3ct6dDX8qQpHD6UQMrCBGk1KXCi8t0Dpyq2RSpfcWOqGPUXvjrd2IUqg1Q_Be6M7-Zp-lxtngFW6oK2QqyPpIOZXjAIAVGE');
+define('TMP_WECHAT_JSAPI_TICKET',
+'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
+

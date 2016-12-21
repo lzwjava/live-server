@@ -50,6 +50,9 @@ class JSSDK
 
     private function getJsApiTicket()
     {
+        if (isDebug()) {
+            return TMP_WECHAT_JSAPI_TICKET;
+        }
         $ticket = $this->wxDao->getJSApiTicket();
         if (!$ticket) {
             $accessToken = $this->getAccessToken();
@@ -69,6 +72,9 @@ class JSSDK
 
     function getAccessToken()
     {
+        if (isDebug()) {
+            return TMP_WECHAT_ACCESS_TOKEN;
+        }
         // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
         $accessToken = $this->wxDao->getAccessToken();
         if (!$accessToken) {

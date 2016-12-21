@@ -138,3 +138,11 @@ func TestWeChat_appOauth_then_register(t *testing.T) {
 		}
 	}
 }
+
+func TestWeChat_isSubscribe(t *testing.T) {
+	c, userId := NewClientAndUser()
+	insertSnsUser(userId)
+	res := c.getData("wechat/isSubscribe", url.Values{"userId": {userId}})
+	assert.NotNil(t, res.Interface())
+	assert.True(t, res.MustBool())
+}
