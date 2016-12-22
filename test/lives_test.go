@@ -193,6 +193,15 @@ func TestLives_begin_error(t *testing.T) {
 	assert.Equal(t, beginRes.Get("status").MustString(), "live_not_wait")
 }
 
+func TestLives_setReview(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	res := c.getData("lives/"+liveId+"/setReview", url.Values{})
+	assert.NotNil(t, res.Interface())
+	res = c.getData("lives/"+liveId, url.Values{})
+	assert.Equal(t, res.Get("status").MustInt(), 5)
+}
+
 func TestLives_submitReview(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := lastPrepareLive(c)
