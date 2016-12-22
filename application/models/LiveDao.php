@@ -162,7 +162,9 @@ class LiveDao extends BaseDao
     {
 //        return random_element(array('flv1.quzhiboapp.com:8080', 'flv2.quzhiboapp.com:8080'));
 //        return 'live-cdn.quzhiboapp.com';
-        return 'flv-xycdn.quzhiboapp.com';
+//        return 'flv-xycdn.quzhiboapp.com';
+//        return 'cheer.quzhiboapp.com';
+        return 'video.quzhiboapp.com:8080';
     }
 
     private function electRtmpServer()
