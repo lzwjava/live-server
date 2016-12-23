@@ -49,7 +49,7 @@ class LiveDao extends BaseDao
             KEY_SUBJECT => $subject,
             KEY_RTMP_KEY => $key,
             KEY_STATUS => LIVE_STATUS_PREPARE,
-            KEY_MAX_PEOPLE => 1000,
+            KEY_MAX_PEOPLE => LIVE_INIT_MAX_PEOPLE,
             KEY_CONVERSATION_ID => $conversationId
         );
         $this->db->insert(TABLE_LIVES, $data);
