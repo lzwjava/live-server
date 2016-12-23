@@ -250,3 +250,6 @@ CREATE TABLE `live_views` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+
+ALTER TABLE `lives` ADD COLUMN `notice` VARCHAR(300) NOT NULL             DEFAULT ''
+AFTER `detail`;

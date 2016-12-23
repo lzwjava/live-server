@@ -93,7 +93,7 @@ class BaseDao extends CI_Model
         return array(KEY_LIVE_ID, KEY_SUBJECT, KEY_RTMP_KEY, KEY_ATTENDANCE_COUNT, KEY_NEED_PAY,
             KEY_COVER_URL, KEY_PREVIEW_URL, KEY_AMOUNT, KEY_MAX_PEOPLE, KEY_CONVERSATION_ID,
             KEY_STATUS, KEY_PLAN_TS, KEY_BEGIN_TS, KEY_END_TS, KEY_OWNER_ID, KEY_SPEAKER_INTRO,
-            KEY_DETAIL, KEY_CREATED, KEY_UPDATED);
+            KEY_DETAIL, KEY_NOTICE, KEY_CREATED, KEY_UPDATED);
     }
 
     protected function livePublicFields($prefix = TABLE_LIVES, $alias = false)

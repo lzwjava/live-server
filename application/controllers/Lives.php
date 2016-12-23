@@ -89,18 +89,25 @@ class Lives extends BaseController
     function update_post($liveId)
     {
         $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_AMOUNT,
-            KEY_DETAIL, KEY_PLAN_TS, KEY_PREVIEW_URL, KEY_SPEAKER_INTRO, KEY_NEED_PAY);
+            KEY_DETAIL, KEY_PLAN_TS, KEY_PREVIEW_URL, KEY_SPEAKER_INTRO,
+            KEY_NEED_PAY, KEY_NOTICE);
         if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
         ) {
             return;
         }
         $data = $this->postParams($keys);
-        $needPay = $this->toNumber($data[KEY_NEED_PAY]);
+        if (isset($data[KEY_NEED_PAY])) {
+
+        }
+
         if (isset($data[KEY_AMOUNT])) {
             $data[KEY_AMOUNT] = $this->toNumber($data[KEY_AMOUNT]);
-            if ($needPay) {
-                if ($this->checkIfAmountWrong($data[KEY_AMOUNT])) {
-                    return;
+            if (isset($data[KEY_NEED_PAY])) {
+                $needPay = $this->toNumber($data[KEY_NEED_PAY]);
+                if ($needPay) {
+                    if ($this->checkIfAmountWrong($data[KEY_AMOUNT])) {
+                        return;
+                    }
                 }
             }
         }
@@ -120,8 +127,7 @@ class Lives extends BaseController
         if (!$ok) {
             $this->failure(ERROR_SQL_WRONG);
         }
-        $live = $this->liveDao->getLive($liveId);
-        $this->succeed($live);
+        $this->succeed();
     }
 
     function list_get()
