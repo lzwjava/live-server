@@ -37,6 +37,7 @@ CREATE TABLE `lives` (
   `maxPeople`       INT           NOT NULL             DEFAULT 0,
   `speakerIntro`    VARCHAR(1000) NOT NULL             DEFAULT '',
   `detail`          VARCHAR(8000) NOT NULL             DEFAULT '',
+  `notice`          VARCHAR(300)  NOT NULL             DEFAULT '',
   `conversationId`  VARCHAR(30)   NOT NULL             DEFAULT '',
   `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
   `attendanceCount` INT           NOT NULL             DEFAULT 0,
@@ -250,6 +251,3 @@ CREATE TABLE `live_views` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-
-ALTER TABLE `lives` ADD COLUMN `notice` VARCHAR(300) NOT NULL             DEFAULT ''
-AFTER `detail`;
