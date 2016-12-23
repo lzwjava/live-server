@@ -224,6 +224,7 @@ class LiveDao extends BaseDao
             } else {
                 $live->canJoin = false;
                 unset($live->rtmpKey);
+                unset($live->notice);
             }
             $live->realAmount = $this->calAmount($live, $user);
         }
