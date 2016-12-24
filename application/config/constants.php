@@ -100,6 +100,7 @@ define('ERROR_AMOUNT_UNIT', 'amount_unit');
 define('ERROR_AMOUNT_TOO_LITTLE', 'amount_too_little');
 define('ERROR_AMOUNT_TOO_MUCH', 'amount_too_much');
 define('ERROR_NOT_ADMIN', 'not_admin');
+define('ERROR_WECHAT', 'wechat_error');
 
 // error users
 define('ERROR_NOT_IN_SESSION', 'not_in_session');
@@ -336,6 +337,8 @@ define('KEY_SESSION_TOKEN_CREATED', 'sessionTokenCreated');
 define('KEY_PASSWORD', 'password');
 define('KEY_USERNAME', 'username');
 define('KEY_USER_ID', 'userId');
+define('KEY_WECHAT_SUBSCRIBE', 'wechatSubscribe');
+
 define('KEY_SMS_CODE', 'smsCode');
 
 // charges
@@ -565,8 +568,8 @@ if (!function_exists('specialPhones')) {
 define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'o4YERd3a6u_NvtpV8BaKptkSvrufX93JLJ7P5Bl5T1-3ct6dDX8qQpHD6UQMrCBGk1KXCi8t0Dpyq2RSpfcWOqGPUXvjrd2IUqg1Q_Be6M7-Zp-lxtngFW6oK2QqyPpIOZXjAIAVGE');
+'gjGxJw0GitbSRa2rNl1GRHCDL97PI2mrHOnfwQuXW5rLDSN_YuxWC3kiLaEdP2OHngBydisD77bdTMPJL0ApbficYKQQ4L6By6AiOmaBQ_PtgcNZJqkdnDgXeb5mWIU4AXKhABAFCP');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
-
+define('WECHAT_API_BASE', 'https://api.weixin.qq.com/cgi-bin/');

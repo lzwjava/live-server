@@ -59,8 +59,10 @@ class JSSDK
             // 如果是企业号用以下 URL 获取 ticket
             // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
             $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
-            $res = json_decode($this->httpGet($url));
-            $ticket = $res->ticket;
+            $res = $this->httpGet($url);
+            if (!$res->error) {
+                $ticket = $res->data->ticket;
+            }
             if ($ticket) {
                 $this->wxDao->setJSApiTicket($ticket, $res->expires_in);
             }
@@ -81,8 +83,10 @@ class JSSDK
             // 如果是企业号用以下URL获取access_token
             // $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
             $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret=$this->appSecret";
-            $res = json_decode($this->httpGet($url));
-            $accessToken = $res->access_token;
+            $res = $this->httpGet($url);
+            if (!$res->error) {
+                $accessToken = $res->data->access_token;
+            }
             if ($accessToken) {
                 $this->wxDao->setAccessToken($accessToken, $res->expires_in);
             }
@@ -97,16 +101,120 @@ class JSSDK
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, 500);
-        // 为保证第三方服务器与微信服务器之间数据传输的安全性，所有微信接口采用https方式调用，必须使用下面2行代码打开ssl安全校验。
-        // 如果在部署过程中代码在此处验证失败，请到 http://curl.haxx.se/ca/cacert.pem 下载新的证书判别文件。
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($curl, CURLOPT_URL, $url);
-
         $res = curl_exec($curl);
         curl_close($curl);
+        return $this->parseResponse($res);
+    }
 
-        return $res;
+    function wechatHttpPost($path, $data)
+    {
+        $accessToken = $this->getAccessToken();
+        $url = WECHAT_API_BASE . $path . '?access_token='
+            . $accessToken;
+        return $this->httpPost($url, $data);
+    }
+
+    function wechatHttpGet($path, $params = '')
+    {
+        $accessToken = $this->getAccessToken();
+        $url = WECHAT_API_BASE . $path . '?access_token='
+            . $accessToken . $params;
+        return $this->httpGet($url);
+    }
+
+    private function parseResponse($respStr)
+    {
+        $error = null;
+        $data = null;
+        if ($respStr === false) {
+            $error = 'network error';
+        } else {
+            $respData = json_decode($respStr);
+            if (isset($respData->errcode) && $respData->errcode != 0) {
+                $error = $respData->errmsg;
+                $data = $respData->errcode;
+            } else {
+                $error = null;
+                $data = $respData;
+            }
+        }
+        return array($error, $data);
+    }
+
+    function httpPost($url, $data)
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        if ($data == null) {
+            $data = new stdClass();
+        }
+        $encoded = json_encode($data, JSON_UNESCAPED_UNICODE);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $encoded);
+        $res = curl_exec($curl);
+        curl_close($curl);
+        return $this->parseResponse($res);
+    }
+
+
+    function httpGetUserInfo($accessToken, $openId)
+    {
+        $url = 'https://api.weixin.qq.com/sns/userinfo?access_token='
+            . $accessToken . '&openid=' . $openId . '&lang=zh_CN';
+        return $this->httpGet($url);
+    }
+
+    function httpGetUserInfoByPlatform($accessToken, $openId)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='
+            . $accessToken . '&openid=' . $openId . '&lang=zh_CN';
+        return $this->httpGet($url);
+    }
+
+    private function baseHttpGetAccessToken($code, $wechatAppId, $wechatSecret)
+    {
+        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $wechatAppId .
+            '&secret=' . $wechatSecret . '&grant_type=authorization_code&code=' . $code;
+        return $this->httpGet($url);
+    }
+
+    private function httpGetUnionId($accessToken, $openId)
+    {
+        $url = 'https://api.weixin.qq.com/sns/userinfo?access_token=' . $accessToken .
+            '&openid=' . $openId;
+        return $this->httpGet($url);
+    }
+
+    function getUnionId($accessToken, $openId)
+    {
+        list($error, $unionResult) = $this->httpGetUnionId($accessToken, $openId);
+        if ($error) {
+            logInfo("failed union result: " . json_encode($unionResult));
+            return array(null, $error->data);
+        } else {
+            return array($unionResult->unionid, 0);
+        }
+    }
+
+    function httpGetAccessToken($code)
+    {
+        return $this->baseHttpGetAccessToken($code, WECHAT_APP_ID, WECHAT_APP_SECRET);
+    }
+
+    function webHttpGetAccessToken($code)
+    {
+        return $this->baseHttpGetAccessToken($code, WEB_WECHAT_APP_ID, WEB_WECHAT_APP_SECRET);
+    }
+
+    function appHttpGetAccessToken($code)
+    {
+        return $this->baseHttpGetAccessToken($code, MOBILE_WECHAT_APP_ID, MOBILE_WECHAT_APP_SECRET);
     }
 
 }
