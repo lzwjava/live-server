@@ -39,81 +39,6 @@ class Wechat extends BaseController
         $this->succeed($this->jsSdk->getSignPackage($url));
     }
 
-    private function httpGetUserInfo($accessToken, $openId)
-    {
-        $url = 'https://api.weixin.qq.com/sns/userinfo?access_token='
-            . $accessToken . '&openid=' . $openId . '&lang=zh_CN';
-        $resp = $this->jsSdk->httpGet($url);
-        return $this->parseResponse($resp);
-    }
-
-    private function httpGetUserInfoByPlatform($accessToken, $openId)
-    {
-        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='
-            . $accessToken . '&openid=' . $openId . '&lang=zh_CN';
-        $resp = $this->jsSdk->httpGet($url);
-        return $this->parseResponse($resp);
-    }
-
-    private function parseResponse($respStr)
-    {
-        $result = new StdClass;
-        if ($respStr === false) {
-            $result->error = 'network error';
-            return $result;
-        }
-        $data = json_decode($respStr);
-        if (isset($data->errcode)) {
-            $result->error = $data->errmsg;
-            $result->errorcode = $data->errcode;
-        } else {
-            $result->error = null;
-            $result->data = $data;
-        }
-        return $result;
-    }
-
-    private function baseHttpGetAccessToken($code, $wechatAppId, $wechatSecret)
-    {
-        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $wechatAppId .
-            '&secret=' . $wechatSecret . '&grant_type=authorization_code&code=' . $code;
-        $resp = $this->jsSdk->httpGet($url);
-        return $this->parseResponse($resp);
-    }
-
-    private function httpGetUnionId($accessToken, $openId)
-    {
-        $url = 'https://api.weixin.qq.com/sns/userinfo?access_token=' . $accessToken .
-            '&openid=' . $openId;
-        $resp = $this->jsSdk->httpGet($url);
-        return $this->parseResponse($resp);
-    }
-
-    private function getUnionId($accessToken, $openId)
-    {
-        $unionResult = $this->httpGetUnionId($accessToken, $openId);
-        if (!$unionResult->error && $unionResult->data->unionid) {
-            return array($unionResult->data->unionid, 0);
-        } else {
-            logInfo("failed union result: " . json_encode($unionResult));
-            return array(null, $unionResult->errorcode);
-        }
-    }
-
-    private function httpGetAccessToken($code)
-    {
-        return $this->baseHttpGetAccessToken($code, WECHAT_APP_ID, WECHAT_APP_SECRET);
-    }
-
-    private function webHttpGetAccessToken($code)
-    {
-        return $this->baseHttpGetAccessToken($code, WEB_WECHAT_APP_ID, WEB_WECHAT_APP_SECRET);
-    }
-
-    private function appHttpGetAccessToken($code)
-    {
-        return $this->baseHttpGetAccessToken($code, MOBILE_WECHAT_APP_ID, MOBILE_WECHAT_APP_SECRET);
-    }
 
     function oauth_get()
     {
@@ -121,12 +46,11 @@ class Wechat extends BaseController
             return;
         };
         $code = $this->get(KEY_CODE);
-        $tokenResult = $this->httpGetAccessToken($code);
-        if ($tokenResult->error) {
-            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+        list($error, $respData) = $this->jsSdk->httpGetAccessToken($code);
+        if ($error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $error);
             return;
         }
-        $respData = $tokenResult->data;
         $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
         if ($snsUser != null) {
             if ($snsUser->userId != 0) {
@@ -136,12 +60,11 @@ class Wechat extends BaseController
             }
             $this->succeed($snsUser);
         } else {
-            $userResp = $this->httpGetUserInfo($respData->access_token, $respData->openid);
-            if ($userResp->error) {
-                $this->failure(ERROR_USER_INFO_FAILED, $userResp->error);
+            list($error, $weUser) = $this->jsSdk->httpGetUserInfo($respData->access_token, $respData->openid);
+            if ($error) {
+                $this->failure(ERROR_USER_INFO_FAILED, $error);
                 return;
             }
-            $weUser = $userResp->data;
             $id = $this->snsUserDao->addSnsUser($weUser->openid, $weUser->nickname,
                 $weUser->headimgurl, PLATFORM_WECHAT, $weUser->unionid);
             if (!$id) {
@@ -159,17 +82,16 @@ class Wechat extends BaseController
             return;
         }
         $code = $this->get(KEY_CODE);
-        $tokenResult = $this->httpGetAccessToken($code);
-        if ($tokenResult->error) {
-            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+        list($error, $respData) = $this->jsSdk->httpGetAccessToken($code);
+        if ($error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $error);
             return;
         }
-        $respData = $tokenResult->data;
         $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
         $unionId = null;
         if ($snsUser != null) {
             if (!$snsUser->unionId) {
-                list($unionId, $errcode) = $this->getUnionId($respData->access_token, $respData->openid);
+                list($unionId, $errcode) = $this->jsSdk->getUnionId($respData->access_token, $respData->openid);
                 if ($errcode == 48001) {
                     // api unauthorized
                     $this->succeed();
@@ -220,19 +142,16 @@ class Wechat extends BaseController
             return;
         }
         $code = $this->get(KEY_CODE);
-        $tokenResult = $this->webHttpGetAccessToken($code);
-        if ($tokenResult->error) {
-            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+        list($error, $respData) = $this->jsSdk->webHttpGetAccessToken($code);
+        if ($error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $error);
             return;
         }
-        $respData = $tokenResult->data;
-        $unionResp = $this->httpGetUnionId($respData->access_token, $respData->openid);
-        if ($unionResp->error) {
-            $this->failure(ERROR_GET_USER_INFO);
+        list($error, $unionResult) = $this->jsSdk->httpGetUnionId($respData->access_token, $respData->openid);
+        if ($error) {
+            $this->failure(ERROR_GET_UNION_ID, $error);
             return;
         }
-        $unionResult = $unionResp->data;
-        // logInfo("union data:" . json_encode($unionResp));
         $unionId = $unionResult->unionid;
         $snsUser = $this->snsUserDao->getSnsUserByUnionId($unionId);
         if (!$snsUser) {
@@ -261,18 +180,16 @@ class Wechat extends BaseController
             return;
         }
         $code = $this->get(KEY_CODE);
-        $tokenResult = $this->appHttpGetAccessToken($code);
-        if ($tokenResult->error) {
-            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+        list($error, $respData) = $this->jsSdk->appHttpGetAccessToken($code);
+        if ($error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $error);
             return;
         }
-        $respData = $tokenResult->data;
-        $unionResp = $this->httpGetUnionId($respData->access_token, $respData->openid);
-        if ($unionResp->error) {
+        list($error, $unionResult) = $this->jsSdk->httpGetUnionId($respData->access_token, $respData->openid);
+        if ($error) {
             $this->failure(ERROR_GET_USER_INFO);
             return;
         }
-        $unionResult = $unionResp->data;
         $unionId = $unionResult->unionid;
 
         $snsUser = $this->snsUserDao->getSnsUser($unionResult->openid, PLATFORM_WECHAT_APP);
@@ -371,18 +288,16 @@ class Wechat extends BaseController
     function appOauth_get()
     {
         $code = $this->get(KEY_CODE);
-        $tokenResult = $this->appHttpGetAccessToken($code);
-        if ($tokenResult->error) {
-            $this->failure(ERROR_GET_ACCESS_TOKEN, $tokenResult->error);
+        list($error, $respData) = $this->jsSdk->appHttpGetAccessToken($code);
+        if ($error) {
+            $this->failure(ERROR_GET_ACCESS_TOKEN, $error);
             return;
         }
-        $respData = $tokenResult->data;
-        $unionResp = $this->httpGetUnionId($respData->access_token, $respData->openid);
-        if ($unionResp->error) {
+        list($error, $unionResult) = $this->jsSdk->httpGetUnionId($respData->access_token, $respData->openid);
+        if ($error) {
             $this->failure(ERROR_GET_USER_INFO);
             return;
         }
-        $unionResult = $unionResp->data;
         $unionId = $unionResult->unionid;
         $user = $this->userDao->findUserByUnionId($unionId);
         if ($user) {
@@ -418,12 +333,10 @@ class Wechat extends BaseController
             return;
         }
         $accessToken = $this->jsSdk->getAccessToken();
-        $userResp = $this->httpGetUserInfoByPlatform($accessToken, $snsUser->openId);
-        if ($userResp->error) {
-            $this->failure(ERROR_USER_INFO_FAILED, $userResp->error);
-            return;
+        list($error, $weUser) = $this->jsSdk->httpGetUserInfoByPlatform($accessToken, $snsUser->openId);
+        if ($error) {
+            $this->failure(ERROR_USER_INFO_FAILED, $error);
         }
-        $weUser = $userResp->data;
         $result = null;
         if ($weUser->subscribe) {
             $result = true;
@@ -431,6 +344,48 @@ class Wechat extends BaseController
             $result = false;
         }
         $this->succeed($result);
+    }
+
+    private function createMenu()
+    {
+        $accessToken = $this->jsSdk->getAccessToken();
+        $url = WECHAT_API_BASE . 'menu/create?access_token='
+            . $accessToken;
+        $data = array(
+            'button' => array(
+                array(
+                    'type' => 'view',
+                    'name' => '最新直播',
+                    'url' => 'http://m.quzhiboapp.com/?liveId=0'
+                )
+            )
+        );
+        return $this->jsSdk->httpPost($url, $data);
+    }
+
+    private function getMenu()
+    {
+        return $this->jsSdk->wechatHttpGet('menu/get');
+    }
+
+    function menu_get()
+    {
+        list($error, $data) = $this->getMenu();
+        if ($error) {
+            $this->failure(ERROR_WECHAT, $error);
+            return;
+        }
+        $this->succeed($data);
+    }
+
+    function createMenu_get()
+    {
+        list($error, $data) = $this->createMenu();
+        if ($error) {
+            $this->failure(ERROR_WECHAT, $error);
+            return;
+        }
+        $this->succeed($data);
     }
 
 }

@@ -78,6 +78,7 @@ class UserDao extends BaseDao
             KEY_SESSION_TOKEN_CREATED,
             KEY_SESSION_TOKEN,
             KEY_UNION_ID,
+            KEY_WECHAT_SUBSCRIBE,
             KEY_CREATED,
             KEY_UPDATED,
         ));

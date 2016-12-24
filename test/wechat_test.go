@@ -76,7 +76,7 @@ func TestWeChat_autoBind(t *testing.T) {
 
 func TestWeChat_silentOauth(t *testing.T) {
 	c := NewClient()
-	c.get("wechat/silentOauth", url.Values{"code": {"021nmcVB0w3SWd2oIwTB0RCbVB0nmcVI"}})
+	c.get("wechat/silentOauth", url.Values{"code": {"0412dP3b0NMQXu1Yky3b0CtO3b02dP3T"}})
 }
 
 func TestWeChat_silentOauth_web(t *testing.T) {
@@ -145,4 +145,16 @@ func TestWeChat_isSubscribe(t *testing.T) {
 	res := c.getData("wechat/isSubscribe", url.Values{"userId": {userId}})
 	assert.NotNil(t, res.Interface())
 	assert.True(t, res.MustBool())
+}
+
+// func TestWeChat_createMenu(t *testing.T) {
+// 	c := NewClient()
+// 	res := c.getData("wechat/createMenu", url.Values{})
+// 	assert.NotNil(t, res.Interface())
+// }
+
+func TestWeChat_getMenu(t *testing.T) {
+	c := NewClient()
+	res := c.getData("wechat/menu", url.Values{})
+	assert.NotNil(t, res.Interface())
 }
