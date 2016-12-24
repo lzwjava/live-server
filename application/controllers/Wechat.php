@@ -349,7 +349,7 @@ class Wechat extends BaseController
     private function createMenu()
     {
         $accessToken = $this->jsSdk->getAccessToken();
-        $url = WECHAT_API_BASE . 'menu/create?access_token='
+        $url = WECHAT_API_CGIBIN . 'menu/create?access_token='
             . $accessToken;
         $data = array(
             'button' => array(
