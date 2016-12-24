@@ -568,8 +568,9 @@ if (!function_exists('specialPhones')) {
 define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'gjGxJw0GitbSRa2rNl1GRHCDL97PI2mrHOnfwQuXW5rLDSN_YuxWC3kiLaEdP2OHngBydisD77bdTMPJL0ApbficYKQQ4L6By6AiOmaBQ_PtgcNZJqkdnDgXeb5mWIU4AXKhABAFCP');
+'h9bbTyJDXMcDbp6nhEDOeLBkkJpNB73mwmF-7I4MyaEFV84YmSKY3IGI9xkFPouIWTFcVyaBBxNfBGQNx13l53JPWJuOUtGX8r--cNAtRGAHVQjABAXLG');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
-define('WECHAT_API_BASE', 'https://api.weixin.qq.com/cgi-bin/');
+define('WECHAT_API_BASE', 'https://api.weixin.qq.com/');
+define('WECHAT_API_CGIBIN', WECHAT_API_BASE . 'cgi-bin/');

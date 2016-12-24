@@ -56,10 +56,12 @@ class JSSDK
         $ticket = $this->wxDao->getJSApiTicket();
         if (!$ticket) {
             $accessToken = $this->getAccessToken();
-            // 如果是企业号用以下 URL 获取 ticket
-            // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
-            $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
-            $res = $this->httpGet($url);
+            $url = WECHAT_API_CGIBIN . 'ticket/getticket';
+            $query = array(
+                'type' => 'jsapi',
+                'access_token' => $accessToken
+            );
+            $res = $this->httpGet($url, $query);
             if (!$res->error) {
                 $ticket = $res->data->ticket;
             }
@@ -80,10 +82,13 @@ class JSSDK
         // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
         $accessToken = $this->wxDao->getAccessToken();
         if (!$accessToken) {
-            // 如果是企业号用以下URL获取access_token
-            // $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
-            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret=$this->appSecret";
-            $res = $this->httpGet($url);
+            $url = WECHAT_API_CGIBIN . 'token';
+            $query = array(
+                'grant_type' => 'client_credential',
+                'appid' => $this->appId,
+                'secret' => $this->appSecret
+            );
+            $res = $this->httpGet($url, $query);
             if (!$res->error) {
                 $accessToken = $res->data->access_token;
             }
@@ -96,8 +101,9 @@ class JSSDK
         }
     }
 
-    function httpGet($url)
+    function httpGet($baseUrl, $query = array())
     {
+        $url = $baseUrl . '?' . http_build_query($query);
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, 500);
@@ -112,17 +118,17 @@ class JSSDK
     function wechatHttpPost($path, $data)
     {
         $accessToken = $this->getAccessToken();
-        $url = WECHAT_API_BASE . $path . '?access_token='
+        $url = WECHAT_API_CGIBIN . $path . '?access_token='
             . $accessToken;
         return $this->httpPost($url, $data);
     }
 
-    function wechatHttpGet($path, $params = '')
+    function wechatHttpGet($path, $params = array())
     {
         $accessToken = $this->getAccessToken();
-        $url = WECHAT_API_BASE . $path . '?access_token='
-            . $accessToken . $params;
-        return $this->httpGet($url);
+        $url = WECHAT_API_CGIBIN . $path;
+        $params['access_token'] = $accessToken;
+        return $this->httpGet($url, $params);
     }
 
     private function parseResponse($respStr)
@@ -165,30 +171,46 @@ class JSSDK
 
     function httpGetUserInfo($accessToken, $openId)
     {
-        $url = 'https://api.weixin.qq.com/sns/userinfo?access_token='
-            . $accessToken . '&openid=' . $openId . '&lang=zh_CN';
-        return $this->httpGet($url);
+        $url = WECHAT_API_BASE . 'sns/userinfo';
+        $query = array(
+            'access_token' => $accessToken,
+            'openid' => $openId,
+            'lang' => 'zh_CN'
+        );
+        return $this->httpGet($url, $query);
     }
 
     function httpGetUserInfoByPlatform($accessToken, $openId)
     {
-        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='
-            . $accessToken . '&openid=' . $openId . '&lang=zh_CN';
-        return $this->httpGet($url);
+        $url = WECHAT_API_CGIBIN . 'user/info';
+        $query = array(
+            'access_token' => $accessToken,
+            'openid' => $openId,
+            'lang' => 'zh_CN'
+        );
+        return $this->httpGet($url, $query);
     }
 
     private function baseHttpGetAccessToken($code, $wechatAppId, $wechatSecret)
     {
-        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $wechatAppId .
-            '&secret=' . $wechatSecret . '&grant_type=authorization_code&code=' . $code;
-        return $this->httpGet($url);
+        $url = WECHAT_API_BASE . 'sns/oauth2/access_token';
+        $query = array(
+            'appid' => $wechatAppId,
+            'secret' => $wechatSecret,
+            'grant_type' => 'authorization_code',
+            'code' => $code
+        );
+        return $this->httpGet($url, $query);
     }
 
-    private function httpGetUnionId($accessToken, $openId)
+    function httpGetUnionId($accessToken, $openId)
     {
-        $url = 'https://api.weixin.qq.com/sns/userinfo?access_token=' . $accessToken .
-            '&openid=' . $openId;
-        return $this->httpGet($url);
+        $url = WECHAT_API_BASE . 'sns/userinfo';
+        $data = array(
+            'access_token' => $accessToken,
+            'openid' => $openId
+        );
+        return $this->httpGet($url, $data);
     }
 
     function getUnionId($accessToken, $openId)
