@@ -293,6 +293,13 @@ func TestLives_notifyLiveStart(t *testing.T) {
 	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
 }
 
+func TestLives_notifyLiveStart_oneHour(t *testing.T) {
+	c, _, _, liveId := createLiveAndWeChatAttendance()
+	res := c.getData("lives/"+liveId+"/notify", url.Values{"oneHour": {"1"}})
+	assert.NotNil(t, res)
+	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
+}
+
 func TestLives_fixAttedanceCount(t *testing.T) {
 	c := NewClient()
 	res := c.getData("lives/fixAttendanceCount", url.Values{})
