@@ -85,6 +85,17 @@ if (!function_exists('logInfo')) {
     }
 }
 
+if (!function_exists('logError')) {
+    function logError($error)
+    {
+        if (isDebug()) {
+            error_log($error);
+        } else {
+            log_message('error', $error);
+        }
+    }
+}
+
 if (!function_exists('amountToYuan')) {
     function amountToYuan($amount)
     {

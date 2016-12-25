@@ -25,15 +25,15 @@ class UserDao extends BaseDao
         return $this->isUserUsed(KEY_MOBILE_PHONE_NUMBER, $mobilePhoneNumber);
     }
 
-    function insertUser($username, $mobilePhoneNumber, $avatarUrl, $unionId = null)
+    function insertUser($username, $mobilePhoneNumber, $avatarUrl, $unionId = null, $subscribe = 0)
     {
-
         $data = array(
             KEY_USERNAME => $username,
             KEY_MOBILE_PHONE_NUMBER => $mobilePhoneNumber,
             KEY_AVATAR_URL => $avatarUrl,
             KEY_SESSION_TOKEN => $this->genSessionToken(),
-            KEY_UNION_ID => $unionId
+            KEY_UNION_ID => $unionId,
+            KEY_WECHAT_SUBSCRIBE => $subscribe
         );
         $this->db->insert(TABLE_USERS, $data);
         return $this->db->insert_id();
@@ -211,6 +211,11 @@ class UserDao extends BaseDao
     {
         $sql = "SELECT * FROM users WHERE avatarUrl LIKE 'http://wx.qlogo.cn%'";
         return $this->db->query($sql)->result();
+    }
+
+    function updateSubscribe($userId, $subscribe)
+    {
+        return $this->updateUser($userId, array(KEY_WECHAT_SUBSCRIBE => $subscribe));
     }
 
 }

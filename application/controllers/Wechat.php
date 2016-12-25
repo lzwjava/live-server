@@ -216,7 +216,7 @@ class Wechat extends BaseController
         $this->notify->Handle(false);
     }
 
-    function valid_get()
+    function callback_get()
     {
         $echoStr = $this->get('echostr');
 
@@ -230,38 +230,95 @@ class Wechat extends BaseController
         $this->succeed();
     }
 
-    function responseMsg()
+    private function xmlToArray($xml)
     {
-        //get post data, May be due to the different environments
-        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        libxml_disable_entity_loader(true);
+        return json_decode(json_encode(simplexml_load_string($xml,
+            'SimpleXMLElement', LIBXML_NOCDATA)), true);
+    }
+
+    public function arrayToXml($values)
+    {
+        if (!is_array($values)
+            || count($values) <= 0
+        ) {
+            throw new Exception("数组数据异常！");
+        }
+
+        $xml = "<xml>";
+        foreach ($values as $key => $val) {
+            if (is_numeric($val)) {
+                $xml .= "<" . $key . ">" . $val . "</" . $key . ">";
+            } else {
+                $xml .= "<" . $key . "><![CDATA[" . $val . "]]></" . $key . ">";
+            }
+        }
+        $xml .= "</xml>";
+        return $xml;
+    }
+
+    private function textReply($fromUsername, $toUsername, $content)
+    {
+        $time = time();
+        $data = array(
+            KEY_FROM_USER_NAME => $fromUsername,
+            KEY_TO_USER_NAME => $toUsername,
+            KEY_CREATE_TIME => $time,
+            KEY_MSG_TYPE => 'text',
+            KEY_CONTENT => $content
+        );
+        return $data;
+    }
+
+    function replyToWeChat($data)
+    {
+        logInfo("wechat reply: " . json_encode($data));
+        $xml = $this->arrayToXml($data);
+        echo $xml;
+    }
+
+
+    function callback_post()
+    {
+        $xmlStr = file_get_contents('php://input');
+
+        logInfo("wechat post str:\n $xmlStr");
 
         //extract post data
-        if (!empty($postStr)) {
+        if (!empty($xmlStr)) {
 
-            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-            $fromUsername = $postObj->FromUserName;
-            $toUsername = $postObj->ToUserName;
-            $keyword = trim($postObj->Content);
-            $time = time();
-            $textTpl = "<xml>
-							<ToUserName><![CDATA[%s]]></ToUserName>
-							<FromUserName><![CDATA[%s]]></FromUserName>
-							<CreateTime>%s</CreateTime>
-							<MsgType><![CDATA[%s]]></MsgType>
-							<Content><![CDATA[%s]]></Content>
-							<FuncFlag>0</FuncFlag>
-							</xml>";
-            if (!empty($keyword)) {
-                $msgType = "text";
-                $contentStr = "Welcome to wechat world!";
-                $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
-                echo $resultStr;
-            } else {
-                echo "Input something...";
+            $postObj = $this->xmlToArray($xmlStr);
+            $fromUsername = $postObj[KEY_FROM_USER_NAME];
+            $toUsername = $postObj[KEY_TO_USER_NAME];
+            $createTime = $postObj[KEY_CREATE_TIME];
+            $msgType = $postObj[KEY_MSG_TYPE];
+            if ($msgType == MSG_TYPE_TEXT) {
+                $keyword = trim($postObj[KEY_CONTENT]);
+                $contentStr = '您的消息我们已经收到。';
+                $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
+                $this->replyToWeChat($textReply);
+            } else if ($msgType == MSG_TYPE_EVENT) {
+                $event = $postObj[KEY_EVENT];
+                if ($event == EVENT_SUBSCRIBE) {
+                    $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
+                    if ($userId) {
+                        $this->userDao->updateSubscribe($userId, 1);
+                    }
+                    $contentStr = WECHAT_WELCOME_WORD;
+                    $welcomeReply = $this->textReply($toUsername, $fromUsername, $contentStr);
+                    $this->replyToWeChat($welcomeReply);
+                } else if ($event == EVENT_UNSUBSCRIBE) {
+                    $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
+                    if ($userId) {
+                        $this->userDao->updateSubscribe($userId, 0);
+                    }
+                    logInfo("unsubscribe event");
+                } else if ($event == EVENT_VIEW) {
+                    logInfo("event view");
+                }
             }
-
         } else {
-            echo "";
+            echo '';
             exit;
         }
     }
@@ -321,29 +378,27 @@ class Wechat extends BaseController
         }
     }
 
+    private function queryIsSubscribe($userId)
+    {
+        $openId = $this->snsUserDao->getOpenIdByUserId($userId);
+        if (!$openId) {
+            return array(ERROR_SNS_USER_NOT_EXISTS, 0);
+        }
+        return $this->jsSdk->queryIsSubscribeByOpenId($openId);
+    }
+
     function isSubscribe_get()
     {
         if ($this->checkIfParamsNotExist($this->get(), array(KEY_USER_ID))) {
             return;
         }
         $userId = $this->get(KEY_USER_ID);
-        $snsUser = $this->snsUserDao->getWeChatSnsUserByUserId($userId);
-        if (!$snsUser) {
-            $this->failure(ERROR_SNS_USER_NOT_EXISTS);
+        list($error, $isSubscribe) = $this->queryIsSubscribe($userId);
+        if ($error) {
+            $this->failure($error);
             return;
         }
-        $accessToken = $this->jsSdk->getAccessToken();
-        list($error, $weUser) = $this->jsSdk->httpGetUserInfoByPlatform($accessToken, $snsUser->openId);
-        if ($error) {
-            $this->failure(ERROR_USER_INFO_FAILED, $error);
-        }
-        $result = null;
-        if ($weUser->subscribe) {
-            $result = true;
-        } else {
-            $result = false;
-        }
-        $this->succeed($result);
+        $this->succeed($isSubscribe);
     }
 
     private function createMenu()
