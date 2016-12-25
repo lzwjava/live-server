@@ -142,9 +142,7 @@ func (c *Client) postWithStr(path string, body string) string {
 	fmt.Println("curl -X", "POST", urlStr, body)
 	resp, err := c.HTTPClient.Do(req)
 	checkErr(err)
-	byteArr, err := ioutil.ReadAll(resp.Body)
-	checkErr(err)
-	bodyStr := string(byteArr)
+	bodyStr := writeStringAndGet(resp.Body)
 	fmt.Println("response:", bodyStr)
 	return bodyStr
 }

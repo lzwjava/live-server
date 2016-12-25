@@ -180,6 +180,17 @@ class JSSDK
         return $this->httpGet($url, $query);
     }
 
+    function queryIsSubscribeByOpenId($openId)
+    {
+        $accessToken = $this->getAccessToken();
+        list($error, $weUser) = $this->httpGetUserInfoByPlatform($accessToken, $openId);
+        if ($error) {
+            logInfo("fetch user info error " . $error);
+            return array(ERROR_USER_INFO_FAILED, 0);
+        }
+        return array(null, $weUser->subscribe);
+    }
+
     function httpGetUserInfoByPlatform($accessToken, $openId)
     {
         $url = WECHAT_API_CGIBIN . 'user/info';

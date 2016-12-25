@@ -59,13 +59,37 @@ class SnsUserDao extends BaseDao
         return $this->db->query($sql, $binds)->row();
     }
 
+    function getWeChatSnsUserByOpenId($openId)
+    {
+        return $this->getSnsUser($openId, PLATFORM_WECHAT);
+    }
+
+    function getUserIdByOpenId($openId)
+    {
+        $snsUser = $this->getWeChatSnsUserByOpenId($openId);
+        if (!$snsUser) {
+            return null;
+        } else {
+            return $snsUser->userId;
+        }
+    }
+
+    function getOpenIdByUserId($userId)
+    {
+        $snsUser = $this->getWeChatSnsUserByUserId($userId);
+        if (!$snsUser) {
+            return null;
+        } else {
+            return $snsUser->openId;
+        }
+    }
+
     function getWeChatSnsUserByUserId($userId)
     {
         $sql = "SELECT * FROM sns_users WHERE userId=? AND platform=?";
         $binds = array($userId, PLATFORM_WECHAT);
         return $this->db->query($sql, $binds)->row();
     }
-
 
     function getSnsUserByUser($user)
     {

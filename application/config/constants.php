@@ -568,9 +568,33 @@ if (!function_exists('specialPhones')) {
 define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'h9bbTyJDXMcDbp6nhEDOeLBkkJpNB73mwmF-7I4MyaEFV84YmSKY3IGI9xkFPouIWTFcVyaBBxNfBGQNx13l53JPWJuOUtGX8r--cNAtRGAHVQjABAXLG');
+'9kuMi5aNaMDZUBEacTI04GwuDCDW0aBA1HpIkYi2Z-sYiMRVz2Sly-2ZgT9Hz185zPK60rkqwbVUn3PXMsRgtHK1Wh69IqX-NNIUMgYz-DUTfUjK09jlLAPOhowxaw8aTKPiAHAZQV');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
 define('WECHAT_API_BASE', 'https://api.weixin.qq.com/');
 define('WECHAT_API_CGIBIN', WECHAT_API_BASE . 'cgi-bin/');
+
+define('KEY_TO_USER_NAME', 'ToUserName');
+define('KEY_FROM_USER_NAME', 'FromUserName');
+define('KEY_CREATE_TIME', 'CreateTime');
+define('KEY_MSG_TYPE', 'MsgType');
+define('KEY_CONTENT', 'Content');
+define('KEY_FUNC_FLAG', 'FuncFlag');
+define('KEY_EVENT', 'Event');
+define('KEY_EVENT_KEY', 'EventKey');
+
+define('MSG_TYPE_TEXT', 'text');
+define('MSG_TYPE_EVENT', 'event');
+define('EVENT_SUBSCRIBE', 'subscribe');
+define('EVENT_UNSUBSCRIBE', 'unsubscribe');
+define('EVENT_VIEW', 'view');
+
+define('WECHAT_WELCOME_WORD', <<<EOD
+欢迎关注趣直播，趣直播是知识直播平台，邀请了大咖来分享知识或经历。
+
+<a href="http://m.quzhiboapp.com/?liveId=0">最新直播</a>
+
+如果遇到问题请加微信：lzwjava
+EOD
+);

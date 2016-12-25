@@ -17,8 +17,9 @@ func TestWeChat_sign(t *testing.T) {
 }
 
 func TestWeChat_oauth(t *testing.T) {
-	c, _ := NewClientAndUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"0013U0ps1XUkNq0Dtels17A0ps13U0pH"}})
+	c := NewClient()
+	deleteSnsUser()
+	res := c.get("wechat/oauth", url.Values{"code": {"031AdaVs0LDcYb13AQWs07EjVs0AdaV7"}})
 	assert.NotNil(t, res)
 }
 
@@ -144,7 +145,7 @@ func TestWeChat_isSubscribe(t *testing.T) {
 	insertSnsUser(userId)
 	res := c.getData("wechat/isSubscribe", url.Values{"userId": {userId}})
 	assert.NotNil(t, res.Interface())
-	assert.True(t, res.MustBool())
+	assert.Equal(t, res.MustInt(), 0)
 }
 
 // func TestWeChat_createMenu(t *testing.T) {
@@ -157,4 +158,28 @@ func TestWeChat_getMenu(t *testing.T) {
 	c := NewClient()
 	res := c.getData("wechat/menu", url.Values{})
 	assert.NotNil(t, res.Interface())
+}
+
+func TestWeChat_sendText(t *testing.T) {
+	c := NewClient()
+	res := c.postWithStr("wechat/callback", `<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+<FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
+<CreateTime>1482623024</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[哈喽]]></Content>
+<MsgId>6367817400842503849</MsgId>
+</xml>`)
+	assert.NotNil(t, res)
+}
+
+func TestWeChat_subscribe(t *testing.T) {
+	c := NewClient()
+	res := c.postWithStr("wechat/callback", `<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+<FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
+<CreateTime>1482625995</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[subscribe]]></Event>
+<EventKey><![CDATA[]]></EventKey>
+</xml>`)
+	assert.NotNil(t, res)
 }
