@@ -363,6 +363,7 @@ class Lives extends BaseController
         if (!$user) {
             return;
         }
+        $oneHour = $this->toNumber($this->get('oneHour'));
         $live = $this->liveDao->getLive($liveId);
         if ($this->checkIfObjectNotExists($live)) {
             return;
@@ -376,9 +377,9 @@ class Lives extends BaseController
         foreach ($users as $user) {
             if ($user->notified == 0) {
                 logInfo("notified 0");
-                $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live);
+                $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live, $oneHour);
                 if (!$ok) {
-                    $ok = $this->sms->notifyLiveStart($user->userId, $live);
+                    $ok = $this->sms->notifyLiveStart($user->userId, $live, $oneHour);
                 }
                 if ($ok) {
                     $this->attendanceDao->updateToNotified($user->userId, $live->liveId);

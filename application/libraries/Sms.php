@@ -22,17 +22,21 @@ class Sms extends BaseDao
         $this->userDao = new UserDao();
     }
 
-    function notifyLiveStart($userId, $live)
+    function notifyLiveStart($userId, $live, $oneHour = false)
     {
         $realUser = $this->userDao->findUserById($userId);
         $name = $realUser->username;
         if (mb_strlen($name) > LC_MAX_NAME_LEN) {
             $name = mb_substr($name, 0, LC_MAX_NAME_LEN);
         }
+        $extraWord = '';
+        if ($oneHour) {
+            $extraWord = '，还有1小时开始';
+        }
         $data = array(
             SMS_NAME => $name,
             KEY_SUBJECT => $live->subject,
-            SMS_OPEN_APP_WORDS => '请回到报名时的微信网页观看或用电脑打开 quzhiboapp.com'
+            SMS_OPEN_APP_WORDS => '请回到报名时的微信网页观看或用电脑打开 quzhiboapp.com' . $extraWord
         );
         $phone = $realUser->mobilePhoneNumber;
         return $this->leancloud->sendTemplateSms($phone, 'LiveStart', $data);

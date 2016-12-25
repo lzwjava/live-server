@@ -26,12 +26,18 @@ class WeChatPlatform
         $this->userDao = new UserDao();
     }
 
-    function notifyUserByWeChat($userId, $live)
+    function notifyUserByWeChat($userId, $live, $oneHour = false)
     {
         $user = $this->userDao->findUserById($userId);
+        $word = null;
+        if ($oneHour) {
+            $word = '，您参与的直播还有一个小时开始，请准备好小凳子哟';
+        } else {
+            $word = '，您参与的直播即将开始啦';
+        }
         $tmplData = array(
             'first' => array(
-                'value' => $user->username . '，您参与的直播即将开始啦',
+                'value' => $user->username . $word,
                 'color' => '#000',
             ),
             'keyword1' => array(
