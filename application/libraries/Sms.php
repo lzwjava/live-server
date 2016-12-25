@@ -36,7 +36,7 @@ class Sms extends BaseDao
         $data = array(
             SMS_NAME => $name,
             KEY_SUBJECT => $live->subject,
-            SMS_OPEN_APP_WORDS => '请回到报名时的微信网页观看或用电脑打开 quzhiboapp.com' . $extraWord
+            SMS_OPEN_APP_WORDS => '请关注公众号「平方根科技」或用电脑打开 quzhiboapp.com' . $extraWord
         );
         $phone = $realUser->mobilePhoneNumber;
         return $this->leancloud->sendTemplateSms($phone, 'LiveStart', $data);
@@ -52,7 +52,7 @@ class Sms extends BaseDao
         $data = array(
             SMS_NAME => $name,
             KEY_SUBJECT => $live->subject,
-            KEY_REMARK => ''
+            KEY_REMARK => '，同时请关注服务号「平方根科技」来接受微信通知, 因为价格高昂短信将不再通知，抱歉'
         );
         $phone = $realUser->mobilePhoneNumber;
         return $this->leancloud->sendTemplateSms($phone, 'VideoReady', $data);

@@ -31,10 +31,16 @@ class VideoDao extends BaseDao
         return $videos;
     }
 
+    private function electVideoHost()
+    {
+        return random_element(array(VIDEO_HOST_URL, VIDEO_ALI_HOST_URL));
+    }
+
     private function assembleVideos($videos)
     {
         foreach ($videos as $video) {
-            $video->url = VIDEO_HOST_URL . $video->fileName . '.mp4';
+            $host = $this->electVideoHost();
+            $video->url = $host . $video->fileName . '.mp4';
         }
     }
 
