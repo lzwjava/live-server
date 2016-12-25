@@ -174,7 +174,8 @@ func TestWeChat_sendText(t *testing.T) {
 }
 
 func TestWeChat_subscribe(t *testing.T) {
-	c := NewClient()
+	c, userId := NewClientAndUser()
+	insertSnsUser(userId)
 	res := c.postWithStr("wechat/callback", `<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
 <FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
 <CreateTime>1482625995</CreateTime>
@@ -183,4 +184,7 @@ func TestWeChat_subscribe(t *testing.T) {
 <EventKey><![CDATA[]]></EventKey>
 </xml>`)
 	assert.NotNil(t, res)
+
+	user := c.getData("self", url.Values{})
+	assert.NotNil(t, user.Interface())
 }
