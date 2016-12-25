@@ -25,7 +25,8 @@ func TestWeChat_oauth(t *testing.T) {
 
 func TestWeChat_oauth_then_register(t *testing.T) {
 	c, _ := NewClientAndUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"0211P1Ji0CVBhk1wdnJi0Bu2Ji01P1J8"}})
+	deleteSnsUser()
+	res := c.get("wechat/oauth", url.Values{"code": {"041JWYHN1lcu741DmrHN1Tq9IN1JWYHj"}})
 	assert.NotNil(t, res)
 	if res.Get("status").MustString() == "success" {
 		result := res.Get("result")
@@ -145,7 +146,7 @@ func TestWeChat_isSubscribe(t *testing.T) {
 	insertSnsUser(userId)
 	res := c.getData("wechat/isSubscribe", url.Values{"userId": {userId}})
 	assert.NotNil(t, res.Interface())
-	assert.Equal(t, res.MustInt(), 0)
+	assert.Equal(t, res.MustInt(), 1)
 }
 
 // func TestWeChat_createMenu(t *testing.T) {

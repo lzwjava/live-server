@@ -61,12 +61,12 @@ class JSSDK
                 'type' => 'jsapi',
                 'access_token' => $accessToken
             );
-            $res = $this->httpGet($url, $query);
-            if (!$res->error) {
-                $ticket = $res->data->ticket;
+            list($error, $data) = $this->httpGet($url, $query);
+            if (!$error) {
+                $ticket = $data->ticket;
             }
             if ($ticket) {
-                $this->wxDao->setJSApiTicket($ticket, $res->expires_in);
+                $this->wxDao->setJSApiTicket($ticket, $data->expires_in);
             }
             return $ticket;
         } else {
@@ -88,12 +88,12 @@ class JSSDK
                 'appid' => $this->appId,
                 'secret' => $this->appSecret
             );
-            $res = $this->httpGet($url, $query);
-            if (!$res->error) {
-                $accessToken = $res->data->access_token;
+            list($error, $data) = $this->httpGet($url, $query);
+            if (!$error) {
+                $accessToken = $data->access_token;
             }
             if ($accessToken) {
-                $this->wxDao->setAccessToken($accessToken, $res->expires_in);
+                $this->wxDao->setAccessToken($accessToken, $data->expires_in);
             }
             return $accessToken;
         } else {

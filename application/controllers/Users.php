@@ -15,6 +15,7 @@ class Users extends BaseController
     public $leancloud;
     public $snsUserDao;
     public $qiniuDao;
+    public $jsSdk;
 
     function __construct()
     {
@@ -26,6 +27,8 @@ class Users extends BaseController
         $this->load->model(QiniuDao::class);
         $this->qiniuDao = new QiniuDao();
         $this->load->helper('string');
+        $this->load->library(JSSDK::class);
+        $this->jsSdk = new JSSDK();
     }
 
     private function checkSmsCodeWrong($mobilePhoneNumber, $smsCode)
@@ -181,7 +184,15 @@ class Users extends BaseController
             $this->failure(ERROR_UNION_ID_EMPTY);
             return;
         }
-        $userId = $this->userDao->insertUser($newUsername, $mobile, $imageUrl, $snsUser->unionId);
+
+        $subscribe = 0;
+        if ($platform == PLATFORM_WECHAT) {
+            list($error, $theSubscribe) = $this->jsSdk->queryIsSubscribeByOpenId($openId);
+            $subscribe = $theSubscribe;
+        }
+
+        $userId = $this->userDao->insertUser($newUsername, $mobile, $imageUrl,
+            $snsUser->unionId, $subscribe);
         if (!$userId) {
             $this->failure(ERROR_SQL_WRONG);
             return;
