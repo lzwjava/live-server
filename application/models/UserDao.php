@@ -218,4 +218,10 @@ class UserDao extends BaseDao
         return $this->updateUser($userId, array(KEY_WECHAT_SUBSCRIBE => $subscribe));
     }
 
+    function findAllUsers()
+    {
+        return $this->getListFromTable(TABLE_USERS, '1', '1',
+            $this->userPublicFields(), null, 0, ROW_MAX);
+    }
+
 }

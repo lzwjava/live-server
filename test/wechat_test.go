@@ -188,3 +188,10 @@ func TestWeChat_subscribe(t *testing.T) {
 	user := c.getData("self", url.Values{})
 	assert.NotNil(t, user.Interface())
 }
+
+func TestWeChat_fixAllSubscribe(t *testing.T) {
+	c := NewClient()
+	c.admin = true
+	res := c.getData("wechat/fixAllSubscribe", url.Values{})
+	assert.NotNil(t, res)
+}

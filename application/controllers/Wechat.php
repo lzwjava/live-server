@@ -282,12 +282,12 @@ class Wechat extends BaseController
     {
         $xmlStr = file_get_contents('php://input');
 
-        logInfo("wechat post str:\n $xmlStr");
-
         //extract post data
         if (!empty($xmlStr)) {
-
             $postObj = $this->xmlToArray($xmlStr);
+
+            logInfo("wechat callback:\n " . json_encode($postObj));
+
             $fromUsername = $postObj[KEY_FROM_USER_NAME];
             $toUsername = $postObj[KEY_TO_USER_NAME];
             $createTime = $postObj[KEY_CREATE_TIME];
@@ -399,6 +399,24 @@ class Wechat extends BaseController
             return;
         }
         $this->succeed($isSubscribe);
+    }
+
+    function fixAllSubscribe_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $users = $this->userDao->findAllUsers();
+        $subscribeCount = 0;
+        foreach ($users as $user) {
+            list($error, $subscribe) = $this->queryIsSubscribe($user->userId);
+            $this->userDao->updateSubscribe($user->userId, $subscribe);
+            if ($subscribe) {
+                $subscribeCount++;
+            }
+        }
+        logInfo("finish subscribeCount:" . $subscribeCount);
+        $this->succeed(array('subscribeCount' => $subscribeCount, 'total' => count($users)));
     }
 
     private function createMenu()
