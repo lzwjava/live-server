@@ -598,3 +598,5 @@ define('WECHAT_WELCOME_WORD', <<<EOD
 如果遇到问题请加微信：lzwjava
 EOD
 );
+
+define('ROW_MAX', 10000 * 10000);
