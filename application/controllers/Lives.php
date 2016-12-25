@@ -410,7 +410,10 @@ class Lives extends BaseController
                 $ok = $this->weChatPlatform->notifyVideoByWeChat($attendance->userId, $live);
                 if (!$ok) {
                     logInfo("wechat failed use sms");
-                    $ok = $this->sms->notifyVideoReady($attendance->userId, $live);
+                    $attends = $this->attendanceDao->getAttendancesByUserId($attendance->userId, 0, 100);
+                    if (count($attends) == 1) {
+                        $ok = $this->sms->notifyVideoReady($attendance->userId, $live);
+                    }
                 }
                 if ($ok) {
                     $this->attendanceDao->updateToVideoNotified($attendance->userId, $live->liveId);

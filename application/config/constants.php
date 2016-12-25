@@ -566,6 +566,8 @@ if (!function_exists('specialPhones')) {
 }
 
 define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
+define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
+
 
 define('TMP_WECHAT_ACCESS_TOKEN',
 'Gu4TQxoypDsgOrouEj0tZFQMyot4glzht7wmuU1Y4yRICDoqnpbJmh9aHlE47jimbDxqDRdVNMJBCc60XvaNB_LG4XzLMOsUUvv-ZijmL0z0KCzXqJ9-XxDyeZLn7nEOOCTdAAAFTK');
