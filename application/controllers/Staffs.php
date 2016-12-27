@@ -21,7 +21,7 @@ class Staffs extends BaseController
     function create_post()
     {
         $key = $this->post('key');
-        if ($key != 'borntobeproud') {
+        if ($key != 'BornToBeProud') {
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
