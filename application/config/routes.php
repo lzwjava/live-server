@@ -155,3 +155,6 @@ $route['staffs']['GET'] = 'staffs/list';
 
 // charges
 $route['charges/one']['GET'] = 'charges/one';
+
+// stats
+$route['stats']['GET'] = 'stats/all';
