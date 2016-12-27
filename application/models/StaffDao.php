@@ -23,6 +23,11 @@ class StaffDao extends BaseDao
         return $this->db->query($sql)->result();
     }
 
+    function isStaff($userId)
+    {
+        return in_array($userId, $this->getStaffIds());
+    }
+
     function getStaffIds()
     {
         $staffs = $this->getStaffs();

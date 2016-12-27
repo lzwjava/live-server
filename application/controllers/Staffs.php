@@ -29,6 +29,9 @@ class Staffs extends BaseController
         if (!$user) {
             return;
         }
+        if ($this->staffDao->isStaff($user->userId)) {
+            $this->failure(ERROR_ALREADY_STAFF);
+        }
         $ok = $this->staffDao->addStaff($user->userId);
         if (!$ok) {
             $this->failure(ERROR_SQL_WRONG);
