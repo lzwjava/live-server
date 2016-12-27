@@ -180,6 +180,9 @@ define('ERROR_REWARD_TOO_MUCH', 'reward_too_much');
 define('ERROR_REWARD_YOURSELF', 'reward_yourself');
 define('ERROR_NOT_ATTEND', 'not_attend');
 
+// staffs
+define('ERROR_ALREADY_STAFF', 'already_staff');
+
 if (!function_exists('errorInfos')) {
     function errorInfos()
     {
@@ -268,7 +271,10 @@ if (!function_exists('errorInfos')) {
             ERROR_REWARD_TOO_LITTLE => '打赏最低为1元',
             ERROR_REWARD_TOO_MUCH => '打赏最高为1000元',
             ERROR_REWARD_YOURSELF => '不能打赏自己',
-            ERROR_NOT_ATTEND => '尚未参与该场直播'
+            ERROR_NOT_ATTEND => '尚未参与该场直播',
+
+            // staffs
+            ERROR_ALREADY_STAFF => '您早已绑定账号'
         );
     }
 
