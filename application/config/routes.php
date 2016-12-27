@@ -149,3 +149,9 @@ $route['lives/(\d+)/videos']['POST'] = 'videos/create/$1';
 $route['liveViews']['POST'] = 'liveViews/create';
 $route['liveViews/(\d+)/end']['GET'] = 'liveViews/end/$1';
 
+// staffs
+$route['staffs']['POST'] = 'staffs/create';
+$route['staffs']['GET'] = 'staffs/list';
+
+// charges
+$route['charges/one']['GET'] = 'charges/one';

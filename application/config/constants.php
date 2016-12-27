@@ -447,6 +447,10 @@ define('KEY_TITLE', 'title');
 define('TABLE_REWARDS', 'rewards');
 define('KEY_REWARD_ID', 'rewardId');
 
+// staffs
+define('TABLE_STAFFS', 'staffs');
+define('KEY_STAFF_ID', 'staffId');
+
 define('TABLE_LIVE_VIEWS', 'live_views');
 define('KEY_LIVE_VIEW_ID', 'liveViewId');
 define('KEY_LIVE_STATUS', 'liveStatus');
