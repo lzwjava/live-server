@@ -115,6 +115,29 @@ func TestAttendances_createByWeChatWithCoupon(t *testing.T) {
 	assert.NotNil(t, callbackRes)
 }
 
+func TestAttendances_createByWeChatByStaff(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLiveWithAmount(c, 5900)
+
+	c2 := NewClient()
+	user := registerNewUser(c2)
+	insertSnsUser(toStr(user.Get("userId").MustInt()))
+
+	createStaff(c2)
+
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
+	assert.NotNil(t, res)
+	orderNo := getLastOrderNo()
+	callbackStr := wechatCallbackStr(orderNo)
+	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
+	fmt.Println("callbackRes:" + callbackRes)
+	assert.NotNil(t, callbackRes)
+
+	charge := c2.getData("charges/one", url.Values{"orderNo": {orderNo}})
+	assert.NotNil(t, charge.Interface())
+	assert.Equal(t, charge.Get("amount").MustInt(), 1)
+}
+
 func TestAttendances_createByWeChatQrcode(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)

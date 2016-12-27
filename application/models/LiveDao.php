@@ -12,6 +12,7 @@ class LiveDao extends BaseDao
     public $leanCloud;
     public $userDao;
     public $couponDao;
+    public $staffDao;
 
     function __construct()
     {
@@ -24,6 +25,8 @@ class LiveDao extends BaseDao
         $this->userDao = new UserDao();
         $this->load->model(CouponDao::class);
         $this->couponDao = new CouponDao();
+        $this->load->model(StaffDao::class);
+        $this->staffDao = new StaffDao();
     }
 
     private function genLiveKey()
@@ -173,7 +176,7 @@ class LiveDao extends BaseDao
         return 'xycdn.quzhiboapp.com';
     }
 
-    private function calAmount($live, $user)
+    private function calAmount($live, $user, $staffIds)
     {
         $origin = $live->amount;
         $shareId = $live->shareId;
@@ -188,6 +191,9 @@ class LiveDao extends BaseDao
                 $origin = 100;
             }
         }
+        if (in_array($user->userId, $staffIds)) {
+            $origin = 1;
+        }
         if ($shareId) {
             $amount = $origin - 100;
             if ($amount <= 0) {
@@ -201,6 +207,7 @@ class LiveDao extends BaseDao
 
     private function assembleLives($lives, $user)
     {
+        $staffIds = $this->staffDao->getStaffIds();
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
@@ -225,7 +232,7 @@ class LiveDao extends BaseDao
                 unset($live->rtmpKey);
                 unset($live->notice);
             }
-            $live->realAmount = $this->calAmount($live, $user);
+            $live->realAmount = $this->calAmount($live, $user, $staffIds);
         }
     }
 

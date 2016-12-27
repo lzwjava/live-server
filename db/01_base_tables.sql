@@ -253,3 +253,11 @@ CREATE TABLE `live_views` (
 
 ALTER TABLE `users` ADD COLUMN `wechatSubscribe` TINYINT(2) NOT NULL DEFAULT 0
 AFTER `password`;
+
+CREATE TABLE `staffs` (
+  `staffId` INT(11) NOT NULL AUTO_INCREMENT,
+  `userId`  INT(11) NOT NULL,
+  PRIMARY KEY (`staffId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
