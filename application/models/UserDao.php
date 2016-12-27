@@ -224,4 +224,9 @@ class UserDao extends BaseDao
             $this->userPublicFields(), null, 0, ROW_MAX);
     }
 
+    function count()
+    {
+        return $this->db->count_all(TABLE_USERS);
+    }
+
 }
