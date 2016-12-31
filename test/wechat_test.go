@@ -26,7 +26,20 @@ func TestWeChat_oauth(t *testing.T) {
 func TestWeChat_oauth_then_register(t *testing.T) {
 	c, _ := NewClientAndUser()
 	deleteSnsUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"041JWYHN1lcu741DmrHN1Tq9IN1JWYHj"}})
+	res := c.get("wechat/oauth", url.Values{"code": {"031koIld2U3gYA0QNjnd21TSld2koIlO"}})
+	assert.NotNil(t, res)
+	if res.Get("status").MustString() == "success" {
+		result := res.Get("result")
+		res := c.postData("users/registerBySns", url.Values{"openId": {result.Get("openId").MustString()},
+			"platform": {"wechat"}})
+		assert.NotNil(t, res)
+	}
+}
+
+func TestWeChat_oauth_then_registerWithMobile(t *testing.T) {
+	c, _ := NewClientAndUser()
+	deleteSnsUser()
+	res := c.get("wechat/oauth", url.Values{"code": {"031Czzd81oYlsR1ZE3d81MSFd81CzzdN"}})
 	assert.NotNil(t, res)
 	if res.Get("status").MustString() == "success" {
 		result := res.Get("result")
@@ -212,7 +225,7 @@ func TestWeChat_subscribe(t *testing.T) {
 func TestWeChat_subscribeByPacket(t *testing.T) {
 	c, userId := NewClientAndUser()
 	insertSnsUser(userId)
-	createPacket(c)
+	createPacket(c, userId)
 	packetId := lastPacketId(c)
 	res := c.postWithStr("wechat/callback", fmt.Sprintf(`<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
 <FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
@@ -220,6 +233,24 @@ func TestWeChat_subscribeByPacket(t *testing.T) {
 <MsgType><![CDATA[event]]></MsgType>
 <Event><![CDATA[subscribe]]></Event>
 <EventKey><![CDATA[qrscene_{"type":"packet", "packetId":"%s"}]]></EventKey>
+</xml>`, packetId))
+	assert.NotNil(t, res)
+
+	user := c.getData("self", url.Values{})
+	assert.NotNil(t, user.Interface())
+}
+
+func TestWeChat_scanEvent(t *testing.T) {
+	c, userId := NewClientAndUser()
+	insertSnsUser(userId)
+	createPacket(c, userId)
+	packetId := lastPacketId(c)
+	res := c.postWithStr("wechat/callback", fmt.Sprintf(`<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+<FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
+<CreateTime>1482625995</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[SCAN]]></Event>
+<EventKey><![CDATA[{"type":"packet", "packetId":"%s"}]]></EventKey>
 </xml>`, packetId))
 	assert.NotNil(t, res)
 

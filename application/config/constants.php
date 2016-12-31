@@ -642,7 +642,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'h9bbTyJDXMcDbp6nhEDOeOAMAaEBvtCUcZR3pWGiMmLmBgtsIKpZM4ytSy8V8mVW2w775lyQdzGO2o0oQGY7mTxB5Nk2OIk2HjRalkMUx5DgGVd1Y9nXKPdIY8AJVLe0EDPfAFAPOA');
+'X3rTI-1X0A-gbQHu4K_DB4yZQpw98CRhVSxcK3gN8XVUAdV6vDjeOVeIzW4I1YuzrEILmsiTxQZYUq9XQdf6pWxvPlwpjG9moYNj7l37lsIOSu63LIGIqL7tbg-QRA2rSHUgADAWLY');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -663,6 +663,7 @@ define('MSG_TYPE_EVENT', 'event');
 define('EVENT_SUBSCRIBE', 'subscribe');
 define('EVENT_UNSUBSCRIBE', 'unsubscribe');
 define('EVENT_VIEW', 'view');
+define('EVENT_SCAN', 'SCAN');
 
 define('WECHAT_WELCOME_WORD', <<<EOD
 欢迎关注趣直播，趣直播是知识直播平台，邀请了大咖来分享知识或经历。

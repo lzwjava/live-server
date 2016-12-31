@@ -176,12 +176,4 @@ class Attendances extends BaseController
     }
 
 
-    function sendRedPacket_get()
-    {
-        if ($this->checkIfNotAdmin()) {
-            return;
-        }
-        $this->pay->sendRedPacket();
-        $this->succeed();
-    }
 }

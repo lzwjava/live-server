@@ -11,91 +11,13 @@ use Endroid\QrCode\QrCode;
 
 class Qrcodes extends BaseController
 {
-    public $qrcodeDao;
     public $userDao;
 
     function __construct()
     {
         parent::__construct();
-        $this->load->model(QrcodeDao::class);
-        $this->qrcodeDao = new QrcodeDao();
         $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
-    }
-
-    private function checkCodeInvalid($code)
-    {
-        if (!preg_match('/quzhibo-[a-zA-Z0-9]{32}/', $code)) {
-            $this->failure(ERROR_QRCODE_INVALID);
-            return true;
-        }
-        return false;
-    }
-
-    function scanQrcode_post()
-    {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_CODE, KEY_TYPE))) {
-            return;
-        }
-        $code = $this->post(KEY_CODE);
-        $type = $this->post(KEY_TYPE);
-        $data = $this->post(KEY_DATA);
-        if ($this->checkCodeInvalid($code)) {
-            return;
-        }
-        $user = $this->checkAndGetSessionUser();
-        if (!$user) {
-            return;
-        }
-        $qrcode = $this->qrcodeDao->getQrcode($code);
-        if ($qrcode) {
-            $this->failure(ERROR_QRCODE_DUPLICATE);
-            return;
-        }
-        $id = $this->qrcodeDao->addQrcode($code, $type, $user->userId, $data);
-        if (!$id) {
-            $this->failure(ERROR_SQL_WRONG);
-            return;
-        }
-        $this->succeed();
-    }
-
-    function isQrcodeScanned_get()
-    {
-        if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE))) {
-            return;
-        }
-        $code = $this->get(KEY_CODE);
-        $secs = 0;
-        while ($secs < 8) {
-            $qrcode = $this->qrcodeDao->getQrcode($code);
-            if (!$qrcode) {
-                sleep(1);
-                $secs++;
-            } else {
-                break;
-            }
-        }
-        $qrcode = $this->qrcodeDao->getQrcode($code);
-        if (!$qrcode) {
-            $this->succeed(array(KEY_SCANNED => false));
-        } else {
-            $this->userDao->setLoginByUserId($qrcode->userId);
-            $this->succeed(array(KEY_SCANNED => true, KEY_TYPE => $qrcode->type,
-                KEY_DATA => $qrcode->data));
-        }
-    }
-
-    function png_get()
-    {
-        if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE))) {
-            return;
-        }
-        $code = $this->get(KEY_CODE);
-        if ($this->checkCodeInvalid($code)) {
-            return;
-        }
-        $this->renderQrcode($code);
     }
 
     private function renderQrcode($text)
