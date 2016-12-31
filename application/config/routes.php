@@ -158,3 +158,11 @@ $route['charges/one']['GET'] = 'charges/one';
 
 // stats
 $route['stats']['GET'] = 'stats/all';
+
+// applications
+$route['applications']['POST'] = 'applications/create';
+$route['applications/(\d+)']['POST'] = 'applications/update/$1';
+$route['applications/(\d+)/succeed']['POST'] = 'applications/reviewSucceed/$1';
+$route['applications/(\d+)/reject']['POST'] = 'applications/reviewReject/$1';
+$route['applications/(\d+)']['GET'] = 'applications/one/$1';
+$route['applications/me']['GET'] = 'applications/me/$1';

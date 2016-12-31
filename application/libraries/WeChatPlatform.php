@@ -142,6 +142,47 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, '_uG1HsFgQABk9_gK502OIaTuPEcHUAUEfRlR1cyfVFE', $url, $tmplData);
     }
 
+    function notifyReviewByWeChat($application)
+    {
+        $user = $this->userDao->findUserById($application->userId);
+        $firstWord = null;
+        $remark = null;
+        $statusWord = null;
+        if ($application->status == APPLICATION_STATUS_SUCCEED) {
+            $firstWord = $user->username . '，恭喜您成为趣直播的主讲人。';
+            $remark = '我们将尽快联系和协助您创建直播';
+            $statusWord = '已通过';
+        } else if ($application->status == APPLICATION_STATUS_REJECT) {
+            $firstWord = $user->username . '，很抱歉，未能通过您的主播申请。';
+            $remark = '原因: ' . $application->reviewRemark;
+            $statusWord = '未通过';
+        }
+        $url = 'http://m.quzhiboapp.com/#apply';
+        $tmplData = array(
+            'first' => array(
+                'value' => $firstWord,
+                'color' => '#000'
+            ),
+            'keyword1' => array(
+                'value' => '无',
+                'color' => '#000'
+            ),
+            'keyword2' => array(
+                'value' => $statusWord,
+                'color' => '#173177'
+            ),
+            'keyword3' => array(
+                'value' => date('Y-m-d'),
+                'color' => '#000',
+            ),
+            'remark' => array(
+                'value' => $remark,
+                'color' => '#000'
+            )
+        );
+        return $this->notifyByWeChat($user, '96n9JfS5RcMraNsZcM_kQu7wyXede2gB7h77El386hM', $url, $tmplData);
+    }
+
     private function httpPost($url, $data)
     {
         $ch = curl_init();
