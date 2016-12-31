@@ -203,7 +203,7 @@ class Packets extends BaseController
         $this->succeed($packet);
     }
 
-    function allPackets_get()
+    function meAll_get()
     {
         $user = $this->checkAndGetSessionUser();
         if (!$user) {

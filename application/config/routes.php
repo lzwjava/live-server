@@ -173,5 +173,6 @@ $route['applications/me']['GET'] = 'applications/me/$1';
 $route['packets']['POST'] = 'packets/create';
 $route['packets/(\w+)/grab']['GET'] = 'packets/grab/$1';
 $route['packets/me']['GET'] = 'packets/myPacket';
+$route['packets/meAll']['GET'] = 'packets/meAll';
 $route['packets/(\w+)']['GET'] = 'packets/one/$1';
 $route['packets/(\w+)/userPackets']['GET'] = 'packets/allPacketsById/$1';

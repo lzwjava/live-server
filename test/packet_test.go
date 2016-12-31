@@ -88,3 +88,13 @@ func TestPackets_userPacket(t *testing.T) {
 	getRes := c2.getData("packets/"+packetId+"/userPackets", url.Values{})
 	assert.NotNil(t, getRes.Interface())
 }
+
+func TestPackets_meAll(t *testing.T) {
+	c2, userId := NewClientAndUser()
+	insertSnsUser(userId)
+	createPacket(c2)
+	packetId := lastPacketId(c2)
+	grabPacket(c2, packetId)
+	getRes := c2.getData("packets/meAll", url.Values{})
+	assert.NotNil(t, getRes.Interface())
+}
