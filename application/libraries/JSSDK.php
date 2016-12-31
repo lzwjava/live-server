@@ -250,5 +250,22 @@ class JSSDK
         return $this->baseHttpGetAccessToken($code, MOBILE_WECHAT_APP_ID, MOBILE_WECHAT_APP_SECRET);
     }
 
+    function genQrcode($sceneData)
+    {
+        $accessToken = $this->getAccessToken();
+        $url = WECHAT_API_CGIBIN . 'qrcode/create?access_token='
+            . $accessToken;
+        $data = array(
+            'expire_seconds' => 60 * 60,
+            'action_name' => 'QR_LIMIT_STR_SCENE',
+            'action_info' => array(
+                'scene' => array(
+                    'scene_str' => json_encode($sceneData)
+                )
+            )
+        );
+        return $this->httpPost($url, $data);
+    }
+
 }
 

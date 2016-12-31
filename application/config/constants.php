@@ -642,7 +642,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'pWWN-8cH01KoNRj6ZOoAIWjq9TdQOMvAXtUT_ZHoXHyZOCUIctg8ZMd04HkT4mnbcR0MaxzyLnJKz46Y96NjYirmDeK9QfVavrcslc01qIYnqktwgBFfW6rJRTa9zzDYCXFgADANIQ');
+'h9bbTyJDXMcDbp6nhEDOeOAMAaEBvtCUcZR3pWGiMmLmBgtsIKpZM4ytSy8V8mVW2w775lyQdzGO2o0oQGY7mTxB5Nk2OIk2HjRalkMUx5DgGVd1Y9nXKPdIY8AJVLe0EDPfAFAPOA');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -669,7 +669,17 @@ define('WECHAT_WELCOME_WORD', <<<EOD
 
 <a href="http://m.quzhiboapp.com/?liveId=0">最新直播</a>
 
-如果遇到问题请加微信：lzwjava
+%s
+EOD
+);
+
+define('WECHAT_LIVE_WORD', <<<EOD
+欢迎参与直播<a href="http://m.quzhiboapp.com/?liveId=%s&type=live">%s</a>
+EOD
+);
+
+define('WECHAT_PACKET_WORD', <<<EOD
+您有一个<a href="http://m.quzhiboapp.com/?packetId=%s&type=packet">%s</a>的红包
 EOD
 );
 
