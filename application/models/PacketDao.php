@@ -26,7 +26,17 @@ class PacketDao extends BaseDao
 
     function getPacket($packetId)
     {
-        return $this->getOneFromTable(TABLE_PACKETS, KEY_PACKET_ID, $packetId);
+        $userFields = $this->userPublicFields('u', true);
+        $sql = "SELECT p.*, $userFields FROM packets AS p
+                LEFT JOIN users AS u ON u.userId=p.userId
+                WHERE p.packetId=?";
+        $binds = array(KEY_PACKET_ID => $packetId);
+        $packet = $this->db->query($sql, $binds)->row();
+        if ($packet) {
+            $us = $this->prefixFields($this->userPublicRawFields(), 'u');
+            $packet->user = extractFields($packet, $us, 'u');
+        }
+        return $packet;
     }
 
     function updatePacket($packetId, $balance, $originRemain)

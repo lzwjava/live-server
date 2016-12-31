@@ -194,6 +194,7 @@ define('ERROR_PACKET_TOO_MUCH', 'packet_too_much');
 define('ERROR_PACKET_NONE', 'packet_none');
 define('ERROR_ALREADY_GRAB', 'packet_already_grab');
 define('ERROR_PACKET_SEND', 'packet_send');
+define('ERROR_PACKET_AT_LEAST', 'packet_at_least');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -299,7 +300,8 @@ if (!function_exists('errorInfos')) {
             ERROR_PACKET_TOO_MUCH => '红包最多1万元',
             ERROR_PACKET_NONE => '红包已经被抢光了',
             ERROR_ALREADY_GRAB => '您已经抢过红包了',
-            ERROR_PAKCET_SEND => '发红包出错了',
+            ERROR_PACKET_SEND => '发红包出错了',
+            ERROR_PACKET_AT_LEAST => '红包每个至于1元'
         );
     }
 

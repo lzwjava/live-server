@@ -131,7 +131,7 @@ class PayNotifyDao extends BaseDao
         } else if ($type == CHARGE_TYPE_PACKET) {
             $userId = $metadata->userId;
             $totalAmount = $metadata->totalAmount;
-            $totalCount = $metadata->totalAmount;
+            $totalCount = $metadata->totalCount;
             $wishing = $metadata->wishing;
             $this->db->trans_begin();
             $error = $this->updatePaidAndNewCharge($orderNo, $charge, $channel, $userId);

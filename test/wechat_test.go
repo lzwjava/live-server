@@ -43,6 +43,13 @@ func deleteSnsUser() {
 	runSql(deleteSql2, false)
 }
 
+func deleteSnsUser2() {
+	deleteSql := fmt.Sprintf("delete from users where unionId='%s'", "oFRlVwXQIzb7TNDS45hQCT8MidQc")
+	runSql(deleteSql, true)
+	deleteSql2 := fmt.Sprintf("delete from sns_users where unionId='%s'", "oFRlVwXQIzb7TNDS45hQCT8MidQc")
+	runSql(deleteSql2, false)
+}
+
 func insertSnsUser(userId string) {
 	deleteSnsUser()
 	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
@@ -52,6 +59,18 @@ func insertSnsUser(userId string) {
 	runSql(sql, false)
 
 	updateSql := fmt.Sprintf("update users set unionId='%s' where userId='%s'", "oFRlVwXY7GkRhpKyfjvTo6oW7kw8", userId)
+	runSql(updateSql, false)
+}
+
+func insertSnsUser2(userId string) {
+	deleteSnsUser2()
+	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
+		"oFRlVwXQIzb7TNDS45hQCT8MidQc", "李智维",
+		"http://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
+		"wechat", userId, "oFRlVwXQIzb7TNDS45hQCT8MidQc")
+	runSql(sql, false)
+
+	updateSql := fmt.Sprintf("update users set unionId='%s' where userId='%s'", "oFRlVwXQIzb7TNDS45hQCT8MidQc", userId)
 	runSql(updateSql, false)
 }
 
