@@ -85,7 +85,30 @@ class WxPay
         $input->SetDesc('测试');
         $transferResult = WxPayApi::transfer($input);
         logInfo("transferResult: " . json_encode($transferResult));
-        if ($transferResult['return_code'] == 'SUCCESS') {
+        if ($transferResult['result_code'] == 'SUCCESS') {
+            return true;
+        } else {
+            logInfo("refund failed!!!");
+            return false;
+        }
+    }
+
+    function sendRedPacket()
+    {
+        $input = new WxPayRedPacket();
+        $orderNo = genOrderNo();
+        $input->SetMchBillNo($orderNo);
+        $input->SetTotalAmount(100);
+        $input->SetOpenid('ol0AFwFe5jFoXcQby4J7AWJaWXIM');
+        $input->SetRemark('测试');
+        $input->SetSendName('天虹百货');
+        $input->SetWishing('感谢您参加猜灯谜活动，祝您元宵节快乐！');
+        $input->SetActName('猜灯谜抢红包活动');
+        $input->SetRemark('猜越多得越多，快来抢！');
+        $input->SetSceneId('猜越多得越多，快来抢！');
+        $transferResult = WxPayApi::sendRedPacket($input);
+        logInfo("transferResult: " . json_encode($transferResult));
+        if ($transferResult['result_code'] == 'SUCCESS') {
             return true;
         } else {
             logInfo("refund failed!!!");

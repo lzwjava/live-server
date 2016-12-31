@@ -3559,5 +3559,20 @@ class WxPayRedPacket extends WxPayDataBase
         return array_key_exists('send_name', $this->values);
     }
 
+    public function SetSceneId($value)
+    {
+        $this->values['scene_id'] = $value;
+    }
+
+    public function GetSceneId()
+    {
+        return $this->values['scene_id'];
+    }
+
+    public function IsSceneIdSet()
+    {
+        return array_key_exists('scene_id', $this->values);
+    }
+
 
 }
