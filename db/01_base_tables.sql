@@ -264,3 +264,22 @@ CREATE TABLE `staffs` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `applications` (
+  `applicationId`  INT(11)      NOT NULL AUTO_INCREMENT,
+  `userId`         INT(11)      NOT NULL,
+  `name`           VARCHAR(30)  NOT NULL DEFAULT '',
+  `wechatAccount`  VARCHAR(30)  NOT NULL DEFAULT '',
+  `socialAccount`  VARCHAR(200) NOT NULL DEFAULT '',
+  `introduction`   VARCHAR(500) NOT NULL DEFAULT '',
+  `status`         TINYINT(4)   NOT NULL DEFAULT 0,
+  `reviewRemark`   VARCHAR(100) NOT NULL DEFAULT '',
+  `reviewNotified` TINYINT(2)   NOT NULL DEFAULT 0,
+  `created`        TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`        TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`applicationId`),
+  UNIQUE KEY (`userId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;

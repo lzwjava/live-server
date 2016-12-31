@@ -376,7 +376,6 @@ class Lives extends BaseController
         $succeedCount = 0;
         foreach ($users as $user) {
             if ($user->notified == 0) {
-                logInfo("notified 0");
                 $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live, $oneHour);
                 if (!$ok) {
                     $ok = $this->sms->notifyLiveStart($user->userId, $live, $oneHour);
@@ -386,7 +385,6 @@ class Lives extends BaseController
                     $succeedCount++;
                 }
             } else {
-                logInfo("notified 1");
             }
         }
         logInfo("finished " . $succeedCount . " total " . count($users));
@@ -409,7 +407,6 @@ class Lives extends BaseController
             if ($attendance->videoNotified == 0) {
                 $ok = $this->weChatPlatform->notifyVideoByWeChat($attendance->userId, $live);
                 if (!$ok) {
-                    logInfo("wechat failed use sms");
                     $attends = $this->attendanceDao->getAttendancesByUserId($attendance->userId, 0, 100);
                     if (count($attends) == 1) {
                         $ok = $this->sms->notifyVideoReady($attendance->userId, $live);
@@ -417,11 +414,8 @@ class Lives extends BaseController
                 }
                 if ($ok) {
                     $this->attendanceDao->updateToVideoNotified($attendance->userId, $live->liveId);
-                    logInfo("videoNotified " . $attendance->userId);
                     $succeedCount++;
                 }
-            } else {
-                logInfo("videoNotified 1");
             }
         }
         logInfo('succeedCount:' . $succeedCount . ' total:' . $total);
@@ -434,7 +428,8 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $count));
     }
 
-    private function getBjfuUsers()
+    private
+    function getBjfuUsers()
     {
         $all = file_get_contents(APPPATH . 'data/bjfudata.txt');
         $users = json_decode($all);
@@ -442,7 +437,8 @@ class Lives extends BaseController
         return $users;
     }
 
-    private function getTestUsers()
+    private
+    function getTestUsers()
     {
         $user = new Stdclass();
         $user->username = '李智维';

@@ -183,6 +183,12 @@ define('ERROR_NOT_ATTEND', 'not_attend');
 // staffs
 define('ERROR_ALREADY_STAFF', 'already_staff');
 
+// applications
+define('ERROR_SOCIAL_ACCOUNT_ELN', 'social_account_len');
+define('ERROR_INTRODUCTION_LEN', 'introduction_len');
+define('ERROR_REVIEW_REMARK_LEN', 'review_remark_len');
+define('ERROR_ALREADY_APPLY', 'already_apply');
+
 if (!function_exists('errorInfos')) {
     function errorInfos()
     {
@@ -274,7 +280,13 @@ if (!function_exists('errorInfos')) {
             ERROR_NOT_ATTEND => '尚未参与该场直播',
 
             // staffs
-            ERROR_ALREADY_STAFF => '您早已绑定账号'
+            ERROR_ALREADY_STAFF => '您早已绑定账号',
+
+            // applications
+            ERROR_SOCIAL_ACCOUNT_ELN => '社交账号介绍不能超过 200 个字符',
+            ERROR_INTRODUCTION_LEN => '个人介绍不能超过 500 个字符',
+            ERROR_REVIEW_REMARK_LEN => '审核评语长度不能超过 100 个字符',
+            ERROR_ALREADY_APPLY => '您已申请过主播了'
         );
     }
 
@@ -467,6 +479,24 @@ define('VIEW_PLATFORM_PC', 'pc');
 define('VIEW_PLATFORM_IOS', 'ios');
 define('VIEW_PLATFORM_ANDROID', 'android');
 
+// applications
+define('TABLE_APPLICATIONS', 'applications');
+define('KEY_APPLICATION_ID', 'applicationId');
+define('KEY_WECHAT_ACCOUNT', 'wechatAccount');
+define('KEY_SOCIAL_ACCOUNT', 'socialAccount');
+define('KEY_INTRODUCTION', 'introduction');
+define('KEY_REVIEW_REMARK', 'reviewRemark');
+define('KEY_REVIEW_NOTIFIED', 'reviewNotified');
+define('KEY_NAME', 'name');
+
+define('APPLICATION_STATUS_REVIEWING', 1);
+define('APPLICATION_STATUS_SUCCEED', 5);
+define('APPLICATION_STATUS_REJECT', 10);
+
+define('MAX_SOCIAL_ACCOUNT_LEN', 200);
+define('MAX_INTRODUCTION_LEN', 500);
+define('MAX_REVIEW_MARK_LEN', 100);
+
 if (!function_exists('viewPlatformSet')) {
     function viewPlatformSet()
     {
@@ -580,7 +610,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'Gu4TQxoypDsgOrouEj0tZFQMyot4glzht7wmuU1Y4yRICDoqnpbJmh9aHlE47jimbDxqDRdVNMJBCc60XvaNB_LG4XzLMOsUUvv-ZijmL0z0KCzXqJ9-XxDyeZLn7nEOOCTdAAAFTK');
+'pWWN-8cH01KoNRj6ZOoAIWjq9TdQOMvAXtUT_ZHoXHyZOCUIctg8ZMd04HkT4mnbcR0MaxzyLnJKz46Y96NjYirmDeK9QfVavrcslc01qIYnqktwgBFfW6rJRTa9zzDYCXFgADANIQ');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
