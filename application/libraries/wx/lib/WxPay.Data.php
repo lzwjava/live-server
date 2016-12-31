@@ -212,6 +212,14 @@ class WxPayResults extends WxPayDataBase
         $obj->CheckSign();
         return $obj->GetValues();
     }
+
+    public static function InitNoSign($xml)
+    {
+        $obj = new self();
+        $obj->FromXml($xml);
+        return $obj->GetValues();
+    }
+
 }
 
 /**
@@ -3223,32 +3231,19 @@ class WxPayTransferItem extends WxPayDataBase
         return array_key_exists('mch_appid', $this->values);
     }
 
-
-    /**
-     * 设置微信支付分配的商户号
-     * @param string $value
-     **/
     public function SetMch_id($value)
     {
-        $this->values['mch_id'] = $value;
+        $this->values['mchid'] = $value;
     }
 
-    /**
-     * 获取微信支付分配的商户号的值
-     * @return 值
-     **/
     public function GetMch_id()
     {
-        return $this->values['mch_id'];
+        return $this->values['mchid'];
     }
 
-    /**
-     * 判断微信支付分配的商户号是否存在
-     * @return true 或 false
-     **/
     public function IsMch_idSet()
     {
-        return array_key_exists('mch_id', $this->values);
+        return array_key_exists('mchid', $this->values);
     }
 
     /**
