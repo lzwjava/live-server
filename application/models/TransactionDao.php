@@ -76,6 +76,12 @@ class TransactionDao extends BaseDao
             'liveId:' . $liveId, $remark);
     }
 
+    function newPayPacket($userId, $orderNo, $amount, $packetId, $remark)
+    {
+        return $this->newTransaction($userId, $orderNo, $amount, TRANS_TYPE_PAY,
+            'packetId:' . $packetId, $remark);
+    }
+
     function payUser($fromUser, $toUser, $liveId, $amount, $type)
     {
         $remark = null;

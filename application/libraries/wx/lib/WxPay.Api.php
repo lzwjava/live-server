@@ -488,7 +488,7 @@ class WxPayApi
         $inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
         $inputObj->setClientIp($_SERVER['REMOTE_ADDR']);//终端ip
         $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
-        $inputObj->SetSceneId('PRODUCT_2');
+        $inputObj->SetSceneId('PRODUCT_1');
         //签名
         $inputObj->SetSign();
         $xml = $inputObj->ToXml();

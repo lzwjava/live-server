@@ -93,25 +93,25 @@ class WxPay
         }
     }
 
-    function sendRedPacket()
+    function sendRedPacket($openId, $sendName, $amount, $wishing)
     {
         $input = new WxPayRedPacket();
         $orderNo = genOrderNo();
         $input->SetMchBillNo($orderNo);
-        $input->SetTotalAmount(100);
-        $input->SetOpenid('ol0AFwFe5jFoXcQby4J7AWJaWXIM');
-        $input->SetRemark('测试');
-        $input->SetSendName('天虹百货');
-        $input->SetWishing('感谢您参加猜灯谜活动，祝您元宵节快乐！');
-        $input->SetActName('猜灯谜抢红包活动');
-        $input->SetRemark('猜越多得越多，快来抢！');
-        $input->SetSceneId('猜越多得越多，快来抢！');
+        $input->SetTotalAmount($amount);
+        $input->SetTotalNum(1);
+        $input->SetOpenid($openId);
+        $input->SetRemark('新年快乐');
+        $input->SetSendName($sendName);
+        $input->SetWishing($wishing);
+        $input->SetActName('新年快乐红包');
+        $input->SetRemark('新年快乐');
         $transferResult = WxPayApi::sendRedPacket($input);
         logInfo("transferResult: " . json_encode($transferResult));
         if ($transferResult['result_code'] == 'SUCCESS') {
             return true;
         } else {
-            logInfo("refund failed!!!");
+            logInfo("send red packet failed!!!");
             return false;
         }
     }

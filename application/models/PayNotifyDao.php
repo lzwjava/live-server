@@ -16,6 +16,7 @@ class PayNotifyDao extends BaseDao
     public $shareDao;
     public $userDao;
     public $rewardDao;
+    public $packetDao;
 
     function __construct()
     {
@@ -34,6 +35,8 @@ class PayNotifyDao extends BaseDao
         $this->userDao = new UserDao();
         $this->load->model(RewardDao::class);
         $this->rewardDao = new RewardDao();
+        $this->load->model(PacketDao::class);
+        $this->packetDao = new PacketDao();
     }
 
     private function remarkFromChannel($channel)
@@ -78,9 +81,9 @@ class PayNotifyDao extends BaseDao
                 return $error;
             }
 
-            $ok = $this->attendanceDao->addAttendanceAndIncreaseCount($userId,
+            $packetId = $this->attendanceDao->addAttendanceAndIncreaseCount($userId,
                 $liveId, $orderNo);
-            if (!$ok || !$this->db->trans_status()) {
+            if (!$packetId || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return ERROR_SQL_WRONG;
             }
@@ -106,8 +109,8 @@ class PayNotifyDao extends BaseDao
                 $this->db->trans_rollback();
                 return $error;
             }
-            $ok = $this->rewardDao->addReward($userId, $liveId, $orderNo);
-            if (!$ok || !$this->db->trans_status()) {
+            $packetId = $this->rewardDao->addReward($userId, $liveId, $orderNo);
+            if (!$packetId || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return ERROR_SQL_WRONG;
             }
@@ -123,6 +126,31 @@ class PayNotifyDao extends BaseDao
                 return $error;
             }
 
+            $this->db->trans_commit();
+            return null;
+        } else if ($type == CHARGE_TYPE_PACKET) {
+            $userId = $metadata->userId;
+            $totalAmount = $metadata->totalAmount;
+            $totalCount = $metadata->totalAmount;
+            $wishing = $metadata->wishing;
+            $this->db->trans_begin();
+            $error = $this->updatePaidAndNewCharge($orderNo, $charge, $channel, $userId);
+            if ($error || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return $error;
+            }
+
+            $packetId = $this->packetDao->addPacket($userId, $totalAmount, $totalCount, $wishing);
+            if (!$packetId || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return ERROR_SQL_WRONG;
+            }
+            $error = $this->transactionDao->newPayPacket($userId, genOrderNo(), $totalAmount,
+                $packetId, '发红包');
+            if ($error || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return $error;
+            }
             $this->db->trans_commit();
             return null;
         } else {
