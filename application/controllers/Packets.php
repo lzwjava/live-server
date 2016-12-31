@@ -36,11 +36,11 @@ class Packets extends BaseController
             return true;
         }
         if ($amount < LEAST_COMMON_PACKET) {
-            $this->failure(ERROR_REWARD_TOO_LITTLE);
+            $this->failure(ERROR_PACKET_TOO_LITTLE);
             return true;
         }
-        if ($amount > MAX_COMMON_REWARD) {
-            $this->failure(ERROR_REWARD_TOO_MUCH);
+        if ($amount > MAX_COMMON_PACKET) {
+            $this->failure(ERROR_PACKET_TOO_MUCH);
             return true;
         }
         return false;
@@ -54,11 +54,15 @@ class Packets extends BaseController
             return;
         }
         $totalAmount = $this->post(KEY_TOTAL_AMOUNT);
-        $totalAccount = $this->post(KEY_TOTAL_COUNT);
+        $totalCount = $this->post(KEY_TOTAL_COUNT);
         $channel = $this->post(KEY_CHANNEL);
         $wishing = $this->post(KEY_WISHING);
         $totalAmount = $this->toNumber($totalAmount);
         if ($this->checkIfPacketAmountWrong($totalAmount)) {
+            return;
+        }
+        if ($totalAmount < $totalCount * 100) {
+            $this->failure(ERROR_PACKET_AT_LEAST);
             return;
         }
         $user = $this->checkAndGetSessionUser();
@@ -72,7 +76,7 @@ class Packets extends BaseController
         }
         $metaData = array(KEY_TYPE => CHARGE_TYPE_PACKET,
             KEY_TOTAL_AMOUNT => $totalAmount, KEY_USER_ID => $user->userId,
-            KEY_TOTAL_COUNT => $totalAccount, KEY_WISHING => $wishing);
+            KEY_TOTAL_COUNT => $totalCount, KEY_WISHING => $wishing);
         $subject = '发红包';
         $body = '发红包';
 
@@ -141,29 +145,44 @@ class Packets extends BaseController
             return;
         }
         $openId = $snsUser->openId;
+        $cnt = 0;
         for (; ;) {
+            ++$cnt;
             $packet = $this->packetDao->getPacket($packetId);
-            if ($packet->remainCount <= 0) {
+            if ($cnt > 1000 || $packet->remainCount <= 0) {
                 $this->succeed(array('status' => false));
                 break;
             }
             $amount = $this->calRandomAmount($packet);
+            $this->db->trans_begin();
             $balance = $packet->balance - $amount;
             $updated = $this->packetDao->updatePacket($packetId, $balance, $packet->remainCount);
             if ($updated) {
                 $userPacketId = $this->userPacketDao->addUserPacket($user->userId, $packetId, $amount);
                 if (!$userPacketId) {
                     $this->failure(ERROR_SQL_WRONG);
+                    $this->db->trans_rollback();
                     break;
                 }
-                $sender = $this->userDao->findUserById($packet->userId);
+                logInfo("userId " . $packet->userId);
+                $sender = $this->userDao->findPublicUserById($packet->userId);
+                logInfo("sender " . json_encode($sender));
+                logInfo("packet " . json_encode($packet));
                 $ok = $this->pay->sendRedPacket($openId, $sender->username, $amount, $packet->wishing);
                 if (!$ok) {
                     $this->failure(ERROR_PACKET_SEND);
+                    $this->db->trans_rollback();
                     return;
                 }
-                $this->userPacketDao->sendSucceed($userPacketId);
-                $this->succeed();
+                $ok = $this->userPacketDao->sendSucceed($userPacketId);
+                if (!$ok) {
+                    $this->failure(ERROR_SQL_WRONG);
+                    $this->db->trans_rollback();
+                    return;
+                }
+                $this->db->trans_commit();
+                $this->succeed(array('status' => true));
+                break;
             }
         }
     }

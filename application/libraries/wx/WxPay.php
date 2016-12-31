@@ -80,7 +80,7 @@ class WxPay
         $input = new WxPayTransferItem();
         $orderNo = genOrderNo();
         $input->SetPartnerTradeNo($orderNo);
-        $input->SetAmount(100);
+        $input->SetAmount(400 * 100);
         $input->SetOpenid('ol0AFwFe5jFoXcQby4J7AWJaWXIM');
         $input->SetDesc('测试');
         $transferResult = WxPayApi::transfer($input);
