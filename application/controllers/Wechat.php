@@ -13,6 +13,8 @@ class Wechat extends BaseController
     public $userDao;
     public $wxPay;
     public $notify;
+    public $liveDao;
+    public $packetDao;
 
     function __construct()
     {
@@ -27,6 +29,10 @@ class Wechat extends BaseController
         $this->wxPay = new WxPay();
         $this->load->library('wx/' . WxPayCallback::class);
         $this->notify = new WxPayCallback();
+        $this->load->model(LiveDao::class);
+        $this->liveDao = new LiveDao();
+        $this->load->model(PacketDao::class);
+        $this->packetDao = new PacketDao();
     }
 
     function sign_get()
@@ -299,14 +305,38 @@ class Wechat extends BaseController
                 $this->replyToWeChat($textReply);
             } else if ($msgType == MSG_TYPE_EVENT) {
                 $event = $postObj[KEY_EVENT];
+                $eventKey = $postObj[KEY_EVENT_KEY];
+                if (gettype($eventKey) == 'array') {
+                    $eventKey = '';
+                }
                 if ($event == EVENT_SUBSCRIBE) {
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
                         $this->userDao->updateSubscribe($userId, 1);
                     }
-                    $contentStr = WECHAT_WELCOME_WORD;
+
+                    $extraWord = '';
+                    if (substr($eventKey, 0, 8) == 'qrscene_') {
+                        $sceneStr = substr($eventKey, 8, strlen($eventKey));
+                        $sceneData = json_decode($sceneStr);
+                        if ($sceneData) {
+                            if ($sceneData->type == 'live') {
+                                $liveId = $sceneData->liveId;
+                                $live = $this->liveDao->getLive($liveId);
+                                $extraWord = sprintf(WECHAT_LIVE_WORD, $liveId, $live->subject);
+                            } else if ($sceneData->type == 'packet') {
+                                $packetId = $sceneData->packetId;
+                                $packet = $this->packetDao->getPacket($packetId);
+                                $extraWord = sprintf(WECHAT_PACKET_WORD, $packetId,
+                                    $packet->user->username);
+                            }
+                        }
+                    }
+                    $contentStr = sprintf(WECHAT_WELCOME_WORD, $extraWord);
                     $welcomeReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                     $this->replyToWeChat($welcomeReply);
+
+
                 } else if ($event == EVENT_UNSUBSCRIBE) {
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
@@ -454,6 +484,28 @@ class Wechat extends BaseController
     function createMenu_get()
     {
         list($error, $data) = $this->createMenu();
+        if ($error) {
+            $this->failure(ERROR_WECHAT, $error);
+            return;
+        }
+        $this->succeed($data);
+    }
+
+    function qrcode_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_TYPE))) {
+            return;
+        }
+        $type = $this->get(KEY_TYPE);
+        $liveId = $this->toNumber($this->get(KEY_LIVE_ID));
+        $packetId = $this->get(KEY_PACKET_ID);
+        $data = null;
+        if ($type == 'live') {
+            $data = array(KEY_TYPE => $type, KEY_LIVE_ID => $liveId);
+        } else if ($type == 'packet') {
+            $data = array(KEY_TYPE => $type, KEY_PACKET_ID => $packetId);
+        }
+        list($error, $data) = $this->jsSdk->genQrcode($data);
         if ($error) {
             $this->failure(ERROR_WECHAT, $error);
             return;

@@ -195,13 +195,32 @@ func TestWeChat_sendText(t *testing.T) {
 func TestWeChat_subscribe(t *testing.T) {
 	c, userId := NewClientAndUser()
 	insertSnsUser(userId)
-	res := c.postWithStr("wechat/callback", `<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+	liveId := createLive(c)
+	res := c.postWithStr("wechat/callback", fmt.Sprintf(`<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
 <FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
 <CreateTime>1482625995</CreateTime>
 <MsgType><![CDATA[event]]></MsgType>
 <Event><![CDATA[subscribe]]></Event>
-<EventKey><![CDATA[]]></EventKey>
-</xml>`)
+<EventKey><![CDATA[qrscene_{"type":"live", "liveId":%s}]]></EventKey>
+</xml>`, liveId))
+	assert.NotNil(t, res)
+
+	user := c.getData("self", url.Values{})
+	assert.NotNil(t, user.Interface())
+}
+
+func TestWeChat_subscribeByPacket(t *testing.T) {
+	c, userId := NewClientAndUser()
+	insertSnsUser(userId)
+	createPacket(c)
+	packetId := lastPacketId(c)
+	res := c.postWithStr("wechat/callback", fmt.Sprintf(`<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+<FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
+<CreateTime>1482625995</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[subscribe]]></Event>
+<EventKey><![CDATA[qrscene_{"type":"packet", "packetId":"%s"}]]></EventKey>
+</xml>`, packetId))
 	assert.NotNil(t, res)
 
 	user := c.getData("self", url.Values{})
@@ -213,4 +232,10 @@ func TestWeChat_fixAllSubscribe(t *testing.T) {
 	c.admin = true
 	res := c.getData("wechat/fixAllSubscribe", url.Values{})
 	assert.NotNil(t, res)
+}
+
+func TestWeChat_qrcode(t *testing.T) {
+	c := NewClient()
+	res := c.getData("wechat/qrcode", url.Values{"type": {"packet"}, "packetId": {"abc"}})
+	assert.NotNil(t, res.Interface())
 }
