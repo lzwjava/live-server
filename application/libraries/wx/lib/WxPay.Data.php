@@ -3186,3 +3186,201 @@ class WxPayBizPayUrl extends WxPayDataBase
         return array_key_exists('product_id', $this->values);
     }
 }
+
+
+/**
+ *
+ * 扫码支付模式一生成二维码参数
+ * @author widyhu
+ *
+ */
+class WxPayTransferItem extends WxPayDataBase
+{
+    /**
+     * 设置微信分配的公众账号ID
+     * @param string $value
+     **/
+    public function SetAppid($value)
+    {
+        $this->values['mch_appid'] = $value;
+    }
+
+    /**
+     * 获取微信分配的公众账号ID的值
+     * @return 值
+     **/
+    public function GetAppid()
+    {
+        return $this->values['mch_appid'];
+    }
+
+    /**
+     * 判断微信分配的公众账号ID是否存在
+     * @return true 或 false
+     **/
+    public function IsAppidSet()
+    {
+        return array_key_exists('mch_appid', $this->values);
+    }
+
+
+    /**
+     * 设置微信支付分配的商户号
+     * @param string $value
+     **/
+    public function SetMch_id($value)
+    {
+        $this->values['mch_id'] = $value;
+    }
+
+    /**
+     * 获取微信支付分配的商户号的值
+     * @return 值
+     **/
+    public function GetMch_id()
+    {
+        return $this->values['mch_id'];
+    }
+
+    /**
+     * 判断微信支付分配的商户号是否存在
+     * @return true 或 false
+     **/
+    public function IsMch_idSet()
+    {
+        return array_key_exists('mch_id', $this->values);
+    }
+
+    /**
+     * 设置随机字符串
+     * @param string $value
+     **/
+    public function SetNonce_str($value)
+    {
+        $this->values['nonce_str'] = $value;
+    }
+
+    /**
+     * 获取随机字符串的值
+     * @return 值
+     **/
+    public function GetNonce_str()
+    {
+        return $this->values['nonce_str'];
+    }
+
+    /**
+     * 判断随机字符串是否存在
+     * @return true 或 false
+     **/
+    public function IsNonce_strSet()
+    {
+        return array_key_exists('nonce_str', $this->values);
+    }
+
+    public function SetPartnerTradeNo($value)
+    {
+        $this->values['partner_trade_no'] = $value;
+    }
+
+    public function GetPartnerTradeNo()
+    {
+        return $this->values['partner_trade_no'];
+    }
+
+    public function IsPartnerTradeNoSet()
+    {
+        return array_key_exists('partner_trade_no', $this->values);
+    }
+
+    public function SetCheckName($value)
+    {
+        $this->values['check_name'] = $value;
+    }
+
+    public function GetCheckName()
+    {
+        return $this->values['check_name'];
+    }
+
+    public function IsCheckNameSet()
+    {
+        return array_key_exists('check_name', $this->values);
+    }
+
+    public function SetReUserName($value)
+    {
+        $this->values['re_user_name'] = $value;
+    }
+
+    public function GetReUserName()
+    {
+        return $this->values['re_user_name'];
+    }
+
+    public function IsReUserNameSet()
+    {
+        return array_key_exists('re_user_name', $this->values);
+    }
+
+    public function SetAmount($value)
+    {
+        $this->values['amount'] = $value;
+    }
+
+    public function GetAmount()
+    {
+        return $this->values['amount'];
+    }
+
+    public function IsAmountSet()
+    {
+        return array_key_exists('amount', $this->values);
+    }
+
+    public function SetDesc($value)
+    {
+        $this->values['desc'] = $value;
+    }
+
+    public function GetDesc()
+    {
+        return $this->values['desc'];
+    }
+
+    public function IsDescSet()
+    {
+        return array_key_exists('desc', $this->values);
+    }
+
+    public function SetOpenid($value)
+    {
+        $this->values['openid'] = $value;
+    }
+
+    public function GetOpenid()
+    {
+        return $this->values['openid'];
+    }
+
+    public function IsOpenidSet()
+    {
+        return array_key_exists('openid', $this->values);
+    }
+
+    public function SetSpbillCreateIp($value)
+    {
+        $this->values['spbill_create_ip'] = $value;
+    }
+
+    public function GetSpbillCreateIp()
+    {
+        return $this->values['spbill_create_ip'];
+    }
+
+    public function IsSpbillCreateIpSet()
+    {
+        return array_key_exists('spbill_create_ip', $this->values);
+    }
+
+}

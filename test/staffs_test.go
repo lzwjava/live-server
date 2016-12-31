@@ -9,12 +9,12 @@ import (
 
 func TestStaffs_create(t *testing.T) {
 	c, _ := NewClientAndUser()
-	res := c.postData("staffs", url.Values{"key": {"aNdQim2r"}})
+	res := c.postData("staffs", url.Values{"key": {"BornToBeProud"}})
 	assert.NotNil(t, res.Interface())
 }
 
 func createStaff(c *Client) {
-	c.postData("staffs", url.Values{"key": {"aNdQim2r"}})
+	c.postData("staffs", url.Values{"key": {"BornToBeProud"}})
 }
 
 func TestStaffs_list(t *testing.T) {

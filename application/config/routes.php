@@ -102,6 +102,7 @@ $route['attendances/one']['GET'] = 'attendances/one';
 $route['attendances/me']['GET'] = 'attendances/myList';
 $route['attendances/lives/(\d+)']['GET'] = 'attendances/liveList/$1';
 $route['attendances/refund/(\d+)']['GET'] = 'attendances/refund/$1';
+$route['attendances/transfer']['GET'] = 'attendances/transfer';
 
 // qrcodes
 $route['qrcodes']['POST'] = 'qrcodes/scanQrcode';
