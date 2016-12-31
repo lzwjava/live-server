@@ -74,4 +74,9 @@ class Pay
     {
         return $this->wxpay->transfer();
     }
+
+    function sendRedPacket()
+    {
+        return $this->wxpay->sendRedPacket();
+    }
 }

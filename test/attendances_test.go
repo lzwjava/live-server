@@ -325,3 +325,10 @@ func TestAttendances_transfer(t *testing.T) {
 	res := c.get("attendances/transfer", url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestAttendances_sendRedPacket(t *testing.T) {
+	c := NewClient()
+	c.admin = true
+	res := c.get("attendances/sendRedPacket", url.Values{})
+	assert.NotNil(t, res)
+}
