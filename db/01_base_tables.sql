@@ -283,3 +283,40 @@ CREATE TABLE `applications` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `packets` (
+  `id`          INT(11)      NOT NULL AUTO_INCREMENT,
+  `packetId`    VARCHAR(20)  NOT NULL DEFAULT '',
+  `userId`      INT(11)      NOT NULL,
+  `totalAmount` INT          NOT NULL DEFAULT 0,
+  `totalCount`  INT          NOT NULL DEFAULT 0,
+  `orderNo`     VARCHAR(31)           DEFAULT NULL,
+  `wishing`     VARCHAR(100) NOT NULL DEFAULT 0,
+  `balance`     INT          NOT NULL DEFAULT 0,
+  `remainCount` INT          NOT NULL DEFAULT 0,
+  `created`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`packetId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `charges` MODIFY COLUMN `metaData` VARCHAR(300) NOT NULL DEFAULT '';
+
+CREATE TABLE `user_packets` (
+  `userPacketId` INT(11)     NOT NULL AUTO_INCREMENT,
+  `packetId`     VARCHAR(20) NOT NULL DEFAULT '',
+  `userId`       INT(11)     NOT NULL,
+  `amount`       INT(11)     NOT NULL DEFAULT 0,
+  `sended`       TINYINT(2)  NOT NULL DEFAULT 0,
+  `created`      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`userPacketId`),
+  FOREIGN KEY (`packetId`) REFERENCES `packets` (`packetId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
+  UNIQUE KEY (`packetId`, `userId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;

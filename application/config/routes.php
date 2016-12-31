@@ -168,3 +168,8 @@ $route['applications/(\d+)/succeed']['POST'] = 'applications/reviewSucceed/$1';
 $route['applications/(\d+)/reject']['POST'] = 'applications/reviewReject/$1';
 $route['applications/(\d+)']['GET'] = 'applications/one/$1';
 $route['applications/me']['GET'] = 'applications/me/$1';
+
+// packets
+$route['packets']['POST'] = 'packets/create';
+$route['packets/(\w+)/grab']['GET'] = 'packets/grab/$1';
+$route['packets/me']['GET'] = 'packets/myPacket';

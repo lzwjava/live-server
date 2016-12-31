@@ -3455,17 +3455,17 @@ class WxPayRedPacket extends WxPayDataBase
 
     public function SetTotalNum($value)
     {
-        $this->values['total_amount'] = $value;
+        $this->values['total_num'] = $value;
     }
 
     public function GetTotalNum()
     {
-        return $this->values['total_amount'];
+        return $this->values['total_num'];
     }
 
     public function IsTotalNumSet()
     {
-        return array_key_exists('total_amount', $this->values);
+        return array_key_exists('total_num', $this->values);
     }
 
     public function SetWishing($value)
