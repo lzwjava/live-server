@@ -301,7 +301,7 @@ if (!function_exists('errorInfos')) {
             ERROR_PACKET_NONE => '红包已经被抢光了',
             ERROR_ALREADY_GRAB => '您已经抢过红包了',
             ERROR_PACKET_SEND => '发红包出错了',
-            ERROR_PACKET_AT_LEAST => '红包每个至于1元'
+            ERROR_PACKET_AT_LEAST => '红包每个至少1元'
         );
     }
 
