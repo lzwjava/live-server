@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -15,7 +16,7 @@ func TestPackets_create(t *testing.T) {
 	res := c2.post("packets", url.Values{"totalAmount": {"1000"},
 		"totalCount": {"1"}, "channel": {"wechat_h5"}, "wishing": {"新年快乐"}})
 	assert.NotNil(t, res.Interface())
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
@@ -26,7 +27,7 @@ func TestPackets_create_grab(t *testing.T) {
 	c2, userId := NewClientAndUser()
 	insertSnsUser(userId)
 
-	createPacket(c2)
+	createPacket(c2, userId)
 
 	packet := c2.getData("packets/me", url.Values{})
 
@@ -38,7 +39,7 @@ func TestPackets_create_grabTwice(t *testing.T) {
 	c2, userId := NewClientAndUser()
 	insertSnsUser(userId)
 
-	createPacket(c2)
+	createPacket(c2, userId)
 
 	packet := c2.getData("packets/me", url.Values{})
 
@@ -52,10 +53,10 @@ func TestPackets_create_grabTwice(t *testing.T) {
 	assert.NotNil(t, grabRes)
 }
 
-func createPacket(c2 *Client) {
+func createPacket(c2 *Client, userId string) {
 	c2.post("packets", url.Values{"totalAmount": {"1000"},
 		"totalCount": {"2"}, "channel": {"wechat_h5"}, "wishing": {"新年快乐"}})
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	c2.postWithStr("wechat/wxpayNotify", callbackStr)
 }
@@ -63,15 +64,19 @@ func createPacket(c2 *Client) {
 func TestPackets_one(t *testing.T) {
 	c2, userId := NewClientAndUser()
 	insertSnsUser(userId)
-	createPacket(c2)
-	packet := c2.getData("packets/me", url.Values{})
-	getRes := c2.getData("packets/"+packet.Get("packetId").MustString(), url.Values{})
+	createPacket(c2, userId)
+	<-time.After(1 * time.Second)
+	packetId := lastPacketId(c2)
+	getRes := c2.getData("packets/"+packetId, url.Values{})
 	assert.NotNil(t, getRes.Interface())
 }
 
 func lastPacketId(c2 *Client) string {
 	packet := c2.getData("packets/me", url.Values{})
 	packetId := packet.Get("packetId").MustString()
+	if len(packetId) == 0 {
+		panic("packetId is null")
+	}
 	return packetId
 }
 
@@ -82,7 +87,7 @@ func grabPacket(c2 *Client, packetId string) {
 func TestPackets_userPacket(t *testing.T) {
 	c2, userId := NewClientAndUser()
 	insertSnsUser(userId)
-	createPacket(c2)
+	createPacket(c2, userId)
 	packetId := lastPacketId(c2)
 	grabPacket(c2, packetId)
 	getRes := c2.getData("packets/"+packetId+"/userPackets", url.Values{})
@@ -92,7 +97,7 @@ func TestPackets_userPacket(t *testing.T) {
 func TestPackets_meAll(t *testing.T) {
 	c2, userId := NewClientAndUser()
 	insertSnsUser(userId)
-	createPacket(c2)
+	createPacket(c2, userId)
 	packetId := lastPacketId(c2)
 	grabPacket(c2, packetId)
 	getRes := c2.getData("packets/meAll", url.Values{})

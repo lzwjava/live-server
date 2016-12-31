@@ -102,12 +102,12 @@ class Users extends BaseController
         } else if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
             return;
         } else {
-            $ok = $this->userDao->insertUser($username, $mobilePhoneNumber, $avatarUrl);
-            if (!$ok) {
+            $userId = $this->userDao->insertUser($username, $mobilePhoneNumber, $avatarUrl);
+            if (!$userId) {
                 $this->failure(ERROR_SQL_WRONG);
                 return;
             }
-            $this->loginOrRegisterSucceed($mobilePhoneNumber);
+            $this->loginOrRegisterSucceed($userId);
         }
     }
 
@@ -129,43 +129,45 @@ class Users extends BaseController
 
     public function registerBySns_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_OPEN_ID, KEY_PLATFORM,
-            KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_OPEN_ID, KEY_PLATFORM))
         ) {
             return;
         }
-        $mobile = $this->post(KEY_MOBILE_PHONE_NUMBER);
         $openId = $this->post(KEY_OPEN_ID);
         $platform = $this->post(KEY_PLATFORM);
+        $mobile = $this->post(KEY_MOBILE_PHONE_NUMBER);
         $smsCode = $this->post(KEY_SMS_CODE);
-        if ($this->checkSmsCodeWrong($mobile, $smsCode)) {
-            return;
-        }
+        if ($mobile) {
 
-        if ($this->userDao->isMobilePhoneNumberUsed($mobile)) {
-
-            $user = $this->userDao->findUserByMobile($mobile);
-            if ($user->unionId) {
-                // 之前绑定过了
-                logInfo("mobilePhone is used: " . $mobile);
-                $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
+            if ($this->checkSmsCodeWrong($mobile, $smsCode)) {
                 return;
-            } else {
-                // 自动绑定
-                $theSnsUser = $this->snsUserDao->getSnsUser($openId, $platform);
-                $this->db->trans_begin();
-                $ok = $this->userDao->bindUnionIdToUser($user->userId, $theSnsUser->unionId);
-                $bindOk = $this->snsUserDao->bindUser($openId, $platform, $user->userId);
-                if (!$ok || !$bindOk || !$this->db->trans_status()) {
-                    $this->db->trans_rollback();
-                    $this->failure(ERROR_BIND_WECHAT_FAILED);
+            }
+
+            if ($this->userDao->isMobilePhoneNumberUsed($mobile)) {
+
+                $user = $this->userDao->findUserByMobile($mobile);
+                if ($user->unionId) {
+                    // 之前绑定过了
+                    logInfo("mobilePhone is used: " . $mobile);
+                    $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
+                    return;
+                } else {
+                    // 自动绑定
+                    $theSnsUser = $this->snsUserDao->getSnsUser($openId, $platform);
+                    $this->db->trans_begin();
+                    $ok = $this->userDao->bindUnionIdToUser($user->userId, $theSnsUser->unionId);
+                    $bindOk = $this->snsUserDao->bindUser($openId, $platform, $user->userId);
+                    if (!$ok || !$bindOk || !$this->db->trans_status()) {
+                        $this->db->trans_rollback();
+                        $this->failure(ERROR_BIND_WECHAT_FAILED);
+                        return;
+                    }
+                    $this->db->trans_commit();
+                    logInfo("auto bind succeed userId:" . $user->userId);
+
+                    $this->loginOrRegisterSucceed($user->userId);
                     return;
                 }
-                $this->db->trans_commit();
-                logInfo("auto bind succeed userId:" . $user->userId);
-
-                $this->loginOrRegisterSucceed($mobile);
-                return;
             }
         }
 
@@ -202,7 +204,7 @@ class Users extends BaseController
             $this->failure(ERROR_USER_BIND);
             return;
         }
-        $this->loginOrRegisterSucceed($mobile);
+        $this->loginOrRegisterSucceed($userId);
     }
 
     private function checkIfUsernameUsedAndReponse($username)
@@ -217,7 +219,9 @@ class Users extends BaseController
 
     public function login_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER,
+            KEY_SMS_CODE))
+        ) {
             return;
         }
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
@@ -225,12 +229,13 @@ class Users extends BaseController
         if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
             return;
         }
-        $this->loginOrRegisterSucceed($mobilePhoneNumber);
+        $user = $this->userDao->findUserByMobile($mobilePhoneNumber);
+        $this->loginOrRegisterSucceed($user->userId);
     }
 
-    public function loginOrRegisterSucceed($mobilePhoneNumber)
+    public function loginOrRegisterSucceed($userId)
     {
-        $user = $this->userDao->setLoginByMobilePhone($mobilePhoneNumber);
+        $user = $this->userDao->setLoginByUserId($userId);
         $this->succeed($user);
     }
 

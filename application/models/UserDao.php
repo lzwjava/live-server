@@ -29,12 +29,14 @@ class UserDao extends BaseDao
     {
         $data = array(
             KEY_USERNAME => $username,
-            KEY_MOBILE_PHONE_NUMBER => $mobilePhoneNumber,
             KEY_AVATAR_URL => $avatarUrl,
             KEY_SESSION_TOKEN => $this->genSessionToken(),
             KEY_UNION_ID => $unionId,
             KEY_WECHAT_SUBSCRIBE => $subscribe
         );
+        if ($data) {
+            $data[KEY_MOBILE_PHONE_NUMBER] = $mobilePhoneNumber;
+        }
         $this->db->insert(TABLE_USERS, $data);
         return $this->db->insert_id();
     }
@@ -139,12 +141,6 @@ class UserDao extends BaseDao
         $newUser = $this->updateSessionTokenByUserIfNeeded($user);
         setCookieForever(KEY_COOKIE_TOKEN, $newUser->sessionToken);
         return $newUser;
-    }
-
-    function setLoginByMobilePhone($mobilePhone)
-    {
-        $user = $this->findUser(KEY_MOBILE_PHONE_NUMBER, $mobilePhone, false);
-        return $this->setLoginByUser($user);
     }
 
     function setLoginByUserId($userId)

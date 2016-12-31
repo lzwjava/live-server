@@ -83,7 +83,7 @@ func TestAttendances_createByWeChat(t *testing.T) {
 	insertSnsUser(userId)
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
@@ -99,7 +99,8 @@ func TestAttendances_createByWeChatWithCoupon(t *testing.T) {
 
 	c2 := NewClient()
 	user := registerNewUser(c2)
-	insertSnsUser(toStr(user.Get("userId").MustInt()))
+	userId := toStr(user.Get("userId").MustInt())
+	insertSnsUser(userId)
 
 	postRes := adminC.postData("coupons", url.Values{
 		"phone":  {user.Get("mobilePhoneNumber").MustString()},
@@ -108,7 +109,7 @@ func TestAttendances_createByWeChatWithCoupon(t *testing.T) {
 
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
@@ -121,13 +122,14 @@ func TestAttendances_createByWeChatByStaff(t *testing.T) {
 
 	c2 := NewClient()
 	user := registerNewUser(c2)
-	insertSnsUser(toStr(user.Get("userId").MustInt()))
+	userId := toStr(user.Get("userId").MustInt())
+	insertSnsUser(userId)
 
 	createStaff(c2)
 
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
@@ -146,7 +148,7 @@ func TestAttendances_createByWeChatQrcode(t *testing.T) {
 	insertSnsUser(userId)
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_qrcode"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
@@ -162,7 +164,7 @@ func TestAttendances_createByWeChat_withShare(t *testing.T) {
 	createShare(c2, liveId)
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
@@ -178,15 +180,16 @@ func TestAttendances_createByWeChat_withShare_AmountLittle(t *testing.T) {
 	createShare(c2, liveId)
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
 	assert.NotNil(t, callbackRes)
 }
 
-func getLastOrderNo() string {
-	rows := queryDb("select orderNo from charges order by created desc limit 1")
+func getLastOrderNo(userId string) string {
+	sql := fmt.Sprintf("select orderNo from charges where creator=%s order by created desc limit 1", userId)
+	rows := queryDb(sql)
 	defer rows.Close()
 	rows.Next()
 	var orderNo string
@@ -204,9 +207,9 @@ func createAttendance(c *Client, liveId string) {
 	c.postWithStr("rewards/notify", callbackStr)
 }
 
-func createWechatAttendance(c *Client, liveId string) {
+func createWechatAttendance(c *Client, userId string, liveId string) {
 	c.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
-	orderNo := getLastOrderNo()
+	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
@@ -312,7 +315,7 @@ func TestAttendances_refund(t *testing.T) {
 
 	c2, userId := NewClientAndUser()
 	insertSnsUser(userId)
-	createWechatAttendance(c2, liveId)
+	createWechatAttendance(c2, userId, liveId)
 
 	c.admin = true
 	res := c.get("attendances/refund/"+liveId, url.Values{})

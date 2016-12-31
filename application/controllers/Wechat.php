@@ -283,6 +283,24 @@ class Wechat extends BaseController
         echo $xml;
     }
 
+    private function extraWordFromEventKey($eventKeyStr)
+    {
+        $sceneData = json_decode($eventKeyStr);
+        $extraWord = '';
+        if ($sceneData) {
+            if ($sceneData->type == 'live') {
+                $liveId = $sceneData->liveId;
+                $live = $this->liveDao->getLive($liveId);
+                $extraWord = sprintf(WECHAT_LIVE_WORD, $liveId, $live->subject);
+            } else if ($sceneData->type == 'packet') {
+                $packetId = $sceneData->packetId;
+                $packet = $this->packetDao->getPacket($packetId);
+                $extraWord = sprintf(WECHAT_PACKET_WORD, $packetId,
+                    $packet->user->username);
+            }
+        }
+        return $extraWord;
+    }
 
     function callback_post()
     {
@@ -318,19 +336,7 @@ class Wechat extends BaseController
                     $extraWord = '';
                     if (substr($eventKey, 0, 8) == 'qrscene_') {
                         $sceneStr = substr($eventKey, 8, strlen($eventKey));
-                        $sceneData = json_decode($sceneStr);
-                        if ($sceneData) {
-                            if ($sceneData->type == 'live') {
-                                $liveId = $sceneData->liveId;
-                                $live = $this->liveDao->getLive($liveId);
-                                $extraWord = sprintf(WECHAT_LIVE_WORD, $liveId, $live->subject);
-                            } else if ($sceneData->type == 'packet') {
-                                $packetId = $sceneData->packetId;
-                                $packet = $this->packetDao->getPacket($packetId);
-                                $extraWord = sprintf(WECHAT_PACKET_WORD, $packetId,
-                                    $packet->user->username);
-                            }
-                        }
+                        $extraWord = $this->extraWordFromEventKey($sceneStr);
                     }
                     $contentStr = sprintf(WECHAT_WELCOME_WORD, $extraWord);
                     $welcomeReply = $this->textReply($toUsername, $fromUsername, $contentStr);
@@ -345,6 +351,10 @@ class Wechat extends BaseController
                     logInfo("unsubscribe event");
                 } else if ($event == EVENT_VIEW) {
                     logInfo("event view");
+                } else if ($event == EVENT_SCAN) {
+                    $extraWord = $this->extraWordFromEventKey($eventKey);
+                    $welcomeReply = $this->textReply($toUsername, $fromUsername, $extraWord);
+                    $this->replyToWeChat($welcomeReply);
                 }
             }
         } else {

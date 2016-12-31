@@ -122,20 +122,6 @@ CREATE TABLE `transactions` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `scanned_qrcodes` (
-  `qrcodeId` INT(11)     NOT NULL AUTO_INCREMENT,
-  `code`     VARCHAR(60) NOT NULL DEFAULT '',
-  `type`     TINYINT     NOT NULL DEFAULT 0,
-  `data`     VARCHAR(128)         DEFAULT '',
-  `userId`   INT(11)     NOT NULL DEFAULT 0,
-  `created`  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`qrcodeId`),
-  UNIQUE KEY (`code`),
-  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
 CREATE TABLE `sns_users` (
   `snsUserId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `openId`    VARCHAR(63)      NOT NULL DEFAULT '',
@@ -320,3 +306,6 @@ CREATE TABLE `user_packets` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+
+ALTER TABLE `users` MODIFY COLUMN `mobilePhoneNumber` VARCHAR(63) DEFAULT NULL;
