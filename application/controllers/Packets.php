@@ -175,6 +175,13 @@ class Packets extends BaseController
             return;
         }
         $packet = $this->packetDao->getMyPacket($user->userId);
+        logInfo("packet " . json_encode($packet));
+        $this->succeed($packet);
+    }
+
+    function one_get($packetId)
+    {
+        $packet = $this->packetDao->getPacket($packetId);
         $this->succeed($packet);
     }
 }
