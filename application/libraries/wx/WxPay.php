@@ -75,4 +75,22 @@ class WxPay
         }
     }
 
+    function transfer()
+    {
+        $input = new WxPayTransferItem();
+        $orderNo = genOrderNo();
+        $input->SetPartnerTradeNo($orderNo);
+        $input->SetAmount(100);
+        $input->SetOpenid('ol0AFwFe5jFoXcQby4J7AWJaWXIM');
+        $input->SetDesc('测试');
+        $transferResult = WxPayApi::transfer($input);
+        logInfo("transferResult: " . json_encode($transferResult));
+        if ($transferResult['return_code'] == 'SUCCESS') {
+            return true;
+        } else {
+            logInfo("refund failed!!!");
+            return false;
+        }
+    }
+
 }

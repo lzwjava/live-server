@@ -400,6 +400,49 @@ class WxPayApi
 		return $result;
 	}
 
+	/**
+	 * transfer
+	 *
+	 * @param WxPayTransferItem $inputObj
+     * @throws WxPayException
+	 * @return result
+	 */
+	public static function transfer($inputObj, $timeOut = 6)
+	{
+        if (!$inputObj->IsPartnerTradeNoSet()) {
+            throw new WxPayException("需要设置 PartnerTradeNo");
+        }
+        if (!$inputObj->IsOpenidSet()) {
+            throw new WxPayException("需要设置 OpenId");
+        }
+        if (!$inputObj->IsAmountSet()) {
+            throw new WxPayException("需要设置 Amount");
+        }
+
+        if (!$inputObj->IsDescSet()) {
+            throw new WxPayException("需要设置 Desc");
+        }
+
+		$url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+
+		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$inputObj->SetSpbillCreateIp($_SERVER['REMOTE_ADDR']);//终端ip
+		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+        $inputObj->SetCheckName("NO_CHECK");
+
+		//签名
+		$inputObj->SetSign();
+		$xml = $inputObj->ToXml();
+
+		$startTimeStamp = self::getMillisecond();//请求开始时间
+		$response = self::postXmlCurl($xml, $url, false, $timeOut);
+		$result = WxPayResults::Init($response);
+		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+
+		return $result;
+	}
+
  	/**
  	 *
  	 * 支付结果通用通知

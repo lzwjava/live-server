@@ -318,3 +318,10 @@ func TestAttendances_refund(t *testing.T) {
 	res := c.get("attendances/refund/"+liveId, url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestAttendances_transfer(t *testing.T) {
+	c := NewClient()
+	c.admin = true
+	res := c.get("attendances/transfer", url.Values{})
+	assert.NotNil(t, res)
+}

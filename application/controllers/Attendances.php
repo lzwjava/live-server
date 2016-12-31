@@ -166,4 +166,13 @@ class Attendances extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => $total));
     }
 
+    function transfer_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $this->pay->transfer();
+        $this->succeed();
+    }
+
 }

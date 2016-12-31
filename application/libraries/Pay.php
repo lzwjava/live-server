@@ -69,4 +69,9 @@ class Pay
         }
         return false;
     }
+
+    function transfer()
+    {
+        return $this->wxpay->transfer();
+    }
 }
