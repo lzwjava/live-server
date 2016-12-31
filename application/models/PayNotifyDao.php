@@ -140,7 +140,8 @@ class PayNotifyDao extends BaseDao
                 return $error;
             }
 
-            $packetId = $this->packetDao->addPacket($userId, $totalAmount, $totalCount, $wishing);
+            $packetId = $this->packetDao->addPacket($userId, $totalAmount, $totalCount,
+                $wishing, $orderNo);
             if (!$packetId || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return ERROR_SQL_WRONG;

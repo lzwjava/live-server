@@ -8,12 +8,13 @@
  */
 class PacketDao extends BaseDao
 {
-    function addPacket($userId, $totalAmount, $totalCount, $wishing)
+    function addPacket($userId, $totalAmount, $totalCount, $wishing, $orderNo)
     {
         $data = array(
             KEY_USER_ID => $userId,
             KEY_TOTAL_AMOUNT => $totalAmount,
             KEY_PACKET_ID => getToken(12),
+            KEY_ORDER_NO => $orderNo,
             KEY_TOTAL_COUNT => $totalCount,
             KEY_WISHING => $wishing,
             KEY_REMAIN_COUNT => $totalCount,
