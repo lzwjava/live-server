@@ -33,4 +33,24 @@ class UserPacketDao extends BaseDao
         $this->db->query($sql, $binds);
         return $this->db->affected_rows() > 0;
     }
+
+    function getUserPackets($packetId)
+    {
+        $userPublicFields = $this->userPublicFields('u', true);
+        $sql = "SELECT up.*,$userPublicFields FROM user_packets AS up
+                LEFT JOIN users AS u ON up.userId = u.userId
+                WHERE packetId=? ORDER BY created DESC";
+        $binds = array($packetId);
+        $userPackets = $this->db->query($sql, $binds)->result();
+        return $this->assembleUserPackets($userPackets);
+    }
+
+    function assembleUserPackets($userPackets)
+    {
+        $us = $this->prefixFields($this->userPublicRawFields(), 'u');
+        foreach ($userPackets as $userPacket) {
+            $userPacket->user = extractFields($userPacket, $us, 'u');
+        }
+        return $userPackets;
+    }
 }

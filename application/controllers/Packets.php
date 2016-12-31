@@ -194,7 +194,6 @@ class Packets extends BaseController
             return;
         }
         $packet = $this->packetDao->getMyPacket($user->userId);
-        logInfo("packet " . json_encode($packet));
         $this->succeed($packet);
     }
 
@@ -202,5 +201,21 @@ class Packets extends BaseController
     {
         $packet = $this->packetDao->getPacket($packetId);
         $this->succeed($packet);
+    }
+
+    function allPackets_get()
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $packets = $this->packetDao->getMyPackets($user->userId);
+        $this->succeed($packets);
+    }
+
+    function allPacketsById_get($packetId)
+    {
+        $userPackets = $this->userPacketDao->getUserPackets($packetId);
+        $this->succeed($userPackets);
     }
 }

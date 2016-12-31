@@ -53,4 +53,12 @@ class PacketDao extends BaseDao
         $binds = array($userId);
         return $this->db->query($sql, $binds)->row();
     }
+
+    function getMyPackets($userId)
+    {
+        $sql = "SELECT * FROM packets WHERE userId=? ORDER BY created DESC";
+        $binds = array($userId);
+        return $this->db->query($sql, $binds)->result();
+    }
+
 }
