@@ -78,7 +78,7 @@ func insertSnsUser(userId string) {
 func insertSnsUser2(userId string) {
 	deleteSnsUser2()
 	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
-		"oFRlVwXQIzb7TNDS45hQCT8MidQc", "李智维",
+		"ol0AFwLgaHJ4rjhfRdUPtvBzlrt8", "李智维lzwjava",
 		"http://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
 		"wechat", userId, "oFRlVwXQIzb7TNDS45hQCT8MidQc")
 	runSql(sql, false)

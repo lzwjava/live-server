@@ -189,6 +189,7 @@ func TestAttendances_createByWeChat_withShare_AmountLittle(t *testing.T) {
 
 func getLastOrderNo(userId string) string {
 	sql := fmt.Sprintf("select orderNo from charges where creator=%s order by created desc limit 1", userId)
+	fmt.Println(sql)
 	rows := queryDb(sql)
 	defer rows.Close()
 	rows.Next()
