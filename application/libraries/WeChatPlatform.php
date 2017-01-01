@@ -182,13 +182,25 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, '96n9JfS5RcMraNsZcM_kQu7wyXede2gB7h77El386hM', $url, $tmplData);
     }
 
-    function notifyOwnerByUserPacket($grabUserId, $ownerUserId, $packetId, $amount)
+    function notifyOwnerByUserPacket($grabUserId, $ownerUserId, $packetId,
+                                     $amount, $wishing, $toOwner = true)
     {
         $user = $this->userDao->findUserById($grabUserId);
         $owner = $this->userDao->findUserById($ownerUserId);
-        $result = $user->username . '抢到了您的红包， 得到一笔奖学金';
+        $result = null;
+        if ($toOwner) {
+            $result = $user->username . '抢到了您的红包';
+        } else {
+            $result = $user->username . '，您抢到了' . $owner->username . '的红包';
+        }
+        $username = null;
+        if ($toOwner) {
+            $username = $user->username;
+        } else {
+            $username = $owner->username;
+        }
         $url = 'http://m.quzhiboapp.com/?type=packet&packetId=' . $packetId;
-        $remark = '祝愿' . $user->username . '在新的一年里好好学习，天天向上';
+        $remark = $wishing;
         $tmplData = array(
             'first' => array(
                 'value' => $result,
@@ -199,7 +211,7 @@ class WeChatPlatform
                 'color' => '#173177'
             ),
             'keyword2' => array(
-                'value' => $user->username,
+                'value' => $username,
                 'color' => '#173177'
             ),
             'remark' => array(

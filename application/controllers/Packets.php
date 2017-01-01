@@ -182,7 +182,12 @@ class Packets extends BaseController
                 }
 
                 $this->weChatPlatform->notifyOwnerByUserPacket($user->userId,
-                    $packet->userId, $packetId, $amount);
+                    $packet->userId, $packetId, $amount, $packet->wishing, true);
+
+                if ($user->userId != $packet->userId) {
+                    $this->weChatPlatform->notifyOwnerByUserPacket($user->userId,
+                        $packet->userId, $packetId, $amount, $packet->wishing, false);
+                }
 
                 $this->db->trans_commit();
                 $this->succeed(array('status' => true));
