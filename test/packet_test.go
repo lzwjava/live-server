@@ -90,8 +90,8 @@ func TestPackets_userPacket(t *testing.T) {
 	createPacket(c2, userId)
 	packetId := lastPacketId(c2)
 	grabPacket(c2, packetId)
-	getRes := c2.getData("packets/"+packetId+"/userPackets", url.Values{})
-	assert.NotNil(t, getRes.Interface())
+	getRes := c2.getArrayData("packets/"+packetId+"/userPackets", url.Values{})
+	assert.True(t, len(getRes.MustArray()) > 0)
 }
 
 func TestPackets_meAll(t *testing.T) {
@@ -100,6 +100,6 @@ func TestPackets_meAll(t *testing.T) {
 	createPacket(c2, userId)
 	packetId := lastPacketId(c2)
 	grabPacket(c2, packetId)
-	getRes := c2.getData("packets/meAll", url.Values{})
-	assert.NotNil(t, getRes.Interface())
+	getRes := c2.getArrayData("packets/meAll", url.Values{})
+	assert.True(t, len(getRes.MustArray()) > 0)
 }

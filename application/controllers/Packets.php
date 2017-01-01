@@ -126,7 +126,7 @@ class Packets extends BaseController
         if (!$user) {
             return;
         }
-        $packet = $this->packetDao->getPacket($packetId);
+        $packet = $this->packetDao->getPacketById($packetId);
         if ($this->checkIfObjectNotExists($packet)) {
             return;
         }
@@ -148,7 +148,7 @@ class Packets extends BaseController
         $cnt = 0;
         for (; ;) {
             ++$cnt;
-            $packet = $this->packetDao->getPacket($packetId);
+            $packet = $this->packetDao->getPacketById($packetId);
             if ($cnt > 1000 || $packet->remainCount <= 0) {
                 $this->succeed(array('status' => false));
                 break;
@@ -196,7 +196,7 @@ class Packets extends BaseController
 
     function one_get($packetId)
     {
-        $packet = $this->packetDao->getPacket($packetId);
+        $packet = $this->packetDao->getPacketById($packetId);
         $this->succeed($packet);
     }
 
