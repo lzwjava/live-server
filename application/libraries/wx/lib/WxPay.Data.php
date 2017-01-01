@@ -3576,3 +3576,189 @@ class WxPayRedPacket extends WxPayDataBase
 
 
 }
+
+class WxPayGroupRedPacket extends WxPayDataBase
+{
+
+    public function SetAppid($value)
+    {
+        $this->values['wxappid'] = $value;
+    }
+
+    public function GetAppid()
+    {
+        return $this->values['wxappid'];
+    }
+
+    public function IsAppidSet()
+    {
+        return array_key_exists('wxappid', $this->values);
+    }
+
+    public function SetMch_id($value)
+    {
+        $this->values['mch_id'] = $value;
+    }
+
+    public function GetMch_id()
+    {
+        return $this->values['mch_id'];
+    }
+
+    public function IsMch_idSet()
+    {
+        return array_key_exists('mch_id', $this->values);
+    }
+
+    public function SetNonce_str($value)
+    {
+        $this->values['nonce_str'] = $value;
+    }
+
+    public function GetNonce_str()
+    {
+        return $this->values['nonce_str'];
+    }
+
+    public function IsNonce_strSet()
+    {
+        return array_key_exists('nonce_str', $this->values);
+    }
+
+    public function SetRemark($value)
+    {
+        $this->values['remark'] = $value;
+    }
+
+    public function GetRemark()
+    {
+        return $this->values['remark'];
+    }
+
+    public function IsRemarkSet()
+    {
+        return array_key_exists('remark', $this->values);
+    }
+
+    public function SetTotalAmount($value)
+    {
+        $this->values['total_amount'] = $value;
+    }
+
+    public function GetTotalAmount()
+    {
+        return $this->values['total_amount'];
+    }
+
+    public function IsTotalAmountSet()
+    {
+        return array_key_exists('total_amount', $this->values);
+    }
+
+    public function SetTotalNum($value)
+    {
+        $this->values['total_num'] = $value;
+    }
+
+    public function GetTotalNum()
+    {
+        return $this->values['total_num'];
+    }
+
+    public function IsTotalNumSet()
+    {
+        return array_key_exists('total_num', $this->values);
+    }
+
+    public function SetWishing($value)
+    {
+        $this->values['wishing'] = $value;
+    }
+
+    public function GetWishing()
+    {
+        return $this->values['wishing'];
+    }
+
+    public function IsWishingSet()
+    {
+        return array_key_exists('wishing', $this->values);
+    }
+
+
+    public function SetActName($value)
+    {
+        $this->values['act_name'] = $value;
+    }
+
+    public function GetActName()
+    {
+        return $this->values['act_name'];
+    }
+
+    public function IsActNameSet()
+    {
+        return array_key_exists('act_name', $this->values);
+    }
+
+    public function SetOpenid($value)
+    {
+        $this->values['re_openid'] = $value;
+    }
+
+    public function GetOpenid()
+    {
+        return $this->values['re_openid'];
+    }
+
+    public function IsOpenidSet()
+    {
+        return array_key_exists('re_openid', $this->values);
+    }
+
+    public function SetMchBillNo($value)
+    {
+        $this->values['mch_billno'] = $value;
+    }
+
+    public function GetMchBillNo()
+    {
+        return $this->values['mch_billno'];
+    }
+
+    public function IsMchBillNoSet()
+    {
+        return array_key_exists('mch_billno', $this->values);
+    }
+
+    public function SetSendName($value)
+    {
+        $this->values['send_name'] = $value;
+    }
+
+    public function GetSendName()
+    {
+        return $this->values['send_name'];
+    }
+
+    public function IsSendNameSet()
+    {
+        return array_key_exists('send_name', $this->values);
+    }
+
+    public function SetAmtType($value)
+    {
+        $this->values['amt_type'] = $value;
+    }
+
+    public function GetAmtType()
+    {
+        return $this->values['amt_type'];
+    }
+
+    public function IsAmtTypeSet()
+    {
+        return array_key_exists('amt_type', $this->values);
+    }
+
+}

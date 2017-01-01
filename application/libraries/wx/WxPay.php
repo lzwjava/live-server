@@ -116,4 +116,31 @@ class WxPay
         }
     }
 
+    function sendGroupRedPacket($openId, $sendName, $amount, $wishing)
+    {
+        $input = new WxPayGroupRedPacket();
+        $orderNo = genOrderNo();
+        $input->SetMchBillNo($orderNo);
+        $input->SetTotalAmount($amount);
+        $totalNum = 5;
+        if ($amount < $totalNum) {
+            $totalNum = $amount;
+        }
+        $input->SetTotalNum($totalNum);
+        $input->SetOpenid($openId);
+        $input->SetRemark('新年快乐');
+        $input->SetSendName($sendName);
+        $input->SetWishing($wishing);
+        $input->SetActName('新年快乐红包');
+        $input->SetRemark('新年快乐');
+        $transferResult = WxPayApi::sendGroupRedPacket($input);
+        logInfo("transferResult: " . json_encode($transferResult));
+        if ($transferResult['result_code'] == 'SUCCESS') {
+            return array(true, null);
+        } else {
+            logInfo("send red packet failed!!!");
+            return array(false, $transferResult['err_code_des']);
+        }
+    }
+
 }

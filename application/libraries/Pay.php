@@ -83,4 +83,13 @@ class Pay
             return $this->wxpay->sendRedPacket($openId, $sendName, $amount, $wishing);
         }
     }
+
+    function sendGroupRedPacket($openId, $sendName, $amount, $wishing)
+    {
+        if (isDebug()) {
+            return array(true, null);
+        } else {
+            return $this->wxpay->sendGroupRedPacket($openId, $sendName, $amount, $wishing);
+        }
+    }
 }

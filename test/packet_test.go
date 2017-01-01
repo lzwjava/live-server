@@ -103,3 +103,8 @@ func TestPackets_meAll(t *testing.T) {
 	getRes := c2.getArrayData("packets/meAll", url.Values{})
 	assert.True(t, len(getRes.MustArray()) > 0)
 }
+
+func TestPackets_send(t *testing.T) {
+	c2 := NewClient()
+	c2.getData("packets/sendPacket", url.Values{})
+}

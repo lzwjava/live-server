@@ -222,4 +222,15 @@ class Packets extends BaseController
         $userPackets = $this->userPacketDao->getUserPackets($packetId);
         $this->succeed($userPackets);
     }
+
+    function sendPacket_get()
+    {
+        list($ok, $data) = $this->pay->sendGroupRedPacket('ol0AFwFe5jFoXcQby4J7AWJaWXIM',
+            '李智维', 10, '新年快乐!');
+        if (!$ok) {
+            $this->failure(ERROR_PACKET_SEND, $data);
+            return;
+        }
+        $this->succeed();
+    }
 }

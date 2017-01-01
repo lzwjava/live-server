@@ -502,6 +502,59 @@ class WxPayApi
     }
 
     /**
+     * sendRedPacket
+     *
+     * @param WxPayGroupRedPacket $inputObj
+     * @throws WxPayException
+     * @return result
+     */
+    public static function sendGroupRedPacket($inputObj, $timeOut = 6)
+    {
+        if (!$inputObj->IsRemarkSet()) {
+            throw new WxPayException("需要设置 Remark");
+        }
+        if (!$inputObj->IsSendNameSet()) {
+            throw new WxPayException("需要设置 SendName");
+        }
+        if (!$inputObj->IsOpenidSet()) {
+            throw new WxPayException("需要设置 OpenId");
+        }
+        if (!$inputObj->IsTotalAmountSet()) {
+            throw new WxPayException("需要设置 TotalAmount");
+        }
+        if (!$inputObj->IsTotalNumSet()) {
+            throw new WxPayException("需要设置 TotalNum");
+        }
+        if (!$inputObj->IsActNameSet()) {
+            throw new WxPayException("需要设置 ActName");
+        }
+        if (!$inputObj->IsWishingSet()) {
+            throw new WxPayException("需要设置 Wishing");
+        }
+        if (!$inputObj->IsMchBillNoSet()) {
+            throw new WxPayException("需要设置 MchBillNo");
+        }
+
+        $url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendgroupredpack";
+
+        $inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+        $inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+        $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+        $inputObj->SetAmtType('ALL_RAND');
+        //签名
+        $inputObj->SetSign();
+
+        $xml = $inputObj->ToXml();
+
+        $startTimeStamp = self::getMillisecond();//请求开始时间
+        $response = self::postXmlCurl($xml, $url, true, $timeOut);
+        logInfo("response " . $response);
+        $result = WxPayResults::InitNoSign($response);
+        self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+        return $result;
+    }
+
+    /**
      *
      * 支付结果通用通知
      * @param function $callback
