@@ -164,13 +164,10 @@ class Packets extends BaseController
                     $this->db->trans_rollback();
                     break;
                 }
-                logInfo("userId " . $packet->userId);
-                $sender = $this->userDao->findPublicUserById($packet->userId);
-                logInfo("sender " . json_encode($sender));
-                logInfo("packet " . json_encode($packet));
-                $ok = $this->pay->sendRedPacket($openId, $sender->username, $amount, $packet->wishing);
+                $sender = $this->userDao->findUserById($packet->userId);
+                list($ok, $data) = $this->pay->sendRedPacket($openId, $sender->username, $amount, $packet->wishing);
                 if (!$ok) {
-                    $this->failure(ERROR_PACKET_SEND);
+                    $this->failure(ERROR_PACKET_SEND, $data . ' 请使用一个常用的微信');
                     $this->db->trans_rollback();
                     return;
                 }
