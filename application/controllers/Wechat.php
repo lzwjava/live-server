@@ -295,8 +295,8 @@ class Wechat extends BaseController
             } else if ($sceneData->type == 'packet') {
                 $packetId = $sceneData->packetId;
                 $packet = $this->packetDao->getPacketById($packetId);
-                $extraWord = sprintf(WECHAT_PACKET_WORD, $packetId,
-                    $packet->user->username);
+                $extraWord = sprintf(WECHAT_PACKET_WORD,
+                    $packet->user->username, $packetId);
             }
         }
         return $extraWord;
