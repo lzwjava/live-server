@@ -24,19 +24,32 @@ class PacketDao extends BaseDao
         return $this->db->insert_id();
     }
 
-    function getPacket($packetId)
+    function getPacketById($packetId)
     {
+        $packets = $this->getPacketsByIds(array($packetId));
+        if (count($packets) > 0) {
+            return $packets[0];
+        } else {
+            return null;
+        }
+    }
+
+    function getPacketsByIds($packetIds)
+    {
+        if (count($packetIds) <= 0) {
+            return null;
+        }
         $userFields = $this->userPublicFields('u', true);
         $sql = "SELECT p.*, $userFields FROM packets AS p
                 LEFT JOIN users AS u ON u.userId=p.userId
-                WHERE p.packetId=?";
-        $binds = array(KEY_PACKET_ID => $packetId);
-        $packet = $this->db->query($sql, $binds)->row();
-        if ($packet) {
+                WHERE p.packetId in ('" . implode("','", $packetIds) . "')
+                order by p.created desc";
+        $packets = $this->db->query($sql)->result();
+        foreach ($packets as $packet) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $packet->user = extractFields($packet, $us, 'u');
         }
-        return $packet;
+        return $packets;
     }
 
     function updatePacket($packetId, $balance, $originRemain)
@@ -49,16 +62,32 @@ class PacketDao extends BaseDao
 
     function getMyPacket($userId)
     {
-        $sql = "SELECT * FROM packets WHERE userId=? ORDER BY created DESC LIMIT 1";
+        $sql = "SELECT packetId FROM packets WHERE userId=? ORDER BY created DESC LIMIT 1";
         $binds = array($userId);
-        return $this->db->query($sql, $binds)->row();
+        $packet = $this->db->query($sql, $binds)->row();
+        if ($packet) {
+            return $this->getPacketById($packet->packetId);
+        } else {
+            return null;
+        }
+    }
+
+    private function extractPacketIds($packets)
+    {
+        $ids = array();
+        foreach ($packets as $packet) {
+            array_push($ids, $packet->packetId);
+        }
+        return $ids;
     }
 
     function getMyPackets($userId)
     {
-        $sql = "SELECT * FROM packets WHERE userId=? ORDER BY created DESC";
+        $sql = "SELECT packetId FROM packets WHERE userId=?";
         $binds = array($userId);
-        return $this->db->query($sql, $binds)->result();
+        $packets = $this->db->query($sql, $binds)->result();
+        $packetIds = $this->extractPacketIds($packets);
+        return $this->getPacketsByIds($packetIds);
     }
 
 }
