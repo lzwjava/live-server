@@ -109,10 +109,10 @@ class WxPay
         $transferResult = WxPayApi::sendRedPacket($input);
         logInfo("transferResult: " . json_encode($transferResult));
         if ($transferResult['result_code'] == 'SUCCESS') {
-            return true;
+            return array(true, null);
         } else {
             logInfo("send red packet failed!!!");
-            return false;
+            return array(false, $transferResult['err_code_des']);
         }
     }
 

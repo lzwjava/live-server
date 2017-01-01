@@ -78,7 +78,7 @@ class Pay
     function sendRedPacket($openId, $sendName, $amount, $wishing)
     {
         if (isDebug()) {
-            return true;
+            return array(true, null);
         } else {
             return $this->wxpay->sendRedPacket($openId, $sendName, $amount, $wishing);
         }
