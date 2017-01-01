@@ -680,7 +680,7 @@ EOD
 );
 
 define('WECHAT_PACKET_WORD', <<<EOD
-您有一个<a href="http://m.quzhiboapp.com/?packetId=%s&type=packet">%s</a>的红包
+您有一个%s的红包 <a href="http://m.quzhiboapp.com/?packetId=%s&type=packet">点击我进入领取</a>
 EOD
 );
 
