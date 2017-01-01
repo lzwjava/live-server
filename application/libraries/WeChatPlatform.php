@@ -74,7 +74,6 @@ class WeChatPlatform
         $accesstoken = $this->jsSdk->getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $accesstoken;
         $res = $this->httpPost($url, $data);
-        logInfo('notify wechat res ' . $res);
         if (!$res) {
             logInfo('wechat notified failed user:' . json_encode($user));
             return false;
@@ -82,7 +81,7 @@ class WeChatPlatform
         $resp = json_decode($res);
         if ($resp->errcode != 0) {
             logInfo("wechat notified failed errcode != 0 user:" . $user->userId
-                . ' name: ' . $user->username);
+                . ' name: ' . $user->username . ' res ' . $res);
             return false;
         }
         return true;
@@ -181,6 +180,34 @@ class WeChatPlatform
             )
         );
         return $this->notifyByWeChat($user, '96n9JfS5RcMraNsZcM_kQu7wyXede2gB7h77El386hM', $url, $tmplData);
+    }
+
+    function notifyOwnerByUserPacket($grabUserId, $ownerUserId, $packetId, $amount)
+    {
+        $user = $this->userDao->findUserById($grabUserId);
+        $owner = $this->userDao->findUserById($ownerUserId);
+        $result = $user->username . '抢到了您的红包， 得到一笔奖学金';
+        $url = 'http://m.quzhiboapp.com/?type=packet&packetId=' . $packetId;
+        $remark = '祝愿' . $user->username . '在新的一年里好好学习，天天向上';
+        $tmplData = array(
+            'first' => array(
+                'value' => $result,
+                'color' => '#000'
+            ),
+            'keyword1' => array(
+                'value' => floor($amount / 100.0) . '元',
+                'color' => '#173177'
+            ),
+            'keyword2' => array(
+                'value' => $user->username,
+                'color' => '#173177'
+            ),
+            'remark' => array(
+                'value' => $remark,
+                'color' => '#000'
+            )
+        );
+        return $this->notifyByWeChat($owner, 'H7LOlSlgG1O8ohoese6k4_kqwjarXAdsOgbn0x8vTQU', $url, $tmplData);
     }
 
     private function httpPost($url, $data)

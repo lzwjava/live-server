@@ -13,6 +13,7 @@ class Packets extends BaseController
     public $userPacketDao;
     public $packetDao;
     public $userDao;
+    public $weChatPlatform;
 
     function __construct()
     {
@@ -27,6 +28,8 @@ class Packets extends BaseController
         $this->packetDao = new PacketDao();
         $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
+        $this->load->library(WeChatPlatform::class);
+        $this->weChatPlatform = new WeChatPlatform();
     }
 
     protected function checkIfPacketAmountWrong($amount)
@@ -177,6 +180,10 @@ class Packets extends BaseController
                     $this->db->trans_rollback();
                     return;
                 }
+
+                $this->weChatPlatform->notifyOwnerByUserPacket($user->userId,
+                    $packet->userId, $packetId, $amount);
+
                 $this->db->trans_commit();
                 $this->succeed(array('status' => true));
                 break;
