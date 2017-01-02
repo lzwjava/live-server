@@ -70,7 +70,7 @@ class UserDao extends BaseDao
         return $user;
     }
 
-    private function getSessionUserFields()
+    private function sessionUserFields()
     {
         return $this->mergeFields(array(
             KEY_USER_ID,
@@ -104,7 +104,7 @@ class UserDao extends BaseDao
 
     private function findActualUser($field, $value)
     {
-        $fields = $this->getSessionUserFields();
+        $fields = $this->sessionUserFields();
         $user = $this->getOneFromTable(TABLE_USERS, $field, $value, $fields);
         return $user;
     }
@@ -217,7 +217,7 @@ class UserDao extends BaseDao
     function findAllUsers()
     {
         return $this->getListFromTable(TABLE_USERS, '1', '1',
-            $this->userPublicFields(), null, 0, ROW_MAX);
+            $this->sessionUserFields(), null, 0, ROW_MAX);
     }
 
     function count()

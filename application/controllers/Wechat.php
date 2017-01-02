@@ -454,11 +454,19 @@ class Wechat extends BaseController
         }
         $users = $this->userDao->findAllUsers();
         $subscribeCount = 0;
-        foreach ($users as $user) {
-            list($error, $subscribe) = $this->queryIsSubscribe($user->userId);
-            $this->userDao->updateSubscribe($user->userId, $subscribe);
-            if ($subscribe) {
-                $subscribeCount++;
+        for ($i = 0; $i < count($users); $i++) {
+            $user = $users[$i];
+            if ($user->wechatSubscribe == 0) {
+                list($error, $subscribe) = $this->queryIsSubscribe($user->userId);
+                if (!$error) {
+                    $this->userDao->updateSubscribe($user->userId, $subscribe);
+                    if ($subscribe) {
+                        $subscribeCount++;
+                    }
+                }
+            }
+            if ($i % 100 == 0) {
+                logInfo("handle $i subscribeCount:" . $subscribeCount);
             }
         }
         logInfo("finish subscribeCount:" . $subscribeCount);
