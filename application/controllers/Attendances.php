@@ -168,10 +168,7 @@ class Attendances extends BaseController
 
     function transfer_get()
     {
-        if ($this->checkIfNotAdmin()) {
-            return;
-        }
-        $this->pay->transfer();
+        $this->pay->transfer('ol0AFwFe5jFoXcQby4J7AWJaWXIM', '李智维', 1, '新年快乐');
         $this->succeed();
     }
 
