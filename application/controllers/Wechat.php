@@ -278,7 +278,6 @@ class Wechat extends BaseController
 
     function replyToWeChat($data)
     {
-        logInfo("wechat reply: " . json_encode($data));
         $xml = $this->arrayToXml($data);
         echo $xml;
     }
