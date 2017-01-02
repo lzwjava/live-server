@@ -336,6 +336,10 @@ define('KEY_OWNER_ID', 'ownerId');
 define('KEY_DETAIL', 'detail');
 define('KEY_NEED_PAY', 'needPay');
 define('KEY_NOTICE', 'notice');
+define('KEY_SHARE_ICON', 'shareIcon');
+
+define('SHARE_ICON_AVATAR', 0);
+define('SHARE_ICON_COVER', 1);
 
 define('LIVE_STATUS_PREPARE', 1);
 define('LIVE_STATUS_REVIEW', 5);

@@ -158,7 +158,8 @@ func TestLives_update(t *testing.T) {
 		"amount":   {"30000"}, "detail": {"我是周子敬，以太资本创始人兼  CEO 。曾任华兴资本副总裁，领导完成多个融资项目，包括美乐乐，途家，猎聘，唱吧，友盟，中清龙图，有缘网等。曾任阿里巴巴资深产品经理，并有过网游公司的创业经验。2014  年创立以太资本，至今，已为超过 350 个项目完成融资，融资总额逾 13 亿美元。成功案例包括知乎，映客，河狸家，蘑菇街，铜板街，达达，小猪短租等。作为资深天使投资人，曾投资今日头条、Loho、团车网以及小麦公社等著名企业。2015 年 11 月，《财富》（中文版）评选中国 40 位 40 岁以下的商界精英，名列第 33 位。本次 Live 我将就创业者最关注的一些融资问题进行解答，希望能帮助到正走在创业道路上的伙伴们。"},
 		"speakerIntro": {"我是悟空，热爱旅行，小众目的地爱好者，也是人文地理摄影师。「摆脱千篇一律的旅程，探索完全属于你自己的世界，去尝试遇见全新的事物，直到世界成为你生命里的一部分。」这是我的旅行哲学，是我读世界的方式。幸运的是至今我也如此实践着，设计飞机涂装，为联合国拍摄公益项目，在远东的堪察加半岛住上一段，去拉达克隐秘的赞斯卡山谷找一座悬崖上的寺庙，为了看一眼 K2 在巴基斯坦喀喇昆仑山区徒步两个星期……每段旅程对我来说都是全新的世界。"},
 		"planTs":       {planTs}, "previewUrl": {"http://video.quzhiboapp.com/vUh9YBTr.mp4"}, "needPay": {"1"},
-		"notice": {"主播微信是 lzwjava"}})
+		"notice":    {"主播微信是 lzwjava"},
+		"shareIcon": {"1"}})
 	assert.NotNil(t, res.Interface())
 	res = getLive(c, liveId)
 	assert.NotNil(t, res)
@@ -170,6 +171,7 @@ func TestLives_update(t *testing.T) {
 	assert.Equal(t, res.Get("planTs").MustString(), planTs)
 	assert.Equal(t, res.Get("amount").MustInt(), 30000)
 	assert.Equal(t, res.Get("needPay").MustInt(), 1)
+	assert.Equal(t, res.Get("shareIcon").MustInt(), 1)
 	assert.Equal(t, res.Get("notice").MustString(), "主播微信是 lzwjava")
 }
 

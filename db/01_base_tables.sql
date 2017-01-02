@@ -307,5 +307,7 @@ CREATE TABLE `user_packets` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-
 ALTER TABLE `users` MODIFY COLUMN `mobilePhoneNumber` VARCHAR(63) DEFAULT NULL;
+
+ALTER TABLE `lives` ADD COLUMN `shareIcon` TINYINT(2) NOT NULL  DEFAULT 0
+AFTER `notice`;

@@ -75,21 +75,21 @@ class WxPay
         }
     }
 
-    function transfer()
+    function transfer($openId, $name, $amount, $wishing)
     {
         $input = new WxPayTransferItem();
         $orderNo = genOrderNo();
         $input->SetPartnerTradeNo($orderNo);
-        $input->SetAmount(400 * 100);
-        $input->SetOpenid('ol0AFwFe5jFoXcQby4J7AWJaWXIM');
-        $input->SetDesc('测试');
+        $input->SetAmount($amount);
+        $input->SetOpenid($openId);
+        $desc = $name . '的红包: ' . $wishing;
+        $input->SetDesc($desc);
         $transferResult = WxPayApi::transfer($input);
-        logInfo("transferResult: " . json_encode($transferResult));
         if ($transferResult['result_code'] == 'SUCCESS') {
-            return true;
+            return array(true, null);
         } else {
-            logInfo("refund failed!!!");
-            return false;
+            logInfo("failed! transferResult: " . json_encode($transferResult));
+            return array(false, $transferResult['err_code_des']);
         }
     }
 
@@ -106,13 +106,13 @@ class WxPay
         $input->SetWishing($wishing);
         $input->SetActName('新年快乐红包');
         $input->SetRemark('新年快乐');
-        $transferResult = WxPayApi::sendRedPacket($input);
-        logInfo("transferResult: " . json_encode($transferResult));
-        if ($transferResult['result_code'] == 'SUCCESS') {
+        $packetResult = WxPayApi::sendRedPacket($input);
+        logInfo("transferResult: " . json_encode($packetResult));
+        if ($packetResult['result_code'] == 'SUCCESS') {
             return array(true, null);
         } else {
             logInfo("send red packet failed!!!");
-            return array(false, $transferResult['err_code_des']);
+            return array(false, $packetResult['err_code_des']);
         }
     }
 
