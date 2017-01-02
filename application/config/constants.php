@@ -646,7 +646,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'KlzrEIipLKqLIKTlSgqM-yuBSMkSy4VlnTHFPrEpUXSPY5hUouyXPkVPbzFPnrL7cOJVfxucn6eyICWp5Jn9XsdQ1RUXc9qQXu2cfgHBsn8VTKgAFAMKB');
+'tf3VeZYGwsxidfDCUdLfpfQNgxzA3hklXU-E-w1BtjVgd0v_XQVLbtTMpll0K6-7Wn8Ceh-Vg2g3tRca7ydfiItV6PT9KaBQOKlJ8S_GSn3P_PoP2vyfK5txx_rGHh-7VSHcAIANKZ');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -679,7 +679,7 @@ EOD
 );
 
 define('WECHAT_LIVE_WORD', <<<EOD
-欢迎参与直播<a href="http://m.quzhiboapp.com/?liveId=%s&type=live">%s</a>
+欢迎参与直播，请点击进入报名：<a href="http://m.quzhiboapp.com/?liveId=%s&type=live">%s</a>
 EOD
 );
 

@@ -352,6 +352,12 @@ class Wechat extends BaseController
                 } else if ($event == EVENT_VIEW) {
                     logInfo("event view");
                 } else if ($event == EVENT_SCAN) {
+                    $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
+                    list($error, $theSubscribe) = $this->jsSdk->queryIsSubscribeByOpenId($fromUsername);
+                    if (!$error) {
+                        $this->userDao->updateSubscribe($userId, $theSubscribe);
+                    }
+
                     $extraWord = $this->extraWordFromEventKey($eventKey);
                     $welcomeReply = $this->textReply($toUsername, $fromUsername, $extraWord);
                     $this->replyToWeChat($welcomeReply);
