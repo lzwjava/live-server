@@ -64,7 +64,6 @@ func deleteSnsUser2() {
 }
 
 func insertSnsUser(userId string) {
-	deleteSnsUser()
 	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
 		"ol0AFwFe5jFoXcQby4J7AWJaWXIM", "李智维",
 		"http://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
@@ -76,7 +75,6 @@ func insertSnsUser(userId string) {
 }
 
 func insertSnsUser2(userId string) {
-	deleteSnsUser2()
 	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
 		"ol0AFwLgaHJ4rjhfRdUPtvBzlrt8", "李智维lzwjava",
 		"http://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
@@ -88,6 +86,7 @@ func insertSnsUser2(userId string) {
 }
 
 func TestWeChat_registerBySns(t *testing.T) {
+	deleteSnsUser()
 	c := NewClient()
 	insertSnsUser("0")
 	res := c.postData("users/registerBySns", url.Values{"openId": {"ol0AFwFe5jFoXcQby4J7AWJaWXIM"},
@@ -97,9 +96,10 @@ func TestWeChat_registerBySns(t *testing.T) {
 }
 
 func TestWeChat_autoBind(t *testing.T) {
+	deleteSnsUser()
+
 	c := NewClient()
 	user := registerNewUser(c)
-
 	insertSnsUser("0")
 
 	res := c.postData("users/registerBySns", url.Values{"openId": {"ol0AFwFe5jFoXcQby4J7AWJaWXIM"},
@@ -174,11 +174,12 @@ func TestWeChat_appOauth_then_register(t *testing.T) {
 }
 
 func TestWeChat_isSubscribe(t *testing.T) {
-	c, userId := NewClientAndUser()
-	insertSnsUser(userId)
-	res := c.getData("wechat/isSubscribe", url.Values{"userId": {userId}})
-	assert.NotNil(t, res.Interface())
-	assert.Equal(t, res.MustInt(), 1)
+	c, userId := NewClientAndWeChatUser()
+	res := c.get("wechat/isSubscribe", url.Values{"userId": {userId}})
+	if res.Get("status").MustString() == "success" {
+		assert.NotNil(t, res.Interface())
+		assert.Equal(t, res.MustInt(), 1)
+	}
 }
 
 // func TestWeChat_createMenu(t *testing.T) {
@@ -189,7 +190,7 @@ func TestWeChat_isSubscribe(t *testing.T) {
 
 func TestWeChat_getMenu(t *testing.T) {
 	c := NewClient()
-	res := c.getData("wechat/menu", url.Values{})
+	res := c.get("wechat/menu", url.Values{})
 	assert.NotNil(t, res.Interface())
 }
 
@@ -206,8 +207,7 @@ func TestWeChat_sendText(t *testing.T) {
 }
 
 func TestWeChat_subscribe(t *testing.T) {
-	c, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c, _ := NewClientAndWeChatUser()
 	liveId := createLive(c)
 	res := c.postWithStr("wechat/callback", fmt.Sprintf(`<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
 <FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
@@ -223,8 +223,7 @@ func TestWeChat_subscribe(t *testing.T) {
 }
 
 func TestWeChat_subscribeByPacket(t *testing.T) {
-	c, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c, userId := NewClientAndWeChatUser()
 	createPacket(c, userId)
 	packetId := lastPacketId(c)
 	res := c.postWithStr("wechat/callback", fmt.Sprintf(`<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
@@ -241,8 +240,7 @@ func TestWeChat_subscribeByPacket(t *testing.T) {
 }
 
 func TestWeChat_scanEvent(t *testing.T) {
-	c, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c, userId := NewClientAndWeChatUser()
 	createPacket(c, userId)
 	packetId := lastPacketId(c)
 	res := c.postWithStr("wechat/callback", fmt.Sprintf(`<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
@@ -267,6 +265,6 @@ func TestWeChat_fixAllSubscribe(t *testing.T) {
 
 func TestWeChat_qrcode(t *testing.T) {
 	c := NewClient()
-	res := c.getData("wechat/qrcode", url.Values{"type": {"packet"}, "packetId": {"abc"}})
+	res := c.get("wechat/qrcode", url.Values{"type": {"packet"}, "packetId": {"abc"}})
 	assert.NotNil(t, res.Interface())
 }

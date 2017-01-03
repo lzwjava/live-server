@@ -188,3 +188,21 @@ func NewClientAndUser() (*Client, string) {
 	user := registerNewUser(c)
 	return c, toStr(user.Get("userId").MustInt())
 }
+
+func NewClientAndWeChatUser() (*Client, string) {
+	deleteSnsUser()
+	c := NewClient()
+	user := registerNewUser(c)
+	userId := toStr(user.Get("userId").MustInt())
+	insertSnsUser(userId)
+	return c, userId
+}
+
+func NewClientAndWeChatUser2() (*Client, string) {
+	deleteSnsUser2()
+	c := NewClient()
+	user := registerNewUser(c)
+	userId := toStr(user.Get("userId").MustInt())
+	insertSnsUser2(userId)
+	return c, userId
+}

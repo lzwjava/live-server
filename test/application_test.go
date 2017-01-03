@@ -9,8 +9,7 @@ import (
 )
 
 func TestApplications_create(t *testing.T) {
-	c, u := NewClientAndUser()
-	insertSnsUser(u)
+	c, _ := NewClientAndWeChatUser()
 	c.postData("applications", url.Values{"name": {"李智维"}, "wechatAccount": {"lzwjava"},
 		"socialAccount": {"GitHub@lzwjava, 微博@lzwjava"}, "introduction": {"21岁CEO"}})
 	application := getMyAppliction(c)
@@ -35,8 +34,7 @@ func createApplication(c *Client) string {
 }
 
 func TestApplications_succeed(t *testing.T) {
-	c, u := NewClientAndUser()
-	insertSnsUser(u)
+	c, _ := NewClientAndWeChatUser()
 	applictionId := createApplication(c)
 	c.admin = true
 	res := c.postData("applications/"+applictionId+"/succeed", url.Values{})
@@ -44,8 +42,7 @@ func TestApplications_succeed(t *testing.T) {
 }
 
 func TestApplications_reject(t *testing.T) {
-	c, u := NewClientAndUser()
-	insertSnsUser(u)
+	c, _ := NewClientAndWeChatUser()
 	applictionId := createApplication(c)
 	c.admin = true
 	res := c.postData("applications/"+applictionId+"/reject", url.Values{"reviewRemark": {"简介太短"}})
@@ -53,8 +50,7 @@ func TestApplications_reject(t *testing.T) {
 }
 
 func TestApplications_rejectAndSubmit(t *testing.T) {
-	c, u := NewClientAndUser()
-	insertSnsUser(u)
+	c, _ := NewClientAndWeChatUser()
 	applictionId := createApplication(c)
 	c.admin = true
 	res := c.postData("applications/"+applictionId+"/reject", url.Values{"reviewRemark": {"简介太短"}})

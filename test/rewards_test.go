@@ -12,8 +12,7 @@ func TestRewards_create(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	createWechatAttendance(c2, userId, liveId)
 
 	res := c2.post("rewards", url.Values{"liveId": {liveId},
@@ -38,8 +37,7 @@ func TestRewards_list(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	createWechatAttendance(c2, userId, liveId)
 	reward(c2, userId, liveId)
 
