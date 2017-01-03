@@ -164,6 +164,12 @@ class UserDao extends BaseDao
         return $user;
     }
 
+    function updateMobile($userId, $mobile)
+    {
+        $data = array(KEY_MOBILE_PHONE_NUMBER => $mobile);
+        return $this->updateUser($userId, $data);
+    }
+
     function updateUser($userId, $data)
     {
         $this->db->where(KEY_USER_ID, $userId);

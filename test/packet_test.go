@@ -10,8 +10,7 @@ import (
 )
 
 func TestPackets_create(t *testing.T) {
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 
 	res := c2.post("packets", url.Values{"totalAmount": {"1000"},
 		"totalCount": {"1"}, "channel": {"wechat_h5"}, "wishing": {"新年快乐"}})
@@ -24,8 +23,7 @@ func TestPackets_create(t *testing.T) {
 }
 
 func TestPackets_create_grab(t *testing.T) {
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 
 	createPacket(c2, userId)
 
@@ -36,8 +34,8 @@ func TestPackets_create_grab(t *testing.T) {
 }
 
 func TestPackets_create_grabTwice(t *testing.T) {
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+
+	c2, userId := NewClientAndWeChatUser()
 
 	createPacket(c2, userId)
 
@@ -46,8 +44,7 @@ func TestPackets_create_grabTwice(t *testing.T) {
 	grabRes := c2.getData("packets/"+packet.Get("packetId").MustString()+"/grab", url.Values{})
 	assert.NotNil(t, grabRes)
 
-	c1, userId2 := NewClientAndUser()
-	insertSnsUser2(userId2)
+	c1, _ := NewClientAndWeChatUser2()
 
 	grabRes = c1.getData("packets/"+packet.Get("packetId").MustString()+"/grab", url.Values{})
 	assert.NotNil(t, grabRes)
@@ -62,8 +59,7 @@ func createPacket(c2 *Client, userId string) {
 }
 
 func TestPackets_one(t *testing.T) {
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	createPacket(c2, userId)
 	<-time.After(1 * time.Second)
 	packetId := lastPacketId(c2)
@@ -85,8 +81,7 @@ func grabPacket(c2 *Client, packetId string) {
 }
 
 func TestPackets_userPacket(t *testing.T) {
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	createPacket(c2, userId)
 	packetId := lastPacketId(c2)
 	grabPacket(c2, packetId)
@@ -95,8 +90,7 @@ func TestPackets_userPacket(t *testing.T) {
 }
 
 func TestPackets_meAll(t *testing.T) {
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	createPacket(c2, userId)
 	packetId := lastPacketId(c2)
 	grabPacket(c2, packetId)

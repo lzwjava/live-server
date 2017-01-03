@@ -207,6 +207,38 @@ class Users extends BaseController
         $this->loginOrRegisterSucceed($userId);
     }
 
+    function bindPhone_post()
+    {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER,
+            KEY_SMS_CODE))
+        ) {
+            return;
+        }
+        $mobile = $this->post(KEY_MOBILE_PHONE_NUMBER);
+        $smsCode = $this->post(KEY_SMS_CODE);
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        if ($user->mobilePhoneNumber) {
+            $this->failure(ERROR_ALREADY_BIND_PHONE);
+            return;
+        }
+        if ($this->userDao->isMobilePhoneNumberUsed($mobile)) {
+            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
+            return;
+        }
+        if ($this->checkSmsCodeWrong($mobile, $smsCode)) {
+            return;
+        }
+        $ok = $this->userDao->updateMobile($user->userId, $mobile);
+        if (!$ok) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->succeed();
+    }
+
     private function checkIfUsernameUsedAndReponse($username)
     {
         if ($this->userDao->isUsernameUsed($username)) {

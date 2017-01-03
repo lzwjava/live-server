@@ -111,3 +111,13 @@ func TestUsers_fixAvatarUrl(t *testing.T) {
 	res := c.getData("users/fixAvatarUrl", url.Values{})
 	assert.NotNil(t, res)
 }
+
+func TestUsers_bindPhone(t *testing.T) {
+	c, userId := NewClientAndUser()
+	runSql("update users set mobilePhoneNumber='' where userId="+userId, false)
+	mobile := randomMobile()
+	res := c.postData("users/bindPhone", url.Values{"mobilePhoneNumber": {mobile}, "smsCode": {"5555"}})
+	assert.NotNil(t, res.Interface())
+	user := c.getData("self", url.Values{})
+	assert.Equal(t, user.Get("mobilePhoneNumber").MustString(), mobile)
+}

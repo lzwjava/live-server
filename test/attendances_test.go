@@ -27,8 +27,7 @@ func TestAttendances_onlyCreateByWeChat(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, _ := NewClientAndWeChatUser()
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
 	assert.NotNil(t, res.Get("appId").Interface())
@@ -79,8 +78,7 @@ func TestAttendances_createByWeChat(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLiveWithAmount(c, 5900)
 
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
 	orderNo := getLastOrderNo(userId)
@@ -97,6 +95,7 @@ func TestAttendances_createByWeChatWithCoupon(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLiveWithAmount(c, 5900)
 
+	deleteSnsUser()
 	c2 := NewClient()
 	user := registerNewUser(c2)
 	userId := toStr(user.Get("userId").MustInt())
@@ -120,6 +119,7 @@ func TestAttendances_createByWeChatByStaff(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLiveWithAmount(c, 5900)
 
+	deleteSnsUser()
 	c2 := NewClient()
 	user := registerNewUser(c2)
 	userId := toStr(user.Get("userId").MustInt())
@@ -144,8 +144,7 @@ func TestAttendances_createByWeChatQrcode(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_qrcode"}})
 	assert.NotNil(t, res)
 	orderNo := getLastOrderNo(userId)
@@ -159,8 +158,7 @@ func TestAttendances_createByWeChat_withShare(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLiveWithAmount(c, 1000)
 
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	createShare(c2, liveId)
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
@@ -175,8 +173,7 @@ func TestAttendances_createByWeChat_withShare_AmountLittle(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLiveWithAmount(c, 100)
 
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	createShare(c2, liveId)
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
@@ -314,8 +311,7 @@ func TestAttendances_refund(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
-	c2, userId := NewClientAndUser()
-	insertSnsUser(userId)
+	c2, userId := NewClientAndWeChatUser()
 	createWechatAttendance(c2, userId, liveId)
 
 	c.admin = true
