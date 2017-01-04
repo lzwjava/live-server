@@ -52,6 +52,10 @@ class Applications extends BaseController
             $this->failure(ERROR_INTRODUCTION_LEN);
             return;
         }
+        if (!preg_match('/[a-zA-Z0-9]+/', $wechatAccount)) {
+            $this->failure(ERROR_WECHAT_NUM_FORMAT);
+            return;
+        }
         $id = $this->applicationDao->create($user->userId, $name, $wechatAccount,
             $socialAccount, $introduction);
         if (!$id) {

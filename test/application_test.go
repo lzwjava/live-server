@@ -16,6 +16,13 @@ func TestApplications_create(t *testing.T) {
 	assert.Equal(t, application.Get("wechatAccount").MustString(), "lzwjava")
 }
 
+func TestApplications_create_wechatError(t *testing.T) {
+	c, _ := NewClientAndWeChatUser()
+	res := c.post("applications", url.Values{"name": {"李智维"}, "wechatAccount": {"牛逼啊"},
+		"socialAccount": {"GitHub@lzwjava, 微博@lzwjava"}, "introduction": {"21岁CEO"}})
+	assert.Equal(t, res.Get("status").MustString(), "wechat_num_format")
+}
+
 func getApplication(c *Client, applicationId string) *simplejson.Json {
 	application := c.getData("applications/"+applicationId, url.Values{})
 	return application
