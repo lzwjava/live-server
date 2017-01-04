@@ -190,6 +190,7 @@ define('ERROR_SOCIAL_ACCOUNT_ELN', 'social_account_len');
 define('ERROR_INTRODUCTION_LEN', 'introduction_len');
 define('ERROR_REVIEW_REMARK_LEN', 'review_remark_len');
 define('ERROR_ALREADY_APPLY', 'already_apply');
+define('ERROR_WECHAT_NUM_FORMAT', 'wechat_num_format');
 
 define('ERROR_PACKET_TOO_LITTLE', 'packet_too_little');
 define('ERROR_PACKET_TOO_MUCH', 'packet_too_much');
@@ -197,6 +198,7 @@ define('ERROR_PACKET_NONE', 'packet_none');
 define('ERROR_ALREADY_GRAB', 'packet_already_grab');
 define('ERROR_PACKET_SEND', 'packet_send');
 define('ERROR_PACKET_AT_LEAST', 'packet_at_least');
+
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -298,6 +300,7 @@ if (!function_exists('errorInfos')) {
             ERROR_REVIEW_REMARK_LEN => '审核评语长度不能超过 100 个字符',
             ERROR_ALREADY_APPLY => '您已申请过主播了',
             ERROR_MUST_BIND_PHONE => '必须先绑定手机',
+            ERROR_WECHAT_NUM_FORMAT => '微信号应该只包含字母和数字, 请到微信设置中查看',
 
             //packets
             ERROR_PACKET_TOO_LITTLE => '红包最低1元',
