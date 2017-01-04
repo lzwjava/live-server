@@ -114,6 +114,7 @@ define('ERROR_USER_BIND', 'user_bind_failed');
 define('ERROR_NOT_ALLOW_APP_REGISTER', 'not_allow_app_register');
 define('ERROR_NOT_ALLOW_APP_LOGIN', 'not_allow_app_login');
 define('ERROR_ALREADY_BIND_PHONE', 'already_bind_phone');
+define('ERROR_MUST_BIND_PHONE', 'must_bind_phone');
 
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
@@ -296,6 +297,7 @@ if (!function_exists('errorInfos')) {
             ERROR_INTRODUCTION_LEN => '个人介绍不能超过 500 个字符',
             ERROR_REVIEW_REMARK_LEN => '审核评语长度不能超过 100 个字符',
             ERROR_ALREADY_APPLY => '您已申请过主播了',
+            ERROR_MUST_BIND_PHONE => '必须先绑定手机',
 
             //packets
             ERROR_PACKET_TOO_LITTLE => '红包最低1元',

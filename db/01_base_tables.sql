@@ -9,7 +9,7 @@ CREATE DATABASE `qulive`
 CREATE TABLE `users` (
   `userId`              INT(11)      NOT NULL AUTO_INCREMENT,
   `username`            VARCHAR(127) NOT NULL DEFAULT '',
-  `mobilePhoneNumber`   VARCHAR(63)  NOT NULL DEFAULT '',
+  `mobilePhoneNumber`   VARCHAR(63)           DEFAULT NULL,
   `avatarUrl`           VARCHAR(255) NOT NULL DEFAULT '',
   `unionId`             VARCHAR(63)           DEFAULT NULL,
   `sessionToken`        VARCHAR(127) NOT NULL DEFAULT '',
@@ -38,6 +38,7 @@ CREATE TABLE `lives` (
   `speakerIntro`    VARCHAR(1000) NOT NULL             DEFAULT '',
   `detail`          VARCHAR(8000) NOT NULL             DEFAULT '',
   `notice`          VARCHAR(300)  NOT NULL             DEFAULT '',
+  `shareIcon`       TINYINT(2)    NOT NULL             DEFAULT 0,
   `conversationId`  VARCHAR(30)   NOT NULL             DEFAULT '',
   `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
   `attendanceCount` INT           NOT NULL             DEFAULT 0,
@@ -307,7 +308,3 @@ CREATE TABLE `user_packets` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE `users` MODIFY COLUMN `mobilePhoneNumber` VARCHAR(63) DEFAULT NULL;
-
-ALTER TABLE `lives` ADD COLUMN `shareIcon` TINYINT(2) NOT NULL  DEFAULT 0
-AFTER `notice`;
