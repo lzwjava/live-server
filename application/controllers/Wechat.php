@@ -483,6 +483,11 @@ class Wechat extends BaseController
                     'type' => 'view',
                     'name' => '最新直播',
                     'url' => 'http://m.quzhiboapp.com/?liveId=0'
+                ),
+                array(
+                    'type' => 'view',
+                    'name' => '创业故事',
+                    'url' => 'http://mp.weixin.qq.com/s?__biz=MzA5NDQ5NDQyOQ==&mid=2649547400&idx=1&sn=09639feec1d0eb60fcda89dda01740fc&mpshare=1&scene=1&srcid=1117oVZc6Ao0UPKeQk3RK3xi#wechat_redirect'
                 )
             )
         );
