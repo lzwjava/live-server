@@ -171,7 +171,16 @@ class Users extends BaseController
             }
         }
 
+
         $snsUser = $this->snsUserDao->getSnsUser($openId, $platform);
+        if ($snsUser->unionId) {
+            $user = $this->userDao->findUserByUnionId($snsUser->unionId);
+            if ($user) {
+                $this->loginOrRegisterSucceed($user->userId);
+                return;
+            }
+        }
+
         list($imageUrl, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
         if ($error) {
             $this->failure(ERROR_QINIU_UPLOAD);
