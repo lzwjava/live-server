@@ -360,7 +360,7 @@ if (!function_exists('liveStatusSet')) {
     function liveStatusSet()
     {
         return array(LIVE_STATUS_PREPARE, LIVE_STATUS_REVIEW, LIVE_STATUS_WAIT,
-            LIVE_STATUS_ON, LIVE_STATUS_TRANSCODE, LIVE_STATUS_OFF);
+            LIVE_STATUS_ON, LIVE_STATUS_TRANSCODE, LIVE_STATUS_OFF, LIVE_STATUS_ERROR);
     }
 }
 
