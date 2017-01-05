@@ -354,6 +354,7 @@ define('LIVE_STATUS_WAIT', 10);
 define('LIVE_STATUS_ON', 20);
 define('LIVE_STATUS_TRANSCODE', 25);
 define('LIVE_STATUS_OFF', 30);
+define('LIVE_STATUS_ERROR', 35);
 
 if (!function_exists('liveStatusSet')) {
     function liveStatusSet()

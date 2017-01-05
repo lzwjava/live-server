@@ -490,4 +490,17 @@ class Lives extends BaseController
         $this->succeed();
     }
 
+    function error_get($liveId)
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $ok = $this->liveDao->setLiveError($liveId);
+        if (!$ok) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->succeed();
+    }
+
 }
