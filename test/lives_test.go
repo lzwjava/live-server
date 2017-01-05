@@ -275,6 +275,7 @@ func createLiveAndWeChatAttendance() (*Client, *Client, string, string) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 
+	deleteSnsUser()
 	c2, u2 := NewClientAndUser()
 	insertSnsUser(u2)
 	createWechatAttendance(c2, u2, liveId)
