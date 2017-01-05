@@ -158,13 +158,15 @@ class LiveDao extends BaseDao
 //        return random_element(array('live1.quzhiboapp.com', 'live2.quzhiboapp.com'));
 //        return 'hls-cdn.quzhiboapp.com';
 //        return 'live-cdn.quzhiboapp.com';
-        return random_element(array('hls-xycdn.quzhiboapp.com', 'live-cdn.quzhiboapp.com'));
+        return random_element(array('hls-xycdn.quzhiboapp.com/live',
+            'live-cdn.quzhiboapp.com/live', 'pili-live-hls.quzhiboapp.com/qulive'));
     }
 
     private function electFlvServer()
     {
 //        return random_element(array('flv1.quzhiboapp.com:8080', 'flv2.quzhiboapp.com:8080'));
-        return random_element(array('live-cdn.quzhiboapp.com'));
+        return random_element(array('live-cdn.quzhiboapp.com/live',
+            'pili-live-hls.quzhiboapp.com/qulive'));
 //        return 'flv-xycdn.quzhiboapp.com';
 //        return 'cheer.quzhiboapp.com';
     }
@@ -173,7 +175,7 @@ class LiveDao extends BaseDao
     {
 //        return random_element(array('rtmp1.quzhiboapp.com'));
 //        return 'live-cdn.quzhiboapp.com';
-        return 'xycdn.quzhiboapp.com';
+        return 'xycdn.quzhiboapp.com/live';
     }
 
     private function calAmount($live, $user, $staffIds)
@@ -213,9 +215,9 @@ class LiveDao extends BaseDao
             $live->owner = extractFields($live, $us, 'u');
             if ($live->attendanceId || ($user && $user->userId == $live->ownerId)) {
                 // 参加了或是创建者
-                $hlsHost = $this->electHlsServer();
-                $rtmpHost = $this->electRtmpServer();
-                $flvHost = $this->electFlvServer();
+                $hlsHostLive = $this->electHlsServer();
+                $rtmpHostLive = $this->electRtmpServer();
+                $flvHostLive = $this->electFlvServer();
                 if ($user && $user->userId == $live->ownerId) {
 //                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey
 //                        . '?vhost=live-cdn.quzhiboapp.com';
@@ -223,9 +225,9 @@ class LiveDao extends BaseDao
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
                 $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
-                $live->rtmpUrl = 'rtmp://' . $rtmpHost . '/live/' . $live->rtmpKey;
-                $live->hlsUrl = 'http://' . $hlsHost . '/live/' . $live->rtmpKey . '.m3u8';
-                $live->flvUrl = 'http://' . $flvHost . '/live/' . $live->rtmpKey . '.flv';
+                $live->rtmpUrl = 'rtmp://' . $rtmpHostLive . '/' . $live->rtmpKey;
+                $live->hlsUrl = 'http://' . $hlsHostLive . '/' . $live->rtmpKey . '.m3u8';
+                $live->flvUrl = 'http://' . $flvHostLive . '/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
             } else {
                 $live->canJoin = false;

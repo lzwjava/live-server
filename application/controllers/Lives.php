@@ -123,10 +123,7 @@ class Lives extends BaseController
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
-        $ok = $this->liveDao->update($liveId, $data);
-        if (!$ok) {
-            $this->failure(ERROR_SQL_WRONG);
-        }
+        $this->liveDao->update($liveId, $data);
         $this->succeed();
     }
 
