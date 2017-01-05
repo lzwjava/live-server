@@ -342,3 +342,12 @@ func TestLives_recommend(t *testing.T) {
 	res := c.get("lives/recommend", url.Values{"skipLiveId": {"10"}})
 	assert.NotNil(t, res)
 }
+
+func TestLives_error(t *testing.T) {
+	c, _ := NewClientAndWeChatUser()
+	liveId := createLive(c)
+	res := c.getData("lives/"+liveId+"/error", url.Values{})
+	assert.NotNil(t, res)
+	live := getLive(c, liveId)
+	assert.Equal(t, live.Get("status").MustInt(), 35)
+}

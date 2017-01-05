@@ -239,7 +239,8 @@ class LiveDao extends BaseDao
     function update($id, $data)
     {
         $this->db->where(KEY_LIVE_ID, $id);
-        return $this->db->update(TABLE_LIVES, $data);
+        $this->db->update(TABLE_LIVES, $data);
+        return $this->db->affected_rows() > 0;
     }
 
     function setLiveTranscode($id)
@@ -254,6 +255,14 @@ class LiveDao extends BaseDao
     {
         return $this->update($id, array(
             KEY_STATUS => LIVE_STATUS_OFF
+        ));
+    }
+
+
+    function setLiveError($id)
+    {
+        return $this->update($id, array(
+            KEY_STATUS => LIVE_STATUS_ERROR
         ));
     }
 
