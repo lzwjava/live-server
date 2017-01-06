@@ -219,7 +219,7 @@ class LiveDao extends BaseDao
                 if ($user && $user->userId == $live->ownerId) {
 //                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey
 //                        . '?vhost=live-cdn.quzhiboapp.com';
-                    $live->pushUrl = 'rtmp://cheerpush.quzhiboapp.com/live/' . $live->rtmpKey;
+                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
                 $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
