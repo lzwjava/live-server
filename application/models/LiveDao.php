@@ -71,10 +71,10 @@ class LiveDao extends BaseDao
     function getHomeLives($skip, $limit, $user)
     {
         $sql = "SELECT liveId FROM lives
-                WHERE status>=?
+                WHERE status>=? and status != ?
                 ORDER BY planTs DESC
                 limit $limit offset $skip";
-        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT))->result();
+        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
         $ids = $this->extractLiveIds($lives);
         return $this->getLivesWithoutDetail($ids, $user, true);
     }
@@ -82,10 +82,11 @@ class LiveDao extends BaseDao
     function getRecommendLives($skip, $limit, $user, $skipLiveId)
     {
         $sql = "SELECT liveId FROM lives
-                WHERE status>=? and liveId != ?
+                WHERE status>=? and status!=? and liveId != ?
                 ORDER BY planTs DESC
                 limit $limit offset $skip";
-        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, $skipLiveId))->result();
+        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT,
+            LIVE_STATUS_ERROR, $skipLiveId))->result();
         $ids = $this->extractLiveIds($lives);
         return $this->getLivesWithoutDetail($ids, $user, true);
     }
@@ -208,6 +209,7 @@ class LiveDao extends BaseDao
     private function assembleLives($lives, $user)
     {
         $staffIds = $this->staffDao->getStaffIds();
+        $staffIds = array();
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
