@@ -536,6 +536,20 @@ define('KEY_REMAIN_COUNT', 'remainCount');
 define('TABLE_USER_PACKETS', 'user_packets');
 define('KEY_USER_PACKET_ID', 'userPacketId');
 
+define('TABLE_APPS', 'apps');
+define('KEY_APP_ID', 'appId');
+define('KEY_QRCODE_KEY', 'qrcodeKey');
+define('KEY_APP_URL', 'appUrl');
+define('KEY_DESC', 'desc');
+define('KEY_ICON_KEY', 'iconKey');
+define('KEY_SHORT_DESC', 'shortDesc');
+
+define('TABLE_APP_IMGS', 'app_imgs');
+define('KEY_APP_IMG_ID', 'appImgId');
+define('KEY_IMG_KEY', 'imgKey');
+
+define('KEY_OP', 'op');
+
 if (!function_exists('viewPlatformSet')) {
     function viewPlatformSet()
     {
