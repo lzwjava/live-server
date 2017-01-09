@@ -39,3 +39,10 @@ func TestApps_mylist(t *testing.T) {
 	res := c.getArrayData("apps/mylist", url.Values{})
 	assert.True(t, len(res.MustArray()) > 0)
 }
+
+func TestApps_one(t *testing.T) {
+	c, _ := NewClientAndUser()
+	appId := createApp(c)
+	res := c.getData("apps/"+appId, url.Values{})
+	assert.NotNil(t, res.Interface())
+}
