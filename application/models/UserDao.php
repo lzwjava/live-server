@@ -34,7 +34,7 @@ class UserDao extends BaseDao
             KEY_UNION_ID => $unionId,
             KEY_WECHAT_SUBSCRIBE => $subscribe
         );
-        if ($data) {
+        if ($mobilePhoneNumber) {
             $data[KEY_MOBILE_PHONE_NUMBER] = $mobilePhoneNumber;
         }
         $this->db->insert(TABLE_USERS, $data);
