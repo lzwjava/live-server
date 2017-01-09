@@ -94,4 +94,13 @@ class Apps extends BaseController
         $this->succeed($apps);
     }
 
+    function one_get($appId)
+    {
+        $app = $this->appDao->getApp($appId);
+        if ($this->checkIfObjectNotExists($app)) {
+            return;
+        }
+        $this->succeed($app);
+    }
+
 }
