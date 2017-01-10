@@ -402,10 +402,11 @@ class Lives extends BaseController
         $total = count($attendances);
         foreach ($attendances as $attendance) {
             if ($attendance->videoNotified == 0) {
-                $ok = $this->weChatPlatform->notifyVideoByWeChat($attendance->userId, $live);
-                if (!$ok) {
-                    $attends = $this->attendanceDao->getAttendancesByUserId($attendance->userId, 0, 100);
-                    if (count($attends) == 1) {
+                $attends = $this->attendanceDao->getAttendancesByUserId($attendance->userId, 0, 100);
+                $ok = false;
+                if (count($attends) <= 1) {
+                    $ok = $this->weChatPlatform->notifyVideoByWeChat($attendance->userId, $live);
+                    if (!$ok) {
                         $ok = $this->sms->notifyVideoReady($attendance->userId, $live);
                     }
                 }
