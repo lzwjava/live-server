@@ -274,3 +274,15 @@ func TestWeChat_login(t *testing.T) {
 	res := c.post("wechat/login", url.Values{"code": {"abc"}})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestWeChat_register(t *testing.T) {
+	c := NewClient()
+	loginRes := c.postData("wechat/login", url.Values{"code": {"abc"}})
+	res := c.post("wechat/register", url.Values{
+		"thirdSession":  {loginRes.Get("thirdSession").MustString()},
+		"rawData":       {"{\"nickName\":\"李智维-趣直播\",\"gender\":1,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"Beijing\",\"country\":\"CN\",\"avatarUrl\":\"http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLyxI8Q0XqyejNIaMaJSofP2sN5z0xg0FibXmGMBtlTEkKxuoLJzktAO3wUMfJlPHfDZH3GQvPfm0A/0\"}"},
+		"signature":     {"5ec88de31ce137f7407e7b19d72b0fafc2000511"},
+		"iv":            {"eYpTfDRT8pSnIDwpKHdFvA=="},
+		"encryptedData": {"U8K3mOnUpDIHhqMreVCrzpr1RGww4U0C56Z7fTZpeqIZ74GzFe8Z5doMncvNZmTbuMfz2BfPOAforw2rkxYm91/K4VESeOLuAuFdQIlu55kaQS8XRp5bZy/Sn5smy1bq80r2+Iy2TmA1cfnHCektRYJRyccYGuE2I5kRD+EKsAoScLgS5heLHpyFfvZgmJYs6vREZEmJ7NDFTXoAqqUBcwbTBnF3WefCJdtJf+cHGIK1BiybV/is4vrzJjK08pUKRUz4XVMkejK4ve9w8sIafp9xSnHXaEU2KfFC8ZhEdA4NgQcZm9AT2Nif8oUGCoaI90vtjua1Z7uWZqkywkjgIo6c2STxUJ2YPAavjJYxyjBsZ+i+82KUV9ElLaJ0BeXFni6A56sq3pougEePoIfD9YszQm0V3y1bNY/Nys9HWHMntkzItBMie6fj6A4c+h6MqXOTvIsmSKLLjmzniuNrswrOuOj/QAs48udCCbs3MhE="}})
+	assert.NotNil(t, res.Interface())
+}

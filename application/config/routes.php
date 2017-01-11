@@ -132,7 +132,10 @@ $route['wechat/createMenu']['GET'] = 'wechat/createMenu';
 $route['wechat/menu']['GET'] = 'wechat/menu';
 $route['wechat/fixAllSubscribe']['GET'] = 'wechat/fixAllSubscribe';
 $route['wechat/qrcode']['GET'] = 'wechat/qrcode';
+
+// wxapp
 $route['wechat/login']['POST'] =  'wechat/login';
+$route['wechat/register']['POST'] =  'wechat/register';
 
 // live hooks
 $route['liveHooks/onPublish']['POST'] = 'liveHooks/onPublish';
