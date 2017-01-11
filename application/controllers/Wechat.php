@@ -6,6 +6,9 @@
  * Date: 9/5/16
  * Time: 5:26 PM
  */
+
+require_once(APPPATH . 'libraries/wxencrypt/WxBizDataCrypt.php');
+
 class Wechat extends BaseController
 {
     public $jsSdk;
@@ -18,6 +21,9 @@ class Wechat extends BaseController
 
     /**@var WxDao */
     public $wxDao;
+
+    /**@var WxSessionDao */
+    public $wxSessionDao;
 
     function __construct()
     {
@@ -38,6 +44,8 @@ class Wechat extends BaseController
         $this->packetDao = new PacketDao();
         $this->load->model(WxDao::class);
         $this->wxDao = new WxDao();
+        $this->load->model(WxSessionDao::class);
+        $this->wxSessionDao = new WxSessionDao();
     }
 
     function sign_get()
@@ -558,12 +566,58 @@ class Wechat extends BaseController
             return;
         }
         $thirdSession = getToken(48);
-        $ok = $this->wxDao->setThirdSession($thirdSession, $data);
+        $ok = $this->wxSessionDao->setOpenIdAndSessionKey($thirdSession, $data);
         if (!$ok) {
             $this->failure(ERROR_REDIS_WRONG);
             return;
         }
         $this->succeed(array(KEY_THIRD_SESSION => $thirdSession));
+    }
+
+    private function checkAppSignWrong($rawData, $thirdSessionData, $signature)
+    {
+        if (isDebug()) {
+            return false;
+        }
+        $signStr = $rawData . $thirdSessionData->session_key;
+        if (sha1($signStr) != $signature) {
+            return true;
+        }
+        return false;
+    }
+
+    function register_post()
+    {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_RAW_DATA,
+            KEY_SIGNATURE, KEY_IV, KEY_ENCRYPTED_DATA, KEY_THIRD_SESSION))
+        ) {
+            return;
+        }
+        $iv = $this->post(KEY_IV);
+        $encryptedData = $this->post(KEY_ENCRYPTED_DATA);
+        $thirdSession = $this->post(KEY_THIRD_SESSION);
+
+        $thirdSessionData = $this->wxSessionDao->getOpenIdAndSessionKey($thirdSession);
+        if (!$thirdSessionData) {
+            $this->failure(ERROR_SESSION_KEY_NOT_EXISTS);
+            return;
+        }
+        $rawData = $this->post(KEY_RAW_DATA);
+        $signature = $this->post(KEY_SIGNATURE);
+        if ($this->checkAppSignWrong($rawData, $thirdSessionData, $signature)) {
+            $this->failure(ERROR_WX_SIGN);
+            return;
+        }
+
+        $pc = new WXBizDataCrypt(WXAPP_APPID, $thirdSessionData->session_key);
+        $data = '';
+        $errCode = $pc->decryptData($encryptedData, $iv, $data);
+        if ($errCode != 0) {
+            logInfo("decrypt errCode " . $errCode);
+            $this->failure(ERROR_WX_ENCRYPT);
+            return;
+        }
+        $this->succeed($data);
     }
 
 }

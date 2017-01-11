@@ -169,6 +169,11 @@ define('ERROR_BIND_UNION_ID_TO_USER', 'fail_bind_union_id_to_user');
 define('ERROR_WECHAT_ALREADY_BIND', 'wechat_already_bind');
 define('ERROR_BIND_WECHAT_FAILED', 'fail_bind_wechat');
 
+// wechat app
+define('ERROR_SESSION_KEY_NOT_EXISTS', 'session_key_not_exists');
+define('ERROR_WX_ENCRYPT', 'wx_encrypt');
+define('ERROR_WX_SIGN', 'wx_sign');
+
 // videos
 define('ERROR_VIDEOS_NOT_GEN', 'video_not_gen');
 define('ERROR_FAIL_HANDLE_VIDEO', 'fail_handle_video');
@@ -277,6 +282,11 @@ if (!function_exists('errorInfos')) {
             ERROR_WECHAT_ALREADY_BIND => '微信已经绑定过了,无需重复绑定',
             ERROR_BIND_WECHAT_FAILED => '绑定微信与手机号失败',
             ERROR_SNS_USER_ID_EMPTY => '还没绑定手机, 请关注平方根平台公众号, 进入直播绑定一下',
+
+            // wechat app
+            ERROR_SESSION_KEY_NOT_EXISTS => '登录已过期或相应的登录信息不存在',
+            ERROR_WX_ENCRYPT => '微信数据加解密失败',
+            ERROR_WX_SIGN => '数据校验失败',
 
             // videos
             ERROR_VIDEOS_NOT_GEN => '回放视频还没有生成',
@@ -715,5 +725,9 @@ EOD
 
 define('ROW_MAX', 10000 * 10000);
 
-define('KEY_THIRD_SESSION', 'third_session');
-
+define('KEY_THIRD_SESSION', 'thirdSession');
+define('KEY_RAW_DATA', 'rawData');
+define('KEY_ENCRYPTED_DATA', 'encryptedData');
+define('KEY_SIGNATURE', 'signature');
+define('KEY_IV', 'iv');
+define('KEY_USER_INFO', 'userInfo');

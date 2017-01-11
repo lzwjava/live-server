@@ -1,6 +1,6 @@
 <?php
 
-include_once "wxBizDataCrypt.php";
+include_once "WxBizDataCrypt.php";
 
 
 $appid = 'wx4f4bc4dec97d474b';
