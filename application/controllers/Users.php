@@ -111,22 +111,6 @@ class Users extends BaseController
         }
     }
 
-    private function genUsername($oldName)
-    {
-        $newUsername = $oldName;
-        $time = 0;
-        while ($this->userDao->isUsernameUsed($newUsername) && $time < 1000) {
-            $newUsername = $oldName . random_string('alnum', 3);
-            logInfo("newUsername: " . $newUsername);
-            $time++;
-        }
-        if ($time < 1000) {
-            return $newUsername;
-        } else {
-            return null;
-        }
-    }
-
     public function registerBySns_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_OPEN_ID, KEY_PLATFORM))
@@ -135,86 +119,14 @@ class Users extends BaseController
         }
         $openId = $this->post(KEY_OPEN_ID);
         $platform = $this->post(KEY_PLATFORM);
-        $mobile = $this->post(KEY_MOBILE_PHONE_NUMBER);
-        $smsCode = $this->post(KEY_SMS_CODE);
-        if ($mobile) {
-
-            if ($this->checkSmsCodeWrong($mobile, $smsCode)) {
-                return;
-            }
-
-            if ($this->userDao->isMobilePhoneNumberUsed($mobile)) {
-
-                $user = $this->userDao->findUserByMobile($mobile);
-                if ($user->unionId) {
-                    // 之前绑定过了
-                    logInfo("mobilePhone is used: " . $mobile);
-                    $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
-                    return;
-                } else {
-                    // 自动绑定
-                    $theSnsUser = $this->snsUserDao->getSnsUser($openId, $platform);
-                    $this->db->trans_begin();
-                    $ok = $this->userDao->bindUnionIdToUser($user->userId, $theSnsUser->unionId);
-                    $bindOk = $this->snsUserDao->bindUser($openId, $platform, $user->userId);
-                    if (!$ok || !$bindOk || !$this->db->trans_status()) {
-                        $this->db->trans_rollback();
-                        $this->failure(ERROR_BIND_WECHAT_FAILED);
-                        return;
-                    }
-                    $this->db->trans_commit();
-                    logInfo("auto bind succeed userId:" . $user->userId);
-
-                    $this->loginOrRegisterSucceed($user->userId);
-                    return;
-                }
-            }
-        }
-
-
-        $snsUser = $this->snsUserDao->getSnsUser($openId, $platform);
-        if ($snsUser->unionId) {
-            $user = $this->userDao->findUserByUnionId($snsUser->unionId);
-            if ($user) {
-                $this->loginOrRegisterSucceed($user->userId);
-                return;
-            }
-        }
-
-        list($imageUrl, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
+        list($error, $userId) = $this->userDao->createUserByOpenId($openId, $platform);
         if ($error) {
-            $this->failure(ERROR_QINIU_UPLOAD);
-            return;
-        }
-        $newUsername = $this->genUsername($snsUser->username);
-        if ($newUsername == null) {
-            $this->failure(ERROR_USERNAME_TAKEN);
-            return;
-        }
-        if (!$snsUser->unionId) {
-            $this->failure(ERROR_UNION_ID_EMPTY);
-            return;
-        }
-
-        $subscribe = 0;
-        if ($platform == PLATFORM_WECHAT) {
-            list($error, $theSubscribe) = $this->jsSdk->queryIsSubscribeByOpenId($openId);
-            $subscribe = $theSubscribe;
-        }
-
-        $userId = $this->userDao->insertUser($newUsername, $mobile, $imageUrl,
-            $snsUser->unionId, $subscribe);
-        if (!$userId) {
-            $this->failure(ERROR_SQL_WRONG);
-            return;
-        }
-        $ok = $this->snsUserDao->bindUser($openId, $platform, $userId);
-        if (!$ok) {
-            $this->failure(ERROR_USER_BIND);
+            $this->failure($error);
             return;
         }
         $this->loginOrRegisterSucceed($userId);
     }
+
 
     function bindPhone_post()
     {

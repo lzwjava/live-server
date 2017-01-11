@@ -69,7 +69,6 @@ class QiniuDao extends BaseDao
             return array(null, $error);
         }
         $imageUrl = $result->bucketUrl . '/' . $result->key;
-        logInfo("uploaded image " . $imageUrl);
         return array($imageUrl, $error);
     }
 
