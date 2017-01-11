@@ -26,7 +26,7 @@ func TestWeChat_oauth(t *testing.T) {
 func TestWeChat_oauth_then_register(t *testing.T) {
 	c, _ := NewClientAndUser()
 	deleteSnsUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"031koIld2U3gYA0QNjnd21TSld2koIlO"}})
+	res := c.get("wechat/oauth", url.Values{"code": {"041TMsWH0vWcWj2tFIYH0E2tWH0TMsWa"}})
 	assert.NotNil(t, res)
 	if res.Get("status").MustString() == "success" {
 		result := res.Get("result")
@@ -285,4 +285,12 @@ func TestWeChat_registerByApp(t *testing.T) {
 		"iv":            {"eYpTfDRT8pSnIDwpKHdFvA=="},
 		"encryptedData": {"U8K3mOnUpDIHhqMreVCrzpr1RGww4U0C56Z7fTZpeqIZ74GzFe8Z5doMncvNZmTbuMfz2BfPOAforw2rkxYm91/K4VESeOLuAuFdQIlu55kaQS8XRp5bZy/Sn5smy1bq80r2+Iy2TmA1cfnHCektRYJRyccYGuE2I5kRD+EKsAoScLgS5heLHpyFfvZgmJYs6vREZEmJ7NDFTXoAqqUBcwbTBnF3WefCJdtJf+cHGIK1BiybV/is4vrzJjK08pUKRUz4XVMkejK4ve9w8sIafp9xSnHXaEU2KfFC8ZhEdA4NgQcZm9AT2Nif8oUGCoaI90vtjua1Z7uWZqkywkjgIo6c2STxUJ2YPAavjJYxyjBsZ+i+82KUV9ElLaJ0BeXFni6A56sq3pougEePoIfD9YszQm0V3y1bNY/Nys9HWHMntkzItBMie6fj6A4c+h6MqXOTvIsmSKLLjmzniuNrswrOuOj/QAs48udCCbs3MhE="}})
 	assert.NotNil(t, res.Interface())
+}
+
+func TestWeChat_loginBySession(t *testing.T) {
+	c := NewClient()
+	res := c.postData("wechat/login", url.Values{"code": {"abc"}})
+	assert.NotNil(t, res.Interface())
+	loginRes := c.post("wechat/loginBySession", url.Values{"thirdSession": {res.Get("thirdSession").MustString()}})
+	assert.NotNil(t, loginRes.Interface())
 }

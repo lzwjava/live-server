@@ -174,6 +174,9 @@ define('ERROR_BIND_WECHAT_FAILED', 'fail_bind_wechat');
 define('ERROR_SESSION_KEY_NOT_EXISTS', 'session_key_not_exists');
 define('ERROR_WX_ENCRYPT', 'wx_encrypt');
 define('ERROR_WX_SIGN', 'wx_sign');
+define('ERROR_WX_SESSION_EXPIRE', 'wx_session_expire');
+define('ERROR_WX_SESSION_LEN', 'wx_session_len');
+define('ERROR_WX_SNS_USER_NOT_EXISTS', 'sns_user_not_exists');
 
 // videos
 define('ERROR_VIDEOS_NOT_GEN', 'video_not_gen');
@@ -289,6 +292,9 @@ if (!function_exists('errorInfos')) {
             ERROR_SESSION_KEY_NOT_EXISTS => '登录已过期或相应的登录信息不存在',
             ERROR_WX_ENCRYPT => '微信数据加解密失败',
             ERROR_WX_SIGN => '数据校验失败',
+            ERROR_WX_SESSION_EXPIRE => '微信登录过期,请重新登录',
+            ERROR_WX_SESSION_LEN => '登录令牌长度错误',
+            ERROR_WX_SNS_USER_NOT_EXISTS => '还没注册微信用户',
 
             // videos
             ERROR_VIDEOS_NOT_GEN => '回放视频还没有生成',
@@ -684,7 +690,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'A0trh_m4BjviDmqsWhQ2coZUE--4K1xBPO_G8aOU1iPz4EvyFL6W5zLYYy7PXURI11H9jiEwDNU0Dgvv5ZDW4QvX00Y2sJe4l1WV-_x2TrW4STYDGGztB0UxX6b4zlYdHKNhABAORU');
+'TG0jViIB80fw09Qi04NhKtE-QkFWoQS5Iax9rW54RQkXa50w-BszogTWGnL_E3LCglOTtigUM51CQYNiStdlE_CT8fi3k-KadME_69XvO5OkyPHKHJWHueIlKVnQAvJjFCIjAJAVSY');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -734,3 +740,5 @@ define('KEY_ENCRYPTED_DATA', 'encryptedData');
 define('KEY_SIGNATURE', 'signature');
 define('KEY_IV', 'iv');
 define('KEY_USER_INFO', 'userInfo');
+
+define('THIRD_SESSION_LEN', 48);
