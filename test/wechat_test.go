@@ -275,10 +275,10 @@ func TestWeChat_login(t *testing.T) {
 	assert.NotNil(t, res.Interface())
 }
 
-func TestWeChat_register(t *testing.T) {
+func TestWeChat_registerByApp(t *testing.T) {
 	c := NewClient()
 	loginRes := c.postData("wechat/login", url.Values{"code": {"abc"}})
-	res := c.post("wechat/register", url.Values{
+	res := c.post("wechat/registerByApp", url.Values{
 		"thirdSession":  {loginRes.Get("thirdSession").MustString()},
 		"rawData":       {"{\"nickName\":\"李智维-趣直播\",\"gender\":1,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"Beijing\",\"country\":\"CN\",\"avatarUrl\":\"http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLyxI8Q0XqyejNIaMaJSofP2sN5z0xg0FibXmGMBtlTEkKxuoLJzktAO3wUMfJlPHfDZH3GQvPfm0A/0\"}"},
 		"signature":     {"5ec88de31ce137f7407e7b19d72b0fafc2000511"},

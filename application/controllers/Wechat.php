@@ -586,7 +586,7 @@ class Wechat extends BaseController
         return false;
     }
 
-    function register_post()
+    function registerByApp_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_RAW_DATA,
             KEY_SIGNATURE, KEY_IV, KEY_ENCRYPTED_DATA, KEY_THIRD_SESSION))
@@ -608,6 +608,8 @@ class Wechat extends BaseController
             $this->failure(ERROR_WX_SIGN);
             return;
         }
+
+        logInfo("session_key: " . $thirdSessionData->session_key);
 
         $pc = new WXBizDataCrypt(WXAPP_APPID, $thirdSessionData->session_key);
         $data = '';
