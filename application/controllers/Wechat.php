@@ -16,6 +16,9 @@ class Wechat extends BaseController
     public $liveDao;
     public $packetDao;
 
+    /**@var WxDao */
+    public $wxDao;
+
     function __construct()
     {
         parent::__construct();
@@ -33,6 +36,7 @@ class Wechat extends BaseController
         $this->liveDao = new LiveDao();
         $this->load->model(PacketDao::class);
         $this->packetDao = new PacketDao();
+        $this->load->model(WxDao::class);
     }
 
     function sign_get()
@@ -539,6 +543,26 @@ class Wechat extends BaseController
             return;
         }
         $this->succeed($data);
+    }
+
+    function login_post()
+    {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_CODE))) {
+            return;
+        }
+        $code = $this->post(KEY_CODE);
+        list($error, $data) = $this->jsSdk->fetchWxappSessionKey($code);
+        if ($error) {
+            $this->failure(ERROR_WECHAT, $error);
+            return;
+        }
+        $thirdSession = getToken(48);
+        $ok = $this->wxDao->setThirdSession($thirdSession, $data);
+        if (!$ok) {
+            $this->failure(ERROR_REDIS_WRONG);
+            return;
+        }
+        $this->succeed(array(KEY_THIRD_SESSION => $thirdSession));
     }
 
 }

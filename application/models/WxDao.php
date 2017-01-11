@@ -38,4 +38,19 @@ class WxDao extends BaseDao
         $this->client->set('jsapi_ticket', $token, 'ex', $ttl);
     }
 
+    function setThirdSession($thirdSession, $data)
+    {
+        $ttl = 60 * 60 * 24 * 7;
+        return $this->client->set($thirdSession, json_encode($data), 'ex', $ttl);
+    }
+
+    function getThirdSession($thirdSession)
+    {
+        $thirdStr = $this->client->get($thirdSession);
+        if (!$thirdStr) {
+            return null;
+        }
+        return json_decode($thirdStr);
+    }
+
 }

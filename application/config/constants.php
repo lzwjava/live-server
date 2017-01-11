@@ -581,6 +581,9 @@ define('WEB_WECHAT_APP_SECRET', 'd4b8c9b89e8786c54b6ea66cbfccc5a8');
 define('MOBILE_WECHAT_APP_ID', 'wxcc3f309821d8cab5');
 define('MOBILE_WECHAT_APP_SECRET', 'eb4b16d73322bd06e41db5eda8549400');
 
+define('WXAPP_APPID', 'wxf7383d242dd0d2b7');
+define('WXAPP_SECRET', 'd855fa3f5d519fbd4be1e30ac08881cd');
+
 
 define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');
 define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
@@ -711,3 +714,6 @@ EOD
 );
 
 define('ROW_MAX', 10000 * 10000);
+
+define('KEY_THIRD_SESSION', 'third_session');
+
