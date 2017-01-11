@@ -125,6 +125,10 @@ class JSSDK
 
     function fetchWxappSessionKey($code)
     {
+        if (isDebug()) {
+            $result = array(null, array('openid' => 'abc', 'session_key' => 'wrewfoiodv'));
+            return $result;
+        }
         $url = WECHAT_API_BASE . 'sns/jscode2session';
         $data = array(
             'appid' => WXAPP_APPID,

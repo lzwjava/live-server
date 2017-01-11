@@ -37,6 +37,7 @@ class Wechat extends BaseController
         $this->load->model(PacketDao::class);
         $this->packetDao = new PacketDao();
         $this->load->model(WxDao::class);
+        $this->wxDao = new WxDao();
     }
 
     function sign_get()
