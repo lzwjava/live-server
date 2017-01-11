@@ -132,6 +132,7 @@ $route['wechat/createMenu']['GET'] = 'wechat/createMenu';
 $route['wechat/menu']['GET'] = 'wechat/menu';
 $route['wechat/fixAllSubscribe']['GET'] = 'wechat/fixAllSubscribe';
 $route['wechat/qrcode']['GET'] = 'wechat/qrcode';
+$route['wechat/login']['POST'] =  'wechat/login';
 
 // live hooks
 $route['liveHooks/onPublish']['POST'] = 'liveHooks/onPublish';
@@ -186,3 +187,4 @@ $route['apps/(\d+)']['POST'] = 'apps/update/$1';
 $route['apps/(\d+)/imgs']['POST'] = 'apps/updateImg/$1';
 $route['apps/myList']['POST'] = 'apps/myList';
 $route['apps/(\d+)']['GET'] = 'apps/one/$1';
+

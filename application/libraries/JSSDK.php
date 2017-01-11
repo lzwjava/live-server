@@ -123,6 +123,18 @@ class JSSDK
         return $this->httpPost($url, $data);
     }
 
+    function fetchWxappSessionKey($code)
+    {
+        $url = WECHAT_API_BASE . 'sns/jscode2session';
+        $data = array(
+            'appid' => WXAPP_APPID,
+            'secret' => WXAPP_SECRET,
+            'js_code' => $code,
+            'grant_type' => 'authorization_code'
+        );
+        return $this->httpGet($url, $data);
+    }
+
     function wechatHttpGet($path, $params = array())
     {
         $accessToken = $this->getAccessToken();

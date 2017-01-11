@@ -268,3 +268,9 @@ func TestWeChat_qrcode(t *testing.T) {
 	res := c.get("wechat/qrcode", url.Values{"type": {"packet"}, "packetId": {"abc"}})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestWeChat_login(t *testing.T) {
+	c := NewClient()
+	res := c.post("wechat/login", url.Values{"code": {"abc"}})
+	assert.NotNil(t, res.Interface())
+}
