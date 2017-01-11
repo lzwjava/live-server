@@ -21,7 +21,6 @@ class WxSessionDao extends BaseDao
     {
         $ttl = $data->expires_in;
         unset($data->expires_in);
-        logInfo("ttl" . $ttl);
         return $this->client->set($thirdSession, json_encode($data), 'ex', $ttl);
     }
 

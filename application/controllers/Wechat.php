@@ -565,7 +565,7 @@ class Wechat extends BaseController
             $this->failure(ERROR_WECHAT, $error);
             return;
         }
-        $thirdSession = getToken(48);
+        $thirdSession = getToken(THIRD_SESSION_LEN);
         $ok = $this->wxSessionDao->setOpenIdAndSessionKey($thirdSession, $data);
         if (!$ok) {
             $this->failure(ERROR_REDIS_WRONG);
@@ -584,6 +584,32 @@ class Wechat extends BaseController
             return true;
         }
         return false;
+    }
+
+    function loginBySession_post()
+    {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_THIRD_SESSION))) {
+            return;
+        }
+        $thirdSession = $this->post(KEY_THIRD_SESSION);
+        if (strlen($thirdSession) != THIRD_SESSION_LEN) {
+            $this->failure(ERROR_WX_SESSION_LEN);
+            return;
+        }
+
+        $sessionData = $this->wxSessionDao->getOpenIdAndSessionKey($thirdSession);
+        if (!$sessionData) {
+            $this->failure(ERROR_WX_SESSION_EXPIRE);
+            return;
+        }
+
+        $snsUser = $this->snsUserDao->getSnsUser($sessionData->openid, PLATFORM_WXAPP);
+        if (!$snsUser || !$snsUser->userId) {
+            $this->failure(ERROR_WX_SNS_USER_NOT_EXISTS);
+            return;
+        }
+        $user = $this->userDao->setLoginByUserId($snsUser->userId);
+        $this->succeed($user);
     }
 
     function registerByApp_post()
