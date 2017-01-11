@@ -8,6 +8,21 @@
  */
 class UserDao extends BaseDao
 {
+    public $qiniuDao;
+    public $snsUserDao;
+    public $jsSdk;
+
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model(QiniuDao::class);
+        $this->qiniuDao = new QiniuDao();
+        $this->load->model(SnsUserDao::class);
+        $this->snsUserDao = new SnsUserDao();
+        $this->load->library(JSSDK::class);
+        $this->jsSdk = new JSSDK();
+    }
+
     private function isUserUsed($field, $value)
     {
         $sql = "SELECT * FROM users WHERE $field =?";
@@ -229,6 +244,69 @@ class UserDao extends BaseDao
     function count()
     {
         return $this->db->count_all(TABLE_USERS);
+    }
+
+    function createUserByOpenId($openId, $platform)
+    {
+        $snsUser = $this->snsUserDao->getSnsUser($openId, $platform);
+        if ($snsUser->unionId) {
+            $user = $this->findUserByUnionId($snsUser->unionId);
+            if ($user) {
+                return array(null, $user->userId);
+            }
+        }
+
+        list($imageUrl, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
+        if ($error) {
+            return array(ERROR_QINIU_UPLOAD, null);
+        }
+
+        $newUsername = $this->genUsername($snsUser->username);
+        if ($newUsername == null) {
+            return array(ERROR_USERNAME_TAKEN, null);
+        }
+        if (!$snsUser->unionId) {
+            return array(ERROR_UNION_ID_EMPTY, null);
+        }
+
+        $subscribe = 0;
+        if ($platform == PLATFORM_WECHAT) {
+            list($error, $theSubscribe) = $this->jsSdk->queryIsSubscribeByOpenId($openId);
+            $subscribe = $theSubscribe;
+        }
+
+        $this->db->trans_begin();
+
+        $userId = $this->insertUser($newUsername, null, $imageUrl,
+            $snsUser->unionId, $subscribe);
+        if (!$userId) {
+            $this->db->trans_rollback();
+            return array(ERROR_INSERT_SQL_WRONG, null);
+        }
+        $ok = $this->snsUserDao->bindUser($openId, $platform, $userId);
+        if (!$ok) {
+            $this->db->trans_rollback();
+            return array(ERROR_USER_BIND, null);
+        }
+        $this->db->trans_commit();
+        return array(null, $userId);
+    }
+
+
+    private function genUsername($oldName)
+    {
+        $newUsername = $oldName;
+        $time = 0;
+        while ($this->userDao->isUsernameUsed($newUsername) && $time < 1000) {
+            $newUsername = $oldName . random_string('alnum', 3);
+            logInfo("newUsername: " . $newUsername);
+            $time++;
+        }
+        if ($time < 1000) {
+            return $newUsername;
+        } else {
+            return null;
+        }
     }
 
 }

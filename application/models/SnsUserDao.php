@@ -8,6 +8,7 @@
  */
 class SnsUserDao extends BaseDao
 {
+
     function addSnsUser($openId, $username, $avatarUrl, $platform, $unionId, $userId = 0)
     {
         $data = array(

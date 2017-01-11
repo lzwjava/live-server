@@ -608,9 +608,6 @@ class Wechat extends BaseController
             $this->failure(ERROR_WX_SIGN);
             return;
         }
-
-        logInfo("session_key: " . $thirdSessionData->session_key);
-
         $pc = new WXBizDataCrypt(WXAPP_APPID, $thirdSessionData->session_key);
         $data = '';
         $errCode = $pc->decryptData($encryptedData, $iv, $data);
@@ -619,7 +616,32 @@ class Wechat extends BaseController
             $this->failure(ERROR_WX_ENCRYPT);
             return;
         }
-        $this->succeed($data);
+        $userInfo = json_decode($data);
+        $userInfo->unionId = 'oFRlVwXY7GkRhpKyfjvTo6oW7kw8';
+
+        $user = $this->userDao->findUserByUnionId($userInfo->unionId);
+        if ($user) {
+            $user = $this->userDao->setLoginByUserId($user->userId);
+            $this->succeed($user);
+        } else {
+            $this->db->trans_begin();
+            $snsUserId = $this->snsUserDao->addSnsUser($userInfo->openId, $userInfo->nickName, $userInfo->avatarUrl,
+                PLATFORM_WXAPP, $userInfo->unionId, 0);
+            if (!$snsUserId) {
+                $this->db->trans_rollback();
+                $this->failure(ERROR_SQL_WRONG);
+                return;
+            }
+            list($error, $userId) = $this->userDao->createUserByOpenId($userInfo->openId, PLATFORM_WXAPP);
+            if ($error) {
+                $this->db->trans_rollback();
+                $this->failure($error);
+                return;
+            }
+            $this->db->trans_commit();
+            $user = $this->userDao->setLoginByUserId($userId);
+            $this->succeed($user);
+        }
     }
 
 }

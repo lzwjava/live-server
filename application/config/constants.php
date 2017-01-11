@@ -95,6 +95,7 @@ define('ERROR_UNKNOWN_TYPE', 'unknown_type');
 define('ERROR_NOT_ALLOW_DO_IT', 'not_allow_do_it');
 define('ERROR_PARAMETER_ILLEGAL', 'parameter_illegal');
 define('ERROR_SQL_WRONG', 'sql_wrong');
+define('ERROR_INSERT_SQL_WRONG', 'insert_sql_wrong');
 define('ERROR_REDIS_WRONG', 'redis_wrong');
 define('ERROR_AMOUNT_UNIT', 'amount_unit');
 define('ERROR_AMOUNT_TOO_LITTLE', 'amount_too_little');
@@ -217,6 +218,7 @@ if (!function_exists('errorInfos')) {
             ERROR_NOT_ALLOW_DO_IT => '您没有相关的权限',
             ERROR_NOT_ADMIN => '此操作只能管理员进行',
             ERROR_PARAMETER_ILLEGAL => '非法的参数',
+            ERROR_INSERT_SQL_WRONG => '插入数据失败',
 
             // users
             ERROR_USERNAME_TAKEN => '用户名已存在',
@@ -458,6 +460,7 @@ define('KEY_UNION_ID', 'unionId');
 define('KEY_PLATFORM', 'platform');
 define('PLATFORM_WECHAT', 'wechat');
 define('PLATFORM_WECHAT_APP', 'wechat_app');
+define('PLATFORM_WXAPP', 'wxapp');
 
 // states
 define('TABLE_STATES', 'states');
