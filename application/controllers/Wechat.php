@@ -643,7 +643,6 @@ class Wechat extends BaseController
             return;
         }
         $userInfo = json_decode($data);
-        $userInfo->unionId = 'oFRlVwXY7GkRhpKyfjvTo6oW7kw8';
 
         $user = $this->userDao->findUserByUnionId($userInfo->unionId);
         if ($user) {

@@ -352,3 +352,12 @@ func TestLives_error(t *testing.T) {
 	live := getLive(c, liveId)
 	assert.Equal(t, live.Get("status").MustInt(), 35)
 }
+
+func TestLives_notifyLiveStartRelated(t *testing.T) {
+	_, _, _, liveId2 := createLiveAndWeChatAttendance()
+
+	c, _, _, liveId := createLiveAndAttendance()
+	res := c.getData("lives/"+liveId+"/notifyRelated", url.Values{"relatedLiveId": {liveId2}})
+	assert.NotNil(t, res)
+	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
+}
