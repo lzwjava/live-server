@@ -90,6 +90,7 @@ $route['lives/(\d+)/notifyVideo']['GET'] = 'lives/notifyVideo/$1';
 $route['lives/(\d+)/import']['GET'] = 'lives/import/$1';
 $route['lives/(\d+)/finish']['GET'] = 'lives/finish/$1';
 $route['lives/(\d+)/error']['GET'] = 'lives/error/$1';
+$route['lives/(\d+)/notifyRelated'] = 'lives/notifyLiveStartRecommend/$1';
 
 // recorded videos
 $route['lives/(\d+)/recordedVideos'] = 'recordedVideos/list/$1';

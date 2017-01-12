@@ -354,6 +354,41 @@ class Lives extends BaseController
         $this->succeed($users);
     }
 
+    private function findUser($toUser, $users)
+    {
+        foreach ($users as $user) {
+            if ($user->userId == $toUser->userId) {
+                return $user;
+            }
+        }
+        return null;
+    }
+
+    function notifyLiveStartRecommend_get($liveId)
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array('relatedLiveId'))) {
+
+        }
+        $relatedLiveId = $this->get('relatedLiveId');
+        $live = $this->liveDao->getLive($liveId);
+        $realtedLive = $this->liveDao->getLive($relatedLiveId);
+
+        $users = $this->liveDao->getAttendedUsers($liveId, 0, 1000000);
+        $relatedUsers = $this->liveDao->getAttendedUsers($relatedLiveId, 0, 100000);
+        $succeedCount = 0;
+        foreach ($relatedUsers as $relatedUser) {
+            $theUser = $this->findUser($relatedUser, $users);
+            if ($theUser) {
+
+            } else {
+                $this->weChatPlatform->notifyUserByWeChat($relatedUser->userId, $live, false);
+                $succeedCount++;
+            }
+        }
+        logInfo("finished " . $succeedCount . " total " . count($relatedUsers));
+        $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($relatedUsers)));
+    }
+
     function notifyLiveStart_get($liveId)
     {
         $user = $this->checkAndGetSessionUser();
