@@ -137,7 +137,6 @@ $route['wechat/qrcode']['GET'] = 'wechat/qrcode';
 // wxapp
 $route['wechat/login']['POST'] = 'wechat/login';
 $route['wechat/registerByApp']['POST'] = 'wechat/registerByApp';
-$route['wechat/loginBySession']['POST'] = 'wechat/loginBySession';
 
 // live hooks
 $route['liveHooks/onPublish']['POST'] = 'liveHooks/onPublish';

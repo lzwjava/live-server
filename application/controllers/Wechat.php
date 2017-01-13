@@ -586,32 +586,6 @@ class Wechat extends BaseController
         return false;
     }
 
-    function loginBySession_post()
-    {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_THIRD_SESSION))) {
-            return;
-        }
-        $thirdSession = $this->post(KEY_THIRD_SESSION);
-        if (strlen($thirdSession) != THIRD_SESSION_LEN) {
-            $this->failure(ERROR_WX_SESSION_LEN);
-            return;
-        }
-
-        $sessionData = $this->wxSessionDao->getOpenIdAndSessionKey($thirdSession);
-        if (!$sessionData) {
-            $this->failure(ERROR_WX_SESSION_EXPIRE);
-            return;
-        }
-
-        $snsUser = $this->snsUserDao->getSnsUser($sessionData->openid, PLATFORM_WXAPP);
-        if (!$snsUser || !$snsUser->userId) {
-            $this->failure(ERROR_WX_SNS_USER_NOT_EXISTS);
-            return;
-        }
-        $user = $this->userDao->setLoginByUserId($snsUser->userId);
-        $this->succeed($user);
-    }
-
     function registerByApp_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_RAW_DATA,
@@ -619,6 +593,7 @@ class Wechat extends BaseController
         ) {
             return;
         }
+
         $iv = $this->post(KEY_IV);
         $encryptedData = $this->post(KEY_ENCRYPTED_DATA);
         $thirdSession = $this->post(KEY_THIRD_SESSION);
