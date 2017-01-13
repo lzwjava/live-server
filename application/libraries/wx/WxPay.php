@@ -134,7 +134,6 @@ class WxPay
         $input->SetActName('新年快乐红包');
         $input->SetRemark('新年快乐');
         $transferResult = WxPayApi::sendGroupRedPacket($input);
-        logInfo("transferResult: " . json_encode($transferResult));
         if ($transferResult['result_code'] == 'SUCCESS') {
             return array(true, null);
         } else {

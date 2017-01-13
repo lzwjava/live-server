@@ -128,7 +128,7 @@ class JSSDK
         if (isDebug()) {
             $obj = new Stdclass;
             $obj->openid = 'o72gJ0ds_nwh2pxkQ1iexCc_fwZU';
-            $obj->session_key = 'yFgjGeqGgUHr0qNHLnnmVg==';
+            $obj->session_key = 'zBpz9ba/shj8Lfmur7Qt9g==';
             $obj->expires_in = 2592000;
             $result = array(null, $obj);
             return $result;
