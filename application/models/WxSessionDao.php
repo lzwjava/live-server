@@ -14,7 +14,7 @@ class WxSessionDao extends BaseDao
     function __construct()
     {
         parent::__construct();
-        $this->client = $this->newRedisClient(0, 'session:');
+        $this->client = $this->newRedisClient(2, 'session:');
     }
 
     function setOpenIdAndSessionKey($thirdSession, $data)

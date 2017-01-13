@@ -58,7 +58,6 @@ class Wechat extends BaseController
         $this->succeed($this->jsSdk->getSignPackage($url));
     }
 
-
     function oauth_get()
     {
         if ($this->checkIfParamsNotExist($this->get(), array(KEY_CODE))) {
