@@ -263,10 +263,12 @@ class Users extends BaseController
         $this->succeed($user);
     }
 
-    function list_get()
+    function list_post()
     {
-        if ($this->checkIfParamsNotExist($this->get(), array(KEY_USER_IDS))) ;
-        $userIds = $this->get(KEY_USER_IDS);
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_USER_IDS))) {
+            return;
+        }
+        $userIds = $this->post(KEY_USER_IDS);
         $userIdArray = json_decode($userIds);
         $users = $this->userDao->findPublicUsers($userIdArray);
         $this->succeed($users);

@@ -124,7 +124,7 @@ func TestUsers_bindPhone(t *testing.T) {
 
 func TestUsers_getList(t *testing.T) {
 	c, userId := NewClientAndUser()
-	res := c.getData("users/list", url.Values{"userIds": {"[" + userId + " ]"}})
+	res := c.postData("users/list", url.Values{"userIds": {"[" + userId + "]"}})
 	assert.NotNil(t, res.Interface())
 	assert.Equal(t, len(res.MustArray()), 1)
 }
