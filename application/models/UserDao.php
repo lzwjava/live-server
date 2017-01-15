@@ -309,4 +309,12 @@ class UserDao extends BaseDao
         }
     }
 
+    function findPublicUsers($userIds)
+    {
+        $userFields = $this->userPublicFields('u');
+        $sql = "SELECT $userFields FROM users as u WHERE userId IN (" .
+            implode(',', $userIds) . ")";
+        return $this->db->query($sql)->result();
+    }
+
 }

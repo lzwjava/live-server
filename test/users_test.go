@@ -121,3 +121,10 @@ func TestUsers_bindPhone(t *testing.T) {
 	user := c.getData("self", url.Values{})
 	assert.Equal(t, user.Get("mobilePhoneNumber").MustString(), mobile)
 }
+
+func TestUses_getList(t *testing.T) {
+	c, userId := NewClientAndUser()
+	res := c.getData("users/list", url.Values{"userIds": {"[" + userId + " ]"}})
+	assert.NotNil(t, res.Interface())
+	assert.Equal(t, len(res.MustArray()), 1)
+}

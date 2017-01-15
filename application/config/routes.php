@@ -65,6 +65,7 @@ $route['users/registerBySns']['POST'] = 'users/registerBySns';
 $route['users/(\d+)']['GET'] = 'users/one/$1';
 $route['users/fixAvatarUrl']['GET'] = 'users/fixAvatarUrl';
 $route['users/bindPhone']['POST'] = 'users/bindPhone';
+$route['users/list']['GET'] = 'users/list';
 
 // lives
 $route['lives/on']['GET'] = 'lives/list';

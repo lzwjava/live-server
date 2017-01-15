@@ -263,6 +263,15 @@ class Users extends BaseController
         $this->succeed($user);
     }
 
+    function list_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_USER_IDS))) ;
+        $userIds = $this->get(KEY_USER_IDS);
+        $userIdArray = json_decode($userIds);
+        $users = $this->userDao->findPublicUsers($userIdArray);
+        $this->succeed($users);
+    }
+
     function fixAvatarUrl_get()
     {
         if ($this->checkIfNotAdmin()) {
