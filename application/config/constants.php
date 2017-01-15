@@ -742,3 +742,5 @@ define('KEY_IV', 'iv');
 define('KEY_USER_INFO', 'userInfo');
 
 define('THIRD_SESSION_LEN', 48);
+
+define('KEY_USER_IDS', 'userIds');
