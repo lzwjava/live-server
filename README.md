@@ -44,7 +44,8 @@ Install dependencies: composer install, composer update
     "status": 10,
     "subject": "C++ \u7f16\u7a0b",    // 直播标题
     "updated": "2017-01-16 16:23:18",  
-    "videoUrl": "http://video-qncdn.quzhiboapp.com/QcmSl5MK.mp4"  // 过时字段，不再用
+    "videoUrl": "http://video-qncdn.quzhiboapp.com/QcmSl5MK.mp4",  // 过时字段，不再用
+    "pushUrl": "rtmp://cheer.quzhiboapp.com/live/cknfu6za"  // 推流地址
 }
 ```
 
