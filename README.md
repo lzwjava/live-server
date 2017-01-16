@@ -200,4 +200,33 @@ curl -X GET http://localhost:3005/wechat/bind map[code:[021mZiQa0Ralxu1L7kNa0Rge
 
 绑定成功，user 字段中会带有一个 `unionId`。
 
+## lives/:liveId/videos
+
+获取直播的回放列表
+
+curl -X GET http://localhost:3005/lives/2456/videos map[]
+
+response:
+
+```
+{
+    "error": "",
+    "result": [
+        {
+            "created": "2017-01-17 04:57:50",
+            "fileName": "RNo7vjSK",
+            "liveId": 2456,
+            "title": "C++ \u7f16\u7a0b",
+            "updated": "2017-01-17 04:57:50",
+            "url": "http://video-qncdn.quzhiboapp.com/RNo7vjSK.mp4",  // 用这个地址来播放
+            "videoId": 110
+        }
+    ],
+    "status": "success"
+}
+```
+
+多数直播都是只有一个回放，只有在 《iDev苹果开发者大会》这个直播里有多个回放。暂时忽略多个回放的情况。默认选择第一个回放为回放视频。
+
+
 
