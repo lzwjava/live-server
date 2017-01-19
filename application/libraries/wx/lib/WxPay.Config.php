@@ -23,6 +23,9 @@ class WxPayConfig
      * @var string
      */
     const APPID = WECHAT_APP_ID;
+
+    const WXAPP_APPID = WXAPP_APPID;
+
     const MCHID = WECHAT_MCHID;
     const KEY = 'ywhHq8VHlStGQMz6Y7cwG4QQGHeBg0WU';
     const APPSECRET = WECHAT_APP_SECRET;

@@ -118,13 +118,13 @@ class Rewards extends BaseController
     public function notify_post()
     {
         $content = file_get_contents("php://input");
-        logInfo("notify $content");
         if ($this->alipay->isSignVerify($_POST, $_POST['sign'])) {
             $outTradeNo = $_POST['out_trade_no'];
             $trade_status = $_POST['trade_status'];
             if ($trade_status == 'TRADE_SUCCESS') {
                 $error = $this->payNotifyDao->handleChargeSucceed($outTradeNo);
                 if ($error) {
+                    logInfo("pay fail notify $content");
                     logInfo("error: " . $error);
                     $this->failure($error);
                     return;
@@ -132,6 +132,7 @@ class Rewards extends BaseController
             }
             echo 'success';
         } else {
+            logInfo("notify $content");
             logInfo("sign failed");
             $this->failure(ERROR_SIGN_FAILED);
         }

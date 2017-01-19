@@ -17,7 +17,8 @@ class WxPay
         date_default_timezone_set('Asia/Shanghai');
     }
 
-    private function baseCreateCharge($orderNo, $amount, $subject, $body, $openId, $tradeType)
+    private function baseCreateCharge($orderNo, $amount, $subject,
+                                      $body, $openId, $tradeType, $appId)
     {
         $input = new WxPayUnifiedOrder();
         $input->SetBody($subject);
@@ -30,6 +31,8 @@ class WxPay
         $input->SetGoods_tag('');
         $input->SetNotify_url("http://api.quzhiboapp.com/wechat/wxpayNotify");
         $input->SetTrade_type($tradeType);
+        $input->SetAppid($appId);
+        logInfo("appId" . $appId);
         if ($tradeType == "JSAPI") {
             $tools = new JsApiPay();
             $input->SetOpenid($openId);
@@ -46,12 +49,20 @@ class WxPay
 
     function createCharge($orderNo, $amount, $subject, $body, $openId)
     {
-        return $this->baseCreateCharge($orderNo, $amount, $subject, $body, $openId, "JSAPI");
+        return $this->baseCreateCharge($orderNo, $amount, $subject, $body,
+            $openId, "JSAPI", WxPayConfig::APPID);
+    }
+
+    function createAppCharge($orderNo, $amount, $subject, $body, $openId)
+    {
+        return $this->baseCreateCharge($orderNo, $amount, $subject, $body,
+            $openId, "JSAPI", WxPayConfig::WXAPP_APPID);
     }
 
     function createQrcodeCharge($orderNo, $amount, $subject, $body)
     {
-        return $this->baseCreateCharge($orderNo, $amount, $subject, $body, null, "NATIVE");
+        return $this->baseCreateCharge($orderNo, $amount, $subject, $body,
+            null, "NATIVE", WxPayConfig::APPID);
     }
 
     function refund($charge)

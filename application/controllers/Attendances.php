@@ -35,6 +35,16 @@ class Attendances extends BaseController
         $this->weChatPlatform = new WeChatPlatform();
     }
 
+    private function getSnsUser($user, $channel)
+    {
+        if ($channel == CHANNEL_WECHAT_H5) {
+            return $this->snsUserDao->getSnsUserByUser($user);
+        } else if ($channel == CHANNEL_WECHAT_APP) {
+            return $this->snsUserDao->getWxAppSnsUser($user->unionId);
+        }
+        return null;
+    }
+
     function create_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID))) {
@@ -71,21 +81,22 @@ class Attendances extends BaseController
         if ($live->needPay) {
             $channel = $this->post(KEY_CHANNEL);
             if ($this->checkIfNotInArray($channel, array(CHANNEL_WECHAT_H5,
-                CHANNEL_WECHAT_QRCODE, CHANNEL_ALIPAY_APP))
+                CHANNEL_WECHAT_QRCODE, CHANNEL_ALIPAY_APP, CHANNEL_WECHAT_APP))
             ) {
                 return;
             }
 
             $openId = null;
 
-            if ($channel == CHANNEL_WECHAT_H5) {
-                $snsUser = $this->snsUserDao->getSnsUserByUser($user);
+            if ($channel == CHANNEL_WECHAT_H5 || $channel == CHANNEL_WECHAT_APP) {
+                $snsUser = $this->getSnsUser($user, $channel);
                 if (!$snsUser) {
                     $this->failure(ERROR_MUST_BIND_WECHAT);
                     return;
                 }
                 $openId = $snsUser->openId;
             }
+
             // max 24 chars
             $subject = '参加直播';
             $body = $user->username . ' 参加直播 ' . $live->subject;
@@ -168,7 +179,7 @@ class Attendances extends BaseController
 
     function transfer_get()
     {
-        $this->pay->transfer('ol0AFwFe5jFoXcQby4J7AWJaWXIM', '李智维', 1, '新年快乐');
+        $this->pay->transfer('ol0AFwFe5jFoXcQby4J7AWJaWXIM', '李智维', 100 * 300, '新年快乐');
         $this->succeed();
     }
 

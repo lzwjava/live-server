@@ -33,6 +33,17 @@ func TestAttendances_onlyCreateByWeChat(t *testing.T) {
 	assert.NotNil(t, res.Get("appId").Interface())
 }
 
+func TestAttendances_onlyCreateByWeChatApp(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	c2, userId2 := NewClientAndWeChatUser()
+	insertAppSnsUser(userId2)
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_app"}})
+	assert.NotNil(t, res)
+	assert.NotNil(t, res.Get("appId").Interface())
+}
+
 func parseOrderNo(res *simplejson.Json) string {
 	dataString := res.MustString()
 	strArr := strings.Split(dataString, "&")

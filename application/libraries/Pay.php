@@ -35,7 +35,6 @@ class Pay
             // local debug case
             $ipAddress = '127.0.0.1';
         }
-        logInfo("amount " . $amount . "subject " . $subject . "body " . $body . " openId" . $openId);
         $ch = $this->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
         if ($ch == null) {
             return null;
@@ -56,6 +55,8 @@ class Pay
             return $this->wxpay->createCharge($orderNo, $amount, $subject, $body, $openId);
         } else if ($channel == CHANNEL_WECHAT_QRCODE) {
             return $this->wxpay->createQrcodeCharge($orderNo, $amount, $subject, $body);
+        } else if ($channel == CHANNEL_WECHAT_APP) {
+            return $this->wxpay->createAppCharge($orderNo, $amount, $subject, $body, $openId);
         }
         return null;
     }

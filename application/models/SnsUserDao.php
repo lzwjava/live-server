@@ -104,4 +104,11 @@ class SnsUserDao extends BaseDao
         return $snsUser;
     }
 
+    function getWxAppSnsUser($unionId)
+    {
+        $sql = "SELECT * FROM sns_users WHERE unionId=? AND platform=?";
+        $binds = array($unionId, PLATFORM_WXAPP);
+        return $this->db->query($sql, $binds)->row();
+    }
+
 }
