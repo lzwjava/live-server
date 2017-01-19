@@ -275,7 +275,13 @@ func TestWeChat_login(t *testing.T) {
 	assert.NotNil(t, res.Interface())
 }
 
+func deleteAppSnsUser() {
+	deleteSql2 := fmt.Sprintf("delete from sns_users where openId='%s'", "ol0AFwFe5jFoXcQby4J7AWJaWXIM")
+	runSql(deleteSql2, false)
+}
+
 func TestWeChat_registerByApp(t *testing.T) {
+	deleteAppSnsUser()
 	c := NewClient()
 	loginRes := c.postData("wechat/login", url.Values{"code": {"abc"}})
 	res := c.post("wechat/registerByApp", url.Values{
@@ -285,4 +291,12 @@ func TestWeChat_registerByApp(t *testing.T) {
 		"iv":            {"NZFYdaE6piO6Mx0beQZgKg=="},
 		"encryptedData": {"l0f5xj2wPddt+QI9sVpwkzVEacCnqVoujIWldcBHtqm0f//fgP8wJAWnAJ79jKHjurFksGhmt5mnhaiPSmYGyv9acR4SuOvorsx6raxRoKI4kvdgoXDeB4ldo9GlwPDOVnp7eN4Pplh6giQlkX112CuoaRaEJ05mhBxTYlGAW6d9N2XPCZBdf3m4IC0sedHPslm4HCK68/BZ1W2VAzhDsVNg9BV37KNtaatQIaoXqvSVn0ghRw2fFNZqfZCUtU+u+ppms31oV8nKcKEs4ViGKmU0CQULaXDzOL7X6Huj1409RkFBl3spkpo2AXh7xg2UgXEkcRWtIfOEvYCs7rA7pEhRjJS5stVzaFpwybglnwNHc+mJqVEVI6bOnI3tnIfM3z1+PJr2WIWwxQSlw+yVwEpjFvwVHE6gF+IOSZYSAYYG1DHY/ocj/N6B/6Paz/aPcIqNTOGn7uzkkpQCiMbKhb9wzPD4oVyCUJPWkt+CMxkCq9soS/azluYKJp0LIH2eeYoQAuV8Lk7OWZmiwaGUMQ=="}})
 	assert.NotNil(t, res.Interface())
+}
+
+func insertAppSnsUser(userId string) {
+	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
+		"o72gJ0ds_nwh2pxkQ1iexCc_fwZU", "李智维-趣直播",
+		"http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLyxI8Q0XqyejNIaMaJSofP2sN5z0xg0FibXmGMBtlTEkKxuoLJzktAO3wUMfJlPHfDZH3GQvPfm0A/0",
+		"wxapp", userId, "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
+	runSql(sql, false)
 }

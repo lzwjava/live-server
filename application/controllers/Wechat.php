@@ -620,6 +620,16 @@ class Wechat extends BaseController
 
         $user = $this->userDao->findUserByUnionId($userInfo->unionId);
         if ($user) {
+            $snsUser = $this->snsUserDao->getSnsUser($userInfo->openId, PLATFORM_WXAPP);
+            if (!$snsUser) {
+                $snsUserId = $this->snsUserDao->addSnsUser($userInfo->openId, $userInfo->nickName, $userInfo->avatarUrl,
+                    PLATFORM_WXAPP, $userInfo->unionId, $user->userId);
+                if (!$snsUserId) {
+                    $this->failure(ERROR_SQL_WRONG);
+                    return;
+                }
+            }
+
             $user = $this->userDao->setLoginByUserId($user->userId);
             $this->succeed($user);
         } else {

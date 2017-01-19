@@ -416,6 +416,7 @@ define('KEY_CHANNEL', 'channel');
 define('CHANNEL_WECHAT_H5', 'wechat_h5');
 define('CHANNEL_WECHAT_QRCODE', 'wechat_qrcode');
 define('CHANNEL_ALIPAY_APP', 'alipay_app');
+define('CHANNEL_WECHAT_APP', 'wechat_app');
 
 // attendances
 define('TABLE_ATTENDANCES', 'attendances');
