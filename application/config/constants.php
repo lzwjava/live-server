@@ -525,6 +525,7 @@ define('VIEW_PLATFORM_WECHAT', 'wechat');
 define('VIEW_PLATFORM_PC', 'pc');
 define('VIEW_PLATFORM_IOS', 'ios');
 define('VIEW_PLATFORM_ANDROID', 'android');
+define('VIEW_PLATFORM_WECHAT_APP', 'wechat_app');
 
 // applications
 define('TABLE_APPLICATIONS', 'applications');
@@ -574,7 +575,7 @@ if (!function_exists('viewPlatformSet')) {
     function viewPlatformSet()
     {
         return array(VIEW_PLATFORM_WECHAT, VIEW_PLATFORM_PC,
-            VIEW_PLATFORM_IOS, VIEW_PLATFORM_ANDROID);
+            VIEW_PLATFORM_IOS, VIEW_PLATFORM_ANDROID, VIEW_PLATFORM_WECHAT_APP);
     }
 }
 

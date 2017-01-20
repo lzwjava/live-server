@@ -10,7 +10,7 @@ import (
 func TestLiveViews_create(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
-	res := c.postData("liveViews", url.Values{"liveId": {liveId}, "platform": {"wechat"}, "liveStatus": {"20"}})
+	res := c.postData("liveViews", url.Values{"liveId": {liveId}, "platform": {"wechat_app"}, "liveStatus": {"20"}})
 	assert.NotNil(t, res.Get("liveViewId").MustInt())
 }
 
