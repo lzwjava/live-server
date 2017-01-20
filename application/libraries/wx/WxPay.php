@@ -32,7 +32,6 @@ class WxPay
         $input->SetNotify_url("http://api.quzhiboapp.com/wechat/wxpayNotify");
         $input->SetTrade_type($tradeType);
         $input->SetAppid($appId);
-        logInfo("appId" . $appId);
         if ($tradeType == "JSAPI") {
             $tools = new JsApiPay();
             $input->SetOpenid($openId);
