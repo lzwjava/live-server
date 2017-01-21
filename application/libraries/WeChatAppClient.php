@@ -42,7 +42,7 @@ class WeChatAppClient
     private function getAccessToken()
     {
         if (isDebug()) {
-            return TMP_WXAPP_ACCESS_TOKEN;
+            return array(null, TMP_WXAPP_ACCESS_TOKEN);
         }
         $accessToken = $this->wxAppDao->getAccessToken();
         if (!$accessToken) {
@@ -106,22 +106,22 @@ class WeChatAppClient
             return false;
         }
         $user = $this->userDao->findUserById($userId);
-        $word = '，您参与的直播即将开始啦';
+        $word = $user->username . '，您参与的直播即将开始啦';
         $tmplData = array(
             'keyword1' => array(
-                'value' => $user->username . $word,
-                'color' => '#000',
-            ),
-            'keyword2' => array(
                 'value' => $live->subject,
                 'color' => '#173177',
+            ),
+            'keyword2' => array(
+                'value' => $live->owner->username,
+                'color' => '#000',
             ),
             'keyword3' => array(
                 'value' => $live->planTs,
                 'color' => '#173177',
             ),
             'keyword4' => array(
-                'value' => '点击进入直播，不见不散。',
+                'value' => $word,
                 'color' => '#000',
             )
         );
