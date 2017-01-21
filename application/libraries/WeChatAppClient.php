@@ -14,6 +14,12 @@ class WeChatAppClient
     /** @var WeChatClient */
     public $weChatClient;
 
+    /** @var SnsUserDao */
+    public $snsUserDao;
+
+    /** @var UserDao */
+    public $userDao;
+
     private $appId;
     private $appSecret;
 
@@ -21,9 +27,15 @@ class WeChatAppClient
     {
         $this->appId = WXAPP_APPID;
         $this->appSecret = WXAPP_SECRET;
+
+        $ci = get_instance();
+        $ci->load->model(SnsUserDao::class);
+        $this->snsUserDao = new SnsUserDao();
+        $ci->load->model(UserDao::class);
+        $this->userDao = new UserDao();
     }
 
-    function getAccessToken()
+    private function getAccessToken()
     {
         if (isDebug()) {
             return TMP_WXAPP_ACCESS_TOKEN;
@@ -49,8 +61,69 @@ class WeChatAppClient
         }
     }
 
-    function sendTmplMsg()
+    private function wechatHttpPost($path, $data)
     {
-        $url = WECHAT_API_CGIBIN . 'message/wxopen/template/send';
+        $accessToken = $this->getAccessToken();
+        $url = WECHAT_API_CGIBIN . $path;
+        $query = array(
+            'access_token' => $accessToken
+        );
+        return $this->weChatClient->httpPost($url, $query, $data);
     }
+
+    private function notifyByWeChat($user, $tempId, $page, $formId, $tmplData)
+    {
+        if (!$user->unionId) {
+            logInfo("the user $user->username do not have unionId fail send wechat msg");
+            return false;
+        }
+        $snsUser = $this->snsUserDao->getWxAppSnsUser($user->unionId);
+        $data = array(
+            'touser' => $snsUser->openId,
+            'template_id' => $tempId,
+            'page' => $page,
+            'form_id' => $formId,
+            'data' => $tmplData
+        );
+        $res = $this->wechatHttpPost('message/wxopen/template/send', $data);
+        if (!$res) {
+            logInfo('wechat notified failed user:' . $user->userId);
+            return false;
+        }
+        $resp = json_decode($res);
+        if ($resp->errcode != 0) {
+            logInfo("wechat notified failed errcode != 0 user:" . $user->userId
+                . ' res ' . $res);
+            return false;
+        }
+        return true;
+    }
+
+    function notifyLiveStart($userId, $prepayId, $live)
+    {
+        $user = $this->userDao->findUserById($userId);
+        $word = '，您参与的直播即将开始啦';
+        $tmplData = array(
+            'keyword1' => array(
+                'value' => $user->username . $word,
+                'color' => '#000',
+            ),
+            'keyword2' => array(
+                'value' => $live->subject,
+                'color' => '#173177',
+            ),
+            'keyword3' => array(
+                'value' => $live->planTs,
+                'color' => '#173177',
+            ),
+            'keyword4' => array(
+                'value' => '点击进入直播，不见不散。',
+                'color' => '#000',
+            )
+        );
+        $page = 'pages/live/live?liveId=' . $live->liveId;
+        return $this->notifyByWeChat($user, 'LlaxiBTOa7ZmLx8KIZG-S8xAXOEl0OKr5q992jGGkII',
+            $page, $prepayId, $tmplData);
+    }
+
 }
