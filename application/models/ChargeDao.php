@@ -37,4 +37,5 @@ class ChargeDao extends BaseDao
     {
         return $this->getOneFromTable(TABLE_CHARGES, KEY_ORDER_NO, $orderNo);
     }
+
 }

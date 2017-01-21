@@ -33,6 +33,10 @@ class WeChatAppClient
         $this->snsUserDao = new SnsUserDao();
         $ci->load->model(UserDao::class);
         $this->userDao = new UserDao();
+        $ci->load->library(WeChatClient::class);
+        $this->weChatClient = new WeChatClient();
+        $ci->load->model(WxAppDao::class);
+        $this->wxAppDao = new WxAppDao();
     }
 
     private function getAccessToken()
@@ -63,7 +67,10 @@ class WeChatAppClient
 
     private function wechatHttpPost($path, $data)
     {
-        $accessToken = $this->getAccessToken();
+        list($error, $accessToken) = $this->getAccessToken();
+        if ($error) {
+            return array($error, null);
+        }
         $url = WECHAT_API_CGIBIN . $path;
         $query = array(
             'access_token' => $accessToken
@@ -85,22 +92,19 @@ class WeChatAppClient
             'form_id' => $formId,
             'data' => $tmplData
         );
-        $res = $this->wechatHttpPost('message/wxopen/template/send', $data);
-        if (!$res) {
-            logInfo('wechat notified failed user:' . $user->userId);
-            return false;
-        }
-        $resp = json_decode($res);
-        if ($resp->errcode != 0) {
-            logInfo("wechat notified failed errcode != 0 user:" . $user->userId
-                . ' res ' . $res);
+        list($error, $data) = $this->wechatHttpPost('message/wxopen/template/send', $data);
+        if ($error) {
+            logInfo('wechat notified failed user:' . $user->userId . ' error: ' . $error);
             return false;
         }
         return true;
     }
 
-    function notifyLiveStart($userId, $prepayId, $live)
+    function notifyLiveStart($userId, $prepayId, $live, $oneHour = false)
     {
+        if ($oneHour) {
+            return false;
+        }
         $user = $this->userDao->findUserById($userId);
         $word = '，您参与的直播即将开始啦';
         $tmplData = array(
