@@ -48,8 +48,7 @@ class Alipay
         $dataString = $this->makeParamString($order);
         $sign = $this->signData($dataString);
         $dataString .= '&sign_type="RSA"&sign="' . $sign . '"';
-        // logInfo(json_encode(array("data" => $dataString)));
-        return $dataString;
+        return array(null, $dataString, null);
     }
 
     private function signData($dataString)

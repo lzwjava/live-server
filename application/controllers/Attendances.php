@@ -102,10 +102,10 @@ class Attendances extends BaseController
             $body = $user->username . ' 参加直播 ' . $live->subject;
             $metaData = array(KEY_TYPE => CHARGE_TYPE_ATTEND, KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
 
-            $ch = $this->pay->createChargeAndInsert($live->realAmount, $channel, $subject, $body,
-                $metaData, $user, $openId);
-            if ($ch == null) {
-                $this->failure(ERROR_CHARGE_CREATE);
+            list($error, $ch) = $this->pay->createChargeAndInsert($live->realAmount, $channel,
+                $subject, $body, $metaData, $user, $openId);
+            if ($error) {
+                $this->failure(ERROR_CHARGE_CREATE, $error);
                 return;
             }
             $this->succeed($ch);

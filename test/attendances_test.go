@@ -3,6 +3,7 @@ package liveserver
 import (
 	"net/url"
 	"testing"
+	"time"
 
 	"fmt"
 
@@ -196,6 +197,7 @@ func TestAttendances_createByWeChat_withShare_AmountLittle(t *testing.T) {
 }
 
 func getLastOrderNo(userId string) string {
+	<-time.After(100 * time.Millisecond)
 	sql := fmt.Sprintf("select orderNo from charges where creator=%s order by created desc limit 1", userId)
 	fmt.Println(sql)
 	rows := queryDb(sql)
@@ -337,9 +339,9 @@ func TestAttendances_transfer(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
-func TestAttendances_sendRedPacket(t *testing.T) {
-	c := NewClient()
-	c.admin = true
-	res := c.get("attendances/sendRedPacket", url.Values{})
-	assert.NotNil(t, res)
-}
+// func TestAttendances_sendRedPacket(t *testing.T) {
+// 	c := NewClient()
+// 	c.admin = true
+// 	res := c.get("attendances/sendRedPacket", url.Values{})
+// 	assert.NotNil(t, res)
+// }

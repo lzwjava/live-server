@@ -418,6 +418,8 @@ define('CHANNEL_WECHAT_QRCODE', 'wechat_qrcode');
 define('CHANNEL_ALIPAY_APP', 'alipay_app');
 define('CHANNEL_WECHAT_APP', 'wechat_app');
 
+define('KEY_PREPAY_ID', 'prepayId');
+
 // attendances
 define('TABLE_ATTENDANCES', 'attendances');
 define('KEY_ATTENDANCE_ID', 'attendanceId');
