@@ -15,6 +15,8 @@ class Lives extends BaseController
     public $weChatPlatform;
     public $couponDao;
     public $videoDao;
+    public $chargeDao;
+    public $weChatAppClient;
 
     function __construct()
     {
@@ -33,6 +35,10 @@ class Lives extends BaseController
         $this->couponDao = new CouponDao();
         $this->load->model(VideoDao::class);
         $this->videoDao = new VideoDao();
+        $this->load->model(ChargeDao::class);
+        $this->chargeDao = new ChargeDao();
+        $this->load->library(WeChatAppClient::class);
+        $this->weChatAppClient = new WeChatAppClient();
     }
 
     protected function checkIfAmountWrong($amount)
@@ -408,7 +414,17 @@ class Lives extends BaseController
         $succeedCount = 0;
         foreach ($users as $user) {
             if ($user->notified == 0) {
-                $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live, $oneHour);
+                $charge = null;
+                if ($user->orderNo) {
+                    $charge = $this->chargeDao->getOneByOrderNo($user->orderNo);
+                }
+                if ($charge && $charge->channel == CHANNEL_WECHAT_APP) {
+                    $ok = $this->weChatAppClient->notifyLiveStart($user->userId,
+                        $charge->prepayId, $live, $oneHour);
+                } else {
+                    $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live, $oneHour);
+                }
+
                 if (!$ok) {
                     $ok = $this->sms->notifyLiveStart($user->userId, $live, $oneHour);
                 }

@@ -196,6 +196,23 @@ func TestAttendances_createByWeChat_withShare_AmountLittle(t *testing.T) {
 	assert.NotNil(t, callbackRes)
 }
 
+func TestAttendances_CreateByWeChatApp(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	deleteAppSnsUser()
+	c2, userId2 := NewClientAndWeChatUser()
+	insertAppSnsUser(userId2)
+	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_app"}})
+	assert.NotNil(t, res)
+	assert.NotNil(t, res.Get("appId").Interface())
+	orderNo := getLastOrderNo(userId2)
+	callbackStr := wechatCallbackStr(orderNo)
+	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
+	fmt.Println("callbackRes:" + callbackRes)
+	assert.NotNil(t, callbackRes)
+}
+
 func getLastOrderNo(userId string) string {
 	<-time.After(100 * time.Millisecond)
 	sql := fmt.Sprintf("select orderNo from charges where creator=%s order by created desc limit 1", userId)
@@ -220,6 +237,14 @@ func createAttendance(c *Client, liveId string) {
 
 func createWechatAttendance(c *Client, userId string, liveId string) {
 	c.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
+	orderNo := getLastOrderNo(userId)
+	callbackStr := wechatCallbackStr(orderNo)
+	callbackRes := c.postWithStr("wechat/wxpayNotify", callbackStr)
+	fmt.Println("callbackRes:" + callbackRes)
+}
+
+func createWechatAppAttendance(c *Client, userId string, liveId string) {
+	c.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_app"}})
 	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c.postWithStr("wechat/wxpayNotify", callbackStr)
