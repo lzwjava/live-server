@@ -36,13 +36,21 @@ class WxPay
             $tools = new JsApiPay();
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input, 15);
-            $jsApiParameters = $tools->GetJsApiParameters($order);
-            return $jsApiParameters;
+            if ($order['return_code'] == 'SUCCESS') {
+                $jsApiParameters = $tools->GetJsApiParameters($order);
+                return array(null, $jsApiParameters, $order['prepay_id']);
+            } else {
+                return array($order['err_code_des'], null, null);
+            }
         } else {
             $input->SetProduct_id($orderNo);
             $order = WxPayApi::unifiedOrder($input, 15);
-            // logInfo("order: " . json_encode($order));
-            return array("code_url" => $order["code_url"]);
+            if ($order['return_code'] == 'SUCCESS') {
+                $data = array("code_url" => $order["code_url"]);
+                return array(null, $data, null);
+            } else {
+                return array($order['err_code_des'], null, null);
+            }
         }
     }
 

@@ -100,10 +100,10 @@ class Rewards extends BaseController
             $openId = $snsUser->openId;
         }
 
-        $ch = $this->pay->createChargeAndInsert($amount, $channel, $subject, $body,
+        list($error, $ch) = $this->pay->createChargeAndInsert($amount, $channel, $subject, $body,
             $metaData, $user, $openId);
-        if (!$ch) {
-            $this->failure(ERROR_CHARGE_CREATE);
+        if ($error) {
+            $this->failure(ERROR_CHARGE_CREATE, $error);
             return;
         }
         $this->succeed($ch);

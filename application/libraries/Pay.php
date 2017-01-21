@@ -35,17 +35,17 @@ class Pay
             // local debug case
             $ipAddress = '127.0.0.1';
         }
-        $ch = $this->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
-        if ($ch == null) {
-            return null;
+        list($error, $ch, $prepayId) = $this->createCharge($orderNo, $channel, $amount, $subject, $body, $openId);
+        if ($error) {
+            return array($error, null);
         }
-        $id = $this->chargeDao->add($orderNo, $amount, $channel, $user->userId, $ipAddress, $metaData);
+        $id = $this->chargeDao->add($orderNo, $amount, $channel, $user->userId,
+            $ipAddress, $metaData, $prepayId);
         if (!$id) {
-            return null;
+            return array(ERROR_SQL_WRONG, null);
         }
-        return $ch;
+        return array(null, $ch);
     }
-
 
     private function createCharge($orderNo, $channel, $amount, $subject, $body, $openId)
     {
@@ -58,7 +58,7 @@ class Pay
         } else if ($channel == CHANNEL_WECHAT_APP) {
             return $this->wxpay->createAppCharge($orderNo, $amount, $subject, $body, $openId);
         }
-        return null;
+        return array(ERROR_PARAMETER_ILLEGAL);
     }
 
     function refund($charge)
