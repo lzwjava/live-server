@@ -7,6 +7,9 @@ class JSSDK
     /** @var WxDao */
     public $wxDao;
 
+    /** @var  WeChatClient */
+    public $weChatClient;
+
     public function __construct($appId = null, $appSecret = null)
     {
         $this->appId = $appId;
@@ -14,6 +17,8 @@ class JSSDK
         $ci = get_instance();
         $ci->load->model(WxDao::class);
         $this->wxDao = new WxDao();
+        $ci->load->library(WeChatClient::class);
+        $this->weChatClient = new WeChatClient();
     }
 
     public function getSignPackage($url)
@@ -61,7 +66,7 @@ class JSSDK
                 'type' => 'jsapi',
                 'access_token' => $accessToken
             );
-            list($error, $data) = $this->httpGet($url, $query);
+            list($error, $data) = $this->weChatClient->httpGet($url, $query);
             if (!$error) {
                 $ticket = $data->ticket;
             }
@@ -79,7 +84,6 @@ class JSSDK
         if (isDebug()) {
             return TMP_WECHAT_ACCESS_TOKEN;
         }
-        // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
         $accessToken = $this->wxDao->getAccessToken();
         if (!$accessToken) {
             $url = WECHAT_API_CGIBIN . 'token';
@@ -88,7 +92,7 @@ class JSSDK
                 'appid' => $this->appId,
                 'secret' => $this->appSecret
             );
-            list($error, $data) = $this->httpGet($url, $query);
+            list($error, $data) = $this->weChatClient->httpGet($url, $query);
             if (!$error) {
                 $accessToken = $data->access_token;
             }
@@ -101,26 +105,14 @@ class JSSDK
         }
     }
 
-    function httpGet($baseUrl, $query = array())
-    {
-        $url = $baseUrl . '?' . http_build_query($query);
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        $res = curl_exec($curl);
-        curl_close($curl);
-        return $this->parseResponse($res);
-    }
-
     function wechatHttpPost($path, $data)
     {
         $accessToken = $this->getAccessToken();
-        $url = WECHAT_API_CGIBIN . $path . '?access_token='
-            . $accessToken;
-        return $this->httpPost($url, $data);
+        $url = WECHAT_API_CGIBIN . $path;
+        $query = array(
+            'access_token' => $accessToken
+        );
+        return $this->weChatClient->httpPost($url, $query, $data);
     }
 
     function fetchWxappSessionKey($code)
@@ -140,7 +132,7 @@ class JSSDK
             'js_code' => $code,
             'grant_type' => 'authorization_code'
         );
-        return $this->httpGet($url, $data);
+        return $this->weChatClient->httpGet($url, $data);
     }
 
     function wechatHttpGet($path, $params = array())
@@ -148,46 +140,27 @@ class JSSDK
         $accessToken = $this->getAccessToken();
         $url = WECHAT_API_CGIBIN . $path;
         $params['access_token'] = $accessToken;
-        return $this->httpGet($url, $params);
+        return $this->weChatClient->httpGet($url, $params);
     }
 
-    private function parseResponse($respStr)
+    function createMenu()
     {
-        $error = null;
-        $data = null;
-        if ($respStr === false) {
-            $error = 'network error';
-        } else {
-            $respData = json_decode($respStr);
-            if (isset($respData->errcode) && $respData->errcode != 0) {
-                $error = $respData->errmsg;
-                $data = $respData->errcode;
-            } else {
-                $error = null;
-                $data = $respData;
-            }
-        }
-        return array($error, $data);
+        $data = array(
+            'button' => array(
+                array(
+                    'type' => 'view',
+                    'name' => '最新直播',
+                    'url' => 'http://m.quzhiboapp.com/?liveId=0'
+                ),
+                array(
+                    'type' => 'view',
+                    'name' => '发布会',
+                    'url' => 'http://mp.weixin.qq.com/s/-ebQBwpCT0YWs-0rM0fB2w'
+                )
+            )
+        );
+        return $this->wechatHttpPost('menu/create', $data);
     }
-
-    function httpPost($url, $data)
-    {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        if ($data == null) {
-            $data = new stdClass();
-        }
-        $encoded = json_encode($data, JSON_UNESCAPED_UNICODE);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $encoded);
-        $res = curl_exec($curl);
-        curl_close($curl);
-        return $this->parseResponse($res);
-    }
-
 
     function httpGetUserInfo($accessToken, $openId)
     {
@@ -197,7 +170,7 @@ class JSSDK
             'openid' => $openId,
             'lang' => 'zh_CN'
         );
-        return $this->httpGet($url, $query);
+        return $this->weChatClient->httpGet($url, $query);
     }
 
     function queryIsSubscribeByOpenId($openId)
@@ -219,7 +192,7 @@ class JSSDK
             'openid' => $openId,
             'lang' => 'zh_CN'
         );
-        return $this->httpGet($url, $query);
+        return $this->weChatClient->httpGet($url, $query);
     }
 
     private function baseHttpGetAccessToken($code, $wechatAppId, $wechatSecret)
@@ -231,7 +204,7 @@ class JSSDK
             'grant_type' => 'authorization_code',
             'code' => $code
         );
-        return $this->httpGet($url, $query);
+        return $this->weChatClient->httpGet($url, $query);
     }
 
     function httpGetUnionId($accessToken, $openId)
@@ -241,7 +214,7 @@ class JSSDK
             'access_token' => $accessToken,
             'openid' => $openId
         );
-        return $this->httpGet($url, $data);
+        return $this->weChatClient->httpGet($url, $data);
     }
 
     function getUnionId($accessToken, $openId)
@@ -272,9 +245,6 @@ class JSSDK
 
     function genQrcode($sceneData)
     {
-        $accessToken = $this->getAccessToken();
-        $url = WECHAT_API_CGIBIN . 'qrcode/create?access_token='
-            . $accessToken;
         $data = array(
             'expire_seconds' => 60 * 60,
             'action_name' => 'QR_LIMIT_STR_SCENE',
@@ -284,7 +254,7 @@ class JSSDK
                 )
             )
         );
-        return $this->httpPost($url, $data);
+        return $this->wechatHttpPost('qrcode/create', $data);
     }
 
 }

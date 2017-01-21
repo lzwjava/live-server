@@ -484,28 +484,6 @@ class Wechat extends BaseController
         $this->succeed(array('subscribeCount' => $subscribeCount, 'total' => count($users)));
     }
 
-    private function createMenu()
-    {
-        $accessToken = $this->jsSdk->getAccessToken();
-        $url = WECHAT_API_CGIBIN . 'menu/create?access_token='
-            . $accessToken;
-        $data = array(
-            'button' => array(
-                array(
-                    'type' => 'view',
-                    'name' => '最新直播',
-                    'url' => 'http://m.quzhiboapp.com/?liveId=0'
-                ),
-                array(
-                    'type' => 'view',
-                    'name' => '发布会',
-                    'url' => 'http://mp.weixin.qq.com/s/-ebQBwpCT0YWs-0rM0fB2w'
-                )
-            )
-        );
-        return $this->jsSdk->httpPost($url, $data);
-    }
-
     private function getMenu()
     {
         return $this->jsSdk->wechatHttpGet('menu/get');
@@ -523,7 +501,7 @@ class Wechat extends BaseController
 
     function createMenu_get()
     {
-        list($error, $data) = $this->createMenu();
+        list($error, $data) = $this->jsSdk->createMenu();
         if ($error) {
             $this->failure(ERROR_WECHAT, $error);
             return;

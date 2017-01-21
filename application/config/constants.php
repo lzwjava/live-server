@@ -696,6 +696,9 @@ define('TMP_WECHAT_ACCESS_TOKEN',
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
+define('TMP_WXAPP_ACCESS_TOKEN',
+'TG0jViIB80fw09Qi04NhKtE-QkFWoQS5Iax9rW54RQkXa50w-BszogTWGnL_E3LCglOTtigUM51CQYNiStdlE_CT8fi3k-KadME_69XvO5OkyPHKHJWHueIlKVnQAvJjFCIjAJAVSY');
+
 define('WECHAT_API_BASE', 'https://api.weixin.qq.com/');
 define('WECHAT_API_CGIBIN', WECHAT_API_BASE . 'cgi-bin/');
 
