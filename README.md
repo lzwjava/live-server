@@ -9,7 +9,7 @@ Install dependencies: composer install, composer update
 
 ## live
 
-```json
+```
 {
     "amount": 100,           // 门票，当 needPay = 0 时无作用
     "attendanceCount": 1,    // 当前参与的人数
@@ -85,7 +85,7 @@ curl -X POST http://localhost:3005/attendances map[liveId:[2452] channel:[alipay
 
 response: 
 
-```json
+```
 {
     "error": "",
     "result": "partner=\"2088421737526755\"&service=\"mobile.securitypay.pay\"&notify_url=\"http://api.quzhiboapp.com/rewards/notify\"&_input_charset=\"utf-8\"&it_b_pay=\"30m\"&show_url=\"m.alipay.com\"&total_fee=\"1.00\"&body=\"855919044 \u53c2\u52a0\u76f4\u64ad C++ \u7f16\u7a0b\"&out_trade_no=\"OrVUbkuyR7rab1Fu\"&seller_id=\"finance@quzhiboapp.com\"&subject=\"\u53c2\u52a0\u76f4\u64ad\"&payment_type=\"1\"&sign_type=\"RSA\"&sign=\"RmXFHW224ehmvAMBnVtfq6tCxAyiS8MhG9yy63DG8MMiI%2BiD7gfXddDQSz%2Ff7oXx6vaSynlldD85YETCiTN6HyEj51PfYiefPQKFjuT4OL%2BJ4iQYdn3BcUUs8BrSWT8b6dx5TNZpGpexmXo4AP3GmBH%2BSgJuy%2Foqj81Q%2FZUzrVg%3D\"",
@@ -101,7 +101,7 @@ curl -X POST http://localhost:3005/attendances map[liveId:[2454]]
 
 response:
 
-```json
+```
 {"status":"success","result":{},"error":""}
 ```
 
@@ -115,7 +115,7 @@ response:
 curl -X GET http://localhost:3005/lives/158 map[]
 
 response:
-```json
+```
 {
     "error": "",
     "result": {
@@ -154,7 +154,7 @@ curl -X GET http://localhost:3005/lives/attended map[]
 
 response: 
 
-```json
+```
 {
     "error": "",
     "result": [
@@ -208,7 +208,7 @@ curl -X GET http://localhost:3005/lives/2456/videos map[]
 
 response:
 
-```json
+```
 {
     "error": "",
     "result": [
@@ -235,7 +235,7 @@ response:
 curl -X GET http://localhost:3005/lives/2552/notify
 response:
 
-```json
+```
 {"status":"success","result":{"succeedCount":1,"total":1},"error":""}
 ```
 
