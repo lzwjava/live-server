@@ -186,10 +186,5 @@ $route['packets/sendPacket']['GET'] = 'packets/sendPacket';
 $route['packets/(\w+)']['GET'] = 'packets/one/$1';
 $route['packets/(\w+)/userPackets']['GET'] = 'packets/allPacketsById/$1';
 
-// apps
-$route['apps']['POST'] = 'apps/create';
-$route['apps/(\d+)']['POST'] = 'apps/update/$1';
-$route['apps/(\d+)/imgs']['POST'] = 'apps/updateImg/$1';
-$route['apps/myList']['POST'] = 'apps/myList';
-$route['apps/(\d+)']['GET'] = 'apps/one/$1';
-
+// topics
+$route['topics']['GET'] = 'topics';
