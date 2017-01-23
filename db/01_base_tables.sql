@@ -307,30 +307,25 @@ CREATE TABLE `user_packets` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `apps` (
-  `appId`     INT(11)       NOT NULL             AUTO_INCREMENT,
-  `userId`    INT(11)       NOT NULL             DEFAULT 0,
-  `name`      VARCHAR(60)   NOT NULL             DEFAULT '',
-  `qrcodeKey` VARCHAR(80)   NOT NULL             DEFAULT '',
-  `appUrl`    VARCHAR(120)  NOT NULL             DEFAULT '',
-  `shortDesc` VARCHAR(100)  NOT NULL             DEFAULT '',
-  `desc`      VARCHAR(1000) NOT NULL             DEFAULT '',
-  `iconKey`   VARCHAR(60)   NOT NULL             DEFAULT '',
-  `created`   TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP,
-  `updated`   TIMESTAMP     NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`appId`),
-  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+CREATE TABLE `topics` (
+  `topicId` INT(11)      NOT NULL AUTO_INCREMENT,
+  `name`    VARCHAR(127) NOT NULL,
+  PRIMARY KEY (`topicId`),
+  UNIQUE KEY `TOPIC_NAME_IDX` (`name`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `app_imgs` (
-  `appImgId` INT(11)     NOT NULL             AUTO_INCREMENT,
-  `appId`    INT(11)     NOT NULL,
-  `imgKey`   VARCHAR(80) NOT NULL             DEFAULT '',
-  `created`  TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`appImgId`),
-  FOREIGN KEY (`appId`) REFERENCES `apps` (`appId`)
+CREATE TABLE `subscribes` (
+  `subscribeId` INT(11)   NOT NULL             AUTO_INCREMENT,
+  `userId`      INT(11)   NOT NULL,
+  `topicId`     INT(11)   NOT NULL,
+  `created`     TIMESTAMP NOT NULL             DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`subscribeId`),
+  UNIQUE KEY `user_topic` (`userId`, `topicId`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+DROP TABLE `apps`;
+DROP TABLE `app_imsg`;
