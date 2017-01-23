@@ -233,6 +233,7 @@ response:
 发送微信通知
 
 curl -X GET http://localhost:3005/lives/2552/notify
+
 response:
 
 ```
