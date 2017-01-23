@@ -322,10 +322,9 @@ CREATE TABLE `subscribes` (
   `topicId`     INT(11)   NOT NULL,
   `created`     TIMESTAMP NOT NULL             DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`subscribeId`),
-  UNIQUE KEY `user_topic` (`userId`, `topicId`)
+  UNIQUE KEY `user_topic` (`userId`, `topicId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
+  FOREIGN KEY (`topicId`) REFERENCES `topics` (`topicId`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-DROP TABLE `apps`;
-DROP TABLE `app_imsg`;
