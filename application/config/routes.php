@@ -187,4 +187,10 @@ $route['packets/(\w+)']['GET'] = 'packets/one/$1';
 $route['packets/(\w+)/userPackets']['GET'] = 'packets/allPacketsById/$1';
 
 // topics
-$route['topics']['GET'] = 'topics';
+$route['topics']['POST'] = 'topics/create';
+$route['topics']['GET'] = 'topics/list';
+$route['topics/init']['GET'] = 'topics/init';
+
+// subscribes
+$route['subscribes']['POST'] = 'subscribes/create';
+$route['subscribes/del']['POST'] = 'subscribes/del';
