@@ -14,7 +14,7 @@ class SubscribeDao extends BaseDao
             KEY_USER_ID => $userId,
             KEY_TOPIC_ID => $topicId
         );
-        $this->db->insert(TABLE_TOPICS, $data);
+        $this->db->insert(TABLE_SUBSCRIBES, $data);
         return $this->db->insert_id();
     }
 
