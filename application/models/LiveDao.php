@@ -14,6 +14,7 @@ class LiveDao extends BaseDao
     public $couponDao;
     public $staffDao;
     public $topicDao;
+    public $stream;
 
     function __construct()
     {
@@ -30,6 +31,8 @@ class LiveDao extends BaseDao
         $this->staffDao = new StaffDao();
         $this->load->model(TopicDao::class);
         $this->topicDao = new TopicDao();
+        $this->load->library(Stream::class);
+        $this->stream = new Stream();
     }
 
     private function genLiveKey()
@@ -234,6 +237,7 @@ class LiveDao extends BaseDao
                 $live->rtmpUrl = 'rtmp://' . $rtmpHostLive . '/' . $live->rtmpKey;
                 $live->hlsUrl = 'http://' . $hlsHostLive . '/' . $live->rtmpKey . '.m3u8';
                 $live->flvUrl = 'http://' . $flvHostLive . '/' . $live->rtmpKey . '.flv';
+                $live->playbackUrl = $this->stream->getPlaybackUrl($live);
                 $live->canJoin = true;
             } else {
                 $live->canJoin = false;
