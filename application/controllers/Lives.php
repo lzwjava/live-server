@@ -133,6 +133,46 @@ class Lives extends BaseController
         $this->succeed();
     }
 
+    function updateTopic_post($liveId)
+    {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_OP))) {
+            return;
+        }
+        $topicId = $this->post(KEY_TOPIC_ID);
+        $op = $this->post(KEY_OP);
+        if ($op == OP_ADD) {
+            if (!$topicId) {
+                $this->failureOfParam(KEY_TOPIC_ID);
+                return;
+            }
+        }
+        if ($this->checkIfNotInArray($op, array(OP_ADD, OP_DEL))) {
+            return;
+        }
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $live = $this->liveDao->getLive($liveId, $user);
+        if ($live->ownerId != $user->userId) {
+            $this->failure(ERROR_NOT_ALLOW_DO_IT);
+            return;
+        }
+        if ($op == OP_ADD) {
+            $ok = $this->liveDao->updateTopic($liveId, $topicId);
+            if (!$ok) {
+                $this->failure(ERROR_SQL_WRONG);
+                return;
+            }
+            $this->succeed();
+        } else if ($op == OP_DEL) {
+            $this->liveDao->removeTopic($liveId);
+            $this->succeed();
+        } else {
+            $this->failure(ERROR_PARAMETER_ILLEGAL);
+        }
+    }
+
     function list_get()
     {
         $skip = $this->skip();
@@ -477,8 +517,7 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $count));
     }
 
-    private
-    function getBjfuUsers()
+    private function getBjfuUsers()
     {
         $all = file_get_contents(APPPATH . 'data/bjfudata.txt');
         $users = json_decode($all);
@@ -486,8 +525,7 @@ class Lives extends BaseController
         return $users;
     }
 
-    private
-    function getTestUsers()
+    private function getTestUsers()
     {
         $user = new Stdclass();
         $user->username = '李智维';

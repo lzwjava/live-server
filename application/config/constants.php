@@ -561,6 +561,9 @@ define('KEY_USER_PACKET_ID', 'userPacketId');
 
 define('KEY_OP', 'op');
 
+define('OP_ADD', 'add');
+define('OP_DEL', 'del');
+
 // topics
 define('TABLE_TOPICS', 'topics');
 define('KEY_TOPIC_ID', 'topicId');

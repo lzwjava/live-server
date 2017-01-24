@@ -172,6 +172,7 @@ func TestLives_update(t *testing.T) {
 	assert.Equal(t, res.Get("amount").MustInt(), 30000)
 	assert.Equal(t, res.Get("needPay").MustInt(), 1)
 	assert.Equal(t, res.Get("shareIcon").MustInt(), 1)
+	assert.NotNil(t, res.Get("topic"))
 	assert.Equal(t, res.Get("notice").MustString(), "主播微信是 lzwjava")
 }
 
@@ -378,4 +379,21 @@ func TestLives_notifyLiveStartRelated(t *testing.T) {
 	res := c.getData("lives/"+liveId+"/notifyRelated", url.Values{"relatedLiveId": {liveId2}})
 	assert.NotNil(t, res)
 	assert.Equal(t, res.Get("succeedCount").MustInt(), res.Get("total").MustInt())
+}
+
+func TestLives_updateTopic(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	topicId := getTopic(c)
+	res := c.postData("lives/"+liveId+"/topic", url.Values{"op": {"add"}, "topicId": {topicId}})
+	assert.NotNil(t, res.Interface())
+	live := getLive(c, liveId)
+	assert.Equal(t, toStr(live.Get("topic").Get("topicId").MustInt()), topicId)
+}
+
+func TestLives_delTopic(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	res := c.postData("lives/"+liveId+"/topic", url.Values{"op": {"del"}})
+	assert.NotNil(t, res.Interface())
 }

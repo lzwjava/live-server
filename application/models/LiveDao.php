@@ -13,6 +13,7 @@ class LiveDao extends BaseDao
     public $userDao;
     public $couponDao;
     public $staffDao;
+    public $topicDao;
 
     function __construct()
     {
@@ -27,6 +28,8 @@ class LiveDao extends BaseDao
         $this->couponDao = new CouponDao();
         $this->load->model(StaffDao::class);
         $this->staffDao = new StaffDao();
+        $this->load->model(TopicDao::class);
+        $this->topicDao = new TopicDao();
     }
 
     private function genLiveKey()
@@ -127,11 +130,12 @@ class LiveDao extends BaseDao
         }
         $fields = $this->livePublicFields('l');
         $userFields = $this->userPublicFields('u', true);
-
-        $sql = "select $fields, $userFields,a.attendanceId,s.shareId from lives as l
+        $topicFields = $this->topicDao->topicPublicFields('t', true);
+        $sql = "select $fields, $userFields,a.attendanceId,s.shareId, $topicFields from lives as l
                 left join users as u on u.userId=l.ownerId
                 left join attendances as a on a.liveId = l.liveId and a.userId = $userId
                 left join shares as s on s.liveId = l.liveId and s.userId= $userId
+                left join topics as t on t.topicId = l.topicId
                 where l.liveId in (" . implode(', ', $liveIds) . ")
                 order by $sortField desc";
         $lives = $this->db->query($sql)->result();
@@ -213,6 +217,8 @@ class LiveDao extends BaseDao
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
+            $topicFields = $this->prefixFields($this->topicDao->topicFields(), 't');
+            $live->topic = extractFields($live, $topicFields, 't');
             if ($live->attendanceId || ($user && $user->userId == $live->ownerId)) {
                 // 参加了或是创建者
                 $hlsHostLive = $this->electHlsServer();
@@ -242,6 +248,20 @@ class LiveDao extends BaseDao
     {
         $this->db->where(KEY_LIVE_ID, $id);
         $this->db->update(TABLE_LIVES, $data);
+        return $this->db->affected_rows() > 0;
+    }
+
+    function updateTopic($liveId, $topicId)
+    {
+        $data = array(KEY_TOPIC_ID => $topicId);
+        return $this->update($liveId, $data);
+    }
+
+    function removeTopic($liveId)
+    {
+        $this->db->set(KEY_TOPIC_ID, 'NULL', false);
+        $this->db->where(KEY_LIVE_ID, $liveId);
+        $this->db->update(TABLE_LIVES);
         return $this->db->affected_rows() > 0;
     }
 

@@ -19,4 +19,15 @@ class TopicDao extends BaseDao
     {
         return $this->getListFromTable(TABLE_TOPICS, '1', '1');
     }
+
+    function topicFields()
+    {
+        return array(KEY_TOPIC_ID, KEY_NAME);
+    }
+
+    function topicPublicFields($prefix = TABLE_TOPICS, $alias = false)
+    {
+        return $this->mergeFields($this->topicFields(), $prefix, $alias);
+    }
+
 }

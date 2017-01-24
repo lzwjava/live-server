@@ -308,7 +308,7 @@ CREATE TABLE `user_packets` (
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `topics` (
-  `topicId` INT(11)      NOT NULL AUTO_INCREMENT,
+  `topicId` INT(11)      NOT NULL             AUTO_INCREMENT,
   `name`    VARCHAR(127) NOT NULL,
   PRIMARY KEY (`topicId`),
   UNIQUE KEY `TOPIC_NAME_IDX` (`name`)
@@ -328,3 +328,10 @@ CREATE TABLE `subscribes` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `lives` ADD COLUMN `topicId` INT(11)
+AFTER `status`;
+
+ALTER TABLE `lives` ADD FOREIGN KEY (`topicId`) REFERENCES `topics` (`topicId`);
+
+
