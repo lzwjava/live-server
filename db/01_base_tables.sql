@@ -333,5 +333,3 @@ ALTER TABLE `lives` ADD COLUMN `topicId` INT(11)
 AFTER `status`;
 
 ALTER TABLE `lives` ADD FOREIGN KEY (`topicId`) REFERENCES `topics` (`topicId`);
-
-
