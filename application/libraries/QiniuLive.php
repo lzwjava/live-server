@@ -6,7 +6,7 @@
  * Date: 1/25/17
  * Time: 1:09 AM
  */
-class Stream
+class QiniuLive
 {
     private $hub;
 
@@ -20,8 +20,13 @@ class Stream
     {
         if ($live->status >= LIVE_STATUS_TRANSCODE) {
             try {
-                $stream = $this->hub->getStream('z1.qulive.' . $live->$rtmpKey);
-                return $stream['ORIGIN'];
+                $stream = $this->hub->getStream('z1.qulive.' . $live->rtmpKey);
+                $result = $stream->segments();
+                $start = $result["segments"][0]["start"];
+                $end = $result["segments"][-1]["end"];
+                $playbackUrls = $stream->hlsPlaybackUrls($start, $end);
+                $origin = $playbackUrls['ORIGIN'];
+                return $origin;
             } catch (Exception $e) {
                 logInfo("getStream catch Exception: " . $e->getMessage());
                 return null;
@@ -29,7 +34,6 @@ class Stream
         } else {
             return null;
         }
-
     }
 
 }

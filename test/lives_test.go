@@ -397,3 +397,11 @@ func TestLives_delTopic(t *testing.T) {
 	res := c.postData("lives/"+liveId+"/topic", url.Values{"op": {"del"}})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestLives_playback(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	beginAndFinshLive(c, liveId)
+	res := c.getData("lives/"+liveId+"/playback", url.Values{})
+	assert.NotNil(t, res.Interface())
+}
