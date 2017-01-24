@@ -17,6 +17,7 @@ class Lives extends BaseController
     public $videoDao;
     public $chargeDao;
     public $weChatAppClient;
+    public $qiniuLive;
 
     function __construct()
     {
@@ -39,6 +40,8 @@ class Lives extends BaseController
         $this->chargeDao = new ChargeDao();
         $this->load->library(WeChatAppClient::class);
         $this->weChatAppClient = new WeChatAppClient();
+        $this->load->library(QiniuLive::class);
+        $this->qiniuLive = new QiniuLive();
     }
 
     protected function checkIfAmountWrong($amount)
@@ -588,6 +591,13 @@ class Lives extends BaseController
             return;
         }
         $this->succeed();
+    }
+
+    function playback_get($liveId)
+    {
+        $live = $this->liveDao->getRawLive($liveId);
+        $url = $this->qiniuLive->getPlaybackUrl($live);
+        $this->succeed($url);
     }
 
 }
