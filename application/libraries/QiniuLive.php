@@ -23,8 +23,15 @@ class QiniuLive
             $result = $stream->segments();
             $start = $result['start'];
             $end = $result['end'];
+            $resp = $stream->saveAs('playback', 'm3u8', $start, $end);
+            $playbackUrl = $resp['url'];
+            logInfo('m3u8 succeed ' . $playbackUrl);
+            return $playbackUrl;
         } catch (Exception $e) {
             logInfo("getStream catch Exception: " . $e->getMessage());
+
+            if (isDebug()) {
+                return true;
             }
             return null;
         }
