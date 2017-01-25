@@ -255,7 +255,7 @@ class Lives extends BaseController
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
-        if ($live->status != LIVE_STATUS_ON) {
+        if ($live->status != LIVE_STATUS_ON && $live->status != LIVE_STATUS_TRANSCODE) {
             $this->failure(ERROR_LIVE_NOT_START);
             return;
         }
@@ -264,11 +264,15 @@ class Lives extends BaseController
             $this->failure(ERROR_PLAYBACK_FAIL);
             return;
         }
+        $this->db->trans_begin();
         $endOk = $this->liveDao->endLive($id);
         $ok = $this->videoDao->addVideoByLive($live);
         if (!$endOk || !$ok) {
+            $this->db->trans_rollback();
             $this->failure(ERROR_SQL_WRONG);
+            return;
         }
+        $this->db->trans_commit();
         $this->succeed();
     }
 
