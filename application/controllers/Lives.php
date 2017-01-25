@@ -255,6 +255,10 @@ class Lives extends BaseController
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
+        if ($live->status != LIVE_STATUS_ON) {
+            $this->failure(ERROR_LIVE_NOT_START);
+            return;
+        }
         $url = $this->qiniuLive->getPlaybackUrl($live);
         if (!$url) {
             $this->failure(ERROR_PLAYBACK_FAIL);
