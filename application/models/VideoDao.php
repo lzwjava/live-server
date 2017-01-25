@@ -8,12 +8,13 @@
  */
 class VideoDao extends BaseDao
 {
-    function addVideo($liveId, $title, $fileName)
+    function addVideo($liveId, $title, $fileName, $type)
     {
         $data = array(
             KEY_LIVE_ID => $liveId,
             KEY_TITLE => $title,
-            KEY_FILE_NAME => $fileName
+            KEY_FILE_NAME => $fileName,
+            KEY_TYPE => $type
         );
         $this->db->insert(TABLE_VIDEOS, $data);
         return $this->db->insert_id();
@@ -21,7 +22,7 @@ class VideoDao extends BaseDao
 
     function addVideoByLive($live)
     {
-        return $this->videoDao->addVideo($live->liveId, $live->subject, $live->rtmpKey);
+        return $this->addVideo($live->liveId, $live->subject, $live->rtmpKey, VIDEO_TYPE_M3U8);
     }
 
     function getVideosByLiveId($liveId)
@@ -39,9 +40,14 @@ class VideoDao extends BaseDao
 
     private function assembleVideos($videos)
     {
+        $host = $this->electVideoHost();
         foreach ($videos as $video) {
-            $host = $this->electVideoHost();
-            $video->url = $host . $video->fileName . '.mp4';
+            if ($video->type == VIDEO_TYPE_MP4) {
+                $video->url = $host . $video->fileName . '.mp4';
+            } else if ($video->type == VIDEO_TYPE_M3U8) {
+                $video->m3u8Url = 'http://ojaulfft5.bkt.clouddn.com/recordings/z1.qulive.'
+                    . $video->fileName . '/playback.m3u8';
+            }
         }
     }
 

@@ -131,6 +131,7 @@ define('ERROR_LIVE_NOT_TRANSCODE', 'live_not_transcode');
 define('ERROR_LIVE_NOT_START', 'live_not_start');
 define('ERROR_LIVE_NOT_ON', 'live_not_on');
 define('ERROR_SPEAKER_INTRO_TOO_SHORT', 'speaker_intro_too_short');
+define('ERROR_PLAYBACK_FAIL', 'playback_fail');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -249,6 +250,7 @@ if (!function_exists('errorInfos')) {
             ERROR_LIVE_NOT_START => '直播不是进行中状态,无法结束',
             ERROR_LIVE_NOT_ON => '直播并不是测试开始状态,无法恢复到报名中',
             ERROR_LIVE_NOT_TRANSCODE => '直播没有在转码状态,无法结束',
+            ERROR_PLAYBACK_FAIL => '生成回放失败',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
@@ -509,6 +511,8 @@ define('KEY_TRANSCODED_FILE_NAME', 'transcodedFileName');
 define('TABLE_VIDEOS', 'videos');
 define('KEY_VIDEO_ID', 'videoId');
 define('KEY_TITLE', 'title');
+define('VIDEO_TYPE_MP4', 'mp4');
+define('VIDEO_TYPE_M3U8', 'm3u8');
 
 // rewards
 define('TABLE_REWARDS', 'rewards');

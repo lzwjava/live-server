@@ -27,7 +27,11 @@ func TestVideos_getList(t *testing.T) {
 	assert.NotNil(t, video.Get("fileName").Interface())
 	assert.NotNil(t, video.Get("created").Interface())
 	assert.NotNil(t, video.Get("updated").Interface())
-	assert.NotNil(t, video.Get("url").Interface())
+	if video.Get("type").MustString() == "mp4" {
+		assert.NotNil(t, video.Get("url").Interface())
+	} else {
+		assert.NotNil(t, video.Get("m3u8Url").Interface())
+	}
 }
 
 func TestVideos_create(t *testing.T) {

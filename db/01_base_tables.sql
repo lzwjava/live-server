@@ -333,3 +333,7 @@ ALTER TABLE `lives` ADD COLUMN `topicId` INT(11)
 AFTER `status`;
 
 ALTER TABLE `lives` ADD FOREIGN KEY (`topicId`) REFERENCES `topics` (`topicId`);
+
+ALTER TABLE `videos` ADD COLUMN `type` VARCHAR(10) DEFAULT 'mp4'
+AFTER `title`;
+
