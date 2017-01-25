@@ -64,7 +64,7 @@ class Videos extends BaseController
         }
         $fileName = $this->post(KEY_FILE_NAME);
         $title = $this->post(KEY_TITLE);
-        $id = $this->videoDao->addVideo($liveId, $title, $fileName);
+        $id = $this->videoDao->addVideo($liveId, $title, $fileName, VIDEO_TYPE_MP4);
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
             return;

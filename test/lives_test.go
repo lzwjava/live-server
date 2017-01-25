@@ -138,7 +138,7 @@ func TestLives_finish(t *testing.T) {
 	liveId := createLive(c)
 	beginLive(c, liveId)
 	endLive(c, liveId)
-	res := c.getData("lives/"+liveId+"/finish", url.Values{})
+	res := c.get("lives/"+liveId+"/finish", url.Values{})
 	assert.NotNil(t, res.Interface())
 }
 
@@ -395,13 +395,5 @@ func TestLives_delTopic(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := createLive(c)
 	res := c.postData("lives/"+liveId+"/topic", url.Values{"op": {"del"}})
-	assert.NotNil(t, res.Interface())
-}
-
-func TestLives_playback(t *testing.T) {
-	c, _ := NewClientAndUser()
-	liveId := createLive(c)
-	beginAndFinshLive(c, liveId)
-	res := c.getData("lives/"+liveId+"/playback", url.Values{})
 	assert.NotNil(t, res.Interface())
 }

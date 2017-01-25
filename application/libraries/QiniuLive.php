@@ -18,20 +18,14 @@ class QiniuLive
 
     function getPlaybackUrl($live)
     {
-        if ($live->status >= LIVE_STATUS_TRANSCODE) {
-            try {
-                $stream = $this->hub->getStream('z1.qulive.' . $live->rtmpKey);
-                $result = $stream->segments();
-                $start = $result["segments"][0]["start"];
-                $end = $result["segments"][-1]["end"];
-                $playbackUrls = $stream->hlsPlaybackUrls($start, $end);
-                $origin = $playbackUrls['ORIGIN'];
-                return $origin;
-            } catch (Exception $e) {
-                logInfo("getStream catch Exception: " . $e->getMessage());
-                return null;
+        try {
+            $stream = $this->hub->getStream('z1.qulive.' . $live->rtmpKey);
+            $result = $stream->segments();
+            $start = $result['start'];
+            $end = $result['end'];
+        } catch (Exception $e) {
+            logInfo("getStream catch Exception: " . $e->getMessage());
             }
-        } else {
             return null;
         }
     }

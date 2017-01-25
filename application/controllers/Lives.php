@@ -255,8 +255,9 @@ class Lives extends BaseController
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
-        if ($live->status != LIVE_STATUS_TRANSCODE) {
-            $this->failure(ERROR_LIVE_NOT_TRANSCODE);
+        $url = $this->qiniuLive->getPlaybackUrl($live);
+        if (!$url) {
+            $this->failure(ERROR_PLAYBACK_FAIL);
             return;
         }
         $endOk = $this->liveDao->endLive($id);
@@ -591,13 +592,6 @@ class Lives extends BaseController
             return;
         }
         $this->succeed();
-    }
-
-    function playback_get($liveId)
-    {
-        $live = $this->liveDao->getRawLive($liveId);
-        $url = $this->qiniuLive->getPlaybackUrl($live);
-        $this->succeed($url);
     }
 
 }
