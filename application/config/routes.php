@@ -195,3 +195,6 @@ $route['topics/init']['GET'] = 'topics/init';
 // subscribes
 $route['subscribes']['POST'] = 'subscribes/create';
 $route['subscribes/del']['POST'] = 'subscribes/del';
+
+// accounts
+$route['accounts/me']['GET'] = 'accounts/me';

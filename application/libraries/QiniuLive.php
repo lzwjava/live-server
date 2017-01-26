@@ -29,7 +29,6 @@ class QiniuLive
             return $playbackUrl;
         } catch (Exception $e) {
             logInfo("getStream catch Exception: " . $e->getMessage());
-
             if (isDebug()) {
                 return true;
             }
