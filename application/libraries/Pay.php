@@ -57,8 +57,10 @@ class Pay
             return $this->wxpay->createQrcodeCharge($orderNo, $amount, $subject, $body);
         } else if ($channel == CHANNEL_WECHAT_APP) {
             return $this->wxpay->createAppCharge($orderNo, $amount, $subject, $body, $openId);
+        } else if ($channel == CHANNEL_APPLE_IAP) {
+            return array(null, array(KEY_ORDER_NO => $orderNo), null);
         }
-        return array(ERROR_PARAMETER_ILLEGAL);
+        return array(ERROR_PARAMETER_ILLEGAL, null, null);
     }
 
     function refund($charge)

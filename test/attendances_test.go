@@ -345,24 +345,24 @@ func TestAttendances_attendanceId(t *testing.T) {
 	assert.NotEqual(t, live.Get("attendanceId").MustInt(), 0)
 }
 
-func TestAttendances_refund(t *testing.T) {
-	c, _ := NewClientAndUser()
-	liveId := createLive(c)
-
-	c2, userId := NewClientAndWeChatUser()
-	createWechatAttendance(c2, userId, liveId)
-
-	c.admin = true
-	res := c.get("attendances/refund/"+liveId, url.Values{})
-	assert.NotNil(t, res)
-}
-
-func TestAttendances_transfer(t *testing.T) {
-	c := NewClient()
-	c.admin = true
-	res := c.get("attendances/transfer", url.Values{})
-	assert.NotNil(t, res)
-}
+// func TestAttendances_refund(t *testing.T) {
+// 	c, _ := NewClientAndUser()
+// 	liveId := createLive(c)
+//
+// 	c2, userId := NewClientAndWeChatUser()
+// 	createWechatAttendance(c2, userId, liveId)
+//
+// 	c.admin = true
+// 	res := c.get("attendances/refund/"+liveId, url.Values{})
+// 	assert.NotNil(t, res)
+// }
+//
+// func TestAttendances_transfer(t *testing.T) {
+// 	c := NewClient()
+// 	c.admin = true
+// 	res := c.get("attendances/transfer", url.Values{})
+// 	assert.NotNil(t, res)
+// }
 
 // func TestAttendances_sendRedPacket(t *testing.T) {
 // 	c := NewClient()

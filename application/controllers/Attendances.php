@@ -35,16 +35,6 @@ class Attendances extends BaseController
         $this->weChatPlatform = new WeChatPlatform();
     }
 
-    private function getSnsUser($user, $channel)
-    {
-        if ($channel == CHANNEL_WECHAT_H5) {
-            return $this->snsUserDao->getSnsUserByUser($user);
-        } else if ($channel == CHANNEL_WECHAT_APP) {
-            return $this->snsUserDao->getWxAppSnsUser($user->unionId);
-        }
-        return null;
-    }
-
     function create_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_LIVE_ID))) {
@@ -80,21 +70,15 @@ class Attendances extends BaseController
 
         if ($live->needPay) {
             $channel = $this->post(KEY_CHANNEL);
-            if ($this->checkIfNotInArray($channel, array(CHANNEL_WECHAT_H5,
-                CHANNEL_WECHAT_QRCODE, CHANNEL_ALIPAY_APP, CHANNEL_WECHAT_APP))
+            if ($this->checkIfNotInArray($channel, channelSet())
             ) {
                 return;
             }
 
-            $openId = null;
-
-            if ($channel == CHANNEL_WECHAT_H5 || $channel == CHANNEL_WECHAT_APP) {
-                $snsUser = $this->getSnsUser($user, $channel);
-                if (!$snsUser) {
-                    $this->failure(ERROR_MUST_BIND_WECHAT);
-                    return;
-                }
-                $openId = $snsUser->openId;
+            list($error, $openId) = $this->snsUserDao->getOpenIdByChannel($user, $channel);
+            if ($error) {
+                $this->failure($error);
+                return;
             }
 
             // max 24 chars

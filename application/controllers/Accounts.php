@@ -26,4 +26,5 @@ class Accounts extends BaseController
         $account = $this->accountDao->getOrCreateAccount($user->userId);
         $this->succeed($account);
     }
+
 }

@@ -30,12 +30,20 @@ class ChargeDao extends BaseDao
     function updateChargeToPaid($orderNo)
     {
         $this->db->where(KEY_ORDER_NO, $orderNo);
-        return $this->db->update(TABLE_CHARGES, array(KEY_PAID => 1));
+        $this->db->update(TABLE_CHARGES, array(KEY_PAID => 1));
+        return $this->db->affected_rows() > 0;
     }
 
     function getOneByOrderNo($orderNo)
     {
         return $this->getOneFromTable(TABLE_CHARGES, KEY_ORDER_NO, $orderNo);
+    }
+
+    function updateRemark($orderNo, $remark)
+    {
+        $this->db->where(KEY_ORDER_NO, $orderNo);
+        $this->db->update(TABLE_CHARGES, array(KEY_REMARK => $remark));
+        return $this->db->affected_rows() > 0;
     }
 
 }

@@ -337,3 +337,5 @@ ALTER TABLE `lives` ADD FOREIGN KEY (`topicId`) REFERENCES `topics` (`topicId`);
 ALTER TABLE `videos` ADD COLUMN `type` VARCHAR(10) DEFAULT 'mp4'
 AFTER `title`;
 
+ALTER TABLE `charges` ADD COLUMN `remark` VARCHAR(300) NOT NULL DEFAULT ''
+AFTER `prepayId`;

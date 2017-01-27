@@ -111,4 +111,27 @@ class SnsUserDao extends BaseDao
         return $this->db->query($sql, $binds)->row();
     }
 
+    private function getSnsUserByChannel($user, $channel)
+    {
+        if ($channel == CHANNEL_WECHAT_H5) {
+            return $this->getSnsUserByUser($user);
+        } else if ($channel == CHANNEL_WECHAT_APP) {
+            return $this->getWxAppSnsUser($user->unionId);
+        }
+        return null;
+    }
+
+    function getOpenIdByChannel($user, $channel)
+    {
+        $openId = null;
+        if ($channel == CHANNEL_WECHAT_H5 || $channel == CHANNEL_WECHAT_APP) {
+            $snsUser = $this->getSnsUserByChannel($user, $channel);
+            if (!$snsUser) {
+                return array(ERROR_MUST_BIND_WECHAT, null);
+            }
+            $openId = $snsUser->openId;
+        }
+        return array(null, $openId);
+    }
+
 }

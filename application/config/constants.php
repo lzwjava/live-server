@@ -209,6 +209,9 @@ define('ERROR_ALREADY_GRAB', 'packet_already_grab');
 define('ERROR_PACKET_SEND', 'packet_send');
 define('ERROR_PACKET_AT_LEAST', 'packet_at_least');
 
+// accounts
+define('ERROR_VERIFY_RECEIPT', 'verify_receipt_wrong');
+
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -328,7 +331,10 @@ if (!function_exists('errorInfos')) {
             ERROR_PACKET_NONE => '红包已经被抢光了',
             ERROR_ALREADY_GRAB => '您已经抢过红包了',
             ERROR_PACKET_SEND => '发红包出错了',
-            ERROR_PACKET_AT_LEAST => '红包每个至少1元'
+            ERROR_PACKET_AT_LEAST => '红包每个至少1元',
+
+            // accounts
+            ERROR_VERIFY_RECEIPT => '验证支付凭证失败'
         );
     }
 
@@ -384,6 +390,14 @@ if (!function_exists('liveStatusSet')) {
     }
 }
 
+if (!function_exists('channelSet')) {
+    function channelSet()
+    {
+        return array(CHANNEL_WECHAT_H5, CHANNEL_WECHAT_QRCODE, CHANNEL_ALIPAY_APP,
+            CHANNEL_WECHAT_APP, CHANNEL_APPLE_IAP);
+    }
+}
+
 // sms
 define('SMS_TEMPLATE', 'template');
 define('SMS_NAME', 'name');
@@ -419,6 +433,7 @@ define('CHANNEL_WECHAT_H5', 'wechat_h5');
 define('CHANNEL_WECHAT_QRCODE', 'wechat_qrcode');
 define('CHANNEL_ALIPAY_APP', 'alipay_app');
 define('CHANNEL_WECHAT_APP', 'wechat_app');
+define('CHANNEL_APPLE_IAP', 'apple_iap');
 
 define('KEY_PREPAY_ID', 'prepayId');
 
@@ -449,6 +464,8 @@ define('TRANS_TYPE_INCOME', 3);
 
 define('REMARK_ALIPAY', '支付宝充值');
 define('REMARK_WECHAT', '微信充值');
+define('REMARK_WECHAT_QRCODE', '微信二维码充值');
+define('REMARK_APPLE_IAP', '苹果应用内购充值');
 define('REMARK_PAY', '参加%s的直播');
 define('REMARK_INCOME_LIVE', '%s报名直播');
 define('REMARK_ATTEND', '%s参加%s的直播');
@@ -667,6 +684,7 @@ define('MAX_COMMON_PACKET', 100 * 100000);
 define('CHARGE_TYPE_ATTEND', 1);
 define('CHARGE_TYPE_REWARD', 2);
 define('CHARGE_TYPE_PACKET', 3);
+define('CHARGE_TYPE_BALANCE', 4);
 
 // oauth type
 define('OAUTH_RESULT_LOGIN', 'login');
