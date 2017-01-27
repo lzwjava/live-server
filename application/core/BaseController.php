@@ -68,7 +68,7 @@ class BaseController extends REST_Controller
             $error = $status;
         }
         if ($extraMsg) {
-            $error .= $extraMsg;
+            $error .= ' ' . $extraMsg;
         }
         if ($error) {
             if ($status != ERROR_NOT_IN_SESSION) {
