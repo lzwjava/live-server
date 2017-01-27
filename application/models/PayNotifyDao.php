@@ -45,6 +45,10 @@ class PayNotifyDao extends BaseDao
             return REMARK_ALIPAY;
         } else if ($channel == CHANNEL_WECHAT_H5) {
             return REMARK_WECHAT;
+        } else if ($channel == CHANNEL_WECHAT_QRCODE) {
+            return REMARK_WECHAT_QRCODE;
+        } else if ($channel == CHANNEL_APPLE_IAP) {
+            return REMARK_APPLE_IAP;
         }
         return 'unknown';
     }
@@ -148,6 +152,16 @@ class PayNotifyDao extends BaseDao
             }
             $error = $this->transactionDao->newPayPacket($userId, genOrderNo(), $totalAmount,
                 $packetId, '发红包');
+            if ($error || !$this->db->trans_status()) {
+                $this->db->trans_rollback();
+                return $error;
+            }
+            $this->db->trans_commit();
+            return null;
+        } else if ($type == CHARGE_TYPE_BALANCE) {
+            $userId = $metadata->userId;
+            $this->db->trans_begin();
+            $error = $this->updatePaidAndNewCharge($orderNo, $charge, $channel, $userId);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return $error;

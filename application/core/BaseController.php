@@ -52,7 +52,12 @@ class BaseController extends REST_Controller
         $this->responseResult(REQ_OK, $resultData, null, $total);
     }
 
-    protected function failure($status, $error = null)
+    protected function failureWithExtraMsg($status, $extraMsg)
+    {
+        $this->failure($status, null, $extraMsg);
+    }
+
+    protected function failure($status, $error = null, $extraMsg = null)
     {
         if (!$error) {
             if (isset(errorInfos()[$status])) {
@@ -61,6 +66,9 @@ class BaseController extends REST_Controller
         }
         if (!$error) {
             $error = $status;
+        }
+        if ($extraMsg) {
+            $error .= $extraMsg;
         }
         if ($error) {
             if ($status != ERROR_NOT_IN_SESSION) {

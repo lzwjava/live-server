@@ -166,6 +166,8 @@ $route['staffs']['GET'] = 'staffs/list';
 
 // charges
 $route['charges/one']['GET'] = 'charges/one';
+$route['charges/remark']['POST'] = 'charges/remark';
+$route['charges']['POST'] = 'charges/create';
 
 // stats
 $route['stats']['GET'] = 'stats/all';
