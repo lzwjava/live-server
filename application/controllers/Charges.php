@@ -94,7 +94,7 @@ class Charges extends BaseController
         $this->succeed($ch);
     }
 
-    function applePayback_post()
+    function appleCallback_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array('receipt', KEY_ORDER_NO))) {
             return;
@@ -128,7 +128,7 @@ class Charges extends BaseController
         }
     }
 
-    function getReceiptData($url, $receipt)
+    private function getReceiptData($url, $receipt)
     {
         $postData = json_encode(
             array('receipt-data' => $receipt)
@@ -149,6 +149,14 @@ class Charges extends BaseController
         $data = json_decode($response);
         if (!is_object($data)) {
             throw new Exception('Invalid response data');
+        }
+        if (isDebug()) {
+            logInfo("in debug, real data: " . json_encode($data));
+            $debugData = new StdClass;
+            $debugData->status = 0;
+            $debugData->receipt = new StdClass;
+            $debugData->receipt->quantity = 1;
+            return $debugData;
         }
         return $data;
     }
