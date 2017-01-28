@@ -96,14 +96,14 @@ class Charges extends BaseController
 
     function appleCallback_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array('receipt', KEY_ORDER_NO))) {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_RECEIPT, KEY_ORDER_NO))) {
             return;
         }
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
         }
-        $receipt = $this->post('receipt');
+        $receipt = $this->post(KEY_RECEIPT);
         $orderNo = $this->post(KEY_ORDER_NO);
         $prodUrl = 'https://buy.itunes.apple.com/verifyReceipt';
         $testUrl = 'https://sandbox.itunes.apple.com/verifyReceipt';
