@@ -153,9 +153,64 @@ class JSSDK
                     'url' => 'http://m.quzhiboapp.com/?liveId=0'
                 ),
                 array(
-                    'type' => 'view',
-                    'name' => '发布会',
-                    'url' => 'http://mp.weixin.qq.com/s/-ebQBwpCT0YWs-0rM0fB2w'
+                    'name' => '历史热门',
+                    'sub_button' => array(
+                        array(
+                            'type' => 'view',
+                            'name' => '唐巧谈iOS安全',
+                            'url' => 'http://m.quzhiboapp.com/?liveId=252'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => 'iDev苹果大会',
+                            'url' => 'http://m.quzhiboapp.com/?liveId=180'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '孙源谈iOS面试',
+                            'url' => 'http://m.quzhiboapp.com/?liveId=115'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '大胡子讲产品',
+                            'url' => 'http://m.quzhiboapp.com/?liveId=255'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '张星宇谈高效用Mac键盘',
+                            'url' => 'http://m.quzhiboapp.com/?liveId=193'
+                        )
+                    ),
+                ),
+                array(
+                    'name' => '创业故事',
+                    'sub_button' => array(
+                        array(
+                            'type' => 'view',
+                            'name' => '95年创始人成长经历',
+                            'url' => 'http://mp.weixin.qq.com/s/KVr_s8bWOBfeexCmhHBpIw'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '趣直播发布会',
+                            'url' => 'http://mp.weixin.qq.com/s/-ebQBwpCT0YWs-0rM0fB2w'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '趣直播首战告捷',
+                            'url' => 'http://mp.weixin.qq.com/s/UvBP3Y9Aw3x0g0bFGa5mdQ'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '上线两个月感想',
+                            'url' => 'http://mp.weixin.qq.com/s/5ww7zVtXnKWfL2mCaBN8Og'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '创业一年心得',
+                            'url' => 'http://mp.weixin.qq.com/s/TwGrRUclPmIxoRu55zLmDg'
+                        )
+                    )
                 )
             )
         );

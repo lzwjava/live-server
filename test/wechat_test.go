@@ -182,6 +182,7 @@ func TestWeChat_isSubscribe(t *testing.T) {
 	}
 }
 
+//
 // func TestWeChat_createMenu(t *testing.T) {
 // 	c := NewClient()
 // 	res := c.getData("wechat/createMenu", url.Values{})
