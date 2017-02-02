@@ -208,7 +208,7 @@ class JSSDK
                         array(
                             'type' => 'view',
                             'name' => '创业一年心得',
-                            'url' => 'http://mp.weixin.qq.com/s/TwGrRUclPmIxoRu55zLmDg'
+                            'url' => 'http://mp.weixin.qq.com/s/rhlWGg4GXpUEHl2VPYru4Q'
                         )
                     )
                 )
