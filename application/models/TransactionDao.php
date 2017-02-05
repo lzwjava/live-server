@@ -62,9 +62,9 @@ class TransactionDao extends BaseDao
             TRANS_TYPE_RECHARGE, 'chargeId:' . $chargeId, $remark);
     }
 
-    function newIncome($userId, $orderNo, $amount, $liveId, $remark)
+    function newIncome($userId, $orderNo, $amount, $type, $liveId, $remark)
     {
-        return $this->newTransaction($userId, $orderNo, $amount, TRANS_TYPE_INCOME,
+        return $this->newTransaction($userId, $orderNo, $amount, $type,
             'liveId:' . $liveId, $remark);
     }
 
@@ -85,26 +85,6 @@ class TransactionDao extends BaseDao
         $orderNo = genOrderNo();
         return $this->newTransaction($userId, $orderNo, -$amount, TRANS_TYPE_WITHDRAW,
             'withdrawId:' . $withdrawId, REMARK_WITHDRAW);
-    }
-
-    function payUser($fromUser, $toUser, $liveId, $amount, $type)
-    {
-        $remark = null;
-        if ($type == CHARGE_TYPE_ATTEND) {
-            $remark = sprintf(REMARK_ATTEND, $fromUser->username, $toUser->username);
-        } else if ($type == CHARGE_TYPE_REWARD) {
-            $remark = sprintf(REMARK_REWARD, $fromUser->username, $toUser->username);
-        }
-        $error = $this->newPay($fromUser->userId, genOrderNo(),
-            -$amount, $liveId, $remark);
-        if ($error) {
-            return $error;
-        }
-        $error = $this->newIncome($toUser->userId, genOrderNo(), $amount, $liveId, $remark);
-        if ($error) {
-            return $error;
-        }
-        return null;
     }
 
 }

@@ -348,3 +348,11 @@ CREATE TABLE `withdraws` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+INSERT INTO `users` (`userId`, `username`, `mobilePhoneNumber`, `avatarUrl`) VALUES (-1, '系统', NULL, 'http://i
+.quzhiboapp.com/icon108.jpg');
+UPDATE `users`
+SET `userId` = 0
+WHERE `userId` = -1;
+
+INSERT INTO `accounts` (`userId`, `balance`) VALUE (0, 0);

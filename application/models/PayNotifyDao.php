@@ -119,7 +119,7 @@ class PayNotifyDao extends BaseDao
             $live = $this->liveDao->getLive($liveId);
             $fromUser = $this->userDao->findPublicUserById($userId);
             $toUser = $live->owner;
-            $error = $this->transactionDao->payUser($fromUser, $toUser, $liveId, $amount, $type);
+            $error = $this->payUser($fromUser, $toUser, $live, $amount, $type);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return $error;
@@ -148,7 +148,7 @@ class PayNotifyDao extends BaseDao
             $live = $this->liveDao->getLive($liveId);
             $fromUser = $this->userDao->findPublicUserById($userId);
             $toUser = $live->owner;
-            $error = $this->transactionDao->payUser($fromUser, $toUser, $liveId, $amount, $type);
+            $error = $this->payUser($fromUser, $toUser, $live, $amount, $type);
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return $error;
@@ -195,6 +195,47 @@ class PayNotifyDao extends BaseDao
         } else {
             return ERROR_PARAMETER_ILLEGAL;
         }
+    }
+
+    private function payUser($fromUser, $toUser, $live, $amount, $type)
+    {
+        $remark = null;
+        $incomeType = null;
+        $liveId = $live->liveId;
+        if ($type == CHARGE_TYPE_ATTEND) {
+            $remark = sprintf(REMARK_ATTEND, $fromUser->username, $toUser->username);
+            $incomeType = TRANS_TYPE_LIVE_INCOME;
+        } else if ($type == CHARGE_TYPE_REWARD) {
+            $remark = sprintf(REMARK_REWARD, $fromUser->username, $toUser->username);
+            $incomeType = TRANS_TYPE_REWARD_INCOME;
+        }
+        $error = $this->transactionDao->newPay($fromUser->userId, genOrderNo(),
+            -$amount, $liveId, $remark);
+        if ($error) {
+            return $error;
+        }
+        // 分钱
+        $anchorAmount = floor($amount * ANCHOR_INCOME_RATE);
+        $systemAmount = $amount - $anchorAmount;
+        if ($anchorAmount > 0) {
+            $error = $this->transactionDao->newIncome($toUser->userId, genOrderNo(),
+                $anchorAmount, $incomeType, $liveId, $remark);
+            if ($error) {
+                return $error;
+            }
+        }
+        if ($systemAmount > 0) {
+            $error = $this->transactionDao->newIncome(ADMIN_OP_SYSTEM_ID, genOrderNo(),
+                $systemAmount, $incomeType, $liveId, $remark . '的系统分成');
+            if ($error) {
+                return $error;
+            }
+        }
+        if ($anchorAmount) {
+            $this->weChatPlatform->notifyNewIncome($incomeType, $anchorAmount, $live, $fromUser);
+        }
+
+        return null;
     }
 
     function handleWithdraw($withdrawId)
