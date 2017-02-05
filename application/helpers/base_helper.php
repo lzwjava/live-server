@@ -103,6 +103,21 @@ if (!function_exists('amountToYuan')) {
     }
 }
 
+if (!function_exists('moneyFormat')) {
+    function moneyFormat($amount)
+    {
+        return number_format($amount / 100.0, 2, '.', '');
+    }
+}
+
+if (!function_exists('dateFormat')) {
+    function dateFormat($dateStr)
+    {
+        $dateTime = date_create($dateStr, new DateTimeZone('Asia/Shanghai'));
+        date_format($dateTime, 'Y-m-d H:i');
+    }
+}
+
 
 if (!function_exists('extractFields')) {
     function extractFields($object, $fields, $prefix = null)

@@ -178,7 +178,6 @@ func TestWeChat_isSubscribe(t *testing.T) {
 	res := c.get("wechat/isSubscribe", url.Values{"userId": {userId}})
 	if res.Get("status").MustString() == "success" {
 		assert.NotNil(t, res.Interface())
-		assert.Equal(t, res.MustInt(), 1)
 	}
 }
 
@@ -221,6 +220,16 @@ func TestWeChat_subscribe(t *testing.T) {
 
 	user := c.getData("self", url.Values{})
 	assert.NotNil(t, user.Interface())
+}
+
+func subscribeWechat(c *Client) {
+	c.postWithStr("wechat/callback", `<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+<FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
+<CreateTime>1482625995</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[subscribe]]></Event>
+<EventKey><![CDATA[]]></EventKey>
+</xml>`)
 }
 
 func TestWeChat_subscribeByPacket(t *testing.T) {

@@ -114,7 +114,7 @@ func TestUsers_fixAvatarUrl(t *testing.T) {
 
 func TestUsers_bindPhone(t *testing.T) {
 	c, userId := NewClientAndUser()
-	runSql("update users set mobilePhoneNumber='' where userId="+userId, false)
+	runSql("update users set mobilePhoneNumber = null where userId="+userId, false)
 	mobile := randomMobile()
 	res := c.postData("users/bindPhone", url.Values{"mobilePhoneNumber": {mobile}, "smsCode": {"5555"}})
 	assert.NotNil(t, res.Interface())

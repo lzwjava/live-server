@@ -387,4 +387,13 @@ class LiveDao extends BaseDao
         return $count;
     }
 
+    function haveWaitLive($userId)
+    {
+        $sql = "SELECT count(*) AS cnt FROM lives WHERE status >= ?
+                AND status < ? AND ownerId=?";
+        $binds = array(LIVE_STATUS_WAIT, LIVE_STATUS_OFF, $userId);
+        $row = $this->db->query($sql, $binds)->row();
+        return $row->cnt > 0;
+    }
+
 }

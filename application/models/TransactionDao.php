@@ -82,6 +82,13 @@ class TransactionDao extends BaseDao
             'packetId:' . $packetId, $remark);
     }
 
+    function newWithdraw($userId, $amount, $withdrawId)
+    {
+        $orderNo = genOrderNo();
+        return $this->newTransaction($userId, $orderNo, -$amount, TRANS_TYPE_WITHDRAW,
+            'withdrawId:' . $withdrawId, REMARK_WITHDRAW);
+    }
+
     function payUser($fromUser, $toUser, $liveId, $amount, $type)
     {
         $remark = null;

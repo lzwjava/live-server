@@ -201,3 +201,8 @@ $route['subscribes/del']['POST'] = 'subscribes/del';
 
 // accounts
 $route['accounts/me']['GET'] = 'accounts/me';
+
+// withdraws
+$route['withdraws']['POST'] = 'withdraws/create';
+$route['withdraws']['GET'] = 'withdraws/list';
+$route['withdraws/(\d+)/agree']['GET'] = 'withdraws/agree/$1';

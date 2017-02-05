@@ -26,8 +26,9 @@ func getTopic(c *Client) string {
 	return toStr(topic.Get("topicId").MustInt())
 }
 
-func TestTopics_init(t *testing.T) {
-	c := NewClient()
-	res := c.getData("topics/init", url.Values{})
-	assert.NotNil(t, res.Interface())
-}
+//
+// func TestTopics_init(t *testing.T) {
+// 	c := NewClient()
+// 	res := c.getData("topics/init", url.Values{})
+// 	assert.NotNil(t, res.Interface())
+// }
