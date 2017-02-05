@@ -66,6 +66,10 @@ class Withdraws extends BaseController
             $this->failure(ERROR_WITHDRAW_AMOUNT_TOO_LITTLE);
             return;
         }
+        if (!$user->mobilePhoneNumber) {
+            $this->failure(ERROR_MUST_BIND_PHONE);
+            return;
+        }
         $haveWaitWithdraw = $this->withdrawDao->haveWaitWithdraw($user->userId);
         if ($haveWaitWithdraw) {
             $this->failure(ERROR_HAVE_WAIT_WITHDRAW);
