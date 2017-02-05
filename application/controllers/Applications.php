@@ -36,7 +36,7 @@ class Applications extends BaseController
             return;
         }
         if (!$user->mobilePhoneNumber) {
-            $this->failure(ERROR_ALREADY_BIND_PHONE);
+            $this->failure(ERROR_MUST_BIND_PHONE);
             return;
         }
         $application = $this->applicationDao->getApplicationByUserId($user->userId);
