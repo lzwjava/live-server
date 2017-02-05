@@ -53,7 +53,7 @@ class PayNotifyDao extends BaseDao
         $this->rewardDao = new RewardDao();
         $this->load->model(PacketDao::class);
         $this->packetDao = new PacketDao();
-        $this->load->model(WithDrawDao::class);
+        $this->load->model(WithdrawDao::class);
         $this->withdrawDao = new WithdrawDao();
         $this->load->library(Pay::class);
         $this->pay = new Pay();

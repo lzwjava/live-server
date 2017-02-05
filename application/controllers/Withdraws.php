@@ -26,7 +26,7 @@ class Withdraws extends BaseController
     function __construct()
     {
         parent::__construct();
-        $this->load->model(WithDrawDao::class);
+        $this->load->model(WithdrawDao::class);
         $this->withdrawDao = new WithdrawDao();
         $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
