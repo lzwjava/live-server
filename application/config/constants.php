@@ -478,6 +478,8 @@ define('TRANS_TYPE_PAY', 2);
 define('TRANS_TYPE_INCOME', 3);
 define('TRANS_TYPE_WITHDRAW', 4);
 
+define('TRANS_TYPE_LIVE_INCOME', 30);
+
 define('REMARK_ALIPAY', '支付宝充值');
 define('REMARK_WECHAT', '微信充值');
 define('REMARK_WECHAT_QRCODE', '微信二维码充值');
@@ -487,6 +489,7 @@ define('REMARK_INCOME_LIVE', '%s报名直播');
 define('REMARK_ATTEND', '%s参加%s的直播');
 define('REMARK_REWARD', '%s打赏%s的直播');
 define('REMARK_WITHDRAW', '提现');
+define('REMARK_SYSTEM_INCOME', '平台分成');
 
 // qrcodes
 define('TABLE_SCANNED_QRCODES', 'scanned_qrcodes');
@@ -740,7 +743,6 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'qwkXYOvNLxY0zbKaTTIJ38171HZrD0vvC3x6BDcMCKjAjsC9Ki8B6xFPYq7eHzVSJ-g0LAoqgtbndYplIFiOcAmcDquK5KxvxTpCcDmYLufz04zeZ6BDs-bktS6r4c72DMDbAIAUDU');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -801,3 +803,8 @@ define('KEY_USER_IDS', 'userIds');
 define('KEY_RECEIPT', 'receipt');
 
 define('MIN_WITHDRAW_AMOUNT', 5 * 100);
+
+define('ADMIN_OP_USER_ID', 1);
+define('ADMIN_OP_SYSTEM_ID', 0);
+
+define('ANCHOR_INCOME_RATE', 0.6);

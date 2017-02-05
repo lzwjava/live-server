@@ -260,6 +260,76 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, 'lNmzB_7IA36S_4uy0NccBexKkrTy4rybAJhAlmcSPpw', null, $tmplData);
     }
 
+    function notifyNewWithdraw($withdraw)
+    {
+        if (isDebug()) {
+            $user = $this->userDao->findUserById($withdraw->userId);
+        } else {
+            $user = $this->userDao->findUserById(ADMIN_OP_USER_ID);
+        }
+        $withdrawUser = $this->userDao->findUserById($withdraw->userId);
+        $tmplData = array(
+            'first' => array(
+                'value' => '有新的提现申请',
+                'color' => '#000'
+            ),
+            'keyword1' => array(
+                'value' => $withdrawUser->username,
+                'color' => '#000'
+            ),
+            'keyword2' => array(
+                'value' => date('Y-m-d H:i'),
+                'color' => '#000'
+            ),
+            'keyword3' => array(
+                'value' => moneyFormat($withdraw->amount) . '元',
+                'color' => '#00A2C0'
+            ),
+            'keyword4' => array(
+                'value' => '微信账户',
+                'color' => '#000'
+            ),
+            'remark' => array(
+                'value' => '提现ID为:' . $withdraw->withdrawId . ',请尽快处理',
+                'color' => '#00A2C0'
+            )
+        );
+        return $this->notifyByWeChat($user, 'fD-twBRM96P4FkBSZQHPJ4GJ8_1i9N7HaDe7A36CllY', null, $tmplData);
+    }
+
+    function notifyNewIncome($incomeType, $amount, $live, $fromUser)
+    {
+        $fromRealUser = $this->userDao->findUserById($fromUser->userId);
+        $word = null;
+        if ($incomeType == TRANS_TYPE_LIVE_INCOME) {
+            $word = '赞助';
+        } else if ($incomeType == TRANS_TYPE_REWARD_INCOME) {
+            $word = '打赏';
+        }
+        $tmplData = array(
+            'first' => array(
+                'value' => sprintf('%s%s了您的直播《%s》，您获得%s元收益', $fromRealUser->username, $word,
+                    $live->subject, moneyFormat($amount)),
+                'color' => '#D00019'
+            ),
+            'keyword1' => array(
+                'value' => $word,
+                'color' => '#000'
+            ),
+            'keyword2' => array(
+                'value' => date('Y-m-d H:i'),
+                'color' => '#000'
+            ),
+            'remark' => array(
+                'value' => '您的努力初见成效，再接再励哟。',
+                'color' => '#000'
+            )
+        );
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+        return $this->notifyByWeChat($fromRealUser, 'Clt9LxKunzjbXwMOYAOoB6w_-40u9FUdv7Men4vTluc',
+            $url, $tmplData);
+    }
+
     private function httpPost($url, $data)
     {
         $ch = curl_init();

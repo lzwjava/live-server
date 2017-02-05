@@ -23,6 +23,9 @@ class Withdraws extends BaseController
     /** @var PayNotifyDao */
     public $payNotifyDao;
 
+    /** @var WeChatPlatform */
+    public $weChatPlatform;
+
     function __construct()
     {
         parent::__construct();
@@ -36,6 +39,8 @@ class Withdraws extends BaseController
         $this->liveDao = new LiveDao();
         $this->load->model(PayNotifyDao::class);
         $this->payNotifyDao = new PayNotifyDao();
+        $this->load->library(WeChatPlatform::class);
+        $this->weChatPlatform = new WeChatPlatform();
     }
 
     function create_post()
@@ -81,6 +86,12 @@ class Withdraws extends BaseController
             return;
         }
         $withdrawId = $this->withdrawDao->createWithdraw($user->userId, $amount);
+        if (!$withdrawId) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
+        $this->weChatPlatform->notifyNewWithdraw($withdraw);
         $this->succeed(array(KEY_WITHDRAW_ID => $withdrawId));
     }
 
