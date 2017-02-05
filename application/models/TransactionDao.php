@@ -32,7 +32,9 @@ class TransactionDao extends BaseDao
         return $this->db->insert_id();
     }
 
-    private function newTransaction($userId, $orderNo, $amount, $type, $relatedId, $remark)
+    // must in transaction
+    private function newTransaction($userId, $orderNo, $amount,
+                                    $type, $relatedId, $remark)
     {
         $account = $this->accountDao->getOrCreateAccount($userId);
         $balance = $account->balance;
@@ -40,21 +42,17 @@ class TransactionDao extends BaseDao
         if ($newBalance < 0) {
             return ERROR_BALANCE_INSUFFICIENT;
         }
-        $this->db->trans_begin();
 
-        $this->addTransaction($userId, $orderNo, $amount, $balance, $type, $relatedId, $remark);
+        $transactionId = $this->addTransaction($userId, $orderNo, $amount, $balance, $type, $relatedId, $remark);
 
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
+        if (!$transactionId) {
             return ERROR_TRANS_FAILED;
         }
 
-        $rows = $this->accountDao->updateBalance($userId, $newBalance, $balance);
-        if (!$rows || $this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
+        $updated = $this->accountDao->updateBalance($userId, $newBalance, $balance);
+        if (!$updated) {
             return ERROR_TRANS_FAILED;
         }
-        $this->db->trans_commit();
         return null;
     }
 

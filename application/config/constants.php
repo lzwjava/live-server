@@ -218,6 +218,7 @@ define('ERROR_EXCEED_BALANCE', 'exceed_balance');
 define('ERROR_WITHDRAW_AMOUNT_TOO_LITTLE', 'withdraw_amount_too_little');
 define('ERROR_HAVE_WAIT_WITHDRAW', 'have_wait_withdraw');
 define('ERROR_HAVE_WAIT_LIVE', 'have_wait_live');
+define('ERROR_WITHDRAW_ALREADY_DONE', 'withdraw_already_done');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -347,7 +348,8 @@ if (!function_exists('errorInfos')) {
             ERROR_EXCEED_BALANCE => '提现金额超过了账户余额',
             ERROR_WITHDRAW_AMOUNT_TOO_LITTLE => '提现金额最低不少于5元',
             ERROR_HAVE_WAIT_WITHDRAW => '有正在处理的提现中,请等待处理完成',
-            ERROR_HAVE_WAIT_LIVE => '当前还有未完成的直播,不允许提现'
+            ERROR_HAVE_WAIT_LIVE => '当前还有未完成的直播,不允许提现',
+            ERROR_WITHDRAW_ALREADY_DONE => '此提现已经处理过了'
         );
     }
 

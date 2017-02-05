@@ -200,6 +200,9 @@ class PayNotifyDao extends BaseDao
     function handleWithdraw($withdrawId)
     {
         $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
+        if ($withdraw->status != WITHDRAW_STATUS_WAIT) {
+            return ERROR_WITHDRAW_ALREADY_DONE;
+        }
         $this->db->trans_begin();
         $error = $this->transactionDao->newWithdraw($withdraw->userId,
             $withdraw->amount, $withdraw->withdrawId);
