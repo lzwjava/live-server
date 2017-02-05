@@ -700,18 +700,12 @@ class WxPayApi
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 
         if ($useCert == true) {
-            if (isDebug()) {
-                curl_setopt($ch, CURLOPT_SSLCERT, WxPayConfig::SSLP12_PATH);
-                curl_setopt($ch, CURLOPT_SSLCERTTYPE, "P12");
-                curl_setopt($ch, CURLOPT_SSLKEYPASSWD, "abc");
-            } else {
-                //设置证书
-                //使用证书：cert 与 key 分别属于两个.pem文件
-                curl_setopt($ch, CURLOPT_SSLCERTTYPE, 'PEM');
-                curl_setopt($ch, CURLOPT_SSLCERT, WxPayConfig::SSLCERT_PATH);
-                curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'PEM');
-                curl_setopt($ch, CURLOPT_SSLKEY, WxPayConfig::SSLKEY_PATH);
-            }
+            //设置证书
+            //使用证书：cert 与 key 分别属于两个.pem文件
+            curl_setopt($ch, CURLOPT_SSLCERTTYPE, 'PEM');
+            curl_setopt($ch, CURLOPT_SSLCERT, WxPayConfig::SSLCERT_PATH);
+            curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'PEM');
+            curl_setopt($ch, CURLOPT_SSLKEY, WxPayConfig::SSLKEY_PATH);
         }
         //post提交方式
         curl_setopt($ch, CURLOPT_POST, TRUE);
