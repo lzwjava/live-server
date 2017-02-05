@@ -9,14 +9,30 @@
 class PayNotifyDao extends BaseDao
 {
 
+    /** @var LiveDao */
     public $liveDao;
+    /** @var AttendanceDao */
     public $attendanceDao;
+    /** @var ChargeDao */
     public $chargeDao;
+    /** @var TransactionDao */
     public $transactionDao;
+    /** @var ShareDao */
     public $shareDao;
+    /** @var UserDao */
     public $userDao;
+    /** @var RewardDao */
     public $rewardDao;
+    /** @var PacketDao */
     public $packetDao;
+    /** @var WithdrawDao */
+    public $withdrawDao;
+    /** @var Pay */
+    public $pay;
+    /** @var SnsUserDao */
+    public $snsUserDao;
+    /** @var WeChatPlatform */
+    public $weChatPlatform;
 
     function __construct()
     {
@@ -37,6 +53,14 @@ class PayNotifyDao extends BaseDao
         $this->rewardDao = new RewardDao();
         $this->load->model(PacketDao::class);
         $this->packetDao = new PacketDao();
+        $this->load->model(WithDrawDao::class);
+        $this->withdrawDao = new WithdrawDao();
+        $this->load->library(Pay::class);
+        $this->pay = new Pay();
+        $this->load->model(SnsUserDao::class);
+        $this->snsUserDao = new SnsUserDao();
+        $this->load->library(WeChatPlatform::class);
+        $this->weChatPlatform = new WeChatPlatform();
     }
 
     private function remarkFromChannel($channel)
@@ -171,5 +195,39 @@ class PayNotifyDao extends BaseDao
         } else {
             return ERROR_PARAMETER_ILLEGAL;
         }
+    }
+
+    function handleWithdraw($withdrawId)
+    {
+        $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
+        $this->db->trans_begin();
+        $error = $this->transactionDao->newWithdraw($withdraw->userId,
+            $withdraw->amount, $withdraw->withdrawId);
+        if ($error) {
+            $this->db->trans_rollback();
+            return $error;
+        }
+        $ok = $this->withdrawDao->finishWithdraw($withdraw->withdrawId);
+        if (!$ok) {
+            $this->db->trans_rollback();
+            return ERROR_SQL_WRONG;
+        }
+        $user = $this->userDao->findUserById($withdraw->userId);
+        $snsUser = $this->snsUserDao->getSnsUserByUser($user);
+        $transOk = null;
+        $transErr = null;
+        try {
+            list($transOk, $transErr) = $this->pay->transfer($snsUser->openId, $withdraw->amount);
+        } catch (Exception $e) {
+            $transOk = false;
+            $transErr = $e->getMessage();
+        }
+        if (!$transOk) {
+            $this->db->trans_rollback();
+            return $transErr;
+        }
+        $this->weChatPlatform->notifyWithdraw($withdraw);
+        $this->db->trans_commit();
+        return null;
     }
 }

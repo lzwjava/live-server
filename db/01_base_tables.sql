@@ -67,6 +67,7 @@ CREATE TABLE `charges` (
   `creatorIP` VARCHAR(63)  NOT NULL,
   `metaData`  VARCHAR(300) NOT NULL DEFAULT '',
   `prepayId`  VARCHAR(50)  NOT NULL DEFAULT '',
+  `remark`    VARCHAR(300) NOT NULL DEFAULT '',
   `created`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`chargeId`),
@@ -195,6 +196,7 @@ CREATE TABLE `videos` (
   `videoId`  INT(11)     NOT NULL             AUTO_INCREMENT,
   `liveId`   INT(11)     NOT NULL,
   `title`    VARCHAR(60) NOT NULL             DEFAULT '',
+  `type`     VARCHAR(10)                      DEFAULT 'mp4',
   `fileName` VARCHAR(20) NOT NULL             DEFAULT '',
   `created`  TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP,
   `updated`  TIMESTAMP   NOT NULL             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -334,8 +336,15 @@ AFTER `status`;
 
 ALTER TABLE `lives` ADD FOREIGN KEY (`topicId`) REFERENCES `topics` (`topicId`);
 
-ALTER TABLE `videos` ADD COLUMN `type` VARCHAR(10) DEFAULT 'mp4'
-AFTER `title`;
-
-ALTER TABLE `charges` ADD COLUMN `remark` VARCHAR(300) NOT NULL DEFAULT ''
-AFTER `prepayId`;
+CREATE TABLE `withdraws` (
+  `withdrawId` INT(11)   NOT NULL AUTO_INCREMENT,
+  `userId`     INT(11)   NOT NULL,
+  `amount`     INT(11)   NOT NULL DEFAULT 0,
+  `status`     INT(11)   NOT NULL DEFAULT 0,
+  `created`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`withdrawId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;

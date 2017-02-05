@@ -73,9 +73,9 @@ class Pay
         return false;
     }
 
-    function transfer($openId, $name, $amount, $wishing)
+    function transfer($openId, $amount)
     {
-        return $this->wxpay->transfer($openId, $name, $amount, $wishing);
+        return $this->wxpay->transfer($openId, $amount);
     }
 
     function sendRedPacket($openId, $sendName, $amount, $wishing)

@@ -212,6 +212,12 @@ define('ERROR_PACKET_AT_LEAST', 'packet_at_least');
 // accounts
 define('ERROR_VERIFY_RECEIPT', 'verify_receipt_wrong');
 
+// withdraws
+define('ERROR_MUST_SUBSCRIBE', 'must_subscribe');
+define('ERROR_EXCEED_BALANCE', 'exceed_balance');
+define('ERROR_WITHDRAW_AMOUNT_TOO_LITTLE', 'withdraw_amount_too_little');
+define('ERROR_HAVE_WAIT_WITHDRAW', 'have_wait_withdraw');
+define('ERROR_HAVE_WAIT_LIVE', 'have_wait_live');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -334,7 +340,14 @@ if (!function_exists('errorInfos')) {
             ERROR_PACKET_AT_LEAST => '红包每个至少1元',
 
             // accounts
-            ERROR_VERIFY_RECEIPT => '验证支付凭证失败'
+            ERROR_VERIFY_RECEIPT => '验证支付凭证失败',
+
+            // withdraws
+            ERROR_MUST_SUBSCRIBE => '为了转账给您,必须先关注平方根科技服务号',
+            ERROR_EXCEED_BALANCE => '提现金额超过了账户余额',
+            ERROR_WITHDRAW_AMOUNT_TOO_LITTLE => '提现金额最低不少于5元',
+            ERROR_HAVE_WAIT_WITHDRAW => '有正在处理的提现中,请等待处理完成',
+            ERROR_HAVE_WAIT_LIVE => '当前还有未完成的直播,不允许提现'
         );
     }
 
@@ -461,6 +474,7 @@ define('KEY_BALANCE', 'balance');
 define('TRANS_TYPE_RECHARGE', 1);
 define('TRANS_TYPE_PAY', 2);
 define('TRANS_TYPE_INCOME', 3);
+define('TRANS_TYPE_WITHDRAW', 4);
 
 define('REMARK_ALIPAY', '支付宝充值');
 define('REMARK_WECHAT', '微信充值');
@@ -470,6 +484,7 @@ define('REMARK_PAY', '参加%s的直播');
 define('REMARK_INCOME_LIVE', '%s报名直播');
 define('REMARK_ATTEND', '%s参加%s的直播');
 define('REMARK_REWARD', '%s打赏%s的直播');
+define('REMARK_WITHDRAW', '提现');
 
 // qrcodes
 define('TABLE_SCANNED_QRCODES', 'scanned_qrcodes');
@@ -592,6 +607,13 @@ define('KEY_TOPIC_ID', 'topicId');
 // subscribes
 define('TABLE_SUBSCRIBES', 'subscribes');
 define('KEY_SUBSCRIBE_ID', 'subscribeId');
+
+// withdraws
+define('TABLE_WITHDRAWS', 'withdraws');
+define('KEY_WITHDRAW_ID', 'withdrawId');
+define('WITHDRAW_STATUS_WAIT', 1);
+define('WITHDRAW_STATUS_REJECT', 5);
+define('WITHDRAW_STATUS_FINISH', 10);
 
 if (!function_exists('viewPlatformSet')) {
     function viewPlatformSet()
@@ -716,7 +738,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'ERr1xwelPnsa12PO-exLQLawQfQkte5Q33rvE1TmLloHK6cgT9HRooc0OQFVhDd4sbGPq9wukKsZuJFBhMLtUNUHHiap8oijwsWjvlCqLAl0xvjdQ_OM5pb3sxy9frQkLSRcACAELK');
+'qwkXYOvNLxY0zbKaTTIJ38171HZrD0vvC3x6BDcMCKjAjsC9Ki8B6xFPYq7eHzVSJ-g0LAoqgtbndYplIFiOcAmcDquK5KxvxTpCcDmYLufz04zeZ6BDs-bktS6r4c72DMDbAIAUDU');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -775,3 +797,5 @@ define('THIRD_SESSION_LEN', 48);
 define('KEY_USER_IDS', 'userIds');
 
 define('KEY_RECEIPT', 'receipt');
+
+define('MIN_WITHDRAW_AMOUNT', 5 * 100);

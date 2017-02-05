@@ -163,7 +163,7 @@ class Attendances extends BaseController
 
     function transfer_get()
     {
-        $this->pay->transfer('ol0AFwFe5jFoXcQby4J7AWJaWXIM', '李智维', 100 * 300, '新年快乐');
+        $this->pay->transfer('ol0AFwFe5jFoXcQby4J7AWJaWXIM', 100 * 1);
         $this->succeed();
     }
 

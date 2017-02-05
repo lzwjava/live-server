@@ -46,7 +46,7 @@ class AccountDao extends BaseDao
         $sql = 'UPDATE accounts SET balance = ? WHERE userId=? AND balance=?';
         $binds = array($balance, $userId, $oldBalance);
         $this->db->query($sql, $binds);
-        return $this->db->affected_rows();
+        return $this->db->affected_rows() > 0;
     }
 
 }

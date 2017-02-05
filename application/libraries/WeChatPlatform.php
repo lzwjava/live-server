@@ -67,10 +67,12 @@ class WeChatPlatform
         $data = array(
             'touser' => $snsUser->openId,
             'template_id' => $tempId,
-            'url' => $url,
             'topcolor' => '#FF0000',
             'data' => $tmplData
         );
+        if ($url) {
+            $data['url'] = $url;
+        }
         $accesstoken = $this->jsSdk->getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $accesstoken;
         $res = $this->httpPost($url, $data);
@@ -220,6 +222,42 @@ class WeChatPlatform
             )
         );
         return $this->notifyByWeChat($owner, 'H7LOlSlgG1O8ohoese6k4_kqwjarXAdsOgbn0x8vTQU', $url, $tmplData);
+    }
+
+    function notifyWithdraw($withdraw)
+    {
+        $user = $this->userDao->findUserById($withdraw->userId);
+        $tmplData = array(
+            'first' => array(
+                'value' => '您的提现申请已处理',
+                'color' => '#000'
+            ),
+            'keyword1' => array(
+                'value' => $user->username,
+                'color' => '#000'
+            ),
+            'keyword2' => array(
+                'value' => moneyFormat($withdraw->amount) . '元',
+                'color' => '#00A2C0'
+            ),
+            'keyword3' => array(
+                'value' => '微信账户',
+                'color' => '#000'
+            ),
+            'keyword4' => array(
+                'value' => date('Y-m-d H:i'),
+                'color' => '#000'
+            ),
+            'keyword5' => array(
+                'value' => '成功',
+                'color' => '#000'
+            ),
+            'remark' => array(
+                'value' => '提现成功，已转账到您的微信，请查收',
+                'color' => '#00A2C0'
+            )
+        );
+        return $this->notifyByWeChat($user, 'lNmzB_7IA36S_4uy0NccBexKkrTy4rybAJhAlmcSPpw', null, $tmplData);
     }
 
     private function httpPost($url, $data)
