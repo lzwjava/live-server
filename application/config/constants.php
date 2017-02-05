@@ -479,6 +479,7 @@ define('TRANS_TYPE_INCOME', 3);
 define('TRANS_TYPE_WITHDRAW', 4);
 
 define('TRANS_TYPE_LIVE_INCOME', 30);
+define('TRANS_TYPE_REWARD_INCOME', 31);
 
 define('REMARK_ALIPAY', '支付宝充值');
 define('REMARK_WECHAT', '微信充值');
@@ -743,6 +744,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
+'IVBgk9Jg4oPCMiZ3K4WcCuSeQgb6uD46h4DXWuGOo_K8BlkdlJrlNScrulO3WgODehpI1Vqar3JUuW7SGOFMPt77K6TssX5LpAntLvaCmgJrik66usVuOzDyioTb1sLCWLIhABASHE');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
