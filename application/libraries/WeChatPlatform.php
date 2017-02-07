@@ -297,9 +297,10 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, 'fD-twBRM96P4FkBSZQHPJ4GJ8_1i9N7HaDe7A36CllY', null, $tmplData);
     }
 
-    function notifyNewIncome($incomeType, $amount, $live, $fromUser)
+    function notifyNewIncome($incomeType, $amount, $live, $fromUser, $toUser)
     {
         $fromRealUser = $this->userDao->findUserById($fromUser->userId);
+        $toRealUser = $this->userDao->findUserById($toUser->userId);
         $word = null;
         if ($incomeType == TRANS_TYPE_LIVE_INCOME) {
             $word = '赞助';
@@ -326,7 +327,7 @@ class WeChatPlatform
             )
         );
         $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
-        return $this->notifyByWeChat($fromRealUser, 'Clt9LxKunzjbXwMOYAOoB6w_-40u9FUdv7Men4vTluc',
+        return $this->notifyByWeChat($toRealUser, 'Clt9LxKunzjbXwMOYAOoB6w_-40u9FUdv7Men4vTluc',
             $url, $tmplData);
     }
 
