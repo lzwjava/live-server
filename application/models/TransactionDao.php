@@ -34,7 +34,7 @@ class TransactionDao extends BaseDao
 
     // must in transaction
     private function newTransaction($userId, $orderNo, $amount,
-                                    $type, $relatedId, $remark)
+                                    $type, $relatedId, $remark, $isIncome = false)
     {
         $account = $this->accountDao->getOrCreateAccount($userId);
         $balance = $account->balance;
@@ -53,6 +53,14 @@ class TransactionDao extends BaseDao
         if (!$updated) {
             return ERROR_TRANS_FAILED;
         }
+        if ($isIncome) {
+            $income = $account->income;
+            $newIncome = $income + $amount;
+            $incomeUpdated = $this->accountDao->updateIncome($userId, $newIncome, $income);
+            if (!$incomeUpdated) {
+                return ERROR_TRANS_FAILED;
+            }
+        }
         return null;
     }
 
@@ -65,7 +73,7 @@ class TransactionDao extends BaseDao
     function newIncome($userId, $orderNo, $amount, $type, $liveId, $remark)
     {
         return $this->newTransaction($userId, $orderNo, $amount, $type,
-            'liveId:' . $liveId, $remark);
+            'liveId:' . $liveId, $remark, true);
     }
 
     function newPay($userId, $orderNo, $amount, $liveId, $remark)

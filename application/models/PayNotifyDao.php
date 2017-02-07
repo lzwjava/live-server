@@ -238,7 +238,7 @@ class PayNotifyDao extends BaseDao
         return null;
     }
 
-    function handleWithdraw($withdrawId)
+    function handleWithdraw($withdrawId, $transfer = true)
     {
         $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
         if ($withdraw->status != WITHDRAW_STATUS_WAIT) {
@@ -256,22 +256,27 @@ class PayNotifyDao extends BaseDao
             $this->db->trans_rollback();
             return ERROR_SQL_WRONG;
         }
-        $user = $this->userDao->findUserById($withdraw->userId);
-        $snsUser = $this->snsUserDao->getSnsUserByUser($user);
-        $transOk = null;
-        $transErr = null;
-        try {
-            list($transOk, $transErr) = $this->pay->transfer($snsUser->openId, $withdraw->amount);
-        } catch (Exception $e) {
-            $transOk = false;
-            $transErr = $e->getMessage();
+        if ($transfer) {
+            $user = $this->userDao->findUserById($withdraw->userId);
+            $snsUser = $this->snsUserDao->getSnsUserByUser($user);
+            $transOk = null;
+            $transErr = null;
+            try {
+                list($transOk, $transErr) = $this->pay->transfer($snsUser->openId, $withdraw->amount);
+            } catch (Exception $e) {
+                $transOk = false;
+                $transErr = $e->getMessage();
+            }
+            if (!$transOk) {
+                $this->db->trans_rollback();
+                return $transErr;
+            }
+            $this->weChatPlatform->notifyWithdraw($withdraw);
+            $this->db->trans_commit();
+            return null;
+        } else {
+            $this->db->trans_commit();
+            return null;
         }
-        if (!$transOk) {
-            $this->db->trans_rollback();
-            return $transErr;
-        }
-        $this->weChatPlatform->notifyWithdraw($withdraw);
-        $this->db->trans_commit();
-        return null;
     }
 }
