@@ -346,7 +346,7 @@ if (!function_exists('errorInfos')) {
             // withdraws
             ERROR_MUST_SUBSCRIBE => '为了转账给您,必须先关注平方根科技服务号',
             ERROR_EXCEED_BALANCE => '提现金额超过了账户余额',
-            ERROR_WITHDRAW_AMOUNT_TOO_LITTLE => '提现金额最低不少于5元',
+            ERROR_WITHDRAW_AMOUNT_TOO_LITTLE => '提现金额最低不少于1元',
             ERROR_HAVE_WAIT_WITHDRAW => '有正在处理的提现中,请等待处理完成',
             ERROR_HAVE_WAIT_LIVE => '当前还有未完成的直播,不允许提现',
             ERROR_WITHDRAW_ALREADY_DONE => '此提现已经处理过了'
