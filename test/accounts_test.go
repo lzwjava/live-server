@@ -13,9 +13,10 @@ func TestAccounts_me(t *testing.T) {
 	assert.NotNil(t, res.Interface())
 }
 
-func TestAccounts_initIncome(t *testing.T) {
-	c := NewClient()
-	c.admin = true
-	res := c.getData("accounts/initIncome", url.Values{})
-	assert.NotNil(t, res.Interface())
-}
+// func TestAccounts_initIncome(t *testing.T) {
+// 	c := NewClient()
+// 	c.admin = true
+// 	res := c.getData("accounts/initIncome", url.Values{})
+// 	assert.NotNil(t, res.Interface())
+// }
+//
