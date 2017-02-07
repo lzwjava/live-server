@@ -149,6 +149,20 @@ class Attendances extends BaseController
         $this->succeed($attendances);
     }
 
+    function invites_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_LIVE_ID))) {
+            return;
+        }
+        $liveId = $this->get(KEY_LIVE_ID);
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $inviteUsers = $this->attendanceDao->queryInviteList($liveId);
+        $this->succeed($inviteUsers);
+    }
+
     function refund_get($liveId)
     {
         if ($this->checkIfNotAdmin()) {

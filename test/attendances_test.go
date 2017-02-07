@@ -117,6 +117,24 @@ func TestAttendances_createByWeChatInvite(t *testing.T) {
 	assert.NotNil(t, callbackRes)
 }
 
+func TestAttendances_inviteList(t *testing.T) {
+	c3, userId3 := NewClientAndUser()
+
+	c, _ := NewClientAndUser()
+	liveId := createLiveWithAmount(c, 5900)
+
+	createAttendance(c3, liveId)
+
+	c2, userId2 := NewClientAndWeChatUser()
+	createWechatAttendanceWithFrom(c2, userId2, liveId, userId3)
+
+	c4, userId4 := NewClientAndWeChatUser2()
+	createWechatAttendanceWithFrom(c4, userId4, liveId, userId3)
+
+	invites := c2.getData("attendances/invites", url.Values{"liveId": {liveId}})
+	assert.NotNil(t, invites.MustArray())
+}
+
 func TestAttendances_createByWeChatWithCoupon(t *testing.T) {
 	adminC := NewClient()
 	adminC.admin = true
@@ -252,12 +270,17 @@ func createAttendance(c *Client, liveId string) {
 	c.postWithStr("rewards/notify", callbackStr)
 }
 
-func createWechatAttendance(c *Client, userId string, liveId string) {
-	c.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
+func createWechatAttendanceWithFrom(c *Client, userId string, liveId string, fromUserId string) {
+	c.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"},
+		"fromUserId": {fromUserId}})
 	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c.postWithStr("wechat/wxpayNotify", callbackStr)
 	fmt.Println("callbackRes:" + callbackRes)
+}
+
+func createWechatAttendance(c *Client, userId string, liveId string) {
+	createWechatAttendanceWithFrom(c, userId, liveId, "")
 }
 
 func createWechatAppAttendance(c *Client, userId string, liveId string) {

@@ -78,6 +78,21 @@ class AttendanceDao extends BaseDao
         return $this->getAttendances(KEY_LIVE_ID, $liveId, $skip, $limit);
     }
 
+    function queryInviteList($liveId)
+    {
+        $userFields = $this->userPublicFields('u');
+        $inviteIncomeRate = INVITE_INCOME_RATE;
+        $sql = "SELECT $userFields,count(attendanceId) as inviteCount,
+                round(sum(c.amount) * $inviteIncomeRate) as inviteIncome
+                FROM attendances AS a
+                 LEFT JOIN charges AS c ON c.orderNo=a.orderNo
+                LEFT JOIN users AS u ON u.userId=a.fromUserId
+                WHERE liveId=? and fromUserId is not null GROUP BY fromUserId";
+        $binds = array($liveId);
+        $inviteUsers = $this->db->query($sql, $binds)->result();
+        return $inviteUsers;
+    }
+
     private function getAttendances($field, $value, $skip = 0, $limit = 100)
     {
         $fields = $this->attendancePublicFields('a');
