@@ -297,23 +297,34 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, 'fD-twBRM96P4FkBSZQHPJ4GJ8_1i9N7HaDe7A36CllY', null, $tmplData);
     }
 
-    function notifyNewIncome($incomeType, $amount, $live, $fromUser, $toUser)
+    function notifyNewIncome($incomeType, $amount, $live, $fromUser, $inviteFromUserId = null)
     {
-        $fromRealUser = $this->userDao->findUserById($fromUser->userId);
-        $toRealUser = $this->userDao->findUserById($toUser->userId);
+        $attendUser = $this->userDao->findUserById($fromUser->userId);
+        $liveOwner = $this->userDao->findUserById($live->ownerId);
         $word = null;
         $incomeTypeWord = null;
+        $actionWord = null;
+        $notifyUser = null;
         if ($incomeType == TRANS_TYPE_LIVE_INCOME) {
-            $word = '赞助';
-            $incomeType = '赞助直播';
+            $incomeTypeWord = '赞助直播';
+            $actionWord = sprintf('%s赞助了您的直播《%s》', $attendUser->username,
+                $live->subject);
+            $notifyUser = $liveOwner;
         } else if ($incomeType == TRANS_TYPE_REWARD_INCOME) {
-            $word = '打赏';
-            $incomeType = '打赏直播';
+            $incomeTypeWord = '打赏直播';
+            $actionWord = sprintf('%s打赏了您的直播《%s》', $attendUser->username,
+                $live->subject);
+            $notifyUser = $liveOwner;
+        } else if ($incomeType == TRANS_TYPE_INVITE_INCOME) {
+            $inviteFromUser = $this->userDao->findUserById($inviteFromUserId);
+            $incomeTypeWord = '邀请参加直播';
+            $actionWord = sprintf('%s参加了您分享的直播《%s》', $attendUser->username,
+                $live->subject);
+            $notifyUser = $inviteFromUser;
         }
         $tmplData = array(
             'first' => array(
-                'value' => sprintf('%s%s了您的直播《%s》，您获得%s元收益', $fromRealUser->username, $word,
-                    $live->subject, moneyFormat($amount)),
+                'value' => sprintf('%s，您获得%s元收益', $actionWord, moneyFormat($amount)),
                 'color' => '#D00019'
             ),
             'keyword1' => array(
@@ -330,7 +341,7 @@ class WeChatPlatform
             )
         );
         $url = 'http://m.quzhiboapp.com/#account';
-        return $this->notifyByWeChat($toRealUser, 'Clt9LxKunzjbXwMOYAOoB6w_-40u9FUdv7Men4vTluc',
+        return $this->notifyByWeChat($notifyUser, 'Clt9LxKunzjbXwMOYAOoB6w_-40u9FUdv7Men4vTluc',
             $url, $tmplData);
     }
 

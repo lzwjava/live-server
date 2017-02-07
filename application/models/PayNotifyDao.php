@@ -102,16 +102,20 @@ class PayNotifyDao extends BaseDao
         if ($type == CHARGE_TYPE_ATTEND) {
             $liveId = $metadata->liveId;
             $userId = $metadata->userId;
+            $inviteFromUserId = null;
+            if (isset($metadata->fromUserId)) {
+                $inviteFromUserId = $metadata->fromUserId;
+            }
             $this->db->trans_begin();
             $error = $this->updatePaidAndNewCharge($orderNo, $charge, $channel, $userId);
-            if ($error || !$this->db->trans_status()) {
+            if ($error) {
                 $this->db->trans_rollback();
                 return $error;
             }
 
-            $packetId = $this->attendanceDao->addAttendanceAndIncreaseCount($userId,
-                $liveId, $orderNo);
-            if (!$packetId || !$this->db->trans_status()) {
+            $attendanceId = $this->attendanceDao->addAttendanceAndIncreaseCount($userId,
+                $liveId, $orderNo, $inviteFromUserId);
+            if (!$attendanceId) {
                 $this->db->trans_rollback();
                 return ERROR_SQL_WRONG;
             }
@@ -119,8 +123,8 @@ class PayNotifyDao extends BaseDao
             $live = $this->liveDao->getLive($liveId);
             $fromUser = $this->userDao->findPublicUserById($userId);
             $toUser = $live->owner;
-            $error = $this->payUser($fromUser, $toUser, $live, $amount, $type);
-            if ($error || !$this->db->trans_status()) {
+            $error = $this->payUser($fromUser, $toUser, $live, $amount, $type, $inviteFromUserId);
+            if ($error) {
                 $this->db->trans_rollback();
                 return $error;
             }
@@ -137,8 +141,8 @@ class PayNotifyDao extends BaseDao
                 $this->db->trans_rollback();
                 return $error;
             }
-            $packetId = $this->rewardDao->addReward($userId, $liveId, $orderNo);
-            if (!$packetId || !$this->db->trans_status()) {
+            $attendanceId = $this->rewardDao->addReward($userId, $liveId, $orderNo);
+            if (!$attendanceId || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return ERROR_SQL_WRONG;
             }
@@ -168,14 +172,14 @@ class PayNotifyDao extends BaseDao
                 return $error;
             }
 
-            $packetId = $this->packetDao->addPacket($userId, $totalAmount, $totalCount,
+            $attendanceId = $this->packetDao->addPacket($userId, $totalAmount, $totalCount,
                 $wishing, $orderNo);
-            if (!$packetId || !$this->db->trans_status()) {
+            if (!$attendanceId || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return ERROR_SQL_WRONG;
             }
             $error = $this->transactionDao->newPayPacket($userId, genOrderNo(), $totalAmount,
-                $packetId, '发红包');
+                $attendanceId, '发红包');
             if ($error || !$this->db->trans_status()) {
                 $this->db->trans_rollback();
                 return $error;
@@ -197,17 +201,31 @@ class PayNotifyDao extends BaseDao
         }
     }
 
-    private function payUser($fromUser, $toUser, $live, $amount, $type)
+
+    private function payUser($fromUser, $toUser, $live, $amount, $type,
+                             $inviteFromUserId = null)
     {
         $remark = null;
         $incomeType = null;
         $liveId = $live->liveId;
+        $anchorAmount = 0;
+        $systemAmount = 0;
+        $inviteAmount = 0;
         if ($type == CHARGE_TYPE_ATTEND) {
             $remark = sprintf(REMARK_ATTEND, $fromUser->username, $toUser->username);
             $incomeType = TRANS_TYPE_LIVE_INCOME;
+            $anchorAmount = floor($amount * ANCHOR_INCOME_RATE);
+            if ($inviteFromUserId) {
+                $inviteAmount = floor($amount * INVITE_INCOME_RATE);
+                $systemAmount = $amount - $anchorAmount - $inviteAmount;
+            } else {
+                $systemAmount = $amount - $anchorAmount;
+            }
         } else if ($type == CHARGE_TYPE_REWARD) {
             $remark = sprintf(REMARK_REWARD, $fromUser->username, $toUser->username);
             $incomeType = TRANS_TYPE_REWARD_INCOME;
+            $anchorAmount = floor($amount * ANCHOR_INCOME_REWARD_RATE);
+            $systemAmount = $amount - $anchorAmount;
         }
         $error = $this->transactionDao->newPay($fromUser->userId, genOrderNo(),
             -$amount, $liveId, $remark);
@@ -215,11 +233,16 @@ class PayNotifyDao extends BaseDao
             return $error;
         }
         // 分钱
-        $anchorAmount = floor($amount * ANCHOR_INCOME_RATE);
-        $systemAmount = $amount - $anchorAmount;
         if ($anchorAmount > 0) {
             $error = $this->transactionDao->newIncome($toUser->userId, genOrderNo(),
                 $anchorAmount, $incomeType, $liveId, $remark);
+            if ($error) {
+                return $error;
+            }
+        }
+        if ($inviteAmount > 0) {
+            $error = $this->transactionDao->newIncome($toUser->userId, genOrderNo(),
+                $inviteAmount, TRANS_TYPE_INVITE_INCOME, $liveId, REMARK_INVITE_INCOME);
             if ($error) {
                 return $error;
             }
@@ -231,9 +254,15 @@ class PayNotifyDao extends BaseDao
                 return $error;
             }
         }
-        if ($anchorAmount) {
+        // 主播通知
+        if ($anchorAmount > 0) {
             $this->weChatPlatform->notifyNewIncome($incomeType, $anchorAmount, $live,
-                $fromUser, $toUser);
+                $fromUser);
+        }
+        // 邀请者通知
+        if ($inviteAmount > 0) {
+            $this->weChatPlatform->notifyNewIncome(TRANS_TYPE_INVITE_INCOME, $anchorAmount, $live,
+                $fromUser, $inviteFromUserId);
         }
 
         return null;
