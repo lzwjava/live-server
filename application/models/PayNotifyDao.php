@@ -242,7 +242,7 @@ class PayNotifyDao extends BaseDao
             }
         }
         if ($inviteAmount > 0) {
-            $error = $this->transactionDao->newIncome($toUser->userId, genOrderNo(),
+            $error = $this->transactionDao->newIncome($inviteFromUserId, genOrderNo(),
                 $inviteAmount, TRANS_TYPE_INVITE_INCOME, $liveId, REMARK_INVITE_INCOME);
             if ($error) {
                 return $error;
