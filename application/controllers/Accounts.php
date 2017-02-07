@@ -27,4 +27,17 @@ class Accounts extends BaseController
         $this->succeed($account);
     }
 
+    function initIncome_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $ok = $this->accountDao->initIncome();
+        if (!$ok) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->succeed();
+    }
+
 }

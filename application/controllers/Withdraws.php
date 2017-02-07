@@ -52,47 +52,50 @@ class Withdraws extends BaseController
         if (!$user) {
             return;
         }
-        if (!$user->wechatSubscribe) {
-            $this->failure(ERROR_MUST_SUBSCRIBE);
+        $amount = $this->toNumber($this->post(KEY_AMOUNT));
+        list($error, $data) = $this->createWithdraw($user, $amount);
+        if ($error) {
+            $this->failure($error);
             return;
         }
-        $amount = $this->toNumber($this->post(KEY_AMOUNT));
+        $this->succeed($data);
+    }
+
+    private function createWithdraw($user, $amount)
+    {
+        if (!$user->wechatSubscribe) {
+            return array(ERROR_MUST_SUBSCRIBE, null);
+        }
         $snsUser = $this->snsUserDao->getSnsUserByUser($user);
         if (!$snsUser) {
-            $this->failure(ERROR_SNS_USER_NOT_EXISTS);
-            return;
+            return array(ERROR_SNS_USER_NOT_EXISTS, null);
         }
         $account = $this->accountDao->getOrCreateAccount($user->userId);
         if ($amount > $account->balance) {
-            $this->failure(ERROR_EXCEED_BALANCE);
-            return;
+            return array(ERROR_EXCEED_BALANCE, null);
         }
         if ($amount < MIN_WITHDRAW_AMOUNT) {
-            $this->failure(ERROR_WITHDRAW_AMOUNT_TOO_LITTLE);
-            return;
+            return array(ERROR_WITHDRAW_AMOUNT_TOO_LITTLE, null);
         }
         if (!$user->mobilePhoneNumber) {
-            $this->failure(ERROR_MUST_BIND_PHONE);
-            return;
+            return array(ERROR_MUST_BIND_PHONE, null);
         }
         $haveWaitWithdraw = $this->withdrawDao->haveWaitWithdraw($user->userId);
         if ($haveWaitWithdraw) {
-            $this->failure(ERROR_HAVE_WAIT_WITHDRAW);
-            return;
+            return array(ERROR_HAVE_WAIT_WITHDRAW, null);
         }
         $haveWaitLive = $this->liveDao->haveWaitLive($user->userId);
         if ($haveWaitLive) {
-            $this->failure(ERROR_HAVE_WAIT_LIVE);
-            return;
+            return array(ERROR_HAVE_WAIT_LIVE, null);
         }
         $withdrawId = $this->withdrawDao->createWithdraw($user->userId, $amount);
         if (!$withdrawId) {
-            $this->failure(ERROR_SQL_WRONG);
-            return;
+            return array(ERROR_SQL_WRONG, null);
         }
         $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
         $this->weChatPlatform->notifyNewWithdraw($withdraw);
-        $this->succeed(array(KEY_WITHDRAW_ID => $withdrawId));
+        $data = array(KEY_WITHDRAW_ID => $withdrawId);
+        return array(null, $data);
     }
 
     function list_get()
@@ -109,13 +112,43 @@ class Withdraws extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-
-        $error = $this->payNotifyDao->handleWithdraw($withdrawId);
+        $error = $this->payNotifyDao->handleWithdraw($withdrawId, true);
         if ($error) {
             $this->failure($error);
             return;
         }
         $this->succeed();
+    }
+
+    function createByManual_post()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_AMOUNT,
+            KEY_USER_ID, KEY_TRANSFER))
+        ) {
+            return;
+        }
+        $transfer = boolval($this->post(KEY_TRANSFER));
+        $amount = intval($this->post(KEY_AMOUNT));
+        $userId = $this->post(KEY_USER_ID);
+        $user = $this->userDao->findUserById($userId);
+        if ($this->checkIfObjectNotExists($user)) {
+            return;
+        }
+        list($error, $data) = $this->createWithdraw($user, $amount);
+        if ($error) {
+            $this->failure($error);
+            return;
+        }
+        $withdrawId = $data[KEY_WITHDRAW_ID];
+        $error = $this->payNotifyDao->handleWithdraw($withdrawId, $transfer);
+        if ($error) {
+            $this->failure($error);
+            return;
+        }
+        $this->succeed($data);
     }
 
 }

@@ -472,6 +472,7 @@ define('KEY_REMARK', 'remark');
 define('TABLE_ACCOUNTS', 'accounts');
 define('KEY_ACCOUNT_ID', 'accountId');
 define('KEY_BALANCE', 'balance');
+define('KEY_INCOME', 'income');
 
 define('TRANS_TYPE_RECHARGE', 1);
 define('TRANS_TYPE_PAY', 2);
@@ -621,6 +622,8 @@ define('WITHDRAW_STATUS_WAIT', 1);
 define('WITHDRAW_STATUS_REJECT', 5);
 define('WITHDRAW_STATUS_FINISH', 10);
 
+define('KEY_TRANSFER', 'transfer');
+
 if (!function_exists('viewPlatformSet')) {
     function viewPlatformSet()
     {
@@ -744,7 +747,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'IVBgk9Jg4oPCMiZ3K4WcCuSeQgb6uD46h4DXWuGOo_K8BlkdlJrlNScrulO3WgODehpI1Vqar3JUuW7SGOFMPt77K6TssX5LpAntLvaCmgJrik66usVuOzDyioTb1sLCWLIhABASHE');
+'gjGxJw0GitbSRa2rNl1GRNXBPql508jLwRzMJHL7fE3FFkH3FAizDoDOc5KxdSTRM551yjDFd8Bj8Qe34H_GkD4URnsRqOjlX_6kRPjBLHPOc_5WprDgHtuwUgFcPFeHXUUjAIAFCC');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -804,7 +807,7 @@ define('KEY_USER_IDS', 'userIds');
 
 define('KEY_RECEIPT', 'receipt');
 
-define('MIN_WITHDRAW_AMOUNT', 5 * 100);
+define('MIN_WITHDRAW_AMOUNT', 1 * 100);
 
 define('ADMIN_OP_USER_ID', 1);
 define('ADMIN_OP_SYSTEM_ID', 0);

@@ -356,3 +356,7 @@ SET `userId` = 0
 WHERE `userId` = -1;
 
 INSERT INTO `accounts` (`userId`, `balance`) VALUE (0, 0);
+
+ALTER TABLE `accounts` ADD COLUMN `income`
+INT(11) NOT NULL DEFAULT 0
+AFTER `balance`;
