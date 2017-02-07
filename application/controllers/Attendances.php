@@ -159,7 +159,9 @@ class Attendances extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        $inviteUsers = $this->attendanceDao->queryInviteList($liveId);
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $inviteUsers = $this->attendanceDao->queryInviteList($liveId, $skip, $limit);
         $this->succeed($inviteUsers);
     }
 

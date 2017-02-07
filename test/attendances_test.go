@@ -131,7 +131,7 @@ func TestAttendances_inviteList(t *testing.T) {
 	c4, userId4 := NewClientAndWeChatUser2()
 	createWechatAttendanceWithFrom(c4, userId4, liveId, userId3)
 
-	invites := c2.getData("attendances/invites", url.Values{"liveId": {liveId}})
+	invites := c2.getData("attendances/invites", url.Values{"liveId": {liveId}, "limit": {"10"}})
 	assert.NotNil(t, invites.MustArray())
 }
 
