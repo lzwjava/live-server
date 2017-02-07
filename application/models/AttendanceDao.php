@@ -88,7 +88,7 @@ class AttendanceDao extends BaseDao
                 LEFT JOIN charges AS c ON c.orderNo=a.orderNo
                 LEFT JOIN users AS u ON u.userId=a.fromUserId
                 WHERE liveId=? and fromUserId is not null GROUP BY fromUserId
-                order by inviteCount desc
+                order by inviteIncome desc
                 limit $limit offset $skip";
         $binds = array($liveId);
         $inviteUsers = $this->db->query($sql, $binds)->result();
