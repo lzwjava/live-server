@@ -133,22 +133,48 @@ class Withdraws extends BaseController
         $transfer = boolval($this->post(KEY_TRANSFER));
         $amount = intval($this->post(KEY_AMOUNT));
         $userId = $this->post(KEY_USER_ID);
-        $user = $this->userDao->findUserById($userId);
-        if ($this->checkIfObjectNotExists($user)) {
-            return;
-        }
-        list($error, $data) = $this->createWithdraw($user, $amount);
-        if ($error) {
-            $this->failure($error);
-            return;
-        }
-        $withdrawId = $data[KEY_WITHDRAW_ID];
-        $error = $this->payNotifyDao->handleWithdraw($withdrawId, $transfer);
+        list($error, $data) = $this->manualWithdraw($userId, $amount, $transfer);
         if ($error) {
             $this->failure($error);
             return;
         }
         $this->succeed($data);
+    }
+
+    private function manualWithdraw($userId, $amount, $transfer)
+    {
+        $user = $this->userDao->findUserById($userId);
+        if (!$user) {
+            return array(ERROR_OBJECT_NOT_EXIST, null);
+        }
+        list($error, $data) = $this->createWithdraw($user, $amount);
+        if ($error) {
+            return array($error, null);
+        }
+        $withdrawId = $data[KEY_WITHDRAW_ID];
+        $error = $this->payNotifyDao->handleWithdraw($withdrawId, $transfer);
+        if ($error) {
+            return array($error, null);
+        }
+        return array(null, $data);
+    }
+
+    function initWithdraw_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $accounts = $this->accountDao->queryAccountsHaveBalance();
+        foreach ($accounts as $account) {
+            $amount = $account->balance;
+            list($error, $data) = $this->manualWithdraw($account->userId, $amount, false);
+            if ($error) {
+                logInfo($account->userId . ' error: ' . $error);
+                //$this->failure($error);
+                //return;
+            }
+        }
+        $this->succeed();
     }
 
 }

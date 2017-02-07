@@ -59,3 +59,10 @@ func TestWithdraws_createByManul(t *testing.T) {
 	withdrawId := toStr(withdrawRes.Get("withdrawId").MustInt())
 	assert.NotNil(t, withdrawId)
 }
+
+func TestWithdraws_init(t *testing.T) {
+	c := NewClient()
+	c.admin = true
+	res := c.getData("withdraws/init", url.Values{})
+	assert.NotNil(t, res.Interface())
+}

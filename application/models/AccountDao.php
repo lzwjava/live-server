@@ -57,7 +57,7 @@ class AccountDao extends BaseDao
         return $this->db->affected_rows() > 0;
     }
 
-    private function queryAccountsHaveBalance()
+    function queryAccountsHaveBalance()
     {
         $sql = "SELECT * FROM accounts WHERE balance > 0";
         $accounts = $this->db->query($sql)->result();
