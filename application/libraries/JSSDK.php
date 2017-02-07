@@ -183,7 +183,7 @@ class JSSDK
                     ),
                 ),
                 array(
-                    'name' => '创业故事',
+                    'name' => '关于我们',
                     'sub_button' => array(
                         array(
                             'type' => 'view',
