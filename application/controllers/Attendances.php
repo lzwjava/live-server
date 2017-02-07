@@ -41,6 +41,7 @@ class Attendances extends BaseController
             return;
         }
         $liveId = $this->post(KEY_LIVE_ID);
+        $fromUserId = $this->post(KEY_FROM_USER_ID);
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
@@ -61,13 +62,17 @@ class Attendances extends BaseController
             $this->failure(ERROR_EXCEED_MAX_PEOPLE);
             return;
         }
-
+        if ($fromUserId) {
+            $fromUser = $this->userDao->findUserById($fromUserId);
+            if ($this->checkIfObjectNotExists($fromUser)) {
+                return;
+            }
+        }
         $attendance = $this->attendanceDao->getAttendance($user->userId, $liveId);
         if ($attendance != null) {
             $this->failure(ERROR_ALREADY_ATTEND);
             return;
         }
-
         if ($live->needPay) {
             $channel = $this->post(KEY_CHANNEL);
             if ($this->checkIfNotInArray($channel, channelSet())
@@ -84,7 +89,11 @@ class Attendances extends BaseController
             // max 24 chars
             $subject = '参加直播';
             $body = $user->username . ' 参加直播 ' . $live->subject;
-            $metaData = array(KEY_TYPE => CHARGE_TYPE_ATTEND, KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
+            $metaData = array(KEY_TYPE => CHARGE_TYPE_ATTEND,
+                KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
+            if ($fromUserId) {
+                $metaData[KEY_FROM_USER_ID] = $fromUserId;
+            }
 
             list($error, $ch) = $this->pay->createChargeAndInsert($live->realAmount, $channel,
                 $subject, $body, $metaData, $user, $openId);
@@ -95,7 +104,7 @@ class Attendances extends BaseController
             $this->succeed($ch);
         } else {
             $id = $this->attendanceDao->addAttendanceAndIncreaseCount($user->userId,
-                $live->liveId, null);
+                $live->liveId, null, $fromUserId);
             $this->succeed($attendance);
         }
     }

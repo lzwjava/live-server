@@ -359,3 +359,7 @@ INSERT INTO `accounts` (`accountId`, `userId`, `balance`) VALUE (0, 0, 0);
 
 ALTER TABLE `accounts` ADD COLUMN `income` INT(11) NOT NULL DEFAULT 0
 AFTER `balance`;
+
+ALTER TABLE `attendances` ADD COLUMN `fromUserId` INT(11) DEFAULT NULL
+AFTER `liveId`;
+ALTER TABLE `attendances` ADD FOREIGN KEY (`fromUserId`) REFERENCES `users` (`userId`);

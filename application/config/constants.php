@@ -456,6 +456,7 @@ define('KEY_PREPAY_ID', 'prepayId');
 define('TABLE_ATTENDANCES', 'attendances');
 define('KEY_ATTENDANCE_ID', 'attendanceId');
 define('KEY_ATTENDANCE_COUNT', 'attendanceCount');
+define('KEY_FROM_USER_ID', 'fromUserId');
 define('KEY_NOTIFIED', 'notified');
 define('KEY_WECHAT_NOTIFIED', 'wechatNotified');
 define('KEY_VIDEO_NOTIFIED', 'videoNotified');
@@ -481,6 +482,7 @@ define('TRANS_TYPE_WITHDRAW', 4);
 
 define('TRANS_TYPE_LIVE_INCOME', 30);
 define('TRANS_TYPE_REWARD_INCOME', 31);
+define('TRANS_TYPE_INVITE_INCOME', 32);
 
 define('REMARK_ALIPAY', '支付宝充值');
 define('REMARK_WECHAT', '微信充值');
@@ -492,6 +494,7 @@ define('REMARK_ATTEND', '%s参加%s的直播');
 define('REMARK_REWARD', '%s打赏%s的直播');
 define('REMARK_WITHDRAW', '提现');
 define('REMARK_SYSTEM_INCOME', '平台分成');
+define('REMARK_INVITE_INCOME', '邀请分成');
 
 // qrcodes
 define('TABLE_SCANNED_QRCODES', 'scanned_qrcodes');
@@ -747,7 +750,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'-sUycdEAElTrBbTKTMPlHWlNTPPN0AvGZyg8UpYL2H_6zXvPzT70-BuDrFdan_9z31X--_cxWS7TtqPAFXikSKLarA8LCbJmofL8VsbyJEeAeMBYkazjrAuTMdLv2UcMZSIiAFADWM');
+'DYle1l0xwsM3aPrNvBOVzbhDrBoB8n2IMiaiOjQGOcNioq6aqn_tBxLLlJRL5Ef_frB4_5rVw8ny4YCcKaqoYWu7iyYNzxERsirZC6Fn6irUlCWev2FzdHpXoDMQy8veKOKfAAAVZV');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -812,4 +815,7 @@ define('MIN_WITHDRAW_AMOUNT', 1 * 100);
 define('ADMIN_OP_USER_ID', 1);
 define('ADMIN_OP_SYSTEM_ID', 0);
 
-define('ANCHOR_INCOME_RATE', 0.6);
+define('ANCHOR_INCOME_RATE', 0.5);
+define('INVITE_INCOME_RATE', 0.3);
+
+define('ANCHOR_INCOME_REWARD_RATE', 0.7);
