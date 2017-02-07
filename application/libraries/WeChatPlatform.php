@@ -329,7 +329,7 @@ class WeChatPlatform
                 'color' => '#000'
             )
         );
-        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+        $url = 'http://m.quzhiboapp.com/#account';
         return $this->notifyByWeChat($toRealUser, 'Clt9LxKunzjbXwMOYAOoB6w_-40u9FUdv7Men4vTluc',
             $url, $tmplData);
     }
