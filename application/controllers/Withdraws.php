@@ -167,11 +167,14 @@ class Withdraws extends BaseController
         $accounts = $this->accountDao->queryAccountsHaveBalance();
         foreach ($accounts as $account) {
             $amount = $account->balance;
-            list($error, $data) = $this->manualWithdraw($account->userId, $amount, false);
-            if ($error) {
-                logInfo($account->userId . ' error: ' . $error);
-                //$this->failure($error);
-                //return;
+            $withdrawId = $this->withdrawDao->createWithdraw($account->userId, $amount);
+            if ($withdrawId) {
+                $error = $this->payNotifyDao->handleWithdraw($withdrawId, false);
+                if ($error) {
+                    logInfo($account->userId . ' error: ' . $error);
+                    //$this->failure($error);
+                    //return;
+                }
             }
         }
         $this->succeed();
