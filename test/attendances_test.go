@@ -101,12 +101,14 @@ func TestAttendances_createByWeChat(t *testing.T) {
 }
 
 func TestAttendances_createByWeChatInvite(t *testing.T) {
-	c, userId2 := NewClientAndWeChatUser2()
+	_, userId3 := NewClientAndWeChatUser2()
+
+	c, _ := NewClientAndUser()
 	liveId := createLiveWithAmount(c, 5900)
 
 	c2, userId := NewClientAndWeChatUser()
 	res := c2.postData("attendances", url.Values{"liveId": {liveId},
-		"channel": {"wechat_h5"}, "fromUserId": {userId2}})
+		"channel": {"wechat_h5"}, "fromUserId": {userId3}})
 	assert.NotNil(t, res)
 	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
