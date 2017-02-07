@@ -123,7 +123,8 @@ class PayNotifyDao extends BaseDao
             $live = $this->liveDao->getLive($liveId);
             $fromUser = $this->userDao->findPublicUserById($userId);
             $toUser = $live->owner;
-            $error = $this->payUser($fromUser, $toUser, $live, $amount, $type, $inviteFromUserId);
+            $error = $this->payUser($fromUser, $toUser, $live, $amount, $type,
+                $inviteFromUserId);
             if ($error) {
                 $this->db->trans_rollback();
                 return $error;
