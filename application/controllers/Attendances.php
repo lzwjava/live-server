@@ -62,6 +62,9 @@ class Attendances extends BaseController
             $this->failure(ERROR_EXCEED_MAX_PEOPLE);
             return;
         }
+        if ($fromUserId == $user->userId) {
+            $fromUserId = null;
+        }
         if ($fromUserId) {
             $fromUser = $this->userDao->findUserById($fromUserId);
             if ($this->checkIfObjectNotExists($fromUser)) {

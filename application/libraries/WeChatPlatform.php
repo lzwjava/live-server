@@ -60,7 +60,7 @@ class WeChatPlatform
     private function notifyByWeChat($user, $tempId, $url, $tmplData)
     {
         if (!$user->unionId) {
-            logInfo("the user $user->username do not have unionId fail send wechat msg");
+            logInfo("the user $user->userId do not have unionId fail send wechat msg");
             return false;
         }
         $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);

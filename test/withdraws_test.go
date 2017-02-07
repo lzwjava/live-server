@@ -20,15 +20,15 @@ func TestWithdraws_create(t *testing.T) {
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
 	assert.NotNil(t, callbackRes)
-
-	withdrawRes := c.postData("withdraws", url.Values{"amount": {"500"}})
-	withdrawId := toStr(withdrawRes.Get("withdrawId").MustInt())
-	assert.NotNil(t, withdrawId)
-
-	c3 := NewClient()
-	c3.admin = true
-	agreeRes := c3.getData("withdraws/"+withdrawId+"/agree", url.Values{})
-	assert.NotNil(t, agreeRes.Interface())
+	//
+	// withdrawRes := c.postData("withdraws", url.Values{"amount": {"500"}})
+	// withdrawId := toStr(withdrawRes.Get("withdrawId").MustInt())
+	// assert.NotNil(t, withdrawId)
+	//
+	// c3 := NewClient()
+	// c3.admin = true
+	// agreeRes := c3.getData("withdraws/"+withdrawId+"/agree", url.Values{})
+	// assert.NotNil(t, agreeRes.Interface())
 }
 
 func TestWithdraws_list(t *testing.T) {
