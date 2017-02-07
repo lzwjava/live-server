@@ -302,10 +302,13 @@ class WeChatPlatform
         $fromRealUser = $this->userDao->findUserById($fromUser->userId);
         $toRealUser = $this->userDao->findUserById($toUser->userId);
         $word = null;
+        $incomeTypeWord = null;
         if ($incomeType == TRANS_TYPE_LIVE_INCOME) {
             $word = '赞助';
+            $incomeType = '赞助直播';
         } else if ($incomeType == TRANS_TYPE_REWARD_INCOME) {
             $word = '打赏';
+            $incomeType = '打赏直播';
         }
         $tmplData = array(
             'first' => array(
@@ -314,7 +317,7 @@ class WeChatPlatform
                 'color' => '#D00019'
             ),
             'keyword1' => array(
-                'value' => $word,
+                'value' => $incomeTypeWord,
                 'color' => '#000'
             ),
             'keyword2' => array(
