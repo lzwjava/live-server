@@ -39,10 +39,6 @@ func TestLiveHooks_onDvr(t *testing.T) {
 		"action": {"on_dvr"},
 		"file":   {"./objs/nginx/html/live/" + rtmpkey + ".1420254068776.flv"}})
 	assert.NotNil(t, res)
-
-	videos := c.getArrayData("lives/"+liveId+"/videos", url.Values{})
-	video := videos.GetIndex(0)
-	assert.Equal(t, video.Get("endTs").MustString(), "1420254068776")
 }
 
 func genVideo(c *Client, liveId string, originFileName string) {
