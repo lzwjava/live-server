@@ -108,7 +108,7 @@ class Attendances extends BaseController
         } else {
             $id = $this->attendanceDao->addAttendanceAndIncreaseCount($user->userId,
                 $live->liveId, null, $fromUserId);
-            $this->succeed($attendance);
+            $this->succeed($id);
         }
     }
 

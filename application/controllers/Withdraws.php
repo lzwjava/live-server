@@ -77,9 +77,6 @@ class Withdraws extends BaseController
         if ($amount < MIN_WITHDRAW_AMOUNT) {
             return array(ERROR_WITHDRAW_AMOUNT_TOO_LITTLE, null);
         }
-        if (!$user->mobilePhoneNumber) {
-            return array(ERROR_MUST_BIND_PHONE, null);
-        }
         $haveWaitWithdraw = $this->withdrawDao->haveWaitWithdraw($user->userId);
         if ($haveWaitWithdraw) {
             return array(ERROR_HAVE_WAIT_WITHDRAW, null);
