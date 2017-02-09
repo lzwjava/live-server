@@ -156,7 +156,7 @@ class Withdraws extends BaseController
         return array(null, $data);
     }
 
-    function initWithdraw_get()
+    function withdrawAll_get()
     {
         if ($this->checkIfNotAdmin()) {
             return;
@@ -164,11 +164,21 @@ class Withdraws extends BaseController
         $accounts = $this->accountDao->queryAccountsHaveBalance();
         foreach ($accounts as $account) {
             $amount = $account->balance;
-            $withdrawId = $this->withdrawDao->createWithdraw($account->userId, $amount);
-            if ($withdrawId) {
-                $error = $this->payNotifyDao->handleWithdraw($withdrawId, false);
+            if ($account->userId == ADMIN_OP_SYSTEM_ID) {
+                continue;
+            }
+            $user = $this->userDao->findUserById($account->userId);
+            if (!$user) {
+                logInfo("user not exists");
+                continue;
+            }
+            list($error, $data) = $this->createWithdraw($user, $amount);
+            if ($error) {
+                logInfo($account->userId . ' error: ' . $error);
+            } else {
+                $withdrawId = $data[KEY_WITHDRAW_ID];
+                $error = $this->payNotifyDao->handleWithdraw($withdrawId, true);
                 if ($error) {
-                    logInfo($account->userId . ' error: ' . $error);
                     //$this->failure($error);
                     //return;
                 }
