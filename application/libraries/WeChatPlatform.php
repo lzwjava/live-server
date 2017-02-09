@@ -253,7 +253,7 @@ class WeChatPlatform
                 'color' => '#000'
             ),
             'remark' => array(
-                'value' => '提现成功，已转账到您的微信，请查收',
+                'value' => '提现成功,已给您发送红包，请拆收',
                 'color' => '#00A2C0'
             )
         );
