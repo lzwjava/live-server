@@ -128,10 +128,10 @@ class WxPay
         $input->SetActName('新年快乐红包');
         $input->SetRemark('新年快乐');
         $packetResult = WxPayApi::sendRedPacket($input);
-        logInfo("transferResult: " . json_encode($packetResult));
         if ($packetResult['result_code'] == 'SUCCESS') {
             return array(true, null);
         } else {
+            logInfo("transferResult: " . json_encode($packetResult));
             logInfo("send red packet failed!!!");
             return array(false, $packetResult['err_code_des']);
         }
