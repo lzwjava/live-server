@@ -293,7 +293,8 @@ class PayNotifyDao extends BaseDao
             $transOk = null;
             $transErr = null;
             try {
-                list($transOk, $transErr) = $this->pay->transfer($snsUser->openId, $withdraw->amount);
+                list($transOk, $transErr) = $this->pay->transfer($snsUser->openId,
+                    $withdraw->amount, '趣直播提现');
             } catch (Exception $e) {
                 $transOk = false;
                 $transErr = $e->getMessage();

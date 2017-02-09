@@ -191,7 +191,22 @@ class Attendances extends BaseController
 
     function transfer_get()
     {
-        $this->pay->transfer('ol0AFwFe5jFoXcQby4J7AWJaWXIM', 100 * 1);
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_USER_ID,
+            KEY_AMOUNT))
+        ) {
+            return;
+        }
+        $userId = $this->post(KEY_USER_ID);
+        $amount = $this->post(KEY_AMOUNT);
+        $openId = $this->snsUserDao->getOpenIdByUserId($userId);
+        if (!$openId) {
+            $this->failure(ERROR_SNS_USER_NOT_EXISTS);
+            return;
+        }
+        $this->pay->transfer($openId, $amount);
         $this->succeed();
     }
 
