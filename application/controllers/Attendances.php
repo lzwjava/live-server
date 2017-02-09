@@ -41,7 +41,7 @@ class Attendances extends BaseController
             return;
         }
         $liveId = $this->post(KEY_LIVE_ID);
-        $fromUserId = $this->post(KEY_FROM_USER_ID);
+        $fromUserId = intval($this->post(KEY_FROM_USER_ID));
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
@@ -94,7 +94,7 @@ class Attendances extends BaseController
             $body = $user->username . ' 参加直播 ' . $live->subject;
             $metaData = array(KEY_TYPE => CHARGE_TYPE_ATTEND,
                 KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
-            if ($fromUserId) {
+            if ($fromUserId && $fromUserId > 0) {
                 $metaData[KEY_FROM_USER_ID] = $fromUserId;
             }
 
