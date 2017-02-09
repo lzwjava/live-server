@@ -206,7 +206,7 @@ class Attendances extends BaseController
             $this->failure(ERROR_SNS_USER_NOT_EXISTS);
             return;
         }
-        $this->pay->transfer($openId, $amount);
+        $this->pay->transfer($openId, $amount, '退款');
         $this->succeed();
     }
 

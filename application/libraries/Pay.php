@@ -78,6 +78,11 @@ class Pay
         return $this->wxpay->transfer($openId, $amount, $desc);
     }
 
+    function sendIncomePacket($openId, $amount)
+    {
+        return $this->wxpay->sendRedPacket($openId, '趣直播', $amount, '您的努力初见成效,继续加油哦');
+    }
+
     function sendRedPacket($openId, $sendName, $amount, $wishing)
     {
         if (isDebug()) {

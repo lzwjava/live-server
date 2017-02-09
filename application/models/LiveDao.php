@@ -133,12 +133,10 @@ class LiveDao extends BaseDao
         }
         $fields = $this->livePublicFields('l');
         $userFields = $this->userPublicFields('u', true);
-        $topicFields = $this->topicDao->topicPublicFields('t', true);
-        $sql = "select $fields, $userFields,a.attendanceId,s.shareId, $topicFields from lives as l
+        $sql = "select $fields, $userFields,a.attendanceId,s.shareId from lives as l
                 left join users as u on u.userId=l.ownerId
                 left join attendances as a on a.liveId = l.liveId and a.userId = $userId
                 left join shares as s on s.liveId = l.liveId and s.userId= $userId
-                left join topics as t on t.topicId = l.topicId
                 where l.liveId in (" . implode(', ', $liveIds) . ")
                 order by $sortField desc";
         $lives = $this->db->query($sql)->result();
@@ -221,8 +219,6 @@ class LiveDao extends BaseDao
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
-            $topicFields = $this->prefixFields($this->topicDao->topicFields(), 't');
-            $live->topic = extractFields($live, $topicFields, 't');
             if ($live->attendanceId || ($user && $user->userId == $live->ownerId)) {
                 // 参加了或是创建者
                 $hlsHostLive = $this->electHlsServer();
