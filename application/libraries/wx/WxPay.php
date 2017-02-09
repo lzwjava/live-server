@@ -93,7 +93,7 @@ class WxPay
         }
     }
 
-    function transfer($openId, $amount)
+    function transfer($openId, $amount, $desc)
     {
         if (isDebug()) {
             return array(true, null);
@@ -103,7 +103,6 @@ class WxPay
         $input->SetPartnerTradeNo($orderNo);
         $input->SetAmount($amount);
         $input->SetOpenid($openId);
-        $desc = '趣直播提现';
         $input->SetDesc($desc);
         $transferResult = WxPayApi::transfer($input);
         if ($transferResult['result_code'] == 'SUCCESS') {
