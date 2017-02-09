@@ -60,9 +60,9 @@ func TestWithdraws_createByManul(t *testing.T) {
 	assert.NotNil(t, withdrawId)
 }
 
-func TestWithdraws_init(t *testing.T) {
+func TestWithdraws_all(t *testing.T) {
 	c := NewClient()
 	c.admin = true
-	res := c.getData("withdraws/init", url.Values{})
+	res := c.getData("withdraws/withdrawAll", url.Values{})
 	assert.NotNil(t, res.Interface())
 }

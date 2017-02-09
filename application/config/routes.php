@@ -209,4 +209,4 @@ $route['withdraws']['POST'] = 'withdraws/create';
 $route['withdraws']['GET'] = 'withdraws/list';
 $route['withdraws/(\d+)/agree']['GET'] = 'withdraws/agree/$1';
 $route['withdraws/manual']['POST'] = 'withdraws/createByManual';
-$route['withdraws/init']['GET'] = 'withdraws/initWithdraw';
+$route['withdraws/withdrawAll']['GET'] = 'withdraws/withdrawAll';
