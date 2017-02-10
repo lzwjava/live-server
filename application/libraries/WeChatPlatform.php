@@ -224,12 +224,18 @@ class WeChatPlatform
         return $this->notifyByWeChat($owner, 'H7LOlSlgG1O8ohoese6k4_kqwjarXAdsOgbn0x8vTQU', $url, $tmplData);
     }
 
-    function notifyWithdraw($withdraw)
+    function notifyWithdraw($withdraw, $systemAuto = false)
     {
         $user = $this->userDao->findUserById($withdraw->userId);
+        $first = null;
+        if ($systemAuto) {
+            $first = '系统自动每日提现给您';
+        } else {
+            $first = '您的提现申请已处理';
+        }
         $tmplData = array(
             'first' => array(
-                'value' => '您的提现申请已处理',
+                'value' => $first,
                 'color' => '#000'
             ),
             'keyword1' => array(
@@ -253,7 +259,7 @@ class WeChatPlatform
                 'color' => '#000'
             ),
             'remark' => array(
-                'value' => '提现成功，已给您发送红包，请拆收',
+                'value' => '已给您发送红包，请拆收',
                 'color' => '#00A2C0'
             )
         );

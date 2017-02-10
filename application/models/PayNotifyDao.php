@@ -269,7 +269,7 @@ class PayNotifyDao extends BaseDao
         return null;
     }
 
-    function handleWithdraw($withdrawId, $transfer = true)
+    function handleWithdraw($withdrawId, $transfer = true, $systemAuto = false)
     {
         $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
         if ($withdraw->status != WITHDRAW_STATUS_WAIT) {
@@ -302,7 +302,7 @@ class PayNotifyDao extends BaseDao
                 $this->db->trans_rollback();
                 return $transErr;
             }
-            $this->weChatPlatform->notifyWithdraw($withdraw);
+            $this->weChatPlatform->notifyWithdraw($withdraw, $systemAuto);
             $this->db->trans_commit();
             return null;
         } else {

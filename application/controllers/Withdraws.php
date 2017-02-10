@@ -109,7 +109,7 @@ class Withdraws extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-        $error = $this->payNotifyDao->handleWithdraw($withdrawId, true);
+        $error = $this->payNotifyDao->handleWithdraw($withdrawId, true, false);
         if ($error) {
             $this->failure($error);
             return;
@@ -149,7 +149,7 @@ class Withdraws extends BaseController
             return array($error, null);
         }
         $withdrawId = $data[KEY_WITHDRAW_ID];
-        $error = $this->payNotifyDao->handleWithdraw($withdrawId, $transfer);
+        $error = $this->payNotifyDao->handleWithdraw($withdrawId, $transfer, false);
         if ($error) {
             return array($error, null);
         }
@@ -178,7 +178,7 @@ class Withdraws extends BaseController
                 logInfo("create withdraw userId $account->userId  error:  $error");
             } else {
                 $withdrawId = $data[KEY_WITHDRAW_ID];
-                $error = $this->payNotifyDao->handleWithdraw($withdrawId, true);
+                $error = $this->payNotifyDao->handleWithdraw($withdrawId, true, true);
                 if ($error) {
                     logInfo("handle withdraw error userId $account->userId error:  $error");
                 } else {
