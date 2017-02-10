@@ -33,6 +33,8 @@ class PayNotifyDao extends BaseDao
     public $snsUserDao;
     /** @var WeChatPlatform */
     public $weChatPlatform;
+    /** @var AccountDao */
+    public $accountDao;
 
     function __construct()
     {
@@ -61,6 +63,8 @@ class PayNotifyDao extends BaseDao
         $this->snsUserDao = new SnsUserDao();
         $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
+        $this->load->model(AccountDao::class);
+        $this->accountDao = new AccountDao();
     }
 
     private function remarkFromChannel($channel)
@@ -202,7 +206,6 @@ class PayNotifyDao extends BaseDao
         }
     }
 
-
     private function payUser($fromUser, $toUser, $live, $amount, $type,
                              $inviteFromUserId = null)
     {
@@ -269,7 +272,60 @@ class PayNotifyDao extends BaseDao
         return null;
     }
 
-    function handleWithdraw($withdrawId, $transfer = true, $systemAuto = false)
+    function createWithdraw($user, $amount)
+    {
+        if (!$user->wechatSubscribe) {
+            return array(ERROR_MUST_SUBSCRIBE, null);
+        }
+        $snsUser = $this->snsUserDao->getSnsUserByUser($user);
+        if (!$snsUser) {
+            return array(ERROR_SNS_USER_NOT_EXISTS, null);
+        }
+        $account = $this->accountDao->getOrCreateAccount($user->userId);
+        if ($amount > $account->balance) {
+            return array(ERROR_EXCEED_BALANCE, null);
+        }
+        if ($amount < MIN_WITHDRAW_AMOUNT) {
+            return array(ERROR_WITHDRAW_AMOUNT_TOO_LITTLE, null);
+        }
+        $haveWaitWithdraw = $this->withdrawDao->haveWaitWithdraw($user->userId);
+        if ($haveWaitWithdraw) {
+            return array(ERROR_HAVE_WAIT_WITHDRAW, null);
+        }
+        $haveWaitLive = $this->liveDao->haveWaitLive($user->userId);
+        if ($haveWaitLive) {
+            return array(ERROR_HAVE_WAIT_LIVE, null);
+        }
+        $withdrawId = $this->withdrawDao->createWithdraw($user->userId, $amount);
+        if (!$withdrawId) {
+            return array(ERROR_SQL_WRONG, null);
+        }
+        $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
+        $this->weChatPlatform->notifyNewWithdraw($withdraw);
+        $data = array(KEY_WITHDRAW_ID => $withdrawId);
+        return array(null, $data);
+    }
+
+    function manualWithdraw($userId, $amount, $transfer)
+    {
+        $user = $this->userDao->findUserById($userId);
+        if (!$user) {
+            return array(ERROR_OBJECT_NOT_EXIST, null);
+        }
+        list($error, $data) = $this->createWithdraw($user, $amount);
+        if ($error) {
+            return array($error, null);
+        }
+        $withdrawId = $data[KEY_WITHDRAW_ID];
+        $error = $this->handleWithdraw($withdrawId, $transfer, false, false);
+        if ($error) {
+            return array($error, null);
+        }
+        return array(null, $data);
+    }
+
+    function handleWithdraw($withdrawId, $transfer = true, $systemAuto = false,
+                            $notify = true)
     {
         $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
         if ($withdraw->status != WITHDRAW_STATUS_WAIT) {
@@ -302,7 +358,9 @@ class PayNotifyDao extends BaseDao
                 $this->db->trans_rollback();
                 return $transErr;
             }
-            $this->weChatPlatform->notifyWithdraw($withdraw, $systemAuto);
+            if ($notify) {
+                $this->weChatPlatform->notifyWithdraw($withdraw, $systemAuto);
+            }
             $this->db->trans_commit();
             return null;
         } else {

@@ -317,7 +317,7 @@ class Users extends BaseController
             $this->failure(ERROR_SQL_WRONG);
             return;
         }
-        $accountSql = "UPDATE accounts SET userId=10000 WHERE userId=0";
+        $accountSql = "UPDATE accounts SET userId=100000 WHERE userId=0";
         $this->db->query($accountSql);
         $accountUpdated = $this->db->affected_rows() > 0;
         if (!$accountUpdated) {
