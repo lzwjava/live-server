@@ -162,6 +162,7 @@ class Withdraws extends BaseController
             return;
         }
         $accounts = $this->accountDao->queryAccountsHaveBalance();
+        $succeedCount = 0;
         foreach ($accounts as $account) {
             $amount = $account->balance;
             if ($account->userId == ADMIN_OP_SYSTEM_ID) {
@@ -174,16 +175,18 @@ class Withdraws extends BaseController
             }
             list($error, $data) = $this->createWithdraw($user, $amount);
             if ($error) {
-                logInfo($account->userId . ' error: ' . $error);
+                logInfo("userId $account->userId  error:  $error");
             } else {
                 $withdrawId = $data[KEY_WITHDRAW_ID];
                 $error = $this->payNotifyDao->handleWithdraw($withdrawId, true);
                 if ($error) {
-                    //$this->failure($error);
-                    //return;
+                    logInfo("userId $account->userId handle error:  $error");
+                } else {
+                    $succeedCount++;
                 }
             }
         }
+        logInfo("succeedCount: " . $succeedCount . ' total: ' . count($accounts));
         $this->succeed();
     }
 
