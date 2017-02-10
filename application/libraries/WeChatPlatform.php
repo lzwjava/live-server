@@ -303,7 +303,8 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, 'fD-twBRM96P4FkBSZQHPJ4GJ8_1i9N7HaDe7A36CllY', null, $tmplData);
     }
 
-    function notifyNewIncome($incomeType, $amount, $live, $fromUser, $inviteFromUserId = null)
+    function notifyNewIncome($incomeType, $amount, $live,
+                             $fromUser, $inviteFromUserId = null)
     {
         $attendUser = $this->userDao->findUserById($fromUser->userId);
         $liveOwner = $this->userDao->findUserById($live->ownerId);

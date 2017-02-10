@@ -53,46 +53,12 @@ class Withdraws extends BaseController
             return;
         }
         $amount = $this->toNumber($this->post(KEY_AMOUNT));
-        list($error, $data) = $this->createWithdraw($user, $amount);
+        list($error, $data) = $this->payNotifyDao->createWithdraw($user, $amount);
         if ($error) {
             $this->failure($error);
             return;
         }
         $this->succeed($data);
-    }
-
-    private function createWithdraw($user, $amount)
-    {
-        if (!$user->wechatSubscribe) {
-            return array(ERROR_MUST_SUBSCRIBE, null);
-        }
-        $snsUser = $this->snsUserDao->getSnsUserByUser($user);
-        if (!$snsUser) {
-            return array(ERROR_SNS_USER_NOT_EXISTS, null);
-        }
-        $account = $this->accountDao->getOrCreateAccount($user->userId);
-        if ($amount > $account->balance) {
-            return array(ERROR_EXCEED_BALANCE, null);
-        }
-        if ($amount < MIN_WITHDRAW_AMOUNT) {
-            return array(ERROR_WITHDRAW_AMOUNT_TOO_LITTLE, null);
-        }
-        $haveWaitWithdraw = $this->withdrawDao->haveWaitWithdraw($user->userId);
-        if ($haveWaitWithdraw) {
-            return array(ERROR_HAVE_WAIT_WITHDRAW, null);
-        }
-        $haveWaitLive = $this->liveDao->haveWaitLive($user->userId);
-        if ($haveWaitLive) {
-            return array(ERROR_HAVE_WAIT_LIVE, null);
-        }
-        $withdrawId = $this->withdrawDao->createWithdraw($user->userId, $amount);
-        if (!$withdrawId) {
-            return array(ERROR_SQL_WRONG, null);
-        }
-        $withdraw = $this->withdrawDao->queryWithdraw($withdrawId);
-        $this->weChatPlatform->notifyNewWithdraw($withdraw);
-        $data = array(KEY_WITHDRAW_ID => $withdrawId);
-        return array(null, $data);
     }
 
     function list_get()
@@ -130,30 +96,13 @@ class Withdraws extends BaseController
         $transfer = boolval($this->post(KEY_TRANSFER));
         $amount = intval($this->post(KEY_AMOUNT));
         $userId = $this->post(KEY_USER_ID);
-        list($error, $data) = $this->manualWithdraw($userId, $amount, $transfer);
+        list($error, $data) = $this->payNotifyDao->manualWithdraw($userId,
+            $amount, $transfer);
         if ($error) {
             $this->failure($error);
             return;
         }
         $this->succeed($data);
-    }
-
-    private function manualWithdraw($userId, $amount, $transfer)
-    {
-        $user = $this->userDao->findUserById($userId);
-        if (!$user) {
-            return array(ERROR_OBJECT_NOT_EXIST, null);
-        }
-        list($error, $data) = $this->createWithdraw($user, $amount);
-        if ($error) {
-            return array($error, null);
-        }
-        $withdrawId = $data[KEY_WITHDRAW_ID];
-        $error = $this->payNotifyDao->handleWithdraw($withdrawId, $transfer, false);
-        if ($error) {
-            return array($error, null);
-        }
-        return array(null, $data);
     }
 
     function withdrawAll_get()
@@ -173,7 +122,7 @@ class Withdraws extends BaseController
                 logInfo("user not exists");
                 continue;
             }
-            list($error, $data) = $this->createWithdraw($user, $amount);
+            list($error, $data) = $this->payNotifyDao->createWithdraw($user, $amount);
             if ($error) {
                 logInfo("create withdraw userId $account->userId  error:  $error");
             } else {
