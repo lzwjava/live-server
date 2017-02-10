@@ -294,4 +294,40 @@ class Users extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
     }
 
+    function fixSystemId_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $this->db->query('SET FOREIGN_KEY_CHECKS=0');
+        $this->db->trans_begin();
+        $sql = "UPDATE users SET userId=100000 WHERE userId=0";
+        $this->db->query($sql);
+        $updated = $this->db->affected_rows() > 0;
+        if (!$updated) {
+            $this->db->trans_rollback();
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $transSql = "UPDATE transactions SET userId=100000 WHERE userId=0";
+        $this->db->query($transSql);
+        $transUpdated = $this->db->affected_rows() > 0;
+        if (!$transUpdated) {
+            $this->db->trans_rollback();
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $accountSql = "UPDATE accounts SET userId=10000 WHERE userId=0";
+        $this->db->query($accountSql);
+        $accountUpdated = $this->db->affected_rows() > 0;
+        if (!$accountUpdated) {
+            $this->db->trans_rollback();
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->db->trans_commit();
+        $this->db->query('SET FOREIGN_KEY_CHECKS=1');
+        $this->succeed();
+    }
+
 }

@@ -210,3 +210,4 @@ $route['withdraws']['GET'] = 'withdraws/list';
 $route['withdraws/(\d+)/agree']['GET'] = 'withdraws/agree/$1';
 $route['withdraws/manual']['POST'] = 'withdraws/createByManual';
 $route['withdraws/withdrawAll']['GET'] = 'withdraws/withdrawAll';
+$route['users/fixSystemId']['GET'] = 'users/fixSystemId';
