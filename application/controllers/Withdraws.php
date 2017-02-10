@@ -175,12 +175,12 @@ class Withdraws extends BaseController
             }
             list($error, $data) = $this->createWithdraw($user, $amount);
             if ($error) {
-                logInfo("userId $account->userId  error:  $error");
+                logInfo("create withdraw userId $account->userId  error:  $error");
             } else {
                 $withdrawId = $data[KEY_WITHDRAW_ID];
                 $error = $this->payNotifyDao->handleWithdraw($withdrawId, true);
                 if ($error) {
-                    logInfo("userId $account->userId handle error:  $error");
+                    logInfo("handle withdraw error userId $account->userId error:  $error");
                 } else {
                     $succeedCount++;
                 }
