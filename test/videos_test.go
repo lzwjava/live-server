@@ -43,3 +43,12 @@ func TestVideos_create(t *testing.T) {
 		"title": {"直播1"}})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestVideos_mp4Ready(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	beginAndFinshLive(c, liveId)
+	c.admin = true
+	res := c.getData("videos/mp4Ready", url.Values{"liveId": {liveId}})
+	assert.NotNil(t, res.Interface())
+}

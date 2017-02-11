@@ -51,4 +51,11 @@ class VideoDao extends BaseDao
         }
     }
 
+    function mp4Ready($liveId)
+    {
+        $this->db->where(KEY_LIVE_ID, $liveId);
+        $this->db->update(TABLE_VIDEOS, array(KEY_TYPE => VIDEO_TYPE_MP4));
+        return $this->db->affected_rows() > 0;
+    }
+
 }
