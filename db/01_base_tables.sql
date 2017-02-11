@@ -80,9 +80,10 @@ CREATE TABLE `attendances` (
   `attendanceId`   INT(11)    NOT NULL AUTO_INCREMENT,
   `userId`         INT(11)    NOT NULL,
   `liveId`         INT(11)    NOT NULL,
+  `fromUserId`     INT(11)             DEFAULT NULL,
   `notified`       TINYINT(2) NOT NULL DEFAULT 0,
   `wechatNotified` TINYINT(2) NOT NULL DEFAULT 0,
-  `videoNotified`  TINYINT(0) NOT NULL DEFAULT 0,
+  `videoNotified`  TINYINT(2) NOT NULL DEFAULT 0,
   `orderNo`        VARCHAR(31)         DEFAULT NULL,
   `created`        TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`        TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -91,7 +92,8 @@ CREATE TABLE `attendances` (
   KEY `liveId` (`liveId`),
   UNIQUE KEY `orderNo` (`orderNo`),
   FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
-  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`)
+  FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
+  FOREIGN KEY (`fromUserId`) REFERENCES `users` (`userId`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
@@ -360,6 +362,4 @@ INSERT INTO `accounts` (`accountId`, `userId`, `balance`) VALUE (0, 0, 0);
 ALTER TABLE `accounts` ADD COLUMN `income` INT(11) NOT NULL DEFAULT 0
 AFTER `balance`;
 
-ALTER TABLE `attendances` ADD COLUMN `fromUserId` INT(11) DEFAULT NULL
-AFTER `liveId`;
-ALTER TABLE `attendances` ADD FOREIGN KEY (`fromUserId`) REFERENCES `users` (`userId`);
+ALTER TABLE `attendances` ADD COLUMN `preNotified` TINYINT(2) DEFAULT 0 AFTER `fromUserId`;

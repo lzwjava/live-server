@@ -24,16 +24,26 @@ class WeChatPlatform
         $this->jsSdk = new JSSDK(WECHAT_APP_ID, WECHAT_APP_SECRET);
         $ci->load->model(UserDao::class);
         $this->userDao = new UserDao();
+        $ci->load->helper('date');
     }
 
     function notifyUserByWeChat($userId, $live, $oneHour = false)
     {
         $user = $this->userDao->findUserById($userId);
         $word = null;
-        if ($oneHour) {
-            $word = '，您参与的直播还有一个小时开始，请准备好小凳子哟';
+        $a = date_create($live->planTs, new DateTimeZone('Asia/Shanghai'));
+        $b = date_create('now');
+        $diff = date_diff($a, $b);
+        $hourStr = null;
+        $word = null;
+        if ($diff->invert > 3600) {
+            $hourStr = $diff->format('%H小时%i分钟');
+            $word = sprintf('，您参与的直播还有%s开始', $hourStr);
+        } else if ($diff->invert > 0) {
+            $hourStr = $diff->format('%i分钟');
+            $word = sprintf('，您参与的直播还有%s开始', $hourStr);
         } else {
-            $word = '，您参与的直播即将开始啦';
+            $word = '，您参与的直播已经开始';
         }
         $tmplData = array(
             'first' => array(

@@ -79,8 +79,9 @@ class BaseDao extends CI_Model
 
     protected function attendanceFields()
     {
-        return array(KEY_ATTENDANCE_ID, KEY_USER_ID, KEY_LIVE_ID, KEY_NOTIFIED,
-            KEY_WECHAT_NOTIFIED, KEY_VIDEO_NOTIFIED, KEY_ORDER_NO, KEY_CREATED, KEY_UPDATED);
+        return array(KEY_ATTENDANCE_ID, KEY_USER_ID, KEY_LIVE_ID, KEY_FROM_USER_ID,
+            KEY_PRE_NOTIFIED, KEY_NOTIFIED, KEY_WECHAT_NOTIFIED, KEY_VIDEO_NOTIFIED, KEY_ORDER_NO,
+            KEY_CREATED, KEY_UPDATED);
     }
 
     protected function attendancePublicFields($prefix = TABLE_ATTENDANCES, $alias = false)

@@ -447,6 +447,22 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($relatedUsers)));
     }
 
+    private function notifyLiveStart($user, $live, $oneHour)
+    {
+        $charge = null;
+        if ($user->orderNo) {
+            $charge = $this->chargeDao->getOneByOrderNo($user->orderNo);
+        }
+        $ok = null;
+        if ($charge && $charge->channel == CHANNEL_WECHAT_APP) {
+            $ok = $this->weChatAppClient->notifyLiveStart($user->userId,
+                $charge->prepayId, $live, $oneHour);
+        } else {
+            $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live, $oneHour);
+        }
+        return $ok;
+    }
+
     function notifyLiveStart_get($liveId)
     {
         $user = $this->checkAndGetSessionUser();
@@ -465,26 +481,18 @@ class Lives extends BaseController
         $users = $this->liveDao->getAttendedUsers($liveId, 0, 1000000);
         $succeedCount = 0;
         foreach ($users as $user) {
-            if ($user->notified == 0) {
-                $charge = null;
-                if ($user->orderNo) {
-                    $charge = $this->chargeDao->getOneByOrderNo($user->orderNo);
+            if ($oneHour && !$user->preNotified) {
+                $ok = $this->notifyLiveStart($user, $live, $oneHour);
+                if ($ok) {
+                    $this->attendanceDao->updateToPreNotified($user->userId, $live->liveId);
+                    $succeedCount++;
                 }
-                if ($charge && $charge->channel == CHANNEL_WECHAT_APP) {
-                    $ok = $this->weChatAppClient->notifyLiveStart($user->userId,
-                        $charge->prepayId, $live, $oneHour);
-                } else {
-                    $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live, $oneHour);
-                }
-
-                if (!$ok) {
-                    $ok = $this->sms->notifyLiveStart($user->userId, $live, $oneHour);
-                }
+            } else if (!$oneHour && $user->notified == 0) {
+                $ok = $this->notifyLiveStart($user, $live, $oneHour);
                 if ($ok) {
                     $this->attendanceDao->updateToNotified($user->userId, $live->liveId);
                     $succeedCount++;
                 }
-            } else {
             }
         }
         logInfo("finished " . $succeedCount . " total " . count($users));
