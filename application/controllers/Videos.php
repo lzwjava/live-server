@@ -64,8 +64,22 @@ class Videos extends BaseController
         }
         $fileName = $this->post(KEY_FILE_NAME);
         $title = $this->post(KEY_TITLE);
-        $id = $this->videoDao->addVideo($liveId, $title, $fileName, VIDEO_TYPE_MP4);
-        if (!$id) {
+        $videoId = $this->videoDao->addVideo($liveId, $title, $fileName, VIDEO_TYPE_MP4);
+        if (!$videoId) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->succeed(array(KEY_VIDEO_ID => $videoId));
+    }
+
+    function mp4Ready_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $liveId = $this->get(KEY_LIVE_ID);
+        $ok = $this->videoDao->mp4Ready($liveId);
+        if (!$ok) {
             $this->failure(ERROR_SQL_WRONG);
             return;
         }
