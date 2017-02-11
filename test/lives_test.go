@@ -59,6 +59,7 @@ func TestLives_get(t *testing.T) {
 	assert.NotNil(t, live.Get("rtmpUrl").Interface())
 	assert.NotNil(t, live.Get("pushUrl").Interface())
 	assert.NotNil(t, live.Get("foreignPushUrl").Interface())
+	assert.NotNil(t, live.Get("hlsUrls").MustArray())
 	assert.NotNil(t, live.Get("hlsUrl").Interface())
 	assert.NotNil(t, live.Get("flvUrl").Interface())
 	assert.NotNil(t, live.Get("videoUrl").Interface())
