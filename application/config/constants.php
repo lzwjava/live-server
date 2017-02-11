@@ -458,6 +458,7 @@ define('KEY_ATTENDANCE_ID', 'attendanceId');
 define('KEY_ATTENDANCE_COUNT', 'attendanceCount');
 define('KEY_FROM_USER_ID', 'fromUserId');
 define('KEY_NOTIFIED', 'notified');
+define('KEY_PRE_NOTIFIED', 'preNotified');
 define('KEY_WECHAT_NOTIFIED', 'wechatNotified');
 define('KEY_VIDEO_NOTIFIED', 'videoNotified');
 
@@ -750,7 +751,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'DYle1l0xwsM3aPrNvBOVzbhDrBoB8n2IMiaiOjQGOcNioq6aqn_tBxLLlJRL5Ef_frB4_5rVw8ny4YCcKaqoYWu7iyYNzxERsirZC6Fn6irUlCWev2FzdHpXoDMQy8veKOKfAAAVZV');
+'3dn6_dvS-KNc95LFeQQf2uNxRyxfo7PqCRYUDcRITtszY3S3aQhr4lHoXJGkQb5snFypGSn6wjYWrw5LCkx3z8sWv1FuRTWVtkYXssblKzWjgsJP25i3qczcg4ysM8FeBJUeAJARZK');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
