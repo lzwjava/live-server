@@ -36,19 +36,21 @@ class WeChatPlatform
         $diff = date_diff($a, $b);
         $hourStr = null;
         $word = null;
-        if ($diff->invert > 3600) {
-            $hourStr = $diff->format('%H小时%i分钟');
+        if ($diff->h > 0) {
+            $hourStr = $diff->format('%h小时%i分钟');
             $word = sprintf('，您参与的直播还有%s开始', $hourStr);
-        } else if ($diff->invert > 0) {
+        } else if ($diff->m > 0) {
             $hourStr = $diff->format('%i分钟');
             $word = sprintf('，您参与的直播还有%s开始', $hourStr);
-        } else {
+        } else if ($diff->invert < 0) {
             $word = '，您参与的直播已经开始';
+        } else {
+            $word = '，您参与的直播即将开始';
         }
         $tmplData = array(
             'first' => array(
                 'value' => $user->username . $word,
-                'color' => '#000',
+                'color' => '#D00019',
             ),
             'keyword1' => array(
                 'value' => $live->subject,
