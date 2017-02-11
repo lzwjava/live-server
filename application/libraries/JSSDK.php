@@ -187,7 +187,7 @@ class JSSDK
                     'sub_button' => array(
                         array(
                             'type' => 'view',
-                            'name' => '95年创始人成长经历',
+                            'name' => '出发创业',
                             'url' => 'http://mp.weixin.qq.com/s/KVr_s8bWOBfeexCmhHBpIw'
                         ),
                         array(
@@ -207,7 +207,7 @@ class JSSDK
                         ),
                         array(
                             'type' => 'view',
-                            'name' => '创业一年心得',
+                            'name' => '上线三个月感想',
                             'url' => 'http://mp.weixin.qq.com/s/rhlWGg4GXpUEHl2VPYru4Q'
                         )
                     )
