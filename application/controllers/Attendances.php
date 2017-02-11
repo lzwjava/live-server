@@ -194,19 +194,23 @@ class Attendances extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_USER_ID,
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_USER_ID,
             KEY_AMOUNT))
         ) {
             return;
         }
-        $userId = $this->post(KEY_USER_ID);
-        $amount = $this->post(KEY_AMOUNT);
-        $openId = $this->snsUserDao->getOpenIdByUserId($userId);
-        if (!$openId) {
+        $userId = $this->get(KEY_USER_ID);
+        $amount = $this->get(KEY_AMOUNT);
+        $user = $this->userDao->findUserById($userId);
+        if ($this->checkIfObjectNotExists($user)) {
+            return;
+        }
+        $snsUser = $this->snsUserDao->getSnsUserByUser($user);
+        if (!$snsUser) {
             $this->failure(ERROR_SNS_USER_NOT_EXISTS);
             return;
         }
-        $this->pay->transfer($openId, $amount, '退款');
+        $this->pay->transfer($snsUser->openId, $amount, '手动转账');
         $this->succeed();
     }
 
