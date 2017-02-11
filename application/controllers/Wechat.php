@@ -329,7 +329,7 @@ class Wechat extends BaseController
             $msgType = $postObj[KEY_MSG_TYPE];
             if ($msgType == MSG_TYPE_TEXT) {
                 $keyword = trim($postObj[KEY_CONTENT]);
-                $contentStr = '如果有任何问题请联系创始人微信 lzwjava 。';
+                $contentStr = '如果有任何问题请联系创始人微信 lzwjava2048 。';
                 $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                 $this->replyToWeChat($textReply);
             } else if ($msgType == MSG_TYPE_EVENT) {
