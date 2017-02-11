@@ -159,14 +159,29 @@ class LiveDao extends BaseDao
         return $this->getListFromTable(TABLE_LIVES, KEY_STATUS, $status);
     }
 
+    function hlsServers()
+    {
+        return array('video.quzhiboapp.com/live',
+            'hls-xycdn.quzhiboapp.com/live',
+            'hls-xycdn1.quzhiboapp.com/live');
+    }
+
     private function electHlsServer()
     {
 //        return 'hls-cdn.quzhiboapp.com';
 //        return 'live-cdn.quzhiboapp.com';
 //        'pili-live-hls.quzhiboapp.com/qulive'
-        return random_element(array('video.quzhiboapp.com/live',
-            'hls-xycdn.quzhiboapp.com/live',
-            'hls-xycdn1.quzhiboapp.com/live'));
+        return random_element($this->hlsServers());
+    }
+
+    private function hlsUrls($rtmpKey)
+    {
+        $urls = array();
+        foreach ($this->hlsServers() as $hlsServer) {
+            $hlsUrl = 'http://' . $hlsServer . '/' . $rtmpKey . '.m3u8';
+            array_push($urls, $hlsUrl);
+        }
+        return $urls;
     }
 
     private function electFlvServer()
@@ -233,7 +248,11 @@ class LiveDao extends BaseDao
                 }
                 $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHostLive . '/' . $live->rtmpKey;
-                $live->hlsUrl = 'http://' . $hlsHostLive . '/' . $live->rtmpKey . '.m3u8';
+
+                $hlsUrls = $this->hlsUrls($live->rtmpKey);
+                $live->hlsUrls = $hlsUrls;
+                $live->hlsUrl = random_element($hlsUrls);
+                
                 $live->flvUrl = 'http://' . $flvHostLive . '/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
             } else {
