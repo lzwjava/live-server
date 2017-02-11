@@ -117,6 +117,9 @@ class Withdraws extends BaseController
             if ($account->userId == ADMIN_OP_SYSTEM_ID) {
                 continue;
             }
+            if ($account->balance < MIN_WITHDRAW_AMOUNT) {
+                continue;
+            }
             $user = $this->userDao->findUserById($account->userId);
             if (!$user) {
                 logInfo("user not exists");
