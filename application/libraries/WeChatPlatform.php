@@ -271,7 +271,7 @@ class WeChatPlatform
                 'color' => '#000'
             ),
             'remark' => array(
-                'value' => '已给您发送红包，请拆收',
+                'value' => '已给您企业转账,请查收',
                 'color' => '#00A2C0'
             )
         );
