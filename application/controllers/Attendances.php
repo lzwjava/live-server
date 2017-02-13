@@ -214,5 +214,4 @@ class Attendances extends BaseController
         $this->succeed();
     }
 
-
 }
