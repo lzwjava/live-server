@@ -241,14 +241,14 @@ class WeChatPlatform
         $user = $this->userDao->findUserById($withdraw->userId);
         $first = null;
         if ($systemAuto) {
-            $first = '系统自动每日提现给您';
+            $first = '感谢您邀请朋友来参加或直播获得收益，系统自动每日提现给您';
         } else {
             $first = '您的提现申请已处理';
         }
         $tmplData = array(
             'first' => array(
                 'value' => $first,
-                'color' => '#000'
+                'color' => '#D00019'
             ),
             'keyword1' => array(
                 'value' => $user->username,

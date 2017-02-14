@@ -89,15 +89,18 @@ class Withdraws extends BaseController
             return;
         }
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_AMOUNT,
-            KEY_USER_ID, KEY_TRANSFER))
+            KEY_USER_ID))
         ) {
             return;
         }
-        $transfer = boolval($this->post(KEY_TRANSFER));
         $amount = intval($this->post(KEY_AMOUNT));
         $userId = $this->post(KEY_USER_ID);
-        list($error, $data) = $this->payNotifyDao->manualWithdraw($userId,
-            $amount, $transfer);
+        $user = $this->userDao->findUserById($userId);
+        if ($this->checkIfObjectNotExists($user)) {
+            return;
+        }
+        list($error, $data) = $this->payNotifyDao->createWithdraw($user,
+            $amount);
         if ($error) {
             $this->failure($error);
             return;
