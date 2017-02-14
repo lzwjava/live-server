@@ -321,8 +321,6 @@ class Wechat extends BaseController
         if (!empty($xmlStr)) {
             $postObj = $this->xmlToArray($xmlStr);
 
-            logInfo("wechat callback:\n " . json_encode($postObj));
-
             $fromUsername = $postObj[KEY_FROM_USER_NAME];
             $toUsername = $postObj[KEY_TO_USER_NAME];
             $createTime = $postObj[KEY_CREATE_TIME];
@@ -359,19 +357,20 @@ class Wechat extends BaseController
                     if ($userId) {
                         $this->userDao->updateSubscribe($userId, 0);
                     }
-                    logInfo("unsubscribe event");
+                    logInfo("unsubscribe event $userId");
                 } else if ($event == EVENT_VIEW) {
-                    logInfo("event view");
+
                 } else if ($event == EVENT_SCAN) {
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     list($error, $theSubscribe) = $this->jsSdk->queryIsSubscribeByOpenId($fromUsername);
                     if (!$error) {
                         $this->userDao->updateSubscribe($userId, $theSubscribe);
                     }
-
                     $extraWord = $this->extraWordFromEventKey($eventKey);
                     $welcomeReply = $this->textReply($toUsername, $fromUsername, $extraWord);
                     $this->replyToWeChat($welcomeReply);
+                } else {
+                    logInfo("unhandle wechat callback:\n " . json_encode($postObj));
                 }
             }
         } else {

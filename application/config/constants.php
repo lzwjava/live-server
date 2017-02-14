@@ -774,7 +774,7 @@ define('MSG_TYPE_TEXT', 'text');
 define('MSG_TYPE_EVENT', 'event');
 define('EVENT_SUBSCRIBE', 'subscribe');
 define('EVENT_UNSUBSCRIBE', 'unsubscribe');
-define('EVENT_VIEW', 'view');
+define('EVENT_VIEW', 'VIEW');
 define('EVENT_SCAN', 'SCAN');
 
 define('WECHAT_WELCOME_WORD', <<<EOD
