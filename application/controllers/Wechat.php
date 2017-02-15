@@ -341,7 +341,6 @@ class Wechat extends BaseController
                     if ($userId) {
                         $this->userDao->updateSubscribe($userId, 1);
                     }
-
                     $extraWord = '';
                     if (substr($eventKey, 0, 8) == 'qrscene_') {
                         $sceneStr = substr($eventKey, 8, strlen($eventKey));
@@ -350,8 +349,6 @@ class Wechat extends BaseController
                     $contentStr = sprintf(WECHAT_WELCOME_WORD, $extraWord);
                     $welcomeReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                     $this->replyToWeChat($welcomeReply);
-
-
                 } else if ($event == EVENT_UNSUBSCRIBE) {
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
@@ -359,7 +356,6 @@ class Wechat extends BaseController
                     }
                     logInfo("unsubscribe event $userId");
                 } else if ($event == EVENT_VIEW) {
-
                 } else if ($event == EVENT_SCAN) {
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     list($error, $theSubscribe) = $this->jsSdk->queryIsSubscribeByOpenId($fromUsername);

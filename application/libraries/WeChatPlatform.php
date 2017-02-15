@@ -27,7 +27,7 @@ class WeChatPlatform
         $ci->load->helper('date');
     }
 
-    function notifyUserByWeChat($userId, $live, $oneHour = false)
+    function notifyUserByWeChat($userId, $live)
     {
         $user = $this->userDao->findUserById($userId);
         $word = null;

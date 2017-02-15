@@ -100,11 +100,8 @@ class WeChatAppClient
         return true;
     }
 
-    function notifyLiveStart($userId, $prepayId, $live, $oneHour = false)
+    function notifyLiveStart($userId, $prepayId, $live)
     {
-        if ($oneHour) {
-            return false;
-        }
         $user = $this->userDao->findUserById($userId);
         $word = $user->username . '，您参与的直播即将开始啦';
         $tmplData = array(

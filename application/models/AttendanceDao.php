@@ -124,25 +124,42 @@ class AttendanceDao extends BaseDao
 
     function updateToNotified($userId, $liveId)
     {
-        $binds = array($userId, $liveId);
-        $sql = "UPDATE attendances SET notified = 1 WHERE userId=? AND liveId=?";
-        return $this->db->query($sql, $binds);
+        $data = array(
+            KEY_NOTIFIED => 1
+        );
+        return $this->updateAttendance($userId, $liveId, $data);
+    }
+
+    private function updateAttendance($userId, $liveId, $data)
+    {
+        $this->db->where(KEY_USER_ID, $userId);
+        $this->db->where(KEY_LIVE_ID, $liveId);;
+        $this->db->update(TABLE_ATTENDANCES, $data);
+        return $this->db->affected_rows() > 0;
     }
 
     function updateToPreNotified($userId, $liveId)
     {
-        $binds = array($userId, $liveId);
-        $sql = "UPDATE attendances SET preNotified = 1 WHERE userId=? AND liveId=?";
-        $this->db->query($sql, $binds);
-        return $this->db->affected_rows() > 0;
+        $data = array(
+            KEY_PRE_NOTIFIED => 1
+        );
+        return $this->updateAttendance($userId, $liveId, $data);
     }
 
     function updateToVideoNotified($userId, $liveId)
     {
-        $binds = array($userId, $liveId);
-        $sql = "UPDATE attendances SET videoNotified = 1 WHERE userId=? AND liveId=?";
-        $this->db->query($sql, $binds);
-        return $this->db->affected_rows() > 0;
+        $data = array(
+            KEY_VIDEO_NOTIFIED => 1
+        );
+        return $this->updateAttendance($userId, $liveId, $data);
+    }
+
+    function updateToFirstNotified($userId, $liveId)
+    {
+        $data = array(
+            KEY_FIRST_NOTIFIED => 1
+        );
+        return $this->updateAttendance($userId, $liveId, $data);
     }
 
 }

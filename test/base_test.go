@@ -45,6 +45,10 @@ func deleteTable(table string, noCheck bool) {
 	deleteRecord(table, "1", "1", noCheck)
 }
 
+func runSqlNoCheck(sentence string) {
+	runSql(sentence, false)
+}
+
 func runSql(sentence string, noCheck bool) {
 	db, err := sql.Open("mysql", "lzw:@/qulive")
 	checkErr(err)
