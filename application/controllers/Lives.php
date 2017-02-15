@@ -18,6 +18,8 @@ class Lives extends BaseController
     public $chargeDao;
     public $weChatAppClient;
     public $qiniuLive;
+    public $jobDao;
+    public $jobHelperDao;
 
     function __construct()
     {
@@ -42,6 +44,10 @@ class Lives extends BaseController
         $this->weChatAppClient = new WeChatAppClient();
         $this->load->library(QiniuLive::class);
         $this->qiniuLive = new QiniuLive();
+        $this->load->model(JobDao::class);
+        $this->jobDao = new JobDao();
+        $this->load->model(JobHelperDao::class);
+        $this->jobHelperDao = new JobHelperDao();
     }
 
     protected function checkIfAmountWrong($amount)
@@ -318,7 +324,19 @@ class Lives extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-        $this->liveDao->setLivePrepare($id);
+        if ($live->status != LIVE_STATUS_REVIEW) {
+            $this->failure(ERROR_LIVE_NOT_REVIEW);
+            return;
+        }
+        $this->db->trans_begin();
+        $liveOk = $this->liveDao->setLivePrepare($id);
+        $jobOk = $this->jobDao->insertNotifyJobs($live);
+        if (!$liveOk || !$jobOk) {
+            $this->db->trans_rollback();
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->db->trans_commit();
         $this->succeed();
     }
 
@@ -437,30 +455,13 @@ class Lives extends BaseController
         foreach ($relatedUsers as $relatedUser) {
             $theUser = $this->findUser($relatedUser, $users);
             if ($theUser) {
-
             } else {
-                $this->weChatPlatform->notifyUserByWeChat($relatedUser->userId, $live, false);
+                $this->weChatPlatform->notifyUserByWeChat($relatedUser->userId, $live);
                 $succeedCount++;
             }
         }
         logInfo("finished " . $succeedCount . " total " . count($relatedUsers));
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($relatedUsers)));
-    }
-
-    private function notifyLiveStart($user, $live, $oneHour)
-    {
-        $charge = null;
-        if ($user->orderNo) {
-            $charge = $this->chargeDao->getOneByOrderNo($user->orderNo);
-        }
-        $ok = null;
-        if ($charge && $charge->channel == CHANNEL_WECHAT_APP) {
-            $ok = $this->weChatAppClient->notifyLiveStart($user->userId,
-                $charge->prepayId, $live, $oneHour);
-        } else {
-            $ok = $this->weChatPlatform->notifyUserByWeChat($user->userId, $live, $oneHour);
-        }
-        return $ok;
     }
 
     function notifyLiveStart_get($liveId)
@@ -469,7 +470,6 @@ class Lives extends BaseController
         if (!$user) {
             return;
         }
-        $oneHour = $this->toNumber($this->get('oneHour'));
         $live = $this->liveDao->getLive($liveId);
         if ($this->checkIfObjectNotExists($live)) {
             return;
@@ -478,25 +478,13 @@ class Lives extends BaseController
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
-        $users = $this->liveDao->getAttendedUsers($liveId, 0, 1000000);
-        $succeedCount = 0;
-        foreach ($users as $user) {
-            if ($oneHour && !$user->preNotified) {
-                $ok = $this->notifyLiveStart($user, $live, $oneHour);
-                if ($ok) {
-                    $this->attendanceDao->updateToPreNotified($user->userId, $live->liveId);
-                    $succeedCount++;
-                }
-            } else if (!$oneHour && $user->notified == 0) {
-                $ok = $this->notifyLiveStart($user, $live, $oneHour);
-                if ($ok) {
-                    $this->attendanceDao->updateToNotified($user->userId, $live->liveId);
-                    $succeedCount++;
-                }
-            }
+        $oneHour = $this->toNumber($this->get('oneHour'));
+        if ($oneHour) {
+            $result = $this->jobHelperDao->notifyLiveStartWithType($live->liveId, 1);
+        } else {
+            $result = $this->jobHelperDao->notifyLiveStartWithType($live->liveId, 2);
         }
-        logInfo("finished " . $succeedCount . " total " . count($users));
-        $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
+        $this->succeed($result);
     }
 
     function notifyVideo_get($liveId)

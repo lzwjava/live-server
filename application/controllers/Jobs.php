@@ -9,17 +9,48 @@
 class Jobs extends BaseController
 {
     public $statusDao;
+    public $jobDao;
+    public $jobHelperDao;
+    public $paramDao;
 
     function __construct()
     {
         parent::__construct();
         $this->load->model(StatusDao::class);
         $this->statusDao = new StatusDao();
+        $this->load->model(JobDao::class);
+        $this->jobDao = new JobDao();
+        $this->load->model(JobHelperDao::class);
+        $this->jobHelperDao = new JobHelperDao();
+        $this->load->model(ParamDao::class);
+        $this->paramDao = new ParamDao();
     }
 
     function alive_get()
     {
         //$this->statusDao->cleanStatus();
+        $taskRunning = $this->paramDao->queryTaskRunning();
+        if ($taskRunning == '1') {
+            logInfo("task already running");
+            return;
+        }
+        $this->paramDao->setTaskRunning('1');
+
+        $waitTodoJobs = $this->jobDao->queryAllWaitJobs();
+        foreach ($waitTodoJobs as $waitJob) {
+            $this->jobDao->updateJobStatus($waitJob->jobId, JOB_STATUS_DOING);
+            if ($waitJob->name == JOB_NAME_NOTIFY_LIVE_START) {
+                $params = $waitJob->params;
+                $result = $this->jobHelperDao->notifyLiveStartWithType($params->liveId,
+                    $params->type);
+                $this->jobDao->updateJobStatusReport($waitJob->jobId,
+                    JOB_STATUS_DONE, json_encode($result));
+            } else {
+
+            }
+        }
+        $this->paramDao->setTaskRunning('0');
+        $this->succeed();
     }
 
     function queue_get()
@@ -32,7 +63,8 @@ class Jobs extends BaseController
         }
     }
 
-    private function getMessageQueue()
+    private
+    function getMessageQueue()
     {
         $queue = msg_get_queue(TRANSCODE_QUEUE);
         for (; ;) {
@@ -45,7 +77,8 @@ class Jobs extends BaseController
         }
     }
 
-    private function addMessageQueue()
+    private
+    function addMessageQueue()
     {
         $queue = msg_get_queue(TRANSCODE_QUEUE);
         $object = new stdclass;
