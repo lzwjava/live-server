@@ -51,3 +51,13 @@ func TestJobs_notifyJob(t *testing.T) {
 
 	runJob(c)
 }
+
+func TestJobs_update(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+
+	planTs := time.Now().Add(10 * time.Hour).Format("2006-01-02 15:04:05")
+	res := c.postData("lives/"+liveId, url.Values{
+		"planTs": {planTs}})
+	assert.NotNil(t, res.Interface())
+}

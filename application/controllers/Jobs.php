@@ -76,8 +76,7 @@ class Jobs extends BaseController
         }
     }
 
-    private
-    function addMessageQueue()
+    private function addMessageQueue()
     {
         $queue = msg_get_queue(TRANSCODE_QUEUE);
         $object = new stdclass;

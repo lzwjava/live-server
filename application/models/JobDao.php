@@ -29,7 +29,6 @@ class JobDao extends BaseDao
             logInfo("invalid job");
             return true;
         }
-        logInfo("insert");
         $paramStr = '{}';
         if ($params) {
             $paramStr = json_encode($params);
@@ -67,13 +66,37 @@ class JobDao extends BaseDao
         ));
     }
 
+    private function cancelOneNotifyJob($params)
+    {
+        $this->db->where(KEY_PARAMS, json_encode($params));
+        $this->db->where(KEY_NAME, JOB_NAME_NOTIFY_LIVE_START);
+        $data = array(
+            KEY_STATUS => JOB_STATUS_CANCEL
+        );
+        $this->db->update(TABLE_JOBS, $data);
+        return $this->db->affected_rows() > 0;
+    }
+
     function cancelNotifyJobs($live)
     {
-
+        $this->cancelOneNotifyJob(array(
+            KEY_LIVE_ID => $live->liveId,
+            KEY_TYPE => 0
+        ));
+        $this->cancelOneNotifyJob(array(
+            KEY_LIVE_ID => $live->liveId,
+            KEY_TYPE => 1
+        ));
+        $this->cancelOneNotifyJob(array(
+            KEY_LIVE_ID => $live->liveId,
+            KEY_TYPE => 2
+        ));
     }
 
     function insertNotifyJobs($live)
     {
+        $this->cancelNotifyJobs($live);
+
         $planTsDate = date_create($live->planTs, new DateTimeZone('Asia/Shanghai'));
         $unixTimestamp = $planTsDate->getTimestamp();
         $ts1 = $unixTimestamp - 60 * 60 * 8;
