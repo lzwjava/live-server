@@ -138,7 +138,17 @@ class Lives extends BaseController
             $this->failure(ERROR_NOT_ALLOW_DO_IT);
             return;
         }
+        $originPlanTs = $live->planTs;
         $this->liveDao->update($liveId, $data);
+
+        if (isset($data[KEY_PLAN_TS])) {
+            $newPlanTs = $data[KEY_PLAN_TS];
+            $newLive = $this->liveDao->getLive($liveId);
+            if ($newPlanTs != $originPlanTs && $newLive->status >= LIVE_STATUS_WAIT) {
+                $this->jobDao->insertNotifyJobs($newLive);
+            }
+        }
+
         $this->succeed();
     }
 
