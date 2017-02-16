@@ -29,12 +29,11 @@ class Jobs extends BaseController
     function alive_get()
     {
         //$this->statusDao->cleanStatus();
-        $taskRunning = $this->paramDao->queryTaskRunning();
-        if ($taskRunning == '1') {
-            logInfo("task already running");
+        $taskRunning = $this->paramDao->getTaskRunning();
+        if ($taskRunning) {
             return;
         }
-        $this->paramDao->setTaskRunning('1');
+        $this->paramDao->setTaskRunning(1);
 
         $waitTodoJobs = $this->jobDao->queryAllWaitJobs();
         foreach ($waitTodoJobs as $waitJob) {
@@ -49,7 +48,7 @@ class Jobs extends BaseController
 
             }
         }
-        $this->paramDao->setTaskRunning('0');
+        $this->paramDao->setTaskRunning(0);
         $this->succeed();
     }
 

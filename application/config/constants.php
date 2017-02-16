@@ -646,11 +646,6 @@ define('KEY_TRIGGER_TS', 'triggerTs');
 
 define('JOB_NAME_NOTIFY_LIVE_START', 'notifyLiveStart');
 
-// params
-define('TABLE_PARAMS', 'params');
-define('KEY_PARAM_ID', 'paramId');
-define('KEY_VALUE', 'value');
-
 define('KEY_TASK_RUNNING', 'taskRunning');
 
 

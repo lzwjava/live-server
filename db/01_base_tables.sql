@@ -81,6 +81,7 @@ CREATE TABLE `attendances` (
   `userId`         INT(11)    NOT NULL,
   `liveId`         INT(11)    NOT NULL,
   `fromUserId`     INT(11)             DEFAULT NULL,
+  `firstNotified`  TINYINT(2)          DEFAULT 0,
   `preNotified`    TINYINT(2)          DEFAULT 0,
   `notified`       TINYINT(2) NOT NULL DEFAULT 0,
   `wechatNotified` TINYINT(2) NOT NULL DEFAULT 0,
@@ -358,33 +359,16 @@ VALUES (100000, '系统', NULL, 'http://i.quzhiboapp.com/icon108.jpg');
 
 INSERT INTO `accounts` (`userId`, `balance`) VALUE (100000, 0);
 
-ALTER TABLE `attendances` ADD COLUMN `firstNotified` TINYINT(2) DEFAULT 0
-AFTER `fromUserId`;
-
 CREATE TABLE `jobs` (
   `jobId`     INT(11)      NOT NULL AUTO_INCREMENT,
   `name`      VARCHAR(30)  NOT NULL DEFAULT '',
   `params`    VARCHAR(300) NOT NULL DEFAULT '',
   `status`    TINYINT      NOT NULL DEFAULT 0,
   `triggerTs` INT(11)      NOT NULL DEFAULT 0,
+  `report`    VARCHAR(100) NOT NULL DEFAULT '',
   `created`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`jobId`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `jobs` ADD COLUMN `report` VARCHAR(100) NOT NULL DEFAULT ''
-AFTER `triggerTs`;
-
-CREATE TABLE `params` (
-  `paramId` INT(11)     NOT NULL AUTO_INCREMENT,
-  `name`    VARCHAR(30) NOT NULL DEFAULT '',
-  `value`   VARCHAR(60) NOT NULL DEFAULT '',
-  `created` TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`paramId`),
-  UNIQUE KEY (`name`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
