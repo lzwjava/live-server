@@ -13,7 +13,7 @@ class ParamDao extends BaseDao
     function __construct()
     {
         parent::__construct();
-        $this->client = $this->newRedisClient(1, 'global:');
+        $this->client = $this->newRedisClient(0, 'global:');
     }
 
     function setTaskRunning($value)
