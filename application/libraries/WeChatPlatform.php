@@ -315,6 +315,37 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, 'fD-twBRM96P4FkBSZQHPJ4GJ8_1i9N7HaDe7A36CllY', null, $tmplData);
     }
 
+    function notifyNewReview($live)
+    {
+        if (isDebug()) {
+            $targetUser = $this->userDao->findUserById($live->ownerId);
+        } else {
+            $targetUser = $this->userDao->findUserById(ADMIN_OP_USER_ID);
+        }
+        $liveOwner = $this->userDao->findUserById($live->ownerId);
+        $tmplData = array(
+            'first' => array(
+                'value' => $liveOwner->username . '提交了直播, 等待审核',
+                'color' => '#000'
+            ),
+            'keyword1' => array(
+                'value' => $live->subject,
+                'color' => '#000'
+            ),
+            'keyword2' => array(
+                'value' => '等待审核',
+                'color' => '#000'
+            ),
+            'remark' => array(
+                'value' => '直播ID为:' . $live->liveId . ', 请尽快处理',
+                'color' => '#00A2C0'
+            )
+        );
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+        return $this->notifyByWeChat($targetUser, 'NN03-O5T23mawo9yado4EV-ycEM-I2-Q92VwLd4pifM',
+            $url, $tmplData);
+    }
+
     function notifyNewIncome($incomeType, $amount, $live,
                              $fromUser, $inviteFromUserId = null)
     {
