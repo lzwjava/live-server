@@ -48,6 +48,7 @@ class Jobs extends BaseController
 
             }
         }
+
         $this->paramDao->setTaskRunning(0);
         $this->succeed();
     }
@@ -62,8 +63,7 @@ class Jobs extends BaseController
         }
     }
 
-    private
-    function getMessageQueue()
+    private function getMessageQueue()
     {
         $queue = msg_get_queue(TRANSCODE_QUEUE);
         for (; ;) {

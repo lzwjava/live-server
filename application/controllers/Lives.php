@@ -321,7 +321,12 @@ class Lives extends BaseController
             $this->failure(ERROR_SPEAKER_INTRO_TOO_SHORT);
             return;
         }
-        $this->liveDao->setLiveReview($id);
+        $ok = $this->liveDao->setLiveReview($id);
+        if (!$ok) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->weChatPlatform->notifyNewReview($live);
         $this->succeed(true);
     }
 

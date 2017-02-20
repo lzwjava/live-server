@@ -211,7 +211,7 @@ func TestLives_setReview(t *testing.T) {
 }
 
 func TestLives_submitReview(t *testing.T) {
-	c, _ := NewClientAndUser()
+	c, _ := NewClientAndWeChatUser()
 	liveId := lastPrepareLive(c)
 	planTs := time.Now().Add(1 * time.Hour).Format("2006-01-02 15:04:05")
 	updateRes := c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
