@@ -110,7 +110,7 @@ class Withdraws extends BaseController
 
     function withdrawAll_get()
     {
-        if ($this->checkIfNotAdmin()) {
+        if (!is_cli() && $this->checkIfNotAdmin()) {
             return;
         }
         $accounts = $this->accountDao->queryAccountsHaveBalance();
