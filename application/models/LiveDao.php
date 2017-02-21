@@ -412,4 +412,16 @@ class LiveDao extends BaseDao
         return $row->cnt > 0;
     }
 
+    function findLatestWaitLive()
+    {
+        $sql = "SELECT liveId FROM lives WHERE status=? ORDER BY planTs ASC LIMIT 1";
+        $binds = array(LIVE_STATUS_WAIT);
+        $live = $this->db->query($sql, $binds)->row();
+        if ($live) {
+            return $this->getLive($live->liveId, null);
+        } else {
+            return null;
+        }
+    }
+
 }
