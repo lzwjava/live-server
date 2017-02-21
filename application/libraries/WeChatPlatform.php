@@ -75,12 +75,12 @@ class WeChatPlatform
         $word = null;
         $tmplData = array(
             'first' => array(
-                'value' => $user->username . ', 有新的直播发布啦',
+                'value' => $user->username . '，有新的直播发布啦',
                 'color' => '#828282',
             ),
             'keyword1' => array(
                 'value' => $live->subject,
-                'color' => '#D00019',
+                'color' => '#00A2C0',
             ),
             'keyword2' => array(
                 'value' => '趣直播',
@@ -88,14 +88,14 @@ class WeChatPlatform
             ),
             'keyword3' => array(
                 'value' => $live->owner->username,
-                'color' => '#D00019',
+                'color' => '#00A2C0',
             ),
             'keyword4' => array(
                 'value' => $live->planTs,
                 'color' => '#828282',
             ),
             'remark' => array(
-                'value' => '点击查看详情,回复TD0000退订新直播发布',
+                'value' => '点击查看详情，回复TD0000退订新直播发布',
                 'color' => '#828282',
             )
         );

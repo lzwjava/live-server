@@ -776,7 +776,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'PnwsNXNhui6Daixq8rS2_Y63NJwJtgjXZIBgzDfnyTg60oHhtg6cRe-xtaU-WZqQh3BsPMt5S-G_nXQjCcsD3PPg6UbfzAA2SBBlD3Be5HZCLi-Wm0YOR_H6fYWsZSfwPXWgAEAIQP');
+'rj3P7TY5eG4Yy0PsNRnyfcItTxjFrXocrh0v5mHv-iczeLLHbDQri0za90W0V3lREdOEmVXN2STxq4SBAv91__AaPXpkh6i88FNIaEn48N4OYFeAAAWGN');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 

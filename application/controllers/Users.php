@@ -16,6 +16,8 @@ class Users extends BaseController
     public $snsUserDao;
     public $qiniuDao;
     public $jsSdk;
+    public $weChatPlatform;
+    public $liveDao;
 
     function __construct()
     {
@@ -29,6 +31,10 @@ class Users extends BaseController
         $this->load->helper('string');
         $this->load->library(JSSDK::class);
         $this->jsSdk = new JSSDK();
+        $this->load->library(WeChatPlatform::class);
+        $this->weChatPlatform = new WeChatPlatform();
+        $this->load->model(LiveDao::class);
+        $this->liveDao = new LiveDao();
     }
 
     private function checkSmsCodeWrong($mobilePhoneNumber, $smsCode)
@@ -240,6 +246,12 @@ class Users extends BaseController
             if ($liveSubscribe == 1 && $user->wechatSubscribe == 0) {
                 $this->failure(ERROR_MUST_SUBSCRIBE);
                 return;
+            }
+            if ($liveSubscribe == 1) {
+                $live = $this->liveDao->findLatestWaitLive();
+                if ($live) {
+                    $this->weChatPlatform->notifyNewLive($user->userId, $live);
+                }
             }
         }
         $user = $this->userDao->updateUserAndGet($user, $data);

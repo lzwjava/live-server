@@ -332,7 +332,7 @@ class Wechat extends BaseController
                     if ($userId) {
                         $this->userDao->updateLiveSubscribe($userId, 0);
                     }
-                    $contentStr = '退订成功,新直播发布将不再通知您';
+                    $contentStr = '退订成功，新直播发布将不再通知您。';
                     $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                     $this->replyToWeChat($textReply);
                 } else {
