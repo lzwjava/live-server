@@ -141,8 +141,9 @@ class Withdraws extends BaseController
                 }
             }
         }
-        logInfo("succeedCount: " . $succeedCount . ' total: ' . count($accounts));
-        $this->succeed();
+        $res = array('succeedCount' => $succeedCount, 'total' => count($accounts));
+        logInfo(json_encode($res));
+        $this->succeed($res);
     }
 
 }
