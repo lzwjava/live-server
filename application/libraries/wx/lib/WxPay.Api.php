@@ -408,6 +408,15 @@ class WxPayApi
         return $result;
     }
 
+    private static function ipAddress()
+    {
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        if (!$ipAddress) {
+            $ipAddress = '127.0.0.1';
+        }
+        return $ipAddress;
+    }
+
     /**
      * transfer
      *
@@ -435,7 +444,7 @@ class WxPayApi
 
         $inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
         $inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
-        $inputObj->SetSpbillCreateIp($_SERVER['REMOTE_ADDR']);//终端ip
+        $inputObj->SetSpbillCreateIp(WxPayApi::ipAddress());//终端ip
         $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
         $inputObj->SetCheckName("NO_CHECK");
 

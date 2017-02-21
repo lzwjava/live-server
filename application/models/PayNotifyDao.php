@@ -272,6 +272,16 @@ class PayNotifyDao extends BaseDao
         return null;
     }
 
+    function fetchWaitWithdraw($user)
+    {
+        $withdraw = $this->withdrawDao->queryWaitWithdraw($user->userId);
+        if (!$withdraw) {
+            return array(ERROR_OBJECT_NOT_EXIST, null);
+        }
+        $data = array(KEY_WITHDRAW_ID => $withdraw->withdrawId);
+        return array(null, $data);
+    }
+
     function createWithdraw($user, $amount)
     {
         if (!$user->wechatSubscribe) {

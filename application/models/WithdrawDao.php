@@ -50,6 +50,17 @@ class WithdrawDao extends BaseDao
         return $row->cnt > 0;
     }
 
+    function queryWaitWithdraw($userId)
+    {
+        $sql = "SELECT * FROM withdraws WHERE userId=? AND status=?";
+        $binds = array(
+            KEY_USER_ID => $userId,
+            KEY_STATUS => WITHDRAW_STATUS_WAIT
+        );
+        $row = $this->db->query($sql, $binds)->row();
+        return $row;
+    }
+
     private function withdrawFields()
     {
         return array(KEY_WITHDRAW_ID, KEY_USER_ID, KEY_AMOUNT, KEY_STATUS, KEY_CREATED, KEY_UPDATED);
