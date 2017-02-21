@@ -213,7 +213,7 @@ class Users extends BaseController
 
     public function update_post()
     {
-        $keys = array(KEY_AVATAR_URL, KEY_USERNAME);
+        $keys = array(KEY_AVATAR_URL, KEY_USERNAME, KEY_LIVE_SUBSCRIBE);
         if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
         ) {
             return;
@@ -229,6 +229,17 @@ class Users extends BaseController
                 if ($this->checkIfUsernameUsedAndReponse($username)) {
                     return;
                 }
+            }
+        }
+        if (isset($data[KEY_LIVE_SUBSCRIBE])) {
+            $liveSubscribe = intval($data[KEY_LIVE_SUBSCRIBE]);
+            if ($liveSubscribe != 0 && $liveSubscribe != 1) {
+                $this->failure(ERROR_PARAMETER_ILLEGAL);
+                return;
+            }
+            if ($liveSubscribe == 1 && $user->wechatSubscribe == 0) {
+                $this->failure(ERROR_MUST_SUBSCRIBE);
+                return;
             }
         }
         $user = $this->userDao->updateUserAndGet($user, $data);

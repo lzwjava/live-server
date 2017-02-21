@@ -41,7 +41,7 @@ class WeChatClient
         return array($error, $data);
     }
 
-    function httpPost($baseUrl, $query = array(), $data)
+    function httpPost($baseUrl, $query = array(), $data, $isFile = false)
     {
         $url = $baseUrl . '?' . http_build_query($query);
         $curl = curl_init();
@@ -53,8 +53,13 @@ class WeChatClient
         if ($data == null) {
             $data = new stdClass();
         }
-        $encoded = json_encode($data, JSON_UNESCAPED_UNICODE);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $encoded);
+        $postFields = null;
+        if ($isFile) {
+            $postFields = $data;
+        } else {
+            $postFields = json_encode($data, JSON_UNESCAPED_UNICODE);
+        }
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
         $res = curl_exec($curl);
         curl_close($curl);
         return $this->parseResponse($res);

@@ -105,14 +105,15 @@ class JSSDK
         }
     }
 
-    function wechatHttpPost($path, $data)
+    function wechatHttpPost($path, $data, $query = null, $isFile = false)
     {
         $accessToken = $this->getAccessToken();
         $url = WECHAT_API_CGIBIN . $path;
-        $query = array(
-            'access_token' => $accessToken
-        );
-        return $this->weChatClient->httpPost($url, $query, $data);
+        if (!$query) {
+            $query = array();
+        }
+        $query['access_token'] = $accessToken;
+        return $this->weChatClient->httpPost($url, $query, $data, $isFile);
     }
 
     function fetchWxappSessionKey($code)
@@ -215,6 +216,52 @@ class JSSDK
             )
         );
         return $this->wechatHttpPost('menu/create', $data);
+    }
+
+    function addNews()
+    {
+        $data = array(
+            'articles' => array(
+                array(
+                    'title' => '新课上线通知',
+                    'thumb_media_id' => '4JUYm2nOjNSMcz26AidpLdaykEJqNa7QKBSxnP9-yvM',
+                    'author' => 'lzwjava',
+                    'digest' => '您关注的直播间有新话题发布啦!',
+                    'show_cover_pic' => 1,
+                    'content' => '新话题发布',
+                    'content_source_url' => 'http://m.quzhiboapp.com/?liveId=7'
+                )
+            )
+        );
+        return $this->wechatHttpPost('material/add_news', $data);
+    }
+
+    function uploadImg()
+    {
+        $fullPath = FCPATH . 'tmp/pic.jpg';
+        $data = array(
+            'media' => new CURLFile($fullPath, 'image/jpg', 'pic.jpg')
+        );
+        $query = array(
+            'type' => 'image'
+        );
+        return $this->wechatHttpPost('material/add_material', $data, $query, true);
+    }
+
+    function sendMassMsg()
+    {
+        $data = array(
+            'touser' => array(
+                'ol0AFwFe5jFoXcQby4J7AWJaWXIM',
+                'ol0AFwLgaHJ4rjhfRdUPtvBzlrt8'
+            ),
+            'mpnews' => array(
+                'media_id' => '4JUYm2nOjNSMcz26AidpLfM6GIEZR7ji77BU2laR2u4'
+            ),
+            'msgtype' => 'mpnews',
+            'send_ignore_reprint' => 0
+        );
+        return $this->wechatHttpPost('message/mass/send', $data);
     }
 
     function httpGetUserInfo($accessToken, $openId)

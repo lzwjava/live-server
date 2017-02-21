@@ -327,9 +327,19 @@ class Wechat extends BaseController
             $msgType = $postObj[KEY_MSG_TYPE];
             if ($msgType == MSG_TYPE_TEXT) {
                 $keyword = trim($postObj[KEY_CONTENT]);
-                $contentStr = '如果有任何问题请联系创始人微信 lzwjava2048 。';
-                $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
-                $this->replyToWeChat($textReply);
+                if ($keyword == 'TD0000') {
+                    $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
+                    if ($userId) {
+                        $this->userDao->updateLiveSubscribe($userId, 0);
+                    }
+                    $contentStr = '退订成功,新直播发布将不再通知您';
+                    $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
+                    $this->replyToWeChat($textReply);
+                } else {
+                    $contentStr = '如果有任何问题请联系创始人微信 lzwjava2048 。';
+                    $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
+                    $this->replyToWeChat($textReply);
+                }
             } else if ($msgType == MSG_TYPE_EVENT) {
                 $event = $postObj[KEY_EVENT];
                 $eventKey = $postObj[KEY_EVENT_KEY];
@@ -339,7 +349,7 @@ class Wechat extends BaseController
                 if ($event == EVENT_SUBSCRIBE) {
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
-                        $this->userDao->updateSubscribe($userId, 1);
+                        $this->userDao->updateWeChatSubscribe($userId, 1);
                     }
                     $extraWord = '';
                     if (substr($eventKey, 0, 8) == 'qrscene_') {
@@ -352,7 +362,7 @@ class Wechat extends BaseController
                 } else if ($event == EVENT_UNSUBSCRIBE) {
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
-                        $this->userDao->updateSubscribe($userId, 0);
+                        $this->userDao->updateWeChatSubscribe($userId, 0);
                     }
                     logInfo("unsubscribe event $userId");
                 } else if ($event == EVENT_VIEW) {
@@ -360,7 +370,7 @@ class Wechat extends BaseController
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     list($error, $theSubscribe) = $this->jsSdk->queryIsSubscribeByOpenId($fromUsername);
                     if (!$error) {
-                        $this->userDao->updateSubscribe($userId, $theSubscribe);
+                        $this->userDao->updateWeChatSubscribe($userId, $theSubscribe);
                     }
                     $extraWord = $this->extraWordFromEventKey($eventKey);
                     $welcomeReply = $this->textReply($toUsername, $fromUsername, $extraWord);
@@ -465,7 +475,7 @@ class Wechat extends BaseController
             if ($user->wechatSubscribe == 0) {
                 list($error, $subscribe) = $this->queryIsSubscribe($user->userId);
                 if (!$error) {
-                    $this->userDao->updateSubscribe($user->userId, $subscribe);
+                    $this->userDao->updateWeChatSubscribe($user->userId, $subscribe);
                     if ($subscribe) {
                         $subscribeCount++;
                     }
@@ -501,6 +511,37 @@ class Wechat extends BaseController
             $this->failure(ERROR_WECHAT, $error);
             return;
         }
+        $this->succeed($data);
+    }
+
+    function addNews_get()
+    {
+        list($error, $data) = $this->jsSdk->addNews();
+        if ($error) {
+            $this->failure(ERROR_WECHAT, $error);
+            return;
+        }
+        $this->succeed($data);
+    }
+
+    function sendMassMsg_get()
+    {
+        list($error, $data) = $this->jsSdk->sendMassMsg();
+        if ($error) {
+            $this->failure(ERROR_WECHAT, $error);
+            return;
+        }
+        $this->succeed($data);
+    }
+
+    function uploadImg_get()
+    {
+        list($error, $data) = $this->jsSdk->uploadImg();
+        if ($error) {
+            $this->failure(ERROR_WECHAT, $error);
+            return;
+        }
+        logInfo("data: " . $data->url);
         $this->succeed($data);
     }
 

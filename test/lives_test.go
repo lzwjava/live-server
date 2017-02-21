@@ -398,3 +398,14 @@ func TestLives_delTopic(t *testing.T) {
 	res := c.postData("lives/"+liveId+"/topic", url.Values{"op": {"del"}})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestLives_notifyNewLive(t *testing.T) {
+	c, _ := NewClientAndWeChatUser()
+	subscribeWechat(c)
+	c.postData("self", url.Values{"liveSubscribe": {"1"}})
+
+	c2, _ := NewClientAndUser()
+	liveId := createLive(c2)
+	res := c2.getData("lives/"+liveId+"/notifyNewLive", url.Values{})
+	assert.NotNil(t, res.Interface())
+}

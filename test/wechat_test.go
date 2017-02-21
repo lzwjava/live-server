@@ -265,6 +265,26 @@ func TestWeChat_scanEvent(t *testing.T) {
 	assert.NotNil(t, user.Interface())
 }
 
+func TestWeChat_unsubcribeLive(t *testing.T) {
+	c, _ := NewClientAndWeChatUser()
+	subscribeWechat(c)
+	c.postData("self", url.Values{"liveSubscribe": {"1"}})
+
+	user := c.getData("self", url.Values{})
+	assert.Equal(t, user.Get("liveSubscribe").MustInt(), 1)
+
+	res := c.postWithStr("wechat/callback", `<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+<FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
+<CreateTime>1482623024</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[TD0000]]></Content>
+<MsgId>6367817400842503849</MsgId>
+</xml>`)
+	assert.NotNil(t, res)
+	user = c.getData("self", url.Values{})
+	assert.Equal(t, user.Get("liveSubscribe").MustInt(), 0)
+}
+
 func TestWeChat_fixAllSubscribe(t *testing.T) {
 	c := NewClient()
 	c.admin = true
@@ -309,3 +329,21 @@ func insertAppSnsUser(userId string) {
 		"wxapp", userId, "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
 	runSql(sql, false)
 }
+
+// func TestWeChat_addNews(t *testing.T) {
+// 	c := NewClient()
+// 	res := c.get("wechat/addNews", url.Values{})
+// 	assert.NotNil(t, res.Interface())
+// }
+//
+// func TestWeChat_uploadImg(t *testing.T) {
+// 	c := NewClient()
+// 	res := c.get("wechat/uploadImg", url.Values{})
+// 	assert.NotNil(t, res.Interface())
+// }
+//
+// func TestWeChat_sendMassMsg(t *testing.T) {
+// 	c := NewClient()
+// 	res := c.get("wechat/sendMassMsg", url.Values{})
+// 	assert.NotNil(t, res.Interface())
+// }

@@ -96,6 +96,7 @@ class UserDao extends BaseDao
             KEY_SESSION_TOKEN,
             KEY_UNION_ID,
             KEY_WECHAT_SUBSCRIBE,
+            KEY_LIVE_SUBSCRIBE,
             KEY_CREATED,
             KEY_UPDATED,
         ));
@@ -230,9 +231,14 @@ class UserDao extends BaseDao
         return $this->db->query($sql)->result();
     }
 
-    function updateSubscribe($userId, $subscribe)
+    function updateWeChatSubscribe($userId, $subscribe)
     {
         return $this->updateUser($userId, array(KEY_WECHAT_SUBSCRIBE => $subscribe));
+    }
+
+    function updateLiveSubscribe($userId, $liveSubscribe)
+    {
+        return $this->updateUser($userId, array(KEY_LIVE_SUBSCRIBE => $liveSubscribe));
     }
 
     function findAllUsers()
@@ -315,6 +321,11 @@ class UserDao extends BaseDao
         $sql = "SELECT $userFields FROM users as u WHERE userId IN (" .
             implode(',', $userIds) . ")";
         return $this->db->query($sql)->result();
+    }
+
+    function findAllLiveSubscribeUsers()
+    {
+        return $this->getListFromTable(TABLE_USERS, KEY_LIVE_SUBSCRIBE, 1);
     }
 
 }

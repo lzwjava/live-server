@@ -93,6 +93,7 @@ $route['lives/(\d+)/finish']['GET'] = 'lives/finish/$1';
 $route['lives/(\d+)/error']['GET'] = 'lives/error/$1';
 $route['lives/(\d+)/notifyRelated']['GET'] = 'lives/notifyLiveStartRecommend/$1';
 $route['lives/(\d+)/topic']['POST'] = 'lives/updateTopic/$1';
+$route['lives/(\d+)/notifyNewLive']['GET'] = 'lives/notifyNewLive/$1';
 
 // recorded videos
 $route['lives/(\d+)/recordedVideos'] = 'recordedVideos/list/$1';
@@ -136,6 +137,9 @@ $route['wechat/createMenu']['GET'] = 'wechat/createMenu';
 $route['wechat/menu']['GET'] = 'wechat/menu';
 $route['wechat/fixAllSubscribe']['GET'] = 'wechat/fixAllSubscribe';
 $route['wechat/qrcode']['GET'] = 'wechat/qrcode';
+$route['wechat/addNews']['GET'] = 'wechat/addNews';
+$route['wechat/uploadImg']['GET'] = 'wechat/uploadImg';
+$route['wechat/sendMassMsg']['GET'] = 'wechat/sendMassMsg';
 
 // wxapp
 $route['wechat/login']['POST'] = 'wechat/login';
