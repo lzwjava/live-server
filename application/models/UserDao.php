@@ -325,7 +325,7 @@ class UserDao extends BaseDao
 
     function findAllLiveSubscribeUsers()
     {
-        return $this->getListFromTable(TABLE_USERS, KEY_LIVE_SUBSCRIBE, 1);
+        return $this->getListFromTable(TABLE_USERS, KEY_LIVE_SUBSCRIBE, 1, '*', null, 0, ROW_MAX);
     }
 
 }
