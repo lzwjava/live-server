@@ -135,3 +135,10 @@ func TestUsers_fixSystemId(t *testing.T) {
 	res := c.getData("users/fixSystemId", url.Values{})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestUsers_liveSubscribe(t *testing.T) {
+	c, _ := NewClientAndWeChatUser()
+	subscribeWechat(c)
+	res := c.postData("self", url.Values{"liveSubscribe": {"1"}})
+	assert.NotNil(t, res.Get("liveSubscribe").MustInt(), 1)
+}

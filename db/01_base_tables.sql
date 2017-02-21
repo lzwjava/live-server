@@ -15,6 +15,7 @@ CREATE TABLE `users` (
   `sessionToken`        VARCHAR(127) NOT NULL DEFAULT '',
   `sessionTokenCreated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `password`            VARCHAR(127) NOT NULL DEFAULT '',
+  `wechatSubscribe`     TINYINT(2)   NOT NULL DEFAULT 0,
   `created`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`),
@@ -246,9 +247,6 @@ CREATE TABLE `live_views` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE `users` ADD COLUMN `wechatSubscribe` TINYINT(2) NOT NULL DEFAULT 0
-AFTER `password`;
-
 CREATE TABLE `staffs` (
   `staffId` INT(11)   NOT NULL AUTO_INCREMENT,
   `userId`  INT(11)   NOT NULL,
@@ -372,3 +370,6 @@ CREATE TABLE `jobs` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `users`ADD COLUMN `liveSubscribe` TINYINT(2) DEFAULT 0
+AFTER `wechatSubscribe`;

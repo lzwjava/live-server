@@ -607,4 +607,29 @@ class Lives extends BaseController
         $this->succeed();
     }
 
+    function notifyNewLive_get($liveId)
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $subscribeUsers = $this->userDao->findAllLiveSubscribeUsers();
+        $succeedCount = 0;
+        foreach ($subscribeUsers as $user) {
+            $ok = $this->weChatPlatform->notifyNewLive($user->userId, $live);
+            if ($ok) {
+                $succeedCount++;
+            }
+        }
+        $this->succeed(
+            array(
+                'succeedCount' => $succeedCount,
+                'total' => count($subscribeUsers)
+            )
+        );
+    }
+
 }

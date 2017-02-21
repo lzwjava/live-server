@@ -69,6 +69,40 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, 'gKSNH1PPeKQqYC4yNPjXl-OrHNdoU1jkyv7468BM6R4', $url, $tmplData);
     }
 
+    function notifyNewLive($userId, $live)
+    {
+        $user = $this->userDao->findUserById($userId);
+        $word = null;
+        $tmplData = array(
+            'first' => array(
+                'value' => $user->username . ', 有新的直播发布啦',
+                'color' => '#828282',
+            ),
+            'keyword1' => array(
+                'value' => $live->subject,
+                'color' => '#D00019',
+            ),
+            'keyword2' => array(
+                'value' => '趣直播',
+                'color' => '#828282',
+            ),
+            'keyword3' => array(
+                'value' => $live->owner->username,
+                'color' => '#D00019',
+            ),
+            'keyword4' => array(
+                'value' => $live->planTs,
+                'color' => '#828282',
+            ),
+            'remark' => array(
+                'value' => '点击查看详情,回复TD0000退订新直播发布',
+                'color' => '#828282',
+            )
+        );
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+        return $this->notifyByWeChat($user, 'w2ScyoZiWxhr3j_aSrSR8McrQpIwwKvDiaMYce__NdU', $url, $tmplData);
+    }
+
     private function notifyByWeChat($user, $tempId, $url, $tmplData)
     {
         if (!$user->unionId) {

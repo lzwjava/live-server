@@ -202,6 +202,7 @@ define('ERROR_INTRODUCTION_LEN', 'introduction_len');
 define('ERROR_REVIEW_REMARK_LEN', 'review_remark_len');
 define('ERROR_ALREADY_APPLY', 'already_apply');
 define('ERROR_WECHAT_NUM_FORMAT', 'wechat_num_format');
+define('ERROR_MIN_INTRODUCTION_LEN', 'min_introduction_len');
 
 define('ERROR_PACKET_TOO_LITTLE', 'packet_too_little');
 define('ERROR_PACKET_TOO_MUCH', 'packet_too_much');
@@ -333,6 +334,7 @@ if (!function_exists('errorInfos')) {
             ERROR_ALREADY_APPLY => '您已申请过主播了',
             ERROR_MUST_BIND_PHONE => '必须先绑定手机',
             ERROR_WECHAT_NUM_FORMAT => '微信号应该只包含字母和数字, 请到微信设置中查看',
+            ERROR_MIN_INTRODUCTION_LEN => '个人介绍不少于30个字符',
 
             //packets
             ERROR_PACKET_TOO_LITTLE => '红包最低1元',
@@ -346,7 +348,7 @@ if (!function_exists('errorInfos')) {
             ERROR_VERIFY_RECEIPT => '验证支付凭证失败',
 
             // withdraws
-            ERROR_MUST_SUBSCRIBE => '为了转账给您,必须先关注平方根科技服务号',
+            ERROR_MUST_SUBSCRIBE => '必须先关注平方根科技服务号',
             ERROR_EXCEED_BALANCE => '提现金额超过了账户余额',
             ERROR_WITHDRAW_AMOUNT_TOO_LITTLE => '提现金额最低不少于1元',
             ERROR_HAVE_WAIT_WITHDRAW => '有正在处理的提现中,请等待处理完成',
@@ -434,6 +436,7 @@ define('KEY_PASSWORD', 'password');
 define('KEY_USERNAME', 'username');
 define('KEY_USER_ID', 'userId');
 define('KEY_WECHAT_SUBSCRIBE', 'wechatSubscribe');
+define('KEY_LIVE_SUBSCRIBE', 'liveSubscribe');
 
 define('KEY_SMS_CODE', 'smsCode');
 
@@ -595,6 +598,7 @@ define('APPLICATION_STATUS_REJECT', 10);
 
 define('MAX_SOCIAL_ACCOUNT_LEN', 200);
 define('MAX_INTRODUCTION_LEN', 500);
+define('MIN_INTRODUCTION_LEN', 30);
 define('MAX_REVIEW_MARK_LEN', 100);
 
 // packets
@@ -772,7 +776,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'66gTXh2ALq7tgBCm_4sDI2ouMB_qQxopA4mQ7k5Fk-ZECaENcV3rRlBhgKnAC4xIqQeKVXZN5ECS08PXc9AmjaWo67en-k4kRJXonNjQzhUKVVPu3gyVdUGWSPYwI8naVVQjAHAYYT');
+'PnwsNXNhui6Daixq8rS2_Y63NJwJtgjXZIBgzDfnyTg60oHhtg6cRe-xtaU-WZqQh3BsPMt5S-G_nXQjCcsD3PPg6UbfzAA2SBBlD3Be5HZCLi-Wm0YOR_H6fYWsZSfwPXWgAEAIQP');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
