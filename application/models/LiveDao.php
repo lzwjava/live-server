@@ -161,8 +161,9 @@ class LiveDao extends BaseDao
 
     function hlsServers()
     {
-        return array('video.quzhiboapp.com/live', 'hls-xycdn.quzhiboapp.com/live',
-            'hls-xycdn1.quzhiboapp.com/live');
+//        return array('video.quzhiboapp.com/live', 'hls-xycdn.quzhiboapp.com/live',
+//            'hls-xycdn1.quzhiboapp.com/live');
+        return array('video.quzhiboapp.com/live', 'hls1.quzhiboapp.com/live');
     }
 
     private function electHlsServer()
