@@ -210,7 +210,12 @@ class Attendances extends BaseController
             $this->failure(ERROR_SNS_USER_NOT_EXISTS);
             return;
         }
-        $this->pay->transfer($snsUser->openId, $amount, '手动转账');
+        list($transOk, $transErr) = $this->pay->transfer($snsUser->openId,
+            $amount, '手动转账');
+        if ($transErr) {
+            $this->failure($transErr);
+            return;
+        }
         $this->succeed();
     }
 
