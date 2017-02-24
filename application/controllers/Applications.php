@@ -64,6 +64,7 @@ class Applications extends BaseController
             $socialAccount, $introduction);
         if (!$id) {
             $this->failure(ERROR_SQL_WRONG);
+            return;
         }
         $this->succeed(array(KEY_APPLICATION_ID => $id));
     }
