@@ -380,9 +380,27 @@ class WeChatPlatform
             $url, $tmplData);
     }
 
+    /**
+     * @param int $nightHour
+     * @param int $morningHour
+     * @param string $timezone
+     * @return bool
+     */
+    private function inDisturbHour($nightHour = 23, $morningHour = 9, $timezone = 'Asia/Shanghai')
+    {
+        $hour = intval(
+            (new DateTime(null, new DateTimeZone($timezone)))->format('H')
+        );
+        return ($hour >= $nightHour) || ($hour < $morningHour);
+    }
+
     function notifyNewIncome($incomeType, $amount, $live,
                              $fromUser, $inviteFromUserId = null)
     {
+        if ($this->inDisturbHour()) {
+            logInfo("notifyNewIncome inDisturbHour $incomeType, $amount, $live->ownerId, $fromUser->userId");
+            return;
+        }
         $attendUser = $this->userDao->findUserById($fromUser->userId);
         $liveOwner = $this->userDao->findUserById($live->ownerId);
         $word = null;
