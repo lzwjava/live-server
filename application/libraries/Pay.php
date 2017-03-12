@@ -44,6 +44,9 @@ class Pay
         if (!$id) {
             return array(ERROR_SQL_WRONG, null);
         }
+        if ($channel == CHANNEL_WECHAT_QRCODE) {
+            $ch[KEY_ORDER_NO] = $orderNo;
+        }
         return array(null, $ch);
     }
 
