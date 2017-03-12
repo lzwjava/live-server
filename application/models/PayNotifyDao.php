@@ -263,10 +263,11 @@ class PayNotifyDao extends BaseDao
 //            $this->weChatPlatform->notifyNewIncome($incomeType, $anchorAmount, $live,
 //                $fromUser);
         }
+
         // 邀请者通知
         if ($inviteAmount > 0) {
-//            $this->weChatPlatform->notifyNewIncome(TRANS_TYPE_INVITE_INCOME, $inviteAmount,
-//                $live, $fromUser, $inviteFromUserId);
+            $this->weChatPlatform->notifyNewIncome(TRANS_TYPE_INVITE_INCOME, $inviteAmount,
+                $live, $fromUser, $inviteFromUserId);
         }
 
         return null;
