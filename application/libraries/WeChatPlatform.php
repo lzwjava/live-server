@@ -39,7 +39,7 @@ class WeChatPlatform
         if ($diff->h > 0) {
             $hourStr = $diff->format('%h小时%i分钟');
             $word = sprintf('，您参与的直播还有%s开始', $hourStr);
-        } else if ($diff->m > 0) {
+        } else if ($diff->i > 0) {
             $hourStr = $diff->format('%i分钟');
             $word = sprintf('，您参与的直播还有%s开始', $hourStr);
         } else if ($diff->invert < 0) {
