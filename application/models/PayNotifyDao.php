@@ -265,11 +265,7 @@ class PayNotifyDao extends BaseDao
         }
 
         // 邀请者通知
-        $hour = intval(
-            (new DateTime(null, new DateTimeZone('Asia/Shanghai')))->format('H')
-        );
-        $in_disturb_hour = $hour >= 23 || $hour < 9;
-        if ($inviteAmount > 0 && !$in_disturb_hour) {
+        if ($inviteAmount > 0) {
             $this->weChatPlatform->notifyNewIncome(TRANS_TYPE_INVITE_INCOME, $inviteAmount,
                 $live, $fromUser, $inviteFromUserId);
         }
