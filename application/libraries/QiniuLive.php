@@ -21,9 +21,14 @@ class QiniuLive
         try {
             $stream = $this->hub->getStream('z1.qulive.' . $live->rtmpKey);
             $result = $stream->segments();
+//            $start = $result['start'];
+//            $end = $result['end'];
+
+//
             $segment0 = $result['segments'][0];
             $start = $segment0['start'];
             $end = $segment0['end'];
+
             $resp = $stream->saveAs('playback.m3u8', 'm3u8', $start, $end);
             $playbackUrl = $resp['url'];
             return $playbackUrl;

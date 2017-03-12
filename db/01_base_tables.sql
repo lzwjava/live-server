@@ -16,6 +16,7 @@ CREATE TABLE `users` (
   `sessionTokenCreated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `password`            VARCHAR(127) NOT NULL DEFAULT '',
   `wechatSubscribe`     TINYINT(2)   NOT NULL DEFAULT 0,
+  `liveSubscribe`       TINYINT(2)            DEFAULT 0,
   `created`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`),
@@ -159,7 +160,6 @@ CREATE TABLE `shares` (
   PRIMARY KEY (`shareId`),
   FOREIGN KEY (`liveId`) REFERENCES `lives` (`liveId`),
   FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
-  PRIMARY KEY (`shareId`),
   UNIQUE KEY (`userId`, `liveId`)
 )
   ENGINE = InnoDB
@@ -370,6 +370,3 @@ CREATE TABLE `jobs` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `users`ADD COLUMN `liveSubscribe` TINYINT(2) DEFAULT 0
-AFTER `wechatSubscribe`;
