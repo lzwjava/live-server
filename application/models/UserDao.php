@@ -241,6 +241,11 @@ class UserDao extends BaseDao
         return $this->updateUser($userId, array(KEY_LIVE_SUBSCRIBE => $liveSubscribe));
     }
 
+    public function updateIncomeSubscribe($userId, $incomeSubscribe)
+    {
+        return $this->updateUser($userId, array(KEY_INCOME_SUBSCRIBE => $incomeSubscribe));
+    }
+
     function findAllUsers()
     {
         return $this->getListFromTable(TABLE_USERS, '1', '1',
