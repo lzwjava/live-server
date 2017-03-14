@@ -163,11 +163,10 @@ class LiveDao extends BaseDao
     {
 //        return array(,
 //            'hls-xycdn1.quzhiboapp.com/live');
-        // 'hls-xycdn.quzhiboapp.com/live'
-
-
+        //
         return array('video.quzhiboapp.com/live', 'hls1.quzhiboapp.com/live',
             'hls2.quzhiboapp.com/live');
+//        return array('hls-xycdn.quzhiboapp.com/live',, );
     }
 
     private function electHlsServer()
@@ -191,7 +190,8 @@ class LiveDao extends BaseDao
     private function electFlvServer()
     {
 //        'pili-live-hls.quzhiboapp.com/qulive'
-        return random_element(array('live-cdn.quzhiboapp.com/live'));
+        return random_element(array('flv1.quzhiboapp.com:8080/live'));
+//        return random_element(array());
 //        return 'flv-xycdn.quzhiboapp.com';
 //        return 'cheer.quzhiboapp.com';
     }
