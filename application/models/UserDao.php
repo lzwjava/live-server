@@ -97,6 +97,7 @@ class UserDao extends BaseDao
             KEY_UNION_ID,
             KEY_WECHAT_SUBSCRIBE,
             KEY_LIVE_SUBSCRIBE,
+            KEY_INCOME_SUBSCRIBE,
             KEY_CREATED,
             KEY_UPDATED,
         ));
