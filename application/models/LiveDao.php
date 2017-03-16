@@ -159,24 +159,31 @@ class LiveDao extends BaseDao
         return $this->getListFromTable(TABLE_LIVES, KEY_STATUS, $status);
     }
 
-    function hlsServers()
+    private function selfHlsServers()
     {
-//        return array(,
-//            'hls-xycdn1.quzhiboapp.com/live');
-        //
         return array(
             'video.quzhiboapp.com/live',
             'hls1.quzhiboapp.com/live',
-            'hls2.quzhiboapp.com/live'
+            'hls2.quzhiboapp.com/live',
         );
-//        return array('hls-xycdn.quzhiboapp.com/live',, );
+    }
+
+    private function thirdHlsServers()
+    {
+        return array(
+            'hls-xycdn.quzhiboapp.com/live',
+            'hls-xycdn1.quzhiboapp.com/live',
+            'upyun.quzhiboapp.com/live'
+        );
+    }
+
+    function hlsServers()
+    {
+        return $this->thirdHlsServers();
     }
 
     private function electHlsServer()
     {
-//        return 'hls-cdn.quzhiboapp.com';
-//        return 'live-cdn.quzhiboapp.com';
-//        'pili-live-hls.quzhiboapp.com/qulive'
         return random_element($this->hlsServers());
     }
 
@@ -190,14 +197,25 @@ class LiveDao extends BaseDao
         return $urls;
     }
 
+    private function selfFlvServers()
+    {
+        return array(
+            'flv1.quzhiboapp.com:8080/live',
+            'flv2.quzhiboapp.com:8080/live'
+        );
+    }
+
+    private function thirdFlvServers()
+    {
+        return array(
+            'flv-xycdn.quzhiboapp.com/live',
+            'upyun.quzhiboapp.com/live'
+        );
+    }
+
     private function electFlvServer()
     {
-//        'pili-live-hls.quzhiboapp.com/qulive'
-        return random_element(array('flv1.quzhiboapp.com:8080/live',
-            'flv2.quzhiboapp.com:8080/live'));
-//        return random_element(array());
-//        return 'flv-xycdn.quzhiboapp.com';
-//        return 'cheer.quzhiboapp.com';
+        return random_element($this->thirdFlvServers());
     }
 
     private function electRtmpServer()
