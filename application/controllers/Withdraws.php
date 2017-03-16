@@ -107,7 +107,7 @@ class Withdraws extends BaseController
             return;
         }
         list($error, $data) = $this->payNotifyDao->createWithdraw($user,
-            $amount);
+            $amount, true);
         if ($error) {
             $this->failure($error);
             return;

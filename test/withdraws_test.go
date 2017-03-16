@@ -61,7 +61,7 @@ func TestWithdraws_createByManul(t *testing.T) {
 	c, userId2 := NewClientAndWeChatUser()
 	liveId := createLiveWithAmount(c, 5900)
 	subscribeWechat(c)
-	beginAndFinshLive(c, liveId)
+	// beginAndFinshLive(c, liveId)
 
 	c2, userId := NewClientAndWeChatUser2()
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})

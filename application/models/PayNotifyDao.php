@@ -283,7 +283,7 @@ class PayNotifyDao extends BaseDao
         return array(null, $data);
     }
 
-    function createWithdraw($user, $amount)
+    function createWithdraw($user, $amount, $ignoreWaitLive = false)
     {
         if (!$user->wechatSubscribe) {
             return array(ERROR_MUST_SUBSCRIBE, null);
@@ -304,7 +304,7 @@ class PayNotifyDao extends BaseDao
             return array(ERROR_HAVE_WAIT_WITHDRAW, null);
         }
         $haveWaitLive = $this->liveDao->haveWaitLive($user->userId);
-        if ($haveWaitLive) {
+        if ($haveWaitLive && !$ignoreWaitLive) {
             return array(ERROR_HAVE_WAIT_LIVE, null);
         }
         $withdrawId = $this->withdrawDao->createWithdraw($user->userId, $amount);
