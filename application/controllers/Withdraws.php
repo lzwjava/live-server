@@ -58,6 +58,13 @@ class Withdraws extends BaseController
             $this->failure($error);
             return;
         }
+        if ($amount < 100 * 100) {
+            $withdrawId = $data[KEY_WITHDRAW_ID];
+            $error = $this->payNotifyDao->handleWithdraw($withdrawId, true, false);
+            if ($error) {
+                logInfo('auto withdraw fail error ' . $error);
+            }
+        }
         $this->succeed($data);
     }
 
