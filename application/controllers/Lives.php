@@ -178,11 +178,7 @@ class Lives extends BaseController
             return;
         }
         if ($op == OP_ADD) {
-            $ok = $this->liveDao->updateTopic($liveId, $topicId);
-            if (!$ok) {
-                $this->failure(ERROR_SQL_WRONG);
-                return;
-            }
+            $this->liveDao->updateTopic($liveId, $topicId);
             $this->succeed();
         } else if ($op == OP_DEL) {
             $this->liveDao->removeTopic($liveId);
