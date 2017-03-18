@@ -93,11 +93,27 @@ func TestAttendances_createByWeChat(t *testing.T) {
 	c2, userId := NewClientAndWeChatUser()
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
+	wxpayNotifyLastOrderNo(c2, userId)
+}
+
+func wxpayNotifyLastOrderNo(c *Client, userId string) {
 	orderNo := getLastOrderNo(userId)
 	callbackStr := wechatCallbackStr(orderNo)
-	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
-	fmt.Println("callbackRes:" + callbackRes)
-	assert.NotNil(t, callbackRes)
+	c.postWithStr("wechat/wxpayNotify", callbackStr)
+}
+
+func TestAttendances_createByWeChatInviteNoNotify(t *testing.T) {
+	c3, userId3 := NewClientAndWeChatUser2()
+	c3.postData("self", url.Values{"incomeSubscribe": {"0"}})
+
+	c, _ := NewClientAndUser()
+	liveId := createLiveWithAmount(c, 5900)
+
+	c2, userId := NewClientAndWeChatUser()
+	res := c2.postData("attendances", url.Values{"liveId": {liveId},
+		"channel": {"wechat_h5"}, "fromUserId": {userId3}})
+	assert.NotNil(t, res)
+	wxpayNotifyLastOrderNo(c2, userId)
 }
 
 func TestAttendances_createByWeChatInvite(t *testing.T) {
@@ -110,11 +126,7 @@ func TestAttendances_createByWeChatInvite(t *testing.T) {
 	res := c2.postData("attendances", url.Values{"liveId": {liveId},
 		"channel": {"wechat_h5"}, "fromUserId": {userId3}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo(userId)
-	callbackStr := wechatCallbackStr(orderNo)
-	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
-	fmt.Println("callbackRes:" + callbackRes)
-	assert.NotNil(t, callbackRes)
+	wxpayNotifyLastOrderNo(c2, userId)
 }
 
 func TestAttendances_inviteList(t *testing.T) {
@@ -155,11 +167,7 @@ func TestAttendances_createByWeChatWithCoupon(t *testing.T) {
 
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo(userId)
-	callbackStr := wechatCallbackStr(orderNo)
-	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
-	fmt.Println("callbackRes:" + callbackRes)
-	assert.NotNil(t, callbackRes)
+	wxpayNotifyLastOrderNo(c, userId)
 }
 
 func TestAttendances_createByWeChatByStaff(t *testing.T) {
@@ -177,10 +185,7 @@ func TestAttendances_createByWeChatByStaff(t *testing.T) {
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
 	orderNo := getLastOrderNo(userId)
-	callbackStr := wechatCallbackStr(orderNo)
-	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
-	fmt.Println("callbackRes:" + callbackRes)
-	assert.NotNil(t, callbackRes)
+	wxpayNotifyLastOrderNo(c2, userId)
 
 	charge := c2.getData("charges/one", url.Values{"orderNo": {orderNo}})
 	assert.NotNil(t, charge.Interface())
@@ -199,7 +204,6 @@ func TestAttendances_createByWeChatQrcode(t *testing.T) {
 	orderNo := res.Get("orderNo").MustString()
 	callbackStr := wechatCallbackStr(orderNo)
 	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
-	fmt.Println("callbackRes:" + callbackRes)
 	assert.NotNil(t, callbackRes)
 }
 
@@ -211,11 +215,7 @@ func TestAttendances_createByWeChat_withShare(t *testing.T) {
 	createShare(c2, liveId)
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo(userId)
-	callbackStr := wechatCallbackStr(orderNo)
-	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
-	fmt.Println("callbackRes:" + callbackRes)
-	assert.NotNil(t, callbackRes)
+	wxpayNotifyLastOrderNo(c2, userId)
 }
 
 func TestAttendances_createByWeChat_withShare_AmountLittle(t *testing.T) {
@@ -226,11 +226,7 @@ func TestAttendances_createByWeChat_withShare_AmountLittle(t *testing.T) {
 	createShare(c2, liveId)
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_h5"}})
 	assert.NotNil(t, res)
-	orderNo := getLastOrderNo(userId)
-	callbackStr := wechatCallbackStr(orderNo)
-	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
-	fmt.Println("callbackRes:" + callbackRes)
-	assert.NotNil(t, callbackRes)
+	wxpayNotifyLastOrderNo(c2, userId)
 }
 
 func TestAttendances_CreateByWeChatApp(t *testing.T) {
@@ -243,11 +239,7 @@ func TestAttendances_CreateByWeChatApp(t *testing.T) {
 	res := c2.postData("attendances", url.Values{"liveId": {liveId}, "channel": {"wechat_app"}})
 	assert.NotNil(t, res)
 	assert.NotNil(t, res.Get("appId").Interface())
-	orderNo := getLastOrderNo(userId2)
-	callbackStr := wechatCallbackStr(orderNo)
-	callbackRes := c2.postWithStr("wechat/wxpayNotify", callbackStr)
-	fmt.Println("callbackRes:" + callbackRes)
-	assert.NotNil(t, callbackRes)
+	wxpayNotifyLastOrderNo(c2, userId2)
 }
 
 func getLastOrderNo(userId string) string {
