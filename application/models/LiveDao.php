@@ -132,12 +132,14 @@ class LiveDao extends BaseDao
             $sortField = "l.created";
         }
         $fields = $this->livePublicFields('l');
+        $topicFields = $this->topicDao->topicPublicFields('t', true);
         $userFields = $this->userPublicFields('u', true);
-        $sql = "select $fields, $userFields,a.attendanceId,s.shareId from lives as l
-                left join users as u on u.userId=l.ownerId
-                left join attendances as a on a.liveId = l.liveId and a.userId = $userId
-                left join shares as s on s.liveId = l.liveId and s.userId= $userId
-                where l.liveId in (" . implode(', ', $liveIds) . ")
+        $sql = "select $fields, $userFields,a . attendanceId,s . shareId, $topicFields from lives as l
+                left join users as u on u . userId = l . ownerId
+                left join attendances as a on a . liveId = l . liveId and a . userId = $userId
+                left join shares as s on s . liveId = l . liveId and s . userId = $userId
+                left join topics as t on t.topicId = l.topicId
+                where l . liveId in(" . implode(', ', $liveIds) . ")
                 order by $sortField desc";
         $lives = $this->db->query($sql)->result();
         $this->assembleLives($lives, $user);
@@ -261,6 +263,8 @@ class LiveDao extends BaseDao
         foreach ($lives as $live) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $live->owner = extractFields($live, $us, 'u');
+            $topicFields = $this->prefixFields($this->topicDao->topicFields(), 't');
+            $live->topic = extractFields($live, $topicFields, 't');
             if ($live->attendanceId || ($user && $user->userId == $live->ownerId)) {
                 // 参加了或是创建者
                 $hlsHostLive = $this->electHlsServer();
@@ -366,7 +370,7 @@ class LiveDao extends BaseDao
 
     function lastPrepareLive($user)
     {
-        $sql = "SELECT liveId FROM lives WHERE ownerId=? AND status<=?";
+        $sql = "SELECT liveId FROM lives WHERE ownerId =? AND status <=?";
         $binds = array($user->userId, LIVE_STATUS_ON);
         $live = $this->db->query($sql, $binds)->row();
         if ($live) {
@@ -383,7 +387,7 @@ class LiveDao extends BaseDao
 
     function getAttendedLives($user)
     {
-        $sql = "SELECT a.liveId FROM attendances AS a WHERE a.userId=?";
+        $sql = "SELECT a . liveId FROM attendances AS a WHERE a . userId =?";
         $binds = array($user->userId);
         $lives = $this->db->query($sql, $binds)->result();
         $ids = $this->extractLiveIds($lives);
@@ -392,7 +396,7 @@ class LiveDao extends BaseDao
 
     function getMyLives($user)
     {
-        $sql = "SELECT liveId FROM lives AS l WHERE l.ownerId=?  ORDER BY created DESC";
+        $sql = "SELECT liveId FROM lives AS l WHERE l . ownerId =?  ORDER BY created DESC";
         $binds = array($user->userId);
         $lives = $this->db->query($sql, $binds)->result();
         $ids = $this->extractLiveIds($lives);
@@ -404,8 +408,8 @@ class LiveDao extends BaseDao
         $fields = $this->userPublicFields('u');
         $attendanceFields = $this->attendancePublicFields('a');
         $sql = "SELECT $fields,$attendanceFields from attendances as a
-               left join users as u on u.userId = a.userId
-               where a.liveId=? order by a.created desc
+               left join users as u on u . userId = a . userId
+               where a . liveId =? order by a . created desc
                limit $limit OFFSET $skip";
         $binds = array($liveId);
         $users = $this->db->query($sql, $binds)->result();
@@ -419,7 +423,7 @@ class LiveDao extends BaseDao
         $count = 0;
         foreach ($lives as $live) {
             $liveId = $live->liveId;
-            $updateSql = "UPDATE lives SET attendanceCount=? WHERE liveId=?";
+            $updateSql = "UPDATE lives SET attendanceCount =? WHERE liveId =?";
             $users = $this->getAttendedUsers($liveId, 0, 100000);
             $binds = array(count($users), $liveId);
             $ok = $this->db->query($updateSql, $binds);
@@ -433,7 +437,7 @@ class LiveDao extends BaseDao
     function haveWaitLive($userId)
     {
         $sql = "SELECT count(*) AS cnt FROM lives WHERE status >= ?
-                AND status < ? AND ownerId=?";
+                AND status < ? AND ownerId =?";
         $binds = array(LIVE_STATUS_WAIT, LIVE_STATUS_OFF, $userId);
         $row = $this->db->query($sql, $binds)->row();
         return $row->cnt > 0;
@@ -441,7 +445,7 @@ class LiveDao extends BaseDao
 
     function findLatestWaitLive()
     {
-        $sql = "SELECT liveId FROM lives WHERE status=? ORDER BY planTs ASC LIMIT 1";
+        $sql = "SELECT liveId FROM lives WHERE status =? ORDER BY planTs ASC LIMIT 1";
         $binds = array(LIVE_STATUS_WAIT);
         $live = $this->db->query($sql, $binds)->row();
         if ($live) {
