@@ -423,6 +423,10 @@ class WeChatPlatform
                 $live->subject);
             $notifyUser = $inviteFromUser;
         }
+        if (!$notifyUser->incomeSubscribe) {
+            logInfo("$notifyUser->userId unsubscribe income");
+            return false;
+        }
         $tmplData = array(
             'first' => array(
                 'value' => sprintf('%s，您获得%s元收益', $actionWord, moneyFormat($amount)),
@@ -437,7 +441,7 @@ class WeChatPlatform
                 'color' => '#000'
             ),
             'remark' => array(
-                'value' => '您的努力初见成效，再接再励哟。',
+                'value' => '您的努力初见成效，再接再励哟。回复TD0001退订收益提醒',
                 'color' => '#000'
             )
         );

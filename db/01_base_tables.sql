@@ -17,6 +17,7 @@ CREATE TABLE `users` (
   `password`            VARCHAR(127) NOT NULL DEFAULT '',
   `wechatSubscribe`     TINYINT(2)   NOT NULL DEFAULT 0,
   `liveSubscribe`       TINYINT(2)            DEFAULT 0,
+  `incomeSubscribe`     TINYINT(2)            DEFAULT 1,
   `created`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`),

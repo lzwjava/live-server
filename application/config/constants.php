@@ -437,6 +437,7 @@ define('KEY_USERNAME', 'username');
 define('KEY_USER_ID', 'userId');
 define('KEY_WECHAT_SUBSCRIBE', 'wechatSubscribe');
 define('KEY_LIVE_SUBSCRIBE', 'liveSubscribe');
+define('KEY_INCOME_SUBSCRIBE', 'incomeSubscribe');    // 是否接收微信收入通知
 
 define('KEY_SMS_CODE', 'smsCode');
 

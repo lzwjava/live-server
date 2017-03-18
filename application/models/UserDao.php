@@ -97,6 +97,7 @@ class UserDao extends BaseDao
             KEY_UNION_ID,
             KEY_WECHAT_SUBSCRIBE,
             KEY_LIVE_SUBSCRIBE,
+            KEY_INCOME_SUBSCRIBE,
             KEY_CREATED,
             KEY_UPDATED,
         ));
@@ -239,6 +240,11 @@ class UserDao extends BaseDao
     function updateLiveSubscribe($userId, $liveSubscribe)
     {
         return $this->updateUser($userId, array(KEY_LIVE_SUBSCRIBE => $liveSubscribe));
+    }
+
+    public function updateIncomeSubscribe($userId, $incomeSubscribe)
+    {
+        return $this->updateUser($userId, array(KEY_INCOME_SUBSCRIBE => $incomeSubscribe));
     }
 
     function findAllUsers()
