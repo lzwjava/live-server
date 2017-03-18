@@ -219,7 +219,7 @@ class Users extends BaseController
 
     public function update_post()
     {
-        $keys = array(KEY_AVATAR_URL, KEY_USERNAME, KEY_LIVE_SUBSCRIBE);
+        $keys = array(KEY_AVATAR_URL, KEY_USERNAME, KEY_LIVE_SUBSCRIBE, KEY_INCOME_SUBSCRIBE);
         if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
         ) {
             return;

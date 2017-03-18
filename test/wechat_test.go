@@ -285,6 +285,26 @@ func TestWeChat_unsubcribeLive(t *testing.T) {
 	assert.Equal(t, user.Get("liveSubscribe").MustInt(), 0)
 }
 
+func TestWeChat_unsubcribeIncome(t *testing.T) {
+	c, _ := NewClientAndWeChatUser()
+	subscribeWechat(c)
+	c.postData("self", url.Values{"incomeSubscribe": {"1"}})
+
+	user := c.getData("self", url.Values{})
+	assert.Equal(t, user.Get("incomeSubscribe").MustInt(), 1)
+
+	res := c.postWithStr("wechat/callback", `<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+<FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
+<CreateTime>1482623024</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[TD0001]]></Content>
+<MsgId>6367817400842503849</MsgId>
+</xml>`)
+	assert.NotNil(t, res)
+	user = c.getData("self", url.Values{})
+	assert.Equal(t, user.Get("incomeSubscribe").MustInt(), 0)
+}
+
 func TestWeChat_fixAllSubscribe(t *testing.T) {
 	c := NewClient()
 	c.admin = true

@@ -327,12 +327,20 @@ class Wechat extends BaseController
             $msgType = $postObj[KEY_MSG_TYPE];
             if ($msgType == MSG_TYPE_TEXT) {
                 $keyword = trim($postObj[KEY_CONTENT]);
-                if ($keyword == 'TD0000') {
+                if (strtolower($keyword) == 'td0000') {
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
                         $this->userDao->updateLiveSubscribe($userId, 0);
                     }
                     $contentStr = '退订成功，新直播发布将不再通知您。';
+                    $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
+                    $this->replyToWeChat($textReply);
+                } else if (strtolower($keyword) == 'td0001') {
+                    $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
+                    if ($userId) {
+                        $this->userDao->updateIncomeSubscribe($userId, 0);
+                    }
+                    $contentStr = '退订成功，新收入提醒将不再通知您。';
                     $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                     $this->replyToWeChat($textReply);
                 } else {
