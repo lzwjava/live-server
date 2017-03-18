@@ -142,3 +142,17 @@ func TestUsers_liveSubscribe(t *testing.T) {
 	res := c.postData("self", url.Values{"liveSubscribe": {"1"}})
 	assert.NotNil(t, res.Get("liveSubscribe").MustInt(), 1)
 }
+
+func TestLives_userTopic(t *testing.T) {
+	c, _ := NewClientAndUser()
+	liveId := createLive(c)
+	topicId := getTopic(c)
+	c.postData("lives/"+liveId+"/topic", url.Values{"op": {"add"}, "topicId": {topicId}})
+
+	c2, userId2 := NewClientAndWeChatUserWithName()
+	createWechatAttendance(c2, userId2, liveId)
+	user := c2.getData("self", url.Values{})
+	topic := c2.getData("users/userTopic", url.Values{"username": {user.Get("username").MustString()}})
+	assert.NotNil(t, topic.Interface())
+	assert.Equal(t, toStr(topic.Get("topicId").MustInt()), topicId)
+}

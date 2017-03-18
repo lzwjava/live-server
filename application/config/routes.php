@@ -66,6 +66,8 @@ $route['users/(\d+)']['GET'] = 'users/one/$1';
 $route['users/fixAvatarUrl']['GET'] = 'users/fixAvatarUrl';
 $route['users/bindPhone']['POST'] = 'users/bindPhone';
 $route['users/list']['POST'] = 'users/list';
+$route['users/userTopic']['GET'] = 'users/userTopic';
+$route['users/fixSystemId']['GET'] = 'users/fixSystemId';
 
 // lives
 $route['lives/on']['GET'] = 'lives/list';
@@ -216,4 +218,3 @@ $route['withdraws']['GET'] = 'withdraws/list';
 $route['withdraws/(\d+)/agree']['GET'] = 'withdraws/agree/$1';
 $route['withdraws/manual']['POST'] = 'withdraws/createByManual';
 $route['withdraws/withdrawAll']['GET'] = 'withdraws/withdrawAll';
-$route['users/fixSystemId']['GET'] = 'users/fixSystemId';
