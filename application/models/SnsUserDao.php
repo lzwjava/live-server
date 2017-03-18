@@ -134,4 +134,16 @@ class SnsUserDao extends BaseDao
         return array(null, $openId);
     }
 
+    function getUserIdByUsername($username)
+    {
+        $sql = "SELECT * FROM sns_users WHERE username=? AND platform = ?";
+        $binds = array($username, PLATFORM_WECHAT);
+        $row = $this->db->query($sql, $binds)->row();
+        if ($row) {
+            return $row->userId;
+        } else {
+            return null;
+        }
+    }
+
 }

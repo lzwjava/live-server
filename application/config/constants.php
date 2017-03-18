@@ -116,6 +116,8 @@ define('ERROR_NOT_ALLOW_APP_REGISTER', 'not_allow_app_register');
 define('ERROR_NOT_ALLOW_APP_LOGIN', 'not_allow_app_login');
 define('ERROR_ALREADY_BIND_PHONE', 'already_bind_phone');
 define('ERROR_MUST_BIND_PHONE', 'must_bind_phone');
+define('ERROR_NOT_ATTEND_LIVE', 'not_attend_live');
+define('ERROR_NOT_LIVE_TOPIC', 'not_live_topic');
 
 // live
 define('ERROR_ALIVE_FAIL', 'alive_fail');
@@ -246,6 +248,8 @@ if (!function_exists('errorInfos')) {
             ERROR_NOT_ALLOW_APP_REGISTER => '请从平方根平台公众号注册,iOS 上注册暂时会影响微信版的使用',
             ERROR_NOT_ALLOW_APP_LOGIN => '请使用平方根平台公众号,iOS会崩溃',
             ERROR_ALREADY_BIND_PHONE => '已经绑定过手机号码了',
+            ERROR_NOT_ATTEND_LIVE => '还没参加过直播,没有分类',
+            ERROR_NOT_LIVE_TOPIC => '直播分类为空',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',

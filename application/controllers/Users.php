@@ -353,4 +353,30 @@ class Users extends BaseController
         $this->succeed();
     }
 
+    function userTopic_get()
+    {
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_USERNAME))) {
+            return;
+        }
+        $username = $this->get(KEY_USERNAME);
+        $userId = $this->snsUserDao->getUserIdByUsername($username);
+        if (!$userId) {
+            $this->failure(ERROR_SNS_USER_NOT_EXISTS);
+            return;
+        }
+        $user = $this->userDao->findUserById($userId);
+        $lives = $this->liveDao->getAttendedLives($user);
+        if (count($lives) <= 0) {
+            $this->failure(ERROR_NOT_ATTEND_LIVE);
+            return;
+        }
+        $live = $lives[0];
+        $topic = $live->topic;
+        if (!$topic) {
+            $this->failure(ERROR_NOT_LIVE_TOPIC);
+            return;
+        }
+        $this->succeed($topic);
+    }
+
 }

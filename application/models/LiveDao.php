@@ -387,7 +387,7 @@ class LiveDao extends BaseDao
 
     function getAttendedLives($user)
     {
-        $sql = "SELECT a . liveId FROM attendances AS a WHERE a . userId =?";
+        $sql = "SELECT a.liveId FROM attendances AS a WHERE a.userId =?";
         $binds = array($user->userId);
         $lives = $this->db->query($sql, $binds)->result();
         $ids = $this->extractLiveIds($lives);
