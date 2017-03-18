@@ -371,3 +371,6 @@ CREATE TABLE `jobs` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `users` ADD COLUMN `incomeSubscribe` TINYINT(2) DEFAULT 1
+AFTER `liveSubscribe`;
