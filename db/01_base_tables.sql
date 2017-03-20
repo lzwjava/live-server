@@ -374,3 +374,15 @@ CREATE TABLE `jobs` (
 
 ALTER TABLE `users` ADD COLUMN `incomeSubscribe` TINYINT(2) DEFAULT 1
 AFTER `liveSubscribe`;
+
+
+CREATE TABLE `wechat_events` (
+  `id`         INT(11)      NOT NULL AUTO_INCREMENT,
+  `event_type` VARCHAR(30)  NOT NULL DEFAULT '',
+  `userId`     INT(11)      NOT NULL,
+  `created`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
