@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"testing"
+	_ "time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -233,6 +234,24 @@ func subscribeWechat(c *Client) {
 <Event><![CDATA[subscribe]]></Event>
 <EventKey><![CDATA[]]></EventKey>
 </xml>`)
+}
+
+func TestWeChat_unsubscribeWechat(t *testing.T) {
+	c, _ := NewClientAndWeChatUser()
+	subscribeWechat(c)
+
+	res := c.postWithStr("wechat/callback", `<xml><ToUserName><![CDATA[gh_0896caf2ec84]]></ToUserName>
+	<FromUserName><![CDATA[ol0AFwFe5jFoXcQby4J7AWJaWXIM]]></FromUserName>
+	<CreateTime>1482625995</CreateTime>
+	<MsgType><![CDATA[event]]></MsgType>
+	<Event><![CDATA[unsubscribe]]></Event>
+	<EventKey><![CDATA[]]></EventKey>
+	</xml>`)
+	assert.NotNil(t, res)
+	user := c.getData("self", url.Values{})
+	assert.Equal(t, 0, user.Get("wechatSubscribe").MustInt())
+	//events := queryDb("select * from wechat_events")
+	fmt.Print(events)
 }
 
 func TestWeChat_subscribeByPacket(t *testing.T) {
