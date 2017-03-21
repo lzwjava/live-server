@@ -660,7 +660,8 @@ define('KEY_TASK_RUNNING', 'taskRunning');
 
 // wechat_events 表，记录取消关注等事件
 define('TABLE_WECHAT_EVENTS', 'wechat_events');
-define('KEY_EVENT_TYPE', 'event_type');
+define('KEY_WECHAT_EVENT_ID', 'wechatEventId');
+define('KEY_EVENT_TYPE', 'eventType');
 
 
 if (!function_exists('viewPlatformSet')) {

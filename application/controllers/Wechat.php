@@ -24,7 +24,7 @@ class Wechat extends BaseController
 
     /**@var WxSessionDao */
     public $wxSessionDao;
-    public $wxEventDao;
+    public $wechatEventsDao;
 
     function __construct()
     {
@@ -47,8 +47,8 @@ class Wechat extends BaseController
         $this->wxDao = new WxDao();
         $this->load->model(WxSessionDao::class);
         $this->wxSessionDao = new WxSessionDao();
-        $this->load->model(WxEventsDao::class);
-        $this->wxEventDao = new WxEventsDao();
+        $this->load->model(WechatEventsDao::class);
+        $this->wechatEventsDao = new WechatEventsDao();
     }
 
     function sign_get()
@@ -374,8 +374,8 @@ class Wechat extends BaseController
                     $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
                         $this->userDao->updateWeChatSubscribe($userId, 0);
-                        $this->wxEventDao->addWxEvent($event, $userId);
                     }
+                    $this->wechatEventsDao->addWechatEvent($event, $userId);
                     logInfo("unsubscribe event $userId");
                 } else if ($event == EVENT_VIEW) {
                 } else if ($event == EVENT_SCAN) {
