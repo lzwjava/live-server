@@ -1,9 +1,9 @@
 <?php
 
 
-class WxEventsDao extends BaseDao
+class WechatEventsDao extends BaseDao
 {
-    public function addWxEvent($eventType, $userId)
+    public function addWechatEvent($eventType, $userId)
     {
         $data = array(
             KEY_EVENT_TYPE => $eventType,

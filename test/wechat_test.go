@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/url"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -236,20 +235,6 @@ func subscribeWechat(c *Client) {
 </xml>`)
 }
 
-func getLastWechatEventId(userId string) string {
-	<-time.After(100 * time.Millisecond)
-	sql := fmt.Sprintf("select id from wechat_events where userId=%s order by created desc limit 1", userId)
-	fmt.Println(sql)
-	rows := queryDb(sql)
-	defer rows.Close()
-	rows.Next()
-	var _id string
-	rows.Scan(&_id)
-	err := rows.Err()
-	checkErr(err)
-	return _id
-}
-
 func TestWeChat_unsubscribeWechat(t *testing.T) {
 	c, _ := NewClientAndWeChatUser()
 	subscribeWechat(c)
@@ -264,9 +249,6 @@ func TestWeChat_unsubscribeWechat(t *testing.T) {
 	assert.NotNil(t, res)
 	user := c.getData("self", url.Values{})
 	assert.Equal(t, 0, user.Get("wechatSubscribe").MustInt())
-
-	_id := getLastWechatEventId(toStr(user.Get("userId").MustInt()))
-	assert.NotNil(t, _id)
 }
 
 func TestWeChat_subscribeByPacket(t *testing.T) {
