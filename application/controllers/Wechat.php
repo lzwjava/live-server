@@ -375,7 +375,7 @@ class Wechat extends BaseController
                     if ($userId) {
                         $this->userDao->updateWeChatSubscribe($userId, 0);
                     }
-                    $this->wechatEventsDao->addWechatEvent($event, $userId);
+                    $this->wechatEventsDao->addWechatEvent($event, $userId, $fromUsername);
                     logInfo("unsubscribe event $userId");
                 } else if ($event == EVENT_VIEW) {
                 } else if ($event == EVENT_SCAN) {
