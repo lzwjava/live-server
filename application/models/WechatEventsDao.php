@@ -9,7 +9,7 @@ class WechatEventsDao extends BaseDao
             KEY_EVENT_TYPE => $eventType,
             KEY_OPEN_ID => $openId,
             KEY_USER_ID => $userId
-        )
+        );
         $this->db->insert(TABLE_WECHAT_EVENTS, $data);
         return $this->db->insert_id();
     }
