@@ -3,13 +3,13 @@
 
 class WechatEventsDao extends BaseDao
 {
-    public function addWechatEvent($eventType, $userId, $openId)
+    public function addWechatEvent($eventType, $openId, $userId)
     {
         $data = array(
             KEY_EVENT_TYPE => $eventType,
-            KEY_USER_ID => $userId,
             KEY_OPEN_ID => $openId,
-        );
+            KEY_USER_ID => $userId
+        )
         $this->db->insert(TABLE_WECHAT_EVENTS, $data);
         return $this->db->insert_id();
     }
