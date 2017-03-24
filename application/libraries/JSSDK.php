@@ -154,34 +154,9 @@ class JSSDK
                     'url' => 'http://m.quzhiboapp.com/?liveId=0'
                 ),
                 array(
-                    'name' => '历史热门',
-                    'sub_button' => array(
-                        array(
-                            'type' => 'view',
-                            'name' => '唐巧谈iOS安全',
-                            'url' => 'http://m.quzhiboapp.com/?liveId=252'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => 'iDev苹果大会',
-                            'url' => 'http://m.quzhiboapp.com/?liveId=180'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '孙源谈iOS面试',
-                            'url' => 'http://m.quzhiboapp.com/?liveId=115'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '大胡子讲产品',
-                            'url' => 'http://m.quzhiboapp.com/?liveId=255'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '张星宇谈高效用Mac键盘',
-                            'url' => 'http://m.quzhiboapp.com/?liveId=193'
-                        )
-                    ),
+                    'type' => 'view',
+                    'name' => '用户群',
+                    'url' => 'https://mp.weixin.qq.com/s/1StlxxIaJGXBmAd5L24IoQ'
                 ),
                 array(
                     'name' => '关于我们',
