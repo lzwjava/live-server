@@ -374,3 +374,18 @@ CREATE TABLE `jobs` (
 
 ALTER TABLE `users` ADD COLUMN `incomeSubscribe` TINYINT(2) DEFAULT 1
 AFTER `liveSubscribe`;
+
+
+CREATE TABLE `wechat_events` (
+  `wechatEventId` INT(11)      NOT NULL AUTO_INCREMENT,
+  `eventType`     VARCHAR(30)  NOT NULL DEFAULT '',
+  `eventData`     VARCHAR(100) NOT NULL DEFAULT '',
+  `userId`        INT(11)      DEFAULT NULL,
+  `openId`        VARCHAR(63)  NOT NULL DEFAULT '',
+  `created`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`wechatEventId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
