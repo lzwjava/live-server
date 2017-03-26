@@ -381,7 +381,7 @@ define('KEY_RTMP_KEY', 'rtmpKey');
 define('KEY_STATUS', 'status');
 define('KEY_CONVERSATION_ID', 'conversationId');
 define('KEY_COVER_URL', 'coverUrl');
-define('KEY_COURSEWARE_URL', 'coursewareUrl');
+define('KEY_COURSEWARE_KEY', 'coursewareKey');    // 课件上传qiniu的key
 define('KEY_PREVIEW_URL', 'previewUrl');
 define('KEY_AMOUNT', 'amount');
 define('KEY_MAX_PEOPLE', 'maxPeople');
