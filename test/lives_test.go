@@ -150,7 +150,7 @@ func TestLives_end_error(t *testing.T) {
 	assert.Equal(t, res.Get("status").MustString(), "live_not_start")
 }
 
-func TestLives_update_live(t *testing.T) {
+func TestLives_update(t *testing.T) {
 	c, _ := NewClientAndUser()
 	liveId := lastPrepareLive(c)
 	planTs := time.Now().Add(1 * time.Hour).Format("2006-01-02 15:04:05")
