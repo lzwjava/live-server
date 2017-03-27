@@ -276,6 +276,7 @@ class LiveDao extends BaseDao
                     $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
+                $live->coursewareUrl = empty($live->coursewareKey) ? "" : QINIU_FILE_HOST . '/' . $live->coursewareKey;
                 $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHostLive . '/' . $live->rtmpKey;
 
@@ -289,6 +290,7 @@ class LiveDao extends BaseDao
                 $live->canJoin = false;
                 unset($live->rtmpKey);
                 unset($live->notice);
+                unset($live->coursewareKey);
             }
             $live->realAmount = $this->calAmount($live, $user, $staffIds);
         }
