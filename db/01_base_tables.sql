@@ -372,9 +372,6 @@ CREATE TABLE `jobs` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE `users` ADD COLUMN `incomeSubscribe` TINYINT(2) DEFAULT 1
-AFTER `liveSubscribe`;
-
 
 CREATE TABLE `wechat_events` (
   `wechatEventId` INT(11)      NOT NULL AUTO_INCREMENT,
@@ -389,3 +386,6 @@ CREATE TABLE `wechat_events` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+
+ALTER TABLE `lives` ADD COLUMN `coursewareKey` VARCHAR(15) DEFAULT '' AFTER `notice`;
