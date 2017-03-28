@@ -141,6 +141,13 @@ class UserDao extends BaseDao
         return $this->findUser(KEY_MOBILE_PHONE_NUMBER, $mobile);
     }
 
+    function findUsersByUsername($username)
+    {
+        $sql = "SELECT * FROM users WHERE username LIKE '%{$username}%'";
+        $result = $this->db->query($sql)->result();
+        return $result;
+    }
+
     private function updateSessionToken($user)
     {
         $token = $this->genSessionToken();
