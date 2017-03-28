@@ -168,13 +168,8 @@ class Lives extends BaseController
         if ($this->checkIfNotInArray($op, array(OP_ADD, OP_DEL))) {
             return;
         }
-        $user = $this->checkAndGetSessionUser();
-        if (!$user) {
-            return;
-        }
-        $live = $this->liveDao->getLive($liveId, $user);
-        if ($live->ownerId != $user->userId) {
-            $this->failure(ERROR_NOT_ALLOW_DO_IT);
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
             return;
         }
         if ($op == OP_ADD) {
