@@ -35,6 +35,8 @@ class Users extends BaseController
         $this->weChatPlatform = new WeChatPlatform();
         $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
+        $this->load->model(UserDao::class);
+        $this->userDao = new UserDao();
     }
 
     private function checkSmsCodeWrong($mobilePhoneNumber, $smsCode)
@@ -379,4 +381,15 @@ class Users extends BaseController
         $this->succeed($topic);
     }
 
+    public function usersByUsername_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_USERNAME))) {
+            return;
+        }
+        $users = $this->userDao->findUsersByUsername($this->get(KEY_USERNAME));
+        $this->succeed($users);
+    }
 }
