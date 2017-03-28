@@ -68,6 +68,7 @@ $route['users/bindPhone']['POST'] = 'users/bindPhone';
 $route['users/list']['POST'] = 'users/list';
 $route['users/userTopic']['GET'] = 'users/userTopic';
 $route['users/fixSystemId']['GET'] = 'users/fixSystemId';
+$route['users/usersByUsername']['GET'] = 'users/usersByUsername';
 
 // lives
 $route['lives/on']['GET'] = 'lives/list';
