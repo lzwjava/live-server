@@ -75,11 +75,11 @@ class Wechat extends BaseController
         $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
         if ($snsUser != null) {
             if ($snsUser->userId != 0) {
-                $this->userDao->setLoginByUserId($snsUser->userId);
-                $this->failure(ERROR_WECHAT_ALREADY_REGISTER);
+                $user = $this->userDao->setLoginByUserId($snsUser->userId);
+                $this->succeed($user);
                 return;
             }
-            $this->succeed($snsUser);
+            $this->handleBySnsUser($snsUser);
         } else {
             list($error, $weUser) = $this->jsSdk->httpGetUserInfo($respData->access_token, $respData->openid);
             if ($error) {
@@ -93,8 +93,20 @@ class Wechat extends BaseController
                 return;
             }
             $snsUser = $this->snsUserDao->getSnsUser($weUser->openid, PLATFORM_WECHAT);
-            $this->succeed($snsUser);
+            $this->handleBySnsUser($snsUser);
         }
+    }
+
+    private function handleBySnsUser($snsUser)
+    {
+        list($error, $userId) = $this->userDao->createUserByOpenId($snsUser->openId,
+            PLATFORM_WECHAT);
+        if ($error) {
+            $this->failure($error);
+            return;
+        }
+        $user = $this->userDao->setLoginByUserId($userId);
+        $this->succeed($user);
     }
 
     function silentOauth_get()

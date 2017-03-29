@@ -388,4 +388,5 @@ CREATE TABLE `wechat_events` (
   DEFAULT CHARSET = utf8mb4;
 
 
-ALTER TABLE `lives` ADD COLUMN `coursewareKey` VARCHAR(15) DEFAULT '' AFTER `notice`;
+ALTER TABLE `lives` ADD COLUMN `coursewareKey` VARCHAR(15) DEFAULT ''
+AFTER `notice`;
