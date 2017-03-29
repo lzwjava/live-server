@@ -26,26 +26,11 @@ func TestWeChat_oauth(t *testing.T) {
 func TestWeChat_oauth_then_register(t *testing.T) {
 	c, _ := NewClientAndUser()
 	deleteSnsUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"041TMsWH0vWcWj2tFIYH0E2tWH0TMsWa"}})
+	res := c.get("wechat/oauth", url.Values{"code": {"001cYzpE0mCzZf2fmdoE0JpnpE0cYzp1"}})
 	assert.NotNil(t, res)
 	if res.Get("status").MustString() == "success" {
 		result := res.Get("result")
-		res := c.postData("users/registerBySns", url.Values{"openId": {result.Get("openId").MustString()},
-			"platform": {"wechat"}})
-		assert.NotNil(t, res)
-	}
-}
-
-func TestWeChat_oauth_then_registerWithMobile(t *testing.T) {
-	c, _ := NewClientAndUser()
-	deleteSnsUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"031Czzd81oYlsR1ZE3d81MSFd81CzzdN"}})
-	assert.NotNil(t, res)
-	if res.Get("status").MustString() == "success" {
-		result := res.Get("result")
-		res := c.postData("users/registerBySns", url.Values{"openId": {result.Get("openId").MustString()},
-			"platform": {"wechat"}, "mobilePhoneNumber": {randomMobile()}, "smsCode": {"5555"}})
-		assert.NotNil(t, res)
+		assert.NotNil(t, result.Get("userId").MustInt())
 	}
 }
 
