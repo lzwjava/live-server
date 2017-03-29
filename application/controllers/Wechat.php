@@ -79,6 +79,33 @@ class Wechat extends BaseController
                 $this->succeed($user);
                 return;
             }
+            if (!$snsUser->unionId) {
+                list($unionId, $errcode) = $this->jsSdk->getUnionId($respData->access_token, $respData->openid);
+                if (!$unionId) {
+                    $this->failure(ERROR_GET_UNION_ID);
+                    return;
+                }
+                $binds = $this->snsUserDao->bindUnionIdToSnsUser($respData->openid,
+                    PLATFORM_WECHAT, $unionId);
+                if (!$binds) {
+                    $this->failure(ERROR_BIND_UNION_ID);
+                    return;
+                }
+            } else {
+                $unionId = $snsUser->unionId;
+            }
+            if ($snsUser->userId != 0) {
+                $unionUser = $this->userDao->findUserByUnionId($unionId);
+                if (!$unionUser) {
+                    $userBinds = $this->userDao->bindUnionIdToUser($snsUser->userId, $unionId);
+                    if (!$userBinds) {
+                        $this->failure(ERROR_BIND_UNION_ID_TO_USER);
+                        return;
+                    }
+                }
+            }
+            
+            $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
             $this->handleBySnsUser($snsUser);
         } else {
             list($error, $weUser) = $this->jsSdk->httpGetUserInfo($respData->access_token, $respData->openid);
