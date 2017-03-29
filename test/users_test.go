@@ -156,3 +156,11 @@ func TestLives_userTopic(t *testing.T) {
 	assert.NotNil(t, topic.Interface())
 	assert.Equal(t, toStr(topic.Get("topicId").MustInt()), topicId)
 }
+
+func TestUsers_usersByUsername_get(t *testing.T) {
+	c, _ := NewClientAndUser()
+	c.admin = true
+	res := c.getData("users/usersByUsername", url.Values{"username": {"系统"}})
+	assert.NotNil(t, res.Interface())
+	assert.Equal(t, 1, len(res.MustArray()))
+}
