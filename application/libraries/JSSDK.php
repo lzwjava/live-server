@@ -159,7 +159,7 @@ class JSSDK
                         array(
                             'type' => 'view',
                             'name' => '个人中心',
-                            'url' => 'http://m.quzhiboapp.com/#mylist'
+                            'url' => 'http://m.quzhiboapp.com/#profile'
                         ),
                         array(
                             'type' => 'view',
