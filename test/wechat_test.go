@@ -26,7 +26,7 @@ func TestWeChat_oauth(t *testing.T) {
 func TestWeChat_oauth_then_register(t *testing.T) {
 	c, _ := NewClientAndUser()
 	deleteSnsUser()
-	res := c.get("wechat/oauth", url.Values{"code": {"041DaOOC0WmZyf2cwNOC0mO4PC0DaOOI"}})
+	res := c.get("wechat/oauth", url.Values{"code": {"031u9utI0iO6il2CQIsI0k3ktI0u9utV"}})
 	assert.NotNil(t, res)
 	if res.Get("status").MustString() == "success" {
 		result := res.Get("result")
