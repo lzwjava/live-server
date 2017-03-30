@@ -277,7 +277,7 @@ class LiveDao extends BaseDao
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
                 $live->coursewareUrl = empty($live->coursewareKey) ? "" : QINIU_FILE_HOST . '/' . $live->coursewareKey;
-                $live->liveQrcodeUrl= empty($live->liveQrcodeUrl) ? QINIU_QULIVE_QRCODE : $live->liveQrcodeUrl;
+                $live->liveQrcodeUrl= empty($live->liveQrcodeKey) ? QINIU_FILE_HOST . '/' . QINIU_QULIVE_QRCODE_KEY : QINIU_FILE_HOST . '/' . $live->liveQrcodeKey;
                 $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHostLive . '/' . $live->rtmpKey;
 
@@ -292,7 +292,7 @@ class LiveDao extends BaseDao
                 unset($live->rtmpKey);
                 unset($live->notice);
                 unset($live->coursewareKey);
-                unset($live->liveQrcodeUrl);
+                unset($live->liveQrcodeKey);
             }
             $live->realAmount = $this->calAmount($live, $user, $staffIds);
         }
