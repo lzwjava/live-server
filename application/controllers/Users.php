@@ -307,7 +307,7 @@ class Users extends BaseController
         $users = $this->userDao->findWxlogoUsers();
         $succeedCount = 0;
         foreach ($users as $user) {
-            list($imageUrl, $error) = $this->qiniuDao->fetchImageAndUpload($user->avatarUrl);
+            list($imageUrl, $imageKey, $error) = $this->qiniuDao->fetchImageAndUpload($user->avatarUrl);
             if ($error) {
                 continue;
             }

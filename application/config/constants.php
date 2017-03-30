@@ -708,6 +708,7 @@ define('QINIU_HUB', 'qulive');
 define('WECHAT_TOKEN', 'mLYmAdMrVkKO');
 
 define('KEY_URL', 'url');
+define('KEY_KEY', 'key');
 
 // live hooks
 define('KEY_STREAM', 'stream');
@@ -788,7 +789,7 @@ define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'-sUycdEAElTrBbTKTMPlHcGaI4sTvECRWGsH7f3MYiL_wTa9jchAx76avQr__yQIXuabVZNhyn6PeleflEXqP9jI-2BCpe1EO-6IQTYN9e38A0bibpsSJnKgz2lZ7xGnDOQaAHAPAC');
+'t4dmVrRpVwhwCYO6OXU2kqTz49WLD2fBFJClOMZnvup4aZumV9sdzqx0m-oVmZ-Fo-izdqeisWhpSSgiN6TgXykVyhktkYa5tv9PIw0fqv-9aMMGJADjivoEWwHBdLABQHRdAFAZQA');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -857,3 +858,5 @@ define('ANCHOR_INCOME_RATE', 0.5);
 define('INVITE_INCOME_RATE', 0.3);
 
 define('ANCHOR_INCOME_REWARD_RATE', 0.7);
+
+define('KEY_MEDIA_ID', 'mediaId');

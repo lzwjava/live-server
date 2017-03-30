@@ -219,3 +219,7 @@ $route['withdraws']['GET'] = 'withdraws/list';
 $route['withdraws/(\d+)/agree']['GET'] = 'withdraws/agree/$1';
 $route['withdraws/manual']['POST'] = 'withdraws/createByManual';
 $route['withdraws/withdrawAll']['GET'] = 'withdraws/withdrawAll';
+
+// files
+$route['files/uptoken']['GET'] = 'files/uptoken';
+$route['files/wechatToQiniu']['GET'] = 'files/wechatToQiniu';

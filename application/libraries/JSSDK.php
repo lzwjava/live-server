@@ -158,12 +158,17 @@ class JSSDK
                     'sub_button' => array(
                         array(
                             'type' => 'view',
+                            'name' => '个人中心',
+                            'url' => 'http://m.quzhiboapp.com/#mylist'
+                        ),
+                        array(
+                            'type' => 'view',
                             'name' => '参与的直播',
                             'url' => 'http://m.quzhiboapp.com/#mylist'
                         ),
                         array(
                             'type' => 'view',
-                            'name' => '账户',
+                            'name' => '我的账户',
                             'url' => 'http://m.quzhiboapp.com/#account'
                         ),
                         array(
