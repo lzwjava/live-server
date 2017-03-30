@@ -382,7 +382,7 @@ define('KEY_STATUS', 'status');
 define('KEY_CONVERSATION_ID', 'conversationId');
 define('KEY_COVER_URL', 'coverUrl');
 define('KEY_COURSEWARE_KEY', 'coursewareKey');    // 课件上传qiniu的key
-define('KEY_LIVE_QRCODE_URL', 'liveQrcodeUrl');    // 允许讲师上传二维码导流
+define('KEY_LIVE_QRCODE_KEY', 'liveQrcodeKey');    // 允许讲师上传二维码导流
 define('KEY_PREVIEW_URL', 'previewUrl');
 define('KEY_AMOUNT', 'amount');
 define('KEY_MAX_PEOPLE', 'maxPeople');
@@ -859,4 +859,4 @@ define('INVITE_INCOME_RATE', 0.3);
 
 define('ANCHOR_INCOME_REWARD_RATE', 0.7);
 
-define('QINIU_QULIVE_QRCODE', 'http://i.quzhiboapp.com/WRuqRV');    // 直播倒计时页面显示的默认二维码
+define('QINIU_QULIVE_QRCODE_KEY', 'WRuqRV');    // 直播倒计时页面显示的默认二维码

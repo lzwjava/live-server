@@ -389,4 +389,4 @@ CREATE TABLE `wechat_events` (
   DEFAULT CHARSET = utf8mb4;
 
 
-ALTER TABLE `lives` ADD COLUMN `liveQrcodeUrl` VARCHAR(80) DEFAULT '' AFTER `coursewareKey`;
+ALTER TABLE `lives` ADD COLUMN `liveQrcodeKey` VARCHAR(15) DEFAULT '' AFTER `coursewareKey`;

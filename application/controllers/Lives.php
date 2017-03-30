@@ -103,7 +103,7 @@ class Lives extends BaseController
 
     function update_post($liveId)
     {
-        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_COURSEWARE_KEY, KEY_LIVE_QRCODE_URL,
+        $keys = array(KEY_SUBJECT, KEY_COVER_URL, KEY_COURSEWARE_KEY, KEY_LIVE_QRCODE_KEY,
             KEY_AMOUNT, KEY_DETAIL, KEY_PLAN_TS, KEY_PREVIEW_URL, KEY_SPEAKER_INTRO,
             KEY_NEED_PAY, KEY_NOTICE, KEY_SHARE_ICON);
         if ($this->checkIfNotAtLeastOneParam($this->post(), $keys)
