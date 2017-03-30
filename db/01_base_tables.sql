@@ -41,6 +41,7 @@ CREATE TABLE `lives` (
   `speakerIntro`    VARCHAR(1000) NOT NULL             DEFAULT '',
   `detail`          VARCHAR(8000) NOT NULL             DEFAULT '',
   `notice`          VARCHAR(300)  NOT NULL             DEFAULT '',
+  `coursewareKey`   VARCHAR(15)   NOT NULL             DEFAULT '',
   `shareIcon`       TINYINT(2)    NOT NULL             DEFAULT 0,
   `conversationId`  VARCHAR(30)   NOT NULL             DEFAULT '',
   `status`          TINYINT(4)    NOT NULL             DEFAULT 0,
@@ -388,5 +389,4 @@ CREATE TABLE `wechat_events` (
   DEFAULT CHARSET = utf8mb4;
 
 
-ALTER TABLE `lives` ADD COLUMN `coursewareKey` VARCHAR(15) DEFAULT ''
-AFTER `notice`;
+ALTER TABLE `lives` ADD COLUMN `liveQrcodeUrl` VARCHAR(80) DEFAULT '' AFTER `coursewareKey`;
