@@ -189,6 +189,11 @@ class LiveDao extends BaseDao
         return random_element($this->hlsServers());
     }
 
+    private function qrcodeUrlByKey($liveQrcodeKey)
+    {
+        return empty($liveQrcodeKey) ? QINIU_FILE_HOST_SLASH . QINIU_QULIVE_QRCODE_KEY : QINIU_FILE_HOST_SLASH . $liveQrcodeKey;
+    }
+
     private function hlsUrls($rtmpKey)
     {
         $urls = array();
@@ -276,7 +281,8 @@ class LiveDao extends BaseDao
                     $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
-                $live->coursewareUrl = empty($live->coursewareKey) ? "" : QINIU_FILE_HOST . '/' . $live->coursewareKey;
+                $live->coursewareUrl = empty($live->coursewareKey) ? "" : QINIU_FILE_HOST_SLASH . $live->coursewareKey;
+                $live->liveQrcodeUrl= $this->qrcodeUrlByKey($live->liveQrcodeKey);
                 $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHostLive . '/' . $live->rtmpKey;
 
@@ -291,6 +297,7 @@ class LiveDao extends BaseDao
                 unset($live->rtmpKey);
                 unset($live->notice);
                 unset($live->coursewareKey);
+                unset($live->liveQrcodeKey);
             }
             $live->realAmount = $this->calAmount($live, $user, $staffIds);
         }
