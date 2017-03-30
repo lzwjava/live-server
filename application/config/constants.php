@@ -382,6 +382,7 @@ define('KEY_STATUS', 'status');
 define('KEY_CONVERSATION_ID', 'conversationId');
 define('KEY_COVER_URL', 'coverUrl');
 define('KEY_COURSEWARE_KEY', 'coursewareKey');    // 课件上传qiniu的key
+define('KEY_LIVE_QRCODE_KEY', 'liveQrcodeKey');    // 允许讲师上传二维码导流
 define('KEY_PREVIEW_URL', 'previewUrl');
 define('KEY_AMOUNT', 'amount');
 define('KEY_MAX_PEOPLE', 'maxPeople');
@@ -701,6 +702,7 @@ define('WXAPP_SECRET', 'd855fa3f5d519fbd4be1e30ac08881cd');
 
 
 define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');
+define('QINIU_FILE_HOST_SLASH', 'http://i.quzhiboapp.com/');
 define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
 define('QINIU_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');
 define('QINIU_HUB', 'qulive');
@@ -860,3 +862,5 @@ define('INVITE_INCOME_RATE', 0.3);
 define('ANCHOR_INCOME_REWARD_RATE', 0.7);
 
 define('KEY_MEDIA_ID', 'mediaId');
+
+define('QINIU_QULIVE_QRCODE_KEY', 'WRuqRV');    // 直播倒计时页面显示的默认二维码
