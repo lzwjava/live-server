@@ -275,7 +275,7 @@ class UserDao extends BaseDao
             }
         }
 
-        list($imageUrl, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
+        list($imageUrl, $imageKey, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
         if ($error) {
             return array(ERROR_QINIU_UPLOAD, null);
         }
