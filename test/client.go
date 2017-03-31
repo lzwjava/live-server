@@ -91,8 +91,10 @@ func (c *Client) getArrayData(path string, params url.Values) *simplejson.Json {
 }
 
 func baseUrl(path string) string {
+	// http://cleanbugs.com/item/412584/php-wechat-scan-code-payment-development-testing-on-some-computers-the.html
 	var urlStr string
 	urlStr = "http://localhost:3005/" + path
+	// urlStr = "http://127.0.0.1:3005/" + path
 	return urlStr
 }
 
