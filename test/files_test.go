@@ -15,6 +15,6 @@ func TestFiles_upToken(t *testing.T) {
 
 func TestFiles_wechatToQiniu(t *testing.T) {
 	c := NewClient()
-	res := c.getData("files/wechatToQiniu", url.Values{"mediaId": {"abc"}})
+	res := c.get("files/wechatToQiniu", url.Values{"mediaId": {"abc"}})
 	assert.NotNil(t, res)
 }
