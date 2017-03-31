@@ -154,9 +154,29 @@ class JSSDK
                     'url' => 'http://m.quzhiboapp.com/?liveId=0'
                 ),
                 array(
-                    'type' => 'view',
-                    'name' => '用户群',
-                    'url' => 'https://mp.weixin.qq.com/s/1StlxxIaJGXBmAd5L24IoQ'
+                    'name' => '我的',
+                    'sub_button' => array(
+                        array(
+                            'type' => 'view',
+                            'name' => '个人中心',
+                            'url' => 'http://m.quzhiboapp.com/#profile'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '参与的直播',
+                            'url' => 'http://m.quzhiboapp.com/#mylist'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '我的账户',
+                            'url' => 'http://m.quzhiboapp.com/#account'
+                        ),
+                        array(
+                            'type' => 'view',
+                            'name' => '用户群',
+                            'url' => 'https://mp.weixin.qq.com/s/1StlxxIaJGXBmAd5L24IoQ'
+                        )
+                    )
                 ),
                 array(
                     'name' => '关于我们',

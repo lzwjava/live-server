@@ -39,22 +39,31 @@ class QiniuDao extends BaseDao
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         $data = curl_exec($ch);
         if (curl_errno($ch) == CURLE_OPERATION_TIMEOUTED) {
+            curl_close($ch);
             logInfo("curl timeout");
-            return null;
+            return array(null, ERROR_QINIU_UPLOAD);
         }
         if ($data == null) {
             logInfo('curl error: ' . curl_error($ch));
+            curl_close($ch);
+            return array(null, ERROR_QINIU_UPLOAD);
         }
         curl_close($ch);
-        return $data;
+        if ($data) {
+            $jsonRep = json_decode($data);
+            if ($jsonRep && $jsonRep->errcode != 0) {
+                logInfo("qiniu unload error $data");
+                return array(null, ERROR_QINIU_UPLOAD);
+            }
+        }
+        return array($data, null);
     }
 
     function fetchImageAndUpload($url)
     {
-        $data = $this->fetchImage($url);
-        if ($data == null) {
-            logInfo("fetch failed user direct url: $url");
-            return array($url, null);
+        list($data, $error) = $this->fetchImage($url);
+        if ($error) {
+            return array(null, null, $error);
         }
         return $this->uploadImage($data);
     }
@@ -69,7 +78,7 @@ class QiniuDao extends BaseDao
             return array(null, $error);
         }
         $imageUrl = $result->bucketUrl . '/' . $result->key;
-        return array($imageUrl, $error);
+        return array($imageUrl, $result->key, $error);
     }
 
 }

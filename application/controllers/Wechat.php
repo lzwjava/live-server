@@ -104,7 +104,7 @@ class Wechat extends BaseController
                     }
                 }
             }
-            
+
             $snsUser = $this->snsUserDao->getSnsUser($respData->openid, PLATFORM_WECHAT);
             $this->handleBySnsUser($snsUser);
         } else {
