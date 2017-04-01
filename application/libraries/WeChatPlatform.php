@@ -28,7 +28,7 @@ class WeChatPlatform
     }
 
     function notifyUserByWeChat($userId, $live)
-    {
+    {    // 活动即将开始通知
         $user = $this->userDao->findUserById($userId);
         $word = null;
         $a = date_create($live->planTs, new DateTimeZone('Asia/Shanghai'));
@@ -47,6 +47,8 @@ class WeChatPlatform
         } else {
             $word = '，您参与的直播即将开始';
         }
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+
         $tmplData = array(
             'first' => array(
                 'value' => $user->username . $word,
@@ -65,9 +67,27 @@ class WeChatPlatform
                 'color' => '#000',
             )
         );
-        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
-        return $this->notifyByWeChat($user, 'gKSNH1PPeKQqYC4yNPjXl-OrHNdoU1jkyv7468BM6R4', $url, $tmplData);
+
+        $customMsgData = array(
+            'msgtype' => 'news',
+            'news' => array(
+                'articles' => array(
+                    array(
+                        'title' => $user->username . $word,
+                        'description' => "您已经报名了直播:『{$live->subject}』\n\n开播时间: {$live->planTs} \n\n点击进入直播",
+                        'url' => $url,
+                        'picurl' => $live->coverUrl
+                    ),
+                )
+            )
+        );
+        if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
+            return true;
+        } else {
+            return $this->notifyByWeChat($user, 'gKSNH1PPeKQqYC4yNPjXl-OrHNdoU1jkyv7468BM6R4', $url, $tmplData);
+        }
     }
+
 
     function notifyNewLive($userId, $live)
     {
@@ -119,10 +139,8 @@ class WeChatPlatform
         if ($url) {
             $data['url'] = $url;
         }
-        $accesstoken = $this->jsSdk->getAccessToken();
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $accesstoken;
-        $res = $this->httpPost($url, $data);
-        if (!$res) {
+        list($error, $res) = $this->jsSdk->wechatHttpPost('message/template/send', $data);
+        if (!is_null($error)) {
             logInfo('wechat notified failed user:' . json_encode($user));
             return false;
         }
@@ -450,12 +468,33 @@ class WeChatPlatform
             $url, $tmplData);
     }
 
+    private function notifyLiveByWeChatCustom($user, $data)
+    {
+        /* 发客服消息给用户提醒直播开始，如果不成功再使用模板消息
+         * https://mp.weixin.qq.com/wiki?id=mp1421140547&highline=%E6%B6%88%E6%81%AF%7C%26%E5%9B%BE%E6%96%87%E6%B6%88%E6%81%AF%7C%26%E5%9B%BE%E6%96%87
+         */
+        if (!$user->unionId) {
+            logInfo("the user $user->userId do not have unionId fail send wechat msg");
+            return false;
+        }
+        $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);
+        $data['touser'] = $snsUser->openId;
+        list($error, $res) = $this->jsSdk->wechatHttpPost('message/custom/send', $data);
+        if (!is_null($error)) {
+            logInfo("wechat custom notified failed errcode != 0 user:" . $user->userId
+                . ' name: ' . $user->username . ' res ' . $res);
+            return false;
+        }
+        return true;
+    }
+
     private function httpPost($url, $data)
     {
+        // http://stackoverflow.com/questions/16498286/why-does-the-php-json-encode-function-convert-utf-8-strings-to-hexadecimal-entit
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $res = curl_exec($ch);
         curl_close($ch);
