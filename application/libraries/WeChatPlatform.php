@@ -141,7 +141,7 @@ class WeChatPlatform
         }
         list($error, $res) = $this->jsSdk->wechatHttpPost('message/template/send', $data);
         if (!is_null($error)) {
-            logInfo('wechat notified failed user:' . json_encode($user) . ' error:' . $error);
+            logInfo("wechat notified failed user: $user->userId name: $user->username error: . $error");
             return false;
         }
         return true;
@@ -475,8 +475,8 @@ class WeChatPlatform
         $data['touser'] = $snsUser->openId;
         list($error, $res) = $this->jsSdk->wechatHttpPost('message/custom/send', $data);
         if (!is_null($error)) {
-            logInfo("wechat custom notified failed errcode != 0 user:" . $user->userId
-                . ' name: ' . $user->username . ' res ' . $res);
+            logInfo("wechat custom notified failed errcode != 0 user: $user->userId
+                 name:  $user->username code: $res error: $error");
             return false;
         }
         return true;
