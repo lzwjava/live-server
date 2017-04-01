@@ -139,10 +139,8 @@ class WeChatPlatform
         if ($url) {
             $data['url'] = $url;
         }
-        $accesstoken = $this->jsSdk->getAccessToken();
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $accesstoken;
-        $res = $this->httpPost($url, $data);
-        if (!$res) {
+        list($error, $res) = $this->jsSdk->wechatHttpPost('message/template/send', $data);
+        if (!is_null($error)) {
             logInfo('wechat notified failed user:' . json_encode($user));
             return false;
         }
