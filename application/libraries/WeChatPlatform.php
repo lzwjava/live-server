@@ -141,13 +141,7 @@ class WeChatPlatform
         }
         list($error, $res) = $this->jsSdk->wechatHttpPost('message/template/send', $data);
         if (!is_null($error)) {
-            logInfo('wechat notified failed user:' . json_encode($user));
-            return false;
-        }
-        $resp = json_decode($res);
-        if ($resp->errcode != 0) {
-            logInfo("wechat notified failed errcode != 0 user:" . $user->userId
-                . ' name: ' . $user->username . ' res ' . $res);
+            logInfo('wechat notified failed user:' . json_encode($user) . ' error:' . $error);
             return false;
         }
         return true;
@@ -486,19 +480,6 @@ class WeChatPlatform
             return false;
         }
         return true;
-    }
-
-    private function httpPost($url, $data)
-    {
-        // http://stackoverflow.com/questions/16498286/why-does-the-php-json-encode-function-convert-utf-8-strings-to-hexadecimal-entit
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $res = curl_exec($ch);
-        curl_close($ch);
-        return $res;
     }
 
 }
