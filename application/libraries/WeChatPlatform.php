@@ -474,19 +474,6 @@ class WeChatPlatform
     {
         /* 发客服消息给用户提醒直播开始，如果不成功再使用模板消息
          * https://mp.weixin.qq.com/wiki?id=mp1421140547&highline=%E6%B6%88%E6%81%AF%7C%26%E5%9B%BE%E6%96%87%E6%B6%88%E6%81%AF%7C%26%E5%9B%BE%E6%96%87
-         * {
-         * "touser":"OPENID",
-         * "msgtype":"news",
-         * "news":{
-         *     "articles": [
-         *     {
-         *         "title":"Happy Day",
-         *         "description":"Is Really A Happy Day",
-         *         "url":"URL",
-         *         "picurl":"PIC_URL"
-         *     },
-         *     ]
-         * }
          */
         if (!$user->unionId) {
             logInfo("the user $user->userId do not have unionId fail send wechat msg");
@@ -494,15 +481,8 @@ class WeChatPlatform
         }
         $snsUser = $this->snsUserDao->getWechatSnsUser($user->unionId);
         $data['touser'] = $snsUser->openId;
-        $accesstoken = $this->jsSdk->getAccessToken();
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=' . $accesstoken;
-        $res = $this->httpPost($url, $data);
-        if (!$res) {
-            logInfo('wechat custom notified failed user:' . json_encode($user));
-            return false;
-        }
-        $resp = json_decode($res);
-        if ($resp->errcode != 0) {
+        list($error, $res) = $this->jsSdk->wechatHttpPost('message/custom/send', $data);
+        if (!is_null($error)) {
             logInfo("wechat custom notified failed errcode != 0 user:" . $user->userId
                 . ' name: ' . $user->username . ' res ' . $res);
             return false;
