@@ -282,7 +282,7 @@ class LiveDao extends BaseDao
                     $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
                 }
                 $live->coursewareUrl = empty($live->coursewareKey) ? "" : QINIU_FILE_HOST_SLASH . $live->coursewareKey;
-                $live->liveQrcodeUrl= $this->qrcodeUrlByKey($live->liveQrcodeKey);
+                $live->liveQrcodeUrl = $this->qrcodeUrlByKey($live->liveQrcodeKey);
                 $live->videoUrl = VIDEO_HOST_URL . $live->rtmpKey . '.mp4';
                 $live->rtmpUrl = 'rtmp://' . $rtmpHostLive . '/' . $live->rtmpKey;
 
@@ -403,13 +403,13 @@ class LiveDao extends BaseDao
         return $this->getLivesWithoutDetail($ids, $user, true);
     }
 
-    function getMyLives($user)
+    function getLivesOfUser($targetUserId, $curUser)
     {
         $sql = "SELECT liveId FROM lives AS l WHERE l . ownerId =?  ORDER BY created DESC";
-        $binds = array($user->userId);
+        $binds = array($targetUserId);
         $lives = $this->db->query($sql, $binds)->result();
         $ids = $this->extractLiveIds($lives);
-        return $this->getLivesWithoutDetail($ids, $user);
+        return $this->getLivesWithoutDetail($ids, $curUser);
     }
 
     function getAttendedUsers($liveId, $skip, $limit)
