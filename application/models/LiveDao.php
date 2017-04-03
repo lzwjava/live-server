@@ -394,13 +394,13 @@ class LiveDao extends BaseDao
         }
     }
 
-    function getAttendedLives($user)
+    function getAttendedLivesOfUser($targetUserId, $curUser)
     {
         $sql = "SELECT a.liveId FROM attendances AS a WHERE a.userId =?";
-        $binds = array($user->userId);
+        $binds = array($targetUserId);
         $lives = $this->db->query($sql, $binds)->result();
         $ids = $this->extractLiveIds($lives);
-        return $this->getLivesWithoutDetail($ids, $user, true);
+        return $this->getLivesWithoutDetail($ids, $curUser, true);
     }
 
     function getLivesOfUser($targetUserId, $curUser)
