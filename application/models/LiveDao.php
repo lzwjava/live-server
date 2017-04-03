@@ -406,7 +406,7 @@ class LiveDao extends BaseDao
     function getLivesOfUser($targetUserId, $curUser)
     {
         $minStatus = 10;
-        if ($curUser && $curUser->userId != $targetUserId) {
+        if ($curUser && $curUser->userId == $targetUserId) {
             $minStatus = 0;
         }
         $sql = "SELECT liveId FROM lives AS l WHERE l . ownerId =? AND l.status>=?  ORDER BY created DESC";
