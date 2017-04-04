@@ -85,3 +85,17 @@ func TestWithdraws_all(t *testing.T) {
 	res := c.getData("withdraws/withdrawAll", url.Values{})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestWithdraws_anchor(t *testing.T) {
+	c := NewClient()
+	c.admin = true
+	res := c.getData("withdraws/withdrawAnchor", url.Values{})
+	assert.NotNil(t, res.Interface())
+}
+
+func TestWithdraws_non_anchor(t *testing.T) {
+	c := NewClient()
+	c.admin = true
+	res := c.getData("withdraws/withdrawNonAnchor", url.Values{})
+	assert.NotNil(t, res.Interface())
+}

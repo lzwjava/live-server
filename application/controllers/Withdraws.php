@@ -115,7 +115,7 @@ class Withdraws extends BaseController
         $this->succeed($data);
     }
 
-    function withdrawAll_get()
+    function withdrawAll_get($withdrawUserIds=null)
     {
         if (!is_cli() && $this->checkIfNotAdmin()) {
             return;
@@ -124,6 +124,9 @@ class Withdraws extends BaseController
         $succeedCount = 0;
         foreach ($accounts as $account) {
             $amount = $account->balance;
+            if (!is_null($withdrawUserIds) && !in_array($account->userId, $withdrawUserIds)) {
+                continue;
+            }
             if ($account->userId == ADMIN_OP_SYSTEM_ID) {
                 continue;
             }
@@ -151,6 +154,21 @@ class Withdraws extends BaseController
         $res = array('succeedCount' => $succeedCount, 'total' => count($accounts));
         logInfo(json_encode($res));
         $this->succeed($res);
+    }
+
+    function withdrawAnchor_get()
+    {
+        // 主播提现
+        $anchorUserIds = $this->liveDao->getHasLivesUserIds();
+        return $this->withdrawAll_get($anchorUserIds);
+    }
+
+    function withdrawNonAnchor_get()
+    {
+        $userIds = $this->accountDao->queryUserIdsHaveBalance();
+        $anchorUserIds = $this->liveDao->getHasLivesUserIds();
+        $nonAnchorUserIds = array_diff($userIds, $anchorUserIds);
+        return $this->withdrawAll_get($nonAnchorUserIds);
     }
 
 }
