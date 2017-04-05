@@ -115,7 +115,7 @@ class Withdraws extends BaseController
         $this->succeed($data);
     }
 
-    function withdrawAll_get($withdrawUserIds=null)
+    private function withdrawAll($withdrawUserIds = null)
     {
         if (!is_cli() && $this->checkIfNotAdmin()) {
             return;
@@ -160,15 +160,16 @@ class Withdraws extends BaseController
     {
         // 主播提现
         $anchorUserIds = $this->liveDao->getHasLivesUserIds();
-        return $this->withdrawAll_get($anchorUserIds);
+        return $this->withdrawAll($anchorUserIds);
     }
 
     function withdrawNonAnchor_get()
     {
-        $userIds = $this->accountDao->queryUserIdsHaveBalance();
+        $accounts = $this->accountDao->queryAccountsHaveBalance();
+        $userIds = array_column($accounts, 'userId');
         $anchorUserIds = $this->liveDao->getHasLivesUserIds();
         $nonAnchorUserIds = array_diff($userIds, $anchorUserIds);
-        return $this->withdrawAll_get($nonAnchorUserIds);
+        return $this->withdrawAll($nonAnchorUserIds);
     }
 
 }
