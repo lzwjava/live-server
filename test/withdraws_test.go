@@ -79,9 +79,16 @@ func TestWithdraws_createByManul(t *testing.T) {
 	assert.NotNil(t, withdrawId)
 }
 
-func TestWithdraws_all(t *testing.T) {
+func TestWithdraws_anchor(t *testing.T) {
 	c := NewClient()
 	c.admin = true
-	res := c.getData("withdraws/withdrawAll", url.Values{})
+	res := c.getData("withdraws/withdrawAnchor", url.Values{})
+	assert.NotNil(t, res.Interface())
+}
+
+func TestWithdraws_non_anchor(t *testing.T) {
+	c := NewClient()
+	c.admin = true
+	res := c.getData("withdraws/withdrawNonAnchor", url.Values{})
 	assert.NotNil(t, res.Interface())
 }
