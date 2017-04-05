@@ -260,7 +260,7 @@ if (!function_exists('errorInfos')) {
             ERROR_PLAN_TS_INVALID => '预计的直播时间应该晚于现在',
             ERROR_EXCEED_MAX_PEOPLE => '抱歉,报名已满',
             ERROR_CREATE_LIVE => '创建直播失败',
-            ERROR_DETAIL_TOO_SHORT => '直播详情至少要 300 字',
+            ERROR_DETAIL_TOO_SHORT => '直播详情至少要 100 字',
             ERROR_ALREADY_REVIEW => '已经在审核或审核过了',
             ERROR_LIVE_NOT_WAIT => '直播不是报名状态,无法开始',
             ERROR_LIVE_NOT_START => '直播不是进行中状态,无法结束',
