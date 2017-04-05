@@ -468,4 +468,14 @@ class LiveDao extends BaseDao
         }
     }
 
+    function getHasLivesUserIds()
+    {
+        // 返回所有主播的userId
+        $sql = 'select distinct(ownerId) from lives where status >= ?';
+        $binds = array(LIVE_STATUS_WAIT);
+        $lives = $this->db->query($sql, $binds)->result();
+        $userIds = array_column($lives, 'ownerId');
+        return $userIds;
+    }
+
 }
