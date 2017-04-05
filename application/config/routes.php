@@ -144,6 +144,7 @@ $route['wechat/qrcode']['GET'] = 'wechat/qrcode';
 $route['wechat/addNews']['GET'] = 'wechat/addNews';
 $route['wechat/uploadImg']['GET'] = 'wechat/uploadImg';
 $route['wechat/sendMassMsg']['GET'] = 'wechat/sendMassMsg';
+$route['wechat/group']['GET'] = 'wechat/group';
 
 // wxapp
 $route['wechat/login']['POST'] = 'wechat/login';

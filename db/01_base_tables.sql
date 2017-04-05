@@ -390,3 +390,4 @@ CREATE TABLE `wechat_events` (
 
 
 ALTER TABLE `lives` ADD COLUMN `liveQrcodeKey` VARCHAR(15) DEFAULT '' AFTER `coursewareKey`;
+
