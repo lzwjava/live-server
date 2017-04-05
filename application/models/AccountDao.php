@@ -64,14 +64,6 @@ class AccountDao extends BaseDao
         return $accounts;
     }
 
-    function queryUserIdsHaveBalance()
-    {
-        $sql = "SELECT userId FROM accounts WHERE balance > 0";
-        $accounts = $this->db->query($sql)->result();
-        $userIds = array_column($accounts, 'userId');
-        return $userIds;
-    }
-
     function initIncome()
     {
         $accounts = $this->queryAccountsHaveBalance();
