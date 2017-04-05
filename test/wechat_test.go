@@ -355,6 +355,12 @@ func insertAppSnsUser(userId string) {
 	runSql(sql, false)
 }
 
+func TestWeChat_group(t *testing.T) {
+	c := NewClient()
+	res := c.getData("wechat/group", url.Values{})
+	assert.NotNil(t, res.Get("url"))
+}
+
 // func TestWeChat_addNews(t *testing.T) {
 // 	c := NewClient()
 // 	res := c.get("wechat/addNews", url.Values{})
