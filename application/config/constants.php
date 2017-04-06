@@ -224,6 +224,9 @@ define('ERROR_HAVE_WAIT_WITHDRAW', 'have_wait_withdraw');
 define('ERROR_HAVE_WAIT_LIVE', 'have_wait_live');
 define('ERROR_WITHDRAW_ALREADY_DONE', 'withdraw_already_done');
 
+// wechat groups
+define('ERROR_NO_AVAILABLE_GROUP', 'no_available_group');
+
 if (!function_exists('errorInfos')) {
     function errorInfos()
     {
@@ -357,7 +360,10 @@ if (!function_exists('errorInfos')) {
             ERROR_WITHDRAW_AMOUNT_TOO_LITTLE => '提现金额最低不少于1元',
             ERROR_HAVE_WAIT_WITHDRAW => '有正在处理的提现中,请等待处理完成',
             ERROR_HAVE_WAIT_LIVE => '当前还有未完成的直播,不允许提现',
-            ERROR_WITHDRAW_ALREADY_DONE => '此提现已经处理过了'
+            ERROR_WITHDRAW_ALREADY_DONE => '此提现已经处理过了',
+
+            // groups
+            ERROR_NO_AVAILABLE_GROUP => '没有可用的群里, 请稍后再试'
         );
     }
 
@@ -664,6 +670,15 @@ define('KEY_TASK_RUNNING', 'taskRunning');
 define('TABLE_WECHAT_EVENTS', 'wechat_events');
 define('KEY_WECHAT_EVENT_ID', 'wechatEventId');
 define('KEY_EVENT_TYPE', 'eventType');
+
+define('TABLE_WECHAT_GROUPS', 'wechat_groups');
+define('KEY_GROUP_ID', 'groupId');
+define('KEY_GROUP_USER_NAME', 'groupUserName');
+define('KEY_QRCODE_KEY', 'qrcodeKey');
+define('KEY_MEMBER_COUNT', 'memberCount');
+define('KEY_USED', 'used');
+
+define('KEY_QRCODE_URL', 'qrcodeUrl');
 
 
 if (!function_exists('viewPlatformSet')) {

@@ -389,5 +389,20 @@ CREATE TABLE `wechat_events` (
   DEFAULT CHARSET = utf8mb4;
 
 
-ALTER TABLE `lives` ADD COLUMN `liveQrcodeKey` VARCHAR(15) DEFAULT '' AFTER `coursewareKey`;
+ALTER TABLE `lives` ADD COLUMN `liveQrcodeKey` VARCHAR(15) DEFAULT ''
+AFTER `coursewareKey`;
 
+
+CREATE TABLE `wechat_groups` (
+  `groupId`       INT(11)     NOT NULL AUTO_INCREMENT,
+  `groupUserName` VARCHAR(80) NOT NULL DEFAULT '',
+  `qrcodeKey`     VARCHAR(20) NOT NULL DEFAULT '',
+  `memberCount`   INT                  DEFAULT 0,
+  `used`          TINYINT              DEFAULT 0,
+  `created`       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`groupId`),
+  UNIQUE KEY (`groupUserName`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
