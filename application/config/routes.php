@@ -226,3 +226,9 @@ $route['withdraws/withdrawNonAnchor']['GET'] = 'withdraws/withdrawNonAnchor';
 // files
 $route['files/uptoken']['GET'] = 'files/uptoken';
 $route['files/wechatToQiniu']['GET'] = 'files/wechatToQiniu';
+
+$route['wechatGroups']['POST'] = 'wechatGroups/create';
+$route['wechatGroups']['GET'] = 'wechatGroups/list';
+$route['wechatGroups/one']['GET'] = 'wechatGroups/one';
+$route['wechatGroups/current']['GET'] = 'wechatGroups/current';
+$route['wechatGroups/update']['POST'] = 'wechatGroups/update';
