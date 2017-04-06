@@ -720,7 +720,7 @@ class Wechat extends BaseController
 
     function group_get()
     {
-        $this->succeed(array(KEY_URL => QINIU_FILE_HOST . '/' . 'group1.jpg'));
+        $this->succeed(array(KEY_URL => QINIU_FILE_HOST . '/' . 'group1a.jpg'));
     }
 
 }
