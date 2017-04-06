@@ -9,7 +9,7 @@ import (
 )
 
 func genGroupUserName() string {
-	return "@@bcc4e6bb1c77048532fa50b6f438b52a01ecf84bebae6ee33446cdd99d" + randomString()
+	return "超级用户群" + randomString()
 }
 
 func TestWechatGroups_create(t *testing.T) {
