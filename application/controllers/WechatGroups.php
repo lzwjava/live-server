@@ -25,13 +25,15 @@ class WechatGroups extends BaseController
         }
         if ($this->checkIfParamsNotExist($this->post(), array(
             KEY_GROUP_USER_NAME,
-            KEY_QRCODE_KEY))
+            KEY_QRCODE_KEY,
+            KEY_TOPIC_ID))
         ) {
             return;
         }
         $groupUserName = $this->post(KEY_GROUP_USER_NAME);
         $qrcodeKey = $this->post(KEY_QRCODE_KEY);
-        $id = $this->wechatGroupDao->createGroup($groupUserName, $qrcodeKey);
+        $topicId = intval($this->post(KEY_TOPIC_ID));
+        $id = $this->wechatGroupDao->createGroup($groupUserName, $qrcodeKey, $topicId);
         $this->succeed(array(KEY_GROUP_ID => $id));
     }
 
@@ -47,7 +49,11 @@ class WechatGroups extends BaseController
 
     function current_get()
     {
-        $group = $this->wechatGroupDao->currentGroup();
+        if ($this->checkIfParamsNotExist($this->get(), array(KEY_TOPIC_ID))) {
+            return;
+        }
+        $topicId = $this->get(KEY_TOPIC_ID);
+        $group = $this->wechatGroupDao->currentGroup($topicId);
         if (!$group) {
             $this->failure(ERROR_NO_AVAILABLE_GROUP);
             return;
@@ -57,7 +63,7 @@ class WechatGroups extends BaseController
             KEY_QRCODE_URL => $group->qrcodeUrl
         ));
     }
-
+    
     function list_get()
     {
         $groups = $this->wechatGroupDao->allGroups();
