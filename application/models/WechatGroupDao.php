@@ -8,20 +8,22 @@
  */
 class WechatGroupDao extends BaseDao
 {
-    function createGroup($groupUserName, $qrcodeKey)
+    function createGroup($groupUserName, $qrcodeKey, $topicId)
     {
         $data = array(
             KEY_GROUP_USER_NAME => $groupUserName,
             KEY_QRCODE_KEY => $qrcodeKey,
+            KEY_TOPIC_ID => $topicId
         );
         $this->db->insert(TABLE_WECHAT_GROUPS, $data);
         return $this->db->insert_id();
     }
 
-    function currentGroup()
+    function currentGroup($topicId)
     {
-        $sql = "SELECT * FROM wechat_groups WHERE used = 0 ORDER BY created ASC LIMIT 1";
-        $group = $this->db->query($sql)->row();
+        $sql = "SELECT * FROM wechat_groups WHERE used = 0 AND topicId=? ORDER BY created ASC LIMIT 1";
+        $binds = array($topicId);
+        $group = $this->db->query($sql, $binds)->row();
         if ($group) {
             $this->assembleGroup($group);
         }

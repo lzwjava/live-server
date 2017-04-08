@@ -15,7 +15,8 @@ func genGroupUserName() string {
 func TestWechatGroups_create(t *testing.T) {
 	c := NewClient()
 	c.admin = true
-	res := c.postData("wechatGroups", url.Values{"qrcodeKey": {"group6.jpeg"}, "groupUserName": {genGroupUserName()}})
+	res := c.postData("wechatGroups", url.Values{"qrcodeKey": {"group6.jpeg"},
+		"groupUserName": {genGroupUserName()}, "topicId": {"7"}})
 	assert.NotNil(t, res.Get("wechatGroupId").MustInt())
 }
 
@@ -23,7 +24,7 @@ func createGroup(c *Client) string {
 	c.admin = true
 	groupUserName := genGroupUserName()
 	c.postData("wechatGroups", url.Values{"qrcodeKey": {"group6.jpeg"}, "groupUserName": {
-		groupUserName}})
+		groupUserName}, "topicId": {"7"}})
 	return groupUserName
 }
 
@@ -32,7 +33,7 @@ func TestWechatGroups_one(t *testing.T) {
 	c.admin = true
 	groupUserName := genGroupUserName()
 	res := c.postData("wechatGroups", url.Values{"qrcodeKey": {"group6.jpeg"}, "groupUserName": {
-		groupUserName}})
+		groupUserName}, "topicId": {"7"}})
 	assert.NotNil(t, res.Get("wechatGroupId").MustInt())
 	group := c.getData("wechatGroups/one", url.Values{"groupUserName": {groupUserName}})
 	assert.NotNil(t, group.Get("groupId"))
@@ -55,7 +56,7 @@ func TestWechatGroups_update(t *testing.T) {
 func TestWechatGroups_current(t *testing.T) {
 	c := NewClient()
 	createGroup(c)
-	currentGroup := c.getData("wechatGroups/current", url.Values{})
+	currentGroup := c.getData("wechatGroups/current", url.Values{"topicId": {"7"}})
 	assert.NotNil(t, currentGroup.Get("groupId"))
 }
 
