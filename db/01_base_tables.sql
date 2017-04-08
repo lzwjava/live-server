@@ -413,5 +413,5 @@ AFTER `qrcodeKey`;
 ALTER TABLE `wechat_groups` ADD FOREIGN KEY (`topicId`) REFERENCES `topics` (`topicId`);
 
 UPDATE `wechat_groups`
-SET `topicId` = 7
+SET `topicId` = 6
 WHERE created < '2017-04-08 00:00:00';

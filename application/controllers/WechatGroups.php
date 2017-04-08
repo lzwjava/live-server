@@ -63,7 +63,7 @@ class WechatGroups extends BaseController
             KEY_QRCODE_URL => $group->qrcodeUrl
         ));
     }
-    
+
     function list_get()
     {
         $groups = $this->wechatGroupDao->allGroups();
