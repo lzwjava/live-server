@@ -45,8 +45,12 @@ class VideoDao extends BaseDao
             if ($video->type == VIDEO_TYPE_MP4) {
                 $video->url = $host . $video->fileName . '.mp4';
             } else if ($video->type == VIDEO_TYPE_M3U8) {
-                $video->m3u8Url = 'http://ojaulfft5.bkt.clouddn.com/recordings/z1.qulive.'
-                    . $video->fileName . '/playback.m3u8';
+                $prefix = 'http://ojaulfft5.bkt.clouddn.com/recordings/z1.qulive.';
+                if ($video->fileName == 'sQ91eVEh') {
+                    $video->m3u8Url = $prefix . $video->fileName . '/playback1.m3u8';
+                } else {
+                    $video->m3u8Url = $prefix . $video->fileName . '/playback.m3u8';
+                }
             }
         }
     }
