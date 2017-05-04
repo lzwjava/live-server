@@ -129,12 +129,12 @@ func TestUsers_getList(t *testing.T) {
 	assert.Equal(t, len(res.MustArray()), 1)
 }
 
-func TestUsers_fixSystemId(t *testing.T) {
-	c := NewClient()
-	c.admin = true
-	res := c.getData("users/fixSystemId", url.Values{})
-	assert.NotNil(t, res.Interface())
-}
+// func TestUsers_fixSystemId(t *testing.T) {
+// 	c := NewClient()
+// 	c.admin = true
+// 	res := c.getData("users/fixSystemId", url.Values{})
+// 	assert.NotNil(t, res.Interface())
+// }
 
 func TestUsers_liveSubscribe(t *testing.T) {
 	c, _ := NewClientAndWeChatUser()
