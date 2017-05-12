@@ -179,6 +179,16 @@ class LiveDao extends BaseDao
         );
     }
 
+    private function webHlsUrl($rtmpKey)
+    {
+        $servers = array(
+            'upyun.quzhiboapp.com/live'
+        );
+        $server = random_element($servers);
+        $hlsUrl = 'http://' . $server . '/' . $rtmpKey . '.m3u8';
+        return $hlsUrl;
+    }
+
     function hlsServers()
     {
         return $this->thirdHlsServers();
@@ -289,7 +299,8 @@ class LiveDao extends BaseDao
                 $hlsUrls = $this->hlsUrls($live->rtmpKey);
                 $live->hlsUrls = $hlsUrls;
                 $live->hlsUrl = random_element($hlsUrls);
-
+                $live->webHlsUrl = $this->webHlsUrl($live->rtmpKey);
+                
                 $live->flvUrl = 'http://' . $flvHostLive . '/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
             } else {
