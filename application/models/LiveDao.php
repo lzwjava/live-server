@@ -300,7 +300,7 @@ class LiveDao extends BaseDao
                 $live->hlsUrls = $hlsUrls;
                 $live->hlsUrl = random_element($hlsUrls);
                 $live->webHlsUrl = $this->webHlsUrl($live->rtmpKey);
-                
+
                 $live->flvUrl = 'http://' . $flvHostLive . '/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
             } else {
