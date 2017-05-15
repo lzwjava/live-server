@@ -99,14 +99,14 @@ class JobDao extends BaseDao
 
         $planTsDate = date_create($live->planTs, new DateTimeZone('Asia/Shanghai'));
         $unixTimestamp = $planTsDate->getTimestamp();
-        $ts1 = $unixTimestamp - 60 * 60 * 8;
-        $ts2 = $unixTimestamp - 60 * 60 * 1;
+//        $ts1 = $unixTimestamp - 60 * 60 * 8;
+        $ts2 = $unixTimestamp - 60 * 60 * 3;
         $ts3 = $unixTimestamp;
 
-        $jobId1 = $this->insertJob(JOB_NAME_NOTIFY_LIVE_START, $ts1, array(
-            KEY_LIVE_ID => $live->liveId,
-            KEY_TYPE => 0
-        ));
+//        $jobId1 = $this->insertJob(JOB_NAME_NOTIFY_LIVE_START, $ts1, array(
+//            KEY_LIVE_ID => $live->liveId,
+//            KEY_TYPE => 0
+//        ));
 
         $jobId2 = $this->insertJob(JOB_NAME_NOTIFY_LIVE_START, $ts2, array(
             KEY_LIVE_ID => $live->liveId,
@@ -118,7 +118,7 @@ class JobDao extends BaseDao
             KEY_TYPE => 2
         ));
 
-        if (!$jobId1 || !$jobId2 || !$jobId3) {
+        if (!$jobId2 || !$jobId3) {
             return false;
         }
         return true;
