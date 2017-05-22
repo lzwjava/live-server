@@ -151,35 +151,15 @@ class JSSDK
                 array(
                     'type' => 'view',
                     'name' => '最新直播',
-                    'url' => 'http://m.quzhiboapp.com/?liveId=0'
+                    'url' => 'http://m.quzhiboapp.com/#lives'
                 ),
                 array(
+                    'type' => 'view',
                     'name' => '我的',
-                    'sub_button' => array(
-                        array(
-                            'type' => 'view',
-                            'name' => '个人中心',
-                            'url' => 'http://m.quzhiboapp.com/#profile'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '参与的直播',
-                            'url' => 'http://m.quzhiboapp.com/#mylist'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '我的账户',
-                            'url' => 'http://m.quzhiboapp.com/#account'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '用户群',
-                            'url' => 'https://mp.weixin.qq.com/s/1StlxxIaJGXBmAd5L24IoQ'
-                        )
-                    )
+                    'url' => 'http://m.quzhiboapp.com/#profile',
                 ),
                 array(
-                    'name' => '关于我们',
+                    'name' => '关于',
                     'sub_button' => array(
                         array(
                             'type' => 'view',
