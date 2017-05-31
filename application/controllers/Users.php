@@ -367,7 +367,7 @@ class Users extends BaseController
             return;
         }
         $user = $this->userDao->findUserById($userId);
-        $lives = $this->liveDao->getAttendedLivesOfUser($user, null);
+        $lives = $this->liveDao->getAttendedLivesOfUser($user->userId, null);
         if (count($lives) <= 0) {
             $this->failure(ERROR_NOT_ATTEND_LIVE);
             return;
