@@ -29,7 +29,7 @@ class WxPay
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag('');
-        $input->SetNotify_url("http://api.quzhiboapp.com/wechat/wxpayNotify");
+        $input->SetNotify_url("https://api.quzhiboapp.com/wechat/wxpayNotify");
         $input->SetTrade_type($tradeType);
         $input->SetAppid($appId);
         if ($tradeType == "JSAPI") {
@@ -40,7 +40,8 @@ class WxPay
                 $jsApiParameters = $tools->GetJsApiParameters($order);
                 return array(null, $jsApiParameters, $order['prepay_id']);
             } else {
-                return array($order['err_code_des'], null, null);
+                $reason = $order['return_msg'];
+                return array($reason, null, null);
             }
         } else {
             $input->SetProduct_id($orderNo);
@@ -49,7 +50,8 @@ class WxPay
                 $data = array("code_url" => $order["code_url"]);
                 return array(null, $data, null);
             } else {
-                return array($order['err_code_des'], null, null);
+                $reason = $order['return_msg'];
+                return array($reason, null, null);
             }
         }
     }

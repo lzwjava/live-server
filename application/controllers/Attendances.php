@@ -91,7 +91,7 @@ class Attendances extends BaseController
 
             // max 24 chars
             $subject = '参加直播';
-            $body = $user->username . ' 参加直播 ' . $live->subject;
+            $body = '用户' . $user->userId . ' 参加直播 ' . $live->liveId;
             $metaData = array(KEY_TYPE => CHARGE_TYPE_ATTEND,
                 KEY_LIVE_ID => $liveId, KEY_USER_ID => $user->userId);
             if ($fromUserId && $fromUserId > 0) {
