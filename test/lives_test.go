@@ -434,5 +434,6 @@ func TestLives_notifyNewLive(t *testing.T) {
 
 func TestLives_card(t *testing.T) {
 	c, _ := NewClientAndUser()
- 	c.getData("lives/1/card", url.Values{})
+ 	res := c.getData("lives/1/card", url.Values{})
+	assert.NotNil(t, res.Interface())
 }

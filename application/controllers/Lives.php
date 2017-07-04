@@ -635,7 +635,7 @@ class Lives extends BaseController
         );
     }
 
-    function invatationCard_get($liveId)
+    function invitationCard_get($liveId)
     {
         if (!function_exists('imagecreate')){
             echo("不支持DG");
@@ -650,7 +650,7 @@ class Lives extends BaseController
             return;
         }
         $qrCodeImage = $this->makeQrcode('http://m.quzhiboapp.com/?liveId='.$live->liveId);
-        $cardName = $this->makeInvationCard($qrCodeImage,
+        $cardName = $this->makeInvitationCard($qrCodeImage,
                                            $user->avatarUrl,
                                            $user->username,
                                            $live->subject,
@@ -661,7 +661,7 @@ class Lives extends BaseController
         $this->succeed($cardUrl);
     }
 
-    function makeInvationCard($qrCodeImage,$avatarUrl=NULL,$username=NULL,$subject=NULL,$owner=NULL,$time=NULL)
+    private function makeInvitationCard($qrCodeImage,$avatarUrl,$username,$subject,$owner,$time)
     {
         $im = imagecreatetruecolor(536, 950);
         //card output path
@@ -746,7 +746,7 @@ class Lives extends BaseController
         return $outputName;
     }
 
-    function makeQrcode($text)
+    private function makeQrcode($text)
     {
         $qrcode = new QrCode();
         $qrcode
@@ -763,13 +763,13 @@ class Lives extends BaseController
         return $qrcode->writeString();
     }
 
-    function charWidth($fontsize, $ttfpath, $char){
+   private function charWidth($fontsize, $ttfpath, $char){
       $box = imagettfbbox($fontsize, 0, $ttfpath, $char);
       $width = abs(max($box[2], $box[4]) - min($box[0], $box[6]));
       return $width;
     }
 
-    function autowrap($fontsize, $fontface, $string, $width) {
+   private function autowrap($fontsize, $fontface, $string, $width) {
       $content = "";
       // 将字符串拆分成一个个单字 保存到数组 letter 中
       for ($i = 0;$i < mb_strlen($string); $i++) {
