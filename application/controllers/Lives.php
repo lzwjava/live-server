@@ -1,5 +1,5 @@
 <?php
-
+use Endroid\QrCode\QrCode;
 /**
  * Created by PhpStorm.
  * User: lzw
@@ -635,4 +635,155 @@ class Lives extends BaseController
         );
     }
 
+    function invatationCard_get($liveId)
+    {
+        if (!function_exists('imagecreate')){
+            echo("不支持DG");
+            return;
+        }
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        $live = $this->liveDao->getLive($liveId);
+        if ($this->checkIfObjectNotExists($live)) {
+            return;
+        }
+        $qrCodeImage = $this->makeQrcode('http://m.quzhiboapp.com/?liveId='.$live->liveId);
+        $cardName = $this->makeInvationCard($qrCodeImage,
+                                           $user->avatarUrl,
+                                           $user->username,
+                                           $live->subject,
+                                           $live->owner->username,
+                                           $live->planTs);
+        $cardUrl = get_instance()->config->slash_item('base_url').'tmp/'.$cardName;
+        //if file_exists($cardUrl)
+        $this->succeed($cardUrl);
+    }
+
+    function makeInvationCard($qrCodeImage,$avatarUrl=NULL,$username=NULL,$subject=NULL,$owner=NULL,$time=NULL)
+    {
+        $im = imagecreatetruecolor(536, 950);
+        //card output path
+        $outputName = "card_".rand().".gif";
+        $outputPath = "./tmp/".$outputName;
+
+        //Resource
+        $fontFile = "./resources/fonts/微软vista正黑体.ttf";
+        $backgroundUrl = "./resources/images/bg.jpeg";
+
+        //color
+        $black = imagecolorallocate($im, 10, 10, 10);
+        $blue = imagecolorallocate($im, 0, 0, 252);
+        $red = imagecolorallocate($im, 222, 0, 2);
+
+        //bgImage
+        $bgImg = imagecreatefromjpeg($backgroundUrl);
+        $width = ImageSX($bgImg);//640
+        $height = ImageSY($bgImg);//1136
+
+        //username
+        $usernameFontSize = 20;
+        $usernameWidth = $this->charWidth($usernameFontSize, $fontFile, $username);
+        $usernameX = ceil(($width - $usernameWidth) / 2);
+        $usernameY = 255;
+
+        //live subject
+        $subjectFontSize = 36;
+        $subjectWrap = $this->autowrap($subjectFontSize, $fontFile, $subject, 450);
+        $subject = $subjectWrap;
+        $subjectWidth = $this->charWidth($subjectFontSize, $fontFile, $subject);
+        $subjectX = ceil (($width - $subjectWidth) /2);
+        $subjectY = 480;
+
+        //owner name
+        $ownerFontSize = 20;
+        $ownerWidth = $this->charWidth($ownerFontSize, $fontFile, $owner);
+        $ownerX = ceil (($width - $ownerWidth) /2);
+        $ownerY = 400;
+
+        //time
+        $date = date_create($time);
+        $time = date_format($date,"Y/m/d H:i");
+        $timeFontSize = 25;
+        $timeWidth = $this->charWidth($timeFontSize, $fontFile, $time);
+        $timeX = ceil (($width - $timeWidth) /2);
+        $timeY = 700;
+
+        //avatar
+        $avatarImg = ImageCreateFromPng($avatarUrl);//获得头像图片
+        $avatarW = ImageSX($avatarImg);
+        $avatarH = ImageSY($avatarImg);
+        $avatarSize = 140;
+        $avatarX = $width/2 - $avatarSize/2;
+        $avatarTop = 80;
+
+        //qrcode
+        $qrcodeImg= imagecreatefromstring($qrCodeImage);
+        $qrCodeOriginalSize = ImageSX($qrcodeImg);
+        $qrCodeSize = 140;
+        $qrcodeX = $width/2 - $qrCodeSize/2;
+        $qrcodeY = 890;
+
+        //resampled copy avatar
+        imagecopyresampled($bgImg, $avatarImg, $avatarX,$avatarTop, 0, 0, $avatarSize, $avatarSize, $avatarW, $avatarH);
+        //resampled copy qrcode
+        imagecopyresampled($bgImg, $qrcodeImg, $qrcodeX,$qrcodeY, 0, 0, $qrCodeSize, $qrCodeSize, $qrCodeOriginalSize, $qrCodeOriginalSize);
+        //user name
+        imagettftext($bgImg, $usernameFontSize, 0, $usernameX, $usernameY, $black, $fontFile, $username);//用户名
+        //subject
+        imagettftext($bgImg, $subjectFontSize, 0, $subjectX, $subjectY, $black, $fontFile, $subject);
+        //owner
+        imagettftext($bgImg, $ownerFontSize, 0, $ownerX, $ownerY, $black, $fontFile, $owner);
+        //plan time
+        imagettftext($bgImg, $timeFontSize, 0, $timeX, $timeY, $black, $fontFile, $time);
+
+        //header('content-type:image/gif');  //设置gif Image
+        //imagegif($bgImg);
+
+        imagegif($bgImg,$outputPath);
+        imagedestroy($bgImg); //销毁
+        return $outputName;
+    }
+
+    function makeQrcode($text)
+    {
+        $qrcode = new QrCode();
+        $qrcode
+            ->setText($text)
+            ->setSize(300)
+            ->setMargin(10)
+            ->setErrorCorrectionLevel('high')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            ->setWriterByName('png');
+        //header('Content-Type: ' . $qrcode->getContentType());
+        //$qrcode->render();
+        //echo $qrcode->render();
+        return $qrcode->writeString();
+    }
+
+    function charWidth($fontsize, $ttfpath, $char){
+      $box = imagettfbbox($fontsize, 0, $ttfpath, $char);
+      $width = abs(max($box[2], $box[4]) - min($box[0], $box[6]));
+      return $width;
+    }
+
+    function autowrap($fontsize, $fontface, $string, $width) {
+      $content = "";
+      // 将字符串拆分成一个个单字 保存到数组 letter 中
+      for ($i = 0;$i < mb_strlen($string); $i++) {
+          $letter[] = mb_substr($string, $i, 1);
+      }
+      foreach ($letter as $l) {
+          $teststr = $content." ".$l;
+          $testbox = imagettfbbox($fontsize, 0, $fontface, $teststr);
+          // 判断拼接后的字符串是否超过预设的宽度
+          if (($testbox[2] > $width) && ($content !== "")) {
+              $content .= "\n";
+          }
+          $content .= $l;
+      }
+      return $content;
+    }
 }
