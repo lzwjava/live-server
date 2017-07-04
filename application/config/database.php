@@ -112,7 +112,7 @@ $db['testing'] = $dbBasicSetting;
 
 switch (ENVIRONMENT) {
     case'development':
-        $active_group = 'lzw';
+        $active_group = 'lzwjava';
         break;
     case 'testing':
         $active_group = 'testing';
