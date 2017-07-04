@@ -3,7 +3,7 @@
     "qiniu/php-sdk": "^7.0",
     "predis/predis": "1.1",
     "pingplusplus/pingpp-php": "dev-master",
-    "endroid/qrcode": "^1.7",
+    "endroid/qrcode": "2.2.2",
     "php-ffmpeg/php-ffmpeg": "~0.5",
     "phpoffice/phpexcel": "^1.8",
     "php-amqplib/php-amqplib": "2.6.*",

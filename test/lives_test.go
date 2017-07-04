@@ -431,3 +431,8 @@ func TestLives_notifyNewLive(t *testing.T) {
 	res := c2.getData("lives/"+liveId+"/notifyNewLive", url.Values{})
 	assert.NotNil(t, res.Interface())
 }
+
+func TestLives_card(t *testing.T) {
+	c, _ := NewClientAndUser()
+ 	c.getData("lives/1/card", url.Values{})
+}
