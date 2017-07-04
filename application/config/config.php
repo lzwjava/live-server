@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'localhost:8888/live-server/';
+$config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------
