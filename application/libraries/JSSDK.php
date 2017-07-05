@@ -151,7 +151,7 @@ class JSSDK
                 array(
                     'type' => 'view',
                     'name' => '最新直播',
-                    'url' => 'http://m.quzhiboapp.com/#lives'
+                    'url' => 'http://m.quzhiboapp.com/?liveId=0'
                 ),
                 array(
                     'type' => 'view',
