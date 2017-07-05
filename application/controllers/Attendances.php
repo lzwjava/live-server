@@ -104,6 +104,7 @@ class Attendances extends BaseController
                 $this->failure(ERROR_CHARGE_CREATE, $error);
                 return;
             }
+//            logInfo("ch: " . json_encode($ch));
             $this->succeed($ch);
         } else {
             $id = $this->attendanceDao->addAttendanceAndIncreaseCount($user->userId,
