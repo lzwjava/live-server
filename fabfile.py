@@ -14,7 +14,7 @@ def _set_user_dir():
 
 def _prepare_local_website(install='true'):
 	local('mkdir -p %s' % tmp_dir)
-	local('cp -rv application vendor system index.php %s' % tmp_dir)
+	local('cp -rv application vendor system resources tmp index.php %s' % tmp_dir)
 
 def prepare_remote_dirs():
 	_set_user_dir()
