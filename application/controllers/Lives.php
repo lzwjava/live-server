@@ -649,7 +649,8 @@ class Lives extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        $qrCodeImage = $this->makeQrcode('http://m.quzhiboapp.com/?liveId='.$live->liveId);
+        $qrCodeImage = $this->makeQrcode('http://m.quzhiboapp.com/?liveId='.$live->liveId.
+                                         '&fromUserId='.$user->userId);
         $cardName = $this->makeInvitationCard($qrCodeImage,
                                            $user->avatarUrl,
                                            $user->username,
@@ -657,8 +658,13 @@ class Lives extends BaseController
                                            $live->owner->username,
                                            $live->planTs);
         $cardUrl = get_instance()->config->slash_item('base_url').'tmp/'.$cardName;
-        //if file_exists($cardUrl)
-        $this->succeed($cardUrl);
+        if (file_exists("./tmp/".$cardName)){
+            $this->succeed(stripslashes($cardUrl));
+        }
+        else{
+            $this->failure("cant not make the invitationCard"."./tmp/".$cardName);
+        }
+
     }
 
     private function makeInvitationCard($qrCodeImage,$avatarUrl,$username,$subject,$owner,$time)
@@ -711,12 +717,12 @@ class Lives extends BaseController
         $timeY = 700;
 
         //avatar
-        $avatarImg = ImageCreateFromPng($avatarUrl);//获得头像图片
+        $avatarImg = $this->openAllTypeImage($avatarUrl);//获得头像图片
         $avatarW = ImageSX($avatarImg);
         $avatarH = ImageSY($avatarImg);
-        $avatarSize = 140;
+        $avatarSize = 120;
         $avatarX = $width/2 - $avatarSize/2;
-        $avatarTop = 80;
+        $avatarTop = 95;
 
         //qrcode
         $qrcodeImg= imagecreatefromstring($qrCodeImage);
@@ -744,6 +750,28 @@ class Lives extends BaseController
         imagegif($bgImg,$outputPath);
         imagedestroy($bgImg); //销毁
         return $outputName;
+    }
+
+    private function openAllTypeImage($image)
+    {
+        $ename = getimagesize($image);
+        $ename = explode('/',$ename['mime']);
+        $ext = $ename[1];
+        switch($ext){
+          case "png":
+            $image = imagecreatefrompng($image);
+            break;
+         case "jpeg":
+            $image = imagecreatefromjpeg($image);
+            break;
+         case "jpg":
+            $image = imagecreatefromjpeg($image);
+            break;
+         case "gif":
+            $image = imagecreatefromgif($image);
+            break;
+        }
+        return $image;
     }
 
     private function makeQrcode($text)
