@@ -183,12 +183,21 @@ class Lives extends BaseController
         }
     }
 
-    function list_get()
+    function listOrderByPlanTs_get()
     {
         $skip = $this->skip();
         $limit = $this->limit();
         $user = $this->getSessionUser();
-        $lives = $this->liveDao->getHomeLives($skip, $limit, $user);
+        $lives = $this->liveDao->getLivesOrderBy_planTs($skip, $limit, $user);
+        $this->succeed($lives);
+    }
+
+    function listOrderByAttendance_get()
+    {
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $user = $this->getSessionUser();
+        $lives = $this->liveDao->getLivesOrderBy_attendanceCount($skip, $limit, $user);
         $this->succeed($lives);
     }
 

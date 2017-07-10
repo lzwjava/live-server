@@ -71,7 +71,8 @@ $route['users/fixSystemId']['GET'] = 'users/fixSystemId';
 $route['users/usersByUsername']['GET'] = 'users/usersByUsername';
 
 // lives
-$route['lives/on']['GET'] = 'lives/list';
+$route['lives/time']['GET'] = 'lives/listOrderByPlanTs';
+$route['lives/attendance']['GET'] = 'lives/listOrderByAttendance';
 $route['lives/recommend']['GET'] = 'lives/recommend';
 $route['lives/(\d+)']['GET'] = 'lives/one/$1';
 $route['lives']['POST'] = 'lives/create';
