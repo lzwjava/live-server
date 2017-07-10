@@ -22,17 +22,20 @@ class Qrcodes extends BaseController
 
     private function renderQrcode($text)
     {
-        $qrcode = new QrCode();
-        $qrcode
+        $qrCode = new QrCode();
+        $qrCode
             ->setText($text)
             ->setSize(300)
-            ->setPadding(10)
-            ->setErrorCorrection('high')
+            ->setMargin(10)
+            ->setErrorCorrectionLevel('high')
             ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
             ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-            ->setImageType(QrCode::IMAGE_TYPE_PNG);
-        header('Content-Type: ' . $qrcode->getContentType());
-        $qrcode->render();
+            ->setWriterByName('png');
+        header('Content-Type: ' . $qrCode->getContentType());
+        $this->output->set_status_header(200)
+            ->set_content_type($qrCode->getContentType(), 'utf-8')
+            ->set_output($qrCode->writeString());
+      
     }
 
     function qrcode_get()
