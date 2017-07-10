@@ -671,7 +671,7 @@ class Lives extends BaseController
     {
         $im = imagecreatetruecolor(536, 950);
         //card output path
-        $outputName = "card_".rand().".gif";
+        $outputName = "card_".rand().".png";
         $outputPath = "./tmp/".$outputName;
 
         //Resource
@@ -747,7 +747,7 @@ class Lives extends BaseController
         //header('content-type:image/gif');  //设置gif Image
         //imagegif($bgImg);
 
-        imagegif($bgImg,$outputPath);
+        imagepng($bgImg,$outputPath);
         imagedestroy($bgImg); //销毁
         return $outputName;
     }
