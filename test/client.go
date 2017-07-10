@@ -95,6 +95,7 @@ func baseUrl(path string) string {
 	var urlStr string
 	urlStr = "http://localhost:3005/" + path
 	// urlStr = "http://127.0.0.1:3005/" + path
+	// urlStr = "http://localhost:8888/live-server/index.php/" + path
 	return urlStr
 }
 
