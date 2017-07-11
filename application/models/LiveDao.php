@@ -119,7 +119,7 @@ class LiveDao extends BaseDao
 
     private function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false)
     {
-        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs);
+        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs , 'attendanceCount');
         foreach ($lvs as $lv) {
             unset($lv->detail);
             unset($lv->speakerIntro);
@@ -127,7 +127,7 @@ class LiveDao extends BaseDao
         return $lvs;
     }
 
-    private function getLives($liveIds, $user, $sortByPlanTs = false)
+    private function getLives($liveIds, $user, $sortByPlanTs = false ,$extraSortField= null)
     {
         $userId = -1;
         if ($user) {
@@ -141,6 +141,9 @@ class LiveDao extends BaseDao
             $sortField = "l.planTs";
         } else {
             $sortField = "l.created";
+        }
+        if(!is_null($sortField)){
+            $sortField = $extraSortField;
         }
         $fields = $this->livePublicFields('l');
         $topicFields = $this->topicDao->topicPublicFields('t', true);
