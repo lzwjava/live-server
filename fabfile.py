@@ -5,6 +5,7 @@ from fabric.contrib.project import rsync_project
 from fabric.contrib.files import exists, sed
 
 server_dir = '/home/project/live-server'
+web_tmp_dir = '/home/project/live-server/tmp'
 tmp_dir = '/tmp/live-server' + str(os.getpid()) + '/'
 
 def _set_user_dir():
@@ -21,6 +22,7 @@ def prepare_remote_dirs():
 	if not exists(server_dir):
 		sudo('mkdir -p %s' % server_dir)
 		sudo('chmod -R 755 %s' % server_dir)
+		sudo('chmod -R 777 %s' % web_tmp_dir)
 		sudo('chown %s %s' % ('root', server_dir))
 
 def _clean_local_dir():
