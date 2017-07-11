@@ -14,6 +14,8 @@ class WeChatPlatform
     var $jsSdk = null;
     /** @var UserDao */
     var $userDao = null;
+    /** @var LiveDao */
+    var $liveDao = null;
 
     function __construct()
     {
@@ -24,6 +26,8 @@ class WeChatPlatform
         $this->jsSdk = new JSSDK(WECHAT_APP_ID, WECHAT_APP_SECRET);
         $ci->load->model(UserDao::class);
         $this->userDao = new UserDao();
+        $ci->load->model(LiveDao::class);
+        $this->liveDao = new LiveDao();
         $ci->load->helper('date');
     }
 
@@ -91,11 +95,11 @@ class WeChatPlatform
     function searchLivesByWechat($userId, $keyword)
     {    // 公众号输入关键词，搜索直播
         $user = $this->userDao->findUserById($userId);
-        $resultlives = $this->LiveDao->getLivesByKeyword(0, 8, -1, $keyword);
+        $resultlives = $this->liveDao->getLivesByKeyword(0, 8, -1, $keyword);
         if (empty($resultlives)){
-            $resultlives = $this->LiveDao->getLivesOrderBy_attendanceCount(0, 8, -1);
+            $resultlives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, -1);
         }
-        
+
         $liveDatas = array();
         foreach ($resultlives as $key => $value) {
           array_push($liveDatas,array(
