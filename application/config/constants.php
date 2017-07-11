@@ -401,6 +401,7 @@ define('KEY_DETAIL', 'detail');
 define('KEY_NEED_PAY', 'needPay');
 define('KEY_NOTICE', 'notice');
 define('KEY_SHARE_ICON', 'shareIcon');
+define('KEY_LIVE_KEYWORD', 'keyword');
 
 define('SHARE_ICON_AVATAR', 0);
 define('SHARE_ICON_COVER', 1);

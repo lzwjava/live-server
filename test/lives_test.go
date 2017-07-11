@@ -114,6 +114,11 @@ func TestLives_lives_by_attendance(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
+func TestLives_lives_by_keyword(t *testing.T) {
+	c := NewClient()
+	res := c.get("lives/keyword", url.Values{"keyword":{"C++"}})
+	assert.NotNil(t, res)
+}
 
 func TestLives_alive(t *testing.T) {
 	c, _ := NewClientAndUser()

@@ -108,6 +108,16 @@ class LiveDao extends BaseDao
         return $this->getLivesWithoutDetail($ids, $user, true);
     }
 
+    function getLivesByKeyword($skip, $limit, $user, $keyword)
+    {
+      $sql = "SELECT liveId FROM lives
+              WHERE status>=? and status != ? AND subject LIKE'%$keyword%'
+              limit $limit offset $skip";
+      $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+      $ids = $this->extractLiveIds($lives);
+      return $this->getLivesWithoutDetail($ids, $user, true);
+    }
+
     private function extractLiveIds($lives)
     {
         $ids = array();

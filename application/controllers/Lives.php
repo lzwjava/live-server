@@ -201,6 +201,16 @@ class Lives extends BaseController
         $this->succeed($lives);
     }
 
+    function listByKeyword_get()
+    {
+        $keyword=$this->get(KEY_LIVE_KEYWORD);
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $user = $this->getSessionUser();
+        $lives = $this->liveDao->getLivesByKeyword($skip, $limit, $user,$keyword);
+        $this->succeed($lives);
+    }
+
     function recommend_get()
     {
         $skip = $this->skip();
