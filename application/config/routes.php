@@ -73,6 +73,7 @@ $route['users/usersByUsername']['GET'] = 'users/usersByUsername';
 // lives
 $route['lives/time']['GET'] = 'lives/listOrderByPlanTs';
 $route['lives/attendance']['GET'] = 'lives/listOrderByAttendance';
+$route['lives/keyword']['GET'] = 'lives/listByKeyword';
 $route['lives/recommend']['GET'] = 'lives/recommend';
 $route['lives/(\d+)']['GET'] = 'lives/one/$1';
 $route['lives']['POST'] = 'lives/create';
