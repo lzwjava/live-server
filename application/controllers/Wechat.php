@@ -18,7 +18,7 @@ class Wechat extends BaseController
     public $notify;
     public $liveDao;
     public $packetDao;
-
+    public $weChatPlatform;
     /**@var WxDao */
     public $wxDao;
 
@@ -31,6 +31,8 @@ class Wechat extends BaseController
         parent::__construct();
         $this->load->library(JSSDK::class);
         $this->jsSdk = new JSSDK(WECHAT_APP_ID, WECHAT_APP_SECRET);
+        $this->load->library(WeChatPlatform::class);
+        $this->weChatPlatform = new WeChatPlatform();
         $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
         $this->load->model(UserDao::class);
@@ -386,9 +388,7 @@ class Wechat extends BaseController
                     $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                     $this->replyToWeChat($textReply);
                 } else {
-                    $contentStr = '如果有任何问题请联系创始人微信 lzwjava2048 。';
-                    $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
-                    $this->replyToWeChat($textReply);
+                    $this->weChatPlatform->searchLivesByWechat($userId, $keyword);
                 }
             } else if ($msgType == MSG_TYPE_EVENT) {
                 $event = $postObj[KEY_EVENT];
