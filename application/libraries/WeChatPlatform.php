@@ -91,14 +91,16 @@ class WeChatPlatform
     function searchLivesByWechat($userId, $keyword)
     {    // 公众号输入关键词，搜索直播
         $user = $this->userDao->findUserById($userId);
-        $resultlives = $this->LiveDao->getLivesByKeyword($skip=0, $limit=8, $user=-1, $keyword);
-
-        $word = sprintf("为您搜索到相关直播[%s]", $keyword);
+        $resultlives = $this->LiveDao->getLivesByKeyword(0, 8, -1, $keyword);
+        if (empty($resultlives)){
+            $resultlives = $this->LiveDao->getLivesOrderBy_attendanceCount(0, 8, -1);
+        }
+        
         $liveDatas = array();
-
         foreach ($resultlives as $key => $value) {
           array_push($liveDatas,array(
             "title" => $value['subject'],
+            "description" => '直播描述',
             "url" => 'http://m.quzhiboapp.com/?liveId=' . $value['liveId'],
             "picurl" => $value['coverUrl']
           ));

@@ -369,10 +369,10 @@ class Wechat extends BaseController
             $toUsername = $postObj[KEY_TO_USER_NAME];
             $createTime = $postObj[KEY_CREATE_TIME];
             $msgType = $postObj[KEY_MSG_TYPE];
+            $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
             if ($msgType == MSG_TYPE_TEXT) {
                 $keyword = trim($postObj[KEY_CONTENT]);
                 if (strtolower($keyword) == 'td0000') {
-                    $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
                         $this->userDao->updateLiveSubscribe($userId, 0);
                     }
@@ -380,7 +380,6 @@ class Wechat extends BaseController
                     $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                     $this->replyToWeChat($textReply);
                 } else if (strtolower($keyword) == 'td0001') {
-                    $userId = $this->snsUserDao->getUserIdByOpenId($fromUsername);
                     if ($userId) {
                         $this->userDao->updateIncomeSubscribe($userId, 0);
                     }
