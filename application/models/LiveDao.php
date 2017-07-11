@@ -93,7 +93,7 @@ class LiveDao extends BaseDao
                 limit $limit offset $skip";
         $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
         $ids = $this->extractLiveIds($lives);
-        return $this->getLivesWithoutDetail($ids, $user, true);
+        return $this->getLivesWithoutDetail($ids, $user, true, 'attendanceCount');
     }
 
     function getRecommendLives($skip, $limit, $user, $skipLiveId)
@@ -117,9 +117,9 @@ class LiveDao extends BaseDao
         return $ids;
     }
 
-    private function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false)
+    private function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false, $extraSortField = null)
     {
-        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs , 'attendanceCount');
+        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs , $extraSortField);
         foreach ($lvs as $lv) {
             unset($lv->detail);
             unset($lv->speakerIntro);
@@ -127,7 +127,7 @@ class LiveDao extends BaseDao
         return $lvs;
     }
 
-    private function getLives($liveIds, $user, $sortByPlanTs = false ,$extraSortField= null)
+    private function getLives($liveIds, $user, $sortByPlanTs = false ,$extraSortField = '')
     {
         $userId = -1;
         if ($user) {
@@ -142,7 +142,7 @@ class LiveDao extends BaseDao
         } else {
             $sortField = "l.created";
         }
-        if(!is_null($sortField)){
+        if(!empty($extraSortField)){
             $sortField = $extraSortField;
         }
         $fields = $this->livePublicFields('l');
