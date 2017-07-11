@@ -482,4 +482,62 @@ class WeChatPlatform
         return true;
     }
 
+    /**
+     * 用户报名成功 通过微信模板消息提醒用户
+     * @param int  $userId  用户ID
+     * @param object  $live    直播ID
+     * @return bool  是否推送成功
+     */
+    public function notifyUserAttendanceSuccessByWeChat($userId, $live)
+    {
+        $user = $this->userDao->findUserById($userId);
+        $hourStr = null;
+        $word = '，您参与的直播已经报名成功';
+
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+
+        $tmplData = array(
+            'first' => array(
+                'value' => $user->username . $word,
+                'color' => '#D00019',
+            ),
+            'keyword1' => array(
+                'value' => $user->username,
+                'color' => '#173177',
+            ),
+            'keyword2' => array(
+                'value' => $live->subject,
+                'color' => '#173177',
+            ),
+            'keyword3' => array(
+                'value' => $live->planTs,
+                'color' => '#173177',
+            ),
+            'keyword4' => array(
+                'value' => $live->liveId,
+                'color' => '#173177',
+            ),
+            'remark' => array(
+                'value' => '点击进入直播，不见不散。',
+                'color' => '#000',
+            )
+        );
+
+        $customMsgData = array(
+            'msgtype' => 'news',
+            'news' => array(
+                'articles' => array(
+                    array(
+                        'title' => $user->username . $word,
+                        'description' => "您已经成功报名直播:『{$live->subject}』\n\n开播时间: {$live->planTs} \n\n点击进入直播",
+                        'url' => $url,
+                        'picurl' => $live->coverUrl
+                    ),
+                )
+            )
+        );
+
+        return $this->notifyByWeChat($user, 'o6Mtcjn4w2aQ7DqwyQdFcwzC57Sr8-O1sK-5s_kuG9Q', $url, $tmplData);
+
+    }
 }
