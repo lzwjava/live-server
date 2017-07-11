@@ -88,6 +88,31 @@ class WeChatPlatform
         }
     }
 
+    function searchLivesByWechat($userId, $keyword)
+    {    // 公众号输入关键词，搜索直播
+        $user = $this->userDao->findUserById($userId);
+        $resultlives = $this->LiveDao->getLivesByKeyword($skip=0, $limit=8, $user=-1, $keyword);
+
+        $word = sprintf("为您搜索到相关直播[%s]", $keyword);
+        $liveDatas = array();
+
+        foreach ($resultlives as $key => $value) {
+          array_push($liveDatas,array(
+            "title" => $value['subject'],
+            "url" => 'http://m.quzhiboapp.com/?liveId=' . $value['liveId'],
+            "picurl" => $value['coverUrl']
+          ));
+        }
+
+        $customMsgData = array(
+            'msgtype' => 'news',
+            'news' => array('articles' => $liveDatas)
+        );
+
+        if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
+            return true;
+        }
+    }
 
     function notifyNewLive($userId, $live)
     {
