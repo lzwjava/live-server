@@ -97,7 +97,7 @@ class WeChatPlatform
         $user = $this->userDao->findUserById($userId);
         $resultLives = $this->liveDao->getLivesByKeyword(0, 8, null, $keyword);
         logInfo("lsx0:resultLives " . json_encode($resultLives));
-        if (empty($resultlives)){
+        if (empty($resultLives)){
             $resultLives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, null);
             logInfo("lsx0:resultLives getLives_attendanceCount " . json_encode($resultLives));
         }
