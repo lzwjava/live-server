@@ -95,34 +95,34 @@ class WeChatPlatform
     function searchLivesByWechat($userId, $keyword)
     {    // 公众号输入关键词，搜索直播
         $user = $this->userDao->findUserById($userId);
-        // $resultlives = $this->liveDao->getLivesByKeyword(0, 8, -1, $keyword);
-        // if (empty($resultlives)){
-        //     $resultlives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, -1);
-        // }
-        //
-        // $liveDatas = array();
-        // foreach ($resultlives as $key => $value) {
-        //   array_push($liveDatas,array(
-        //     "title" => $value['subject'],
-        //     "description" => '直播描述',
-        //     "url" => 'http://m.quzhiboapp.com/?liveId=' . $value['liveId'],
-        //     "picurl" => $value['coverUrl']
-        //   ));
-        // }
+        $resultlives = $this->liveDao->getLivesByKeyword(0, 8, null, $keyword);
+        if (empty($resultlives)){
+            $resultlives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, null);
+        }
 
-        $customMsgData = array(
-            'msgtype' => 'news',
-            'news' => array(
-                'articles' => array(
-                    array(
-                        'title' => "测试测试",
-                        'description' => "欢迎您反馈",
-                        'url' => "",
-                        'picurl' => ""
-                    ),
-                )
-            )
-        );
+        $liveDatas = array();
+        foreach ($resultlives as $key => $value) {
+          array_push($liveDatas,array(
+            "title" => $value->subject,
+            "description" => '直播描述',
+            "url" => 'http://m.quzhiboapp.com/?liveId=' . $value->liveId,
+            "picurl" => $value->coverUrl
+          ));
+        }
+
+        // $customMsgData = array(
+        //     'msgtype' => 'news',
+        //     'news' => array(
+        //         'articles' => array(
+        //             array(
+        //                 'title' => "测试测试",
+        //                 'description' => "欢迎您反馈",
+        //                 'url' => "",
+        //                 'picurl' => ""
+        //             ),
+        //         )
+        //     )
+        // );
 
         if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
             return true;
