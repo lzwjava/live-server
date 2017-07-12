@@ -804,9 +804,6 @@ class Lives extends BaseController
             ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
             ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
             ->setWriterByName('png');
-        //header('Content-Type: ' . $qrcode->getContentType());
-        //$qrcode->render();
-        //echo $qrcode->render();
         return $qrcode->writeString();
     }
 
@@ -818,6 +815,7 @@ class Lives extends BaseController
 
    private function autoWrap($fontsize, $fontface, $string, $width) {
       $content = "";
+      $letter = [];
       // 将字符串拆分成一个个单字 保存到数组 letter 中
       for ($i = 0;$i < mb_strlen($string); $i++) {
           $letter[] = mb_substr($string, $i, 1);
