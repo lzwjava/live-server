@@ -387,6 +387,7 @@ class Wechat extends BaseController
                     $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                     $this->replyToWeChat($textReply);
                 } else {
+                    logInfo("lsx: 接受到微信公众号信息:".$keyword.'from '.$userId)
                     $this->weChatPlatform->searchLivesByWechat($userId, $keyword);
                 }
             } else if ($msgType == MSG_TYPE_EVENT) {
