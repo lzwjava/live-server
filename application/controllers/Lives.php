@@ -715,7 +715,7 @@ class Lives extends BaseController
         //live subject
         $subject=$this->filterEmoji($subject);
         $subjectFontSize = 36;
-        $subjectWrap = $this->autowrap($subjectFontSize, $fontFile, $subject, 450);
+        $subjectWrap = $this->autoWrap($subjectFontSize, $fontFile, $subject, 450);
         $subject = $subjectWrap;
         $subjectWidth = $this->charWidth($subjectFontSize, $fontFile, $subject);
         $subjectX = ceil (($width - $subjectWidth) /2);
