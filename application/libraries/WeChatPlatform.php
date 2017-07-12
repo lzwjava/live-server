@@ -99,11 +99,10 @@ class WeChatPlatform
         logInfo("lsx0:resultLives " . json_encode($resultLives));
         if (empty($resultlives)){
             $resultLives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, null);
-            logInfo("lsx0:resultLives " . json_encode($resultLives));
+            logInfo("lsx0:resultLives getLives_attendanceCount " . json_encode($resultLives));
         }
 
         $liveDatas = array();
-        logInfo("lsx1:liveData " . json_encode($liveDatas));
 
         foreach ($resultlives as $key => $value) {
           array_push($liveDatas,array(
