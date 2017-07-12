@@ -114,9 +114,9 @@ func TestLives_lives_by_attendance(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
-func TestLives_lives_by_keyword(t *testing.T) {
+func TestLives_search_without_detail(t *testing.T) {
 	c := NewClient()
-	res := c.get("lives/keyword", url.Values{"keyword":{"C++"}})
+	res := c.get("lives/search", url.Values{"keyword":{"C++"}})
 	assert.NotNil(t, res)
 }
 
