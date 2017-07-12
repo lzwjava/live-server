@@ -104,7 +104,7 @@ class WeChatPlatform
 
         $liveDatas = array();
 
-        foreach ($resultlives as $key => $value) {
+        foreach ($resultLives as $key => $value) {
           array_push($liveDatas,array(
             "title" => $value->subject,
             "description" => '直播描述',
