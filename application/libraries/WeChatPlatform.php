@@ -96,11 +96,15 @@ class WeChatPlatform
     {    // 公众号输入关键词，搜索直播
         $user = $this->userDao->findUserById($userId);
         $resultLives = $this->liveDao->getLivesByKeyword(0, 8, null, $keyword);
+        logInfo("lsx0:resultLives " . json_encode($resultLives));
         if (empty($resultlives)){
             $resultLives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, null);
+            logInfo("lsx0:resultLives " . json_encode($resultLives));
         }
 
         $liveDatas = array();
+        logInfo("lsx1:liveData " . json_encode($liveDatas));
+
         foreach ($resultlives as $key => $value) {
           array_push($liveDatas,array(
             "title" => $value->subject,
@@ -110,11 +114,13 @@ class WeChatPlatform
           ));
         }
 
+        logInfo("lsx2:liveData" . json_encode($liveDatas));
         $customMsgData = array(
             'msgtype' => 'news',
             'news' => array('articles' => $liveDatas)
         );
 
+        logInfo("lsx3:liveData " . json_encode($customMsgData));
         if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
             return true;
         }
