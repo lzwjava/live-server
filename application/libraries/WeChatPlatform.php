@@ -110,19 +110,10 @@ class WeChatPlatform
           ));
         }
 
-        // $customMsgData = array(
-        //     'msgtype' => 'news',
-        //     'news' => array(
-        //         'articles' => array(
-        //             array(
-        //                 'title' => "测试测试",
-        //                 'description' => "欢迎您反馈",
-        //                 'url' => "",
-        //                 'picurl' => ""
-        //             ),
-        //         )
-        //     )
-        // );
+        $customMsgData = array(
+            'msgtype' => 'news',
+            'news' => array('articles' => $liveDatas)
+        );
 
         if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
             return true;
