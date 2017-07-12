@@ -656,7 +656,7 @@ class Lives extends BaseController
     function invitationCard_get($liveId)
     {
         if (!function_exists('imagecreate')){
-            echo("不支持DG");
+            phpInfo("php不支持DG");
             return;
         }
         $user = $this->checkAndGetSessionUser();
@@ -713,8 +713,9 @@ class Lives extends BaseController
         $usernameY = 255;
 
         //live subject
+        $subject=$this->filterEmoji($subject);
         $subjectFontSize = 36;
-        $subjectWrap = $this->autowrap($subjectFontSize, $fontFile, $subject, 450);
+        $subjectWrap = $this->autoWrap($subjectFontSize, $fontFile, $subject, 450);
         $subject = $subjectWrap;
         $subjectWidth = $this->charWidth($subjectFontSize, $fontFile, $subject);
         $subjectX = ceil (($width - $subjectWidth) /2);
@@ -803,9 +804,6 @@ class Lives extends BaseController
             ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
             ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
             ->setWriterByName('png');
-        //header('Content-Type: ' . $qrcode->getContentType());
-        //$qrcode->render();
-        //echo $qrcode->render();
         return $qrcode->writeString();
     }
 
@@ -815,8 +813,9 @@ class Lives extends BaseController
       return $width;
     }
 
-   private function autowrap($fontsize, $fontface, $string, $width) {
+   private function autoWrap($fontsize, $fontface, $string, $width) {
       $content = "";
+      $letter = [];
       // 将字符串拆分成一个个单字 保存到数组 letter 中
       for ($i = 0;$i < mb_strlen($string); $i++) {
           $letter[] = mb_substr($string, $i, 1);
@@ -832,4 +831,20 @@ class Lives extends BaseController
       }
       return $content;
     }
+
+   /**
+    * 剔除字符串中的 Emoji 字符
+    * @param string $str
+    * @return string
+    */
+   private function filterEmoji($str){
+       $str = preg_replace_callback(
+            '/./u',
+            function (array $match) {
+                return strlen($match[0]) >= 4 ? '' : $match[0];
+                //大于四个字节则替换
+            },
+            $str);
+       return $str;
+   }
 }
