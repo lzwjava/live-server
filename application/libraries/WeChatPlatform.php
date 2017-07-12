@@ -95,7 +95,7 @@ class WeChatPlatform
     function searchLivesByWechat($userId, $keyword)
     {    // 公众号输入关键词，搜索直播
         $user = $this->userDao->findUserById($userId);
-        $resultLives = $this->liveDao->getLivesByKeyword(0, 8, null, $keyword);
+        $resultLives = $this->liveDao->searchWithoutDetail(0, 8,  $keyword);
         logInfo("lsx0:resultLives " . json_encode($resultLives));
         if (empty($resultLives)){
             $resultLives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, null);
