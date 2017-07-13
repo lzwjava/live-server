@@ -47,4 +47,5 @@ Session.vim
 *~
 # auto-generated tag files
 tags
-.phpcomplete_extended/
+# apache file
+/.htaccess
