@@ -676,7 +676,7 @@ class Lives extends BaseController
                                            $live->owner->username,
                                            $live->planTs);
         $cardUrl = get_instance()->config->slash_item('base_url').'tmp/'.$cardName;
-        if (file_exists("./tmp/".$cardName)){
+        if (file_exists('./tmp/'.$cardName)){
             $this->succeed(stripslashes($cardUrl));
         }
         else{
@@ -702,7 +702,7 @@ class Lives extends BaseController
         $red = imagecolorallocate($im, 222, 0, 2);
 
         //bgImage
-        $bgImg = imagecreatefromjpg($backgroundUrl);
+        $bgImg = imagecreatefromjpeg($backgroundUrl);
         $width = ImageSX($bgImg);//750
         $height = ImageSY($bgImg);//1334
 
