@@ -227,9 +227,6 @@ class Lives extends BaseController
     {
         $user = $this->getSessionUser();
         $live = $this->liveDao->getLive($id, $user);
-        if(!$live){
-            $live = $this->liveDao->getLivesOrderBy_planTs(0, 1000, $user);
-        }
         $this->succeed($live);
     }
 
