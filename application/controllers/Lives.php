@@ -183,12 +183,30 @@ class Lives extends BaseController
         }
     }
 
-    function list_get()
+    function listOrderByPlanTs_get()
     {
         $skip = $this->skip();
         $limit = $this->limit();
         $user = $this->getSessionUser();
-        $lives = $this->liveDao->getHomeLives($skip, $limit, $user);
+        $lives = $this->liveDao->getLivesOrderBy_planTs($skip, $limit, $user);
+        $this->succeed($lives);
+    }
+
+    function listOrderByAttendance_get()
+    {
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $user = $this->getSessionUser();
+        $lives = $this->liveDao->getLivesOrderBy_attendanceCount($skip, $limit, $user);
+        $this->succeed($lives);
+    }
+
+    function searchWithoutDetail_get()
+    {
+        $keyword=$this->get(KEY_LIVE_KEYWORD);
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $lives = $this->liveDao->searchWithoutDetail($skip, $limit,$keyword);
         $this->succeed($lives);
     }
 
@@ -209,6 +227,9 @@ class Lives extends BaseController
     {
         $user = $this->getSessionUser();
         $live = $this->liveDao->getLive($id, $user);
+        if(!$live){
+            $live = $this->liveDao->getLivesOrderBy_planTs(0, 1000, $user);
+        }
         $this->succeed($live);
     }
 
@@ -638,7 +659,7 @@ class Lives extends BaseController
     function invitationCard_get($liveId)
     {
         if (!function_exists('imagecreate')){
-            echo("不支持DG");
+            phpInfo("php不支持DG");
             return;
         }
         $user = $this->checkAndGetSessionUser();
@@ -658,7 +679,7 @@ class Lives extends BaseController
                                            $live->owner->username,
                                            $live->planTs);
         $cardUrl = get_instance()->config->slash_item('base_url').'tmp/'.$cardName;
-        if (file_exists("./tmp/".$cardName)){
+        if (file_exists('./tmp/'.$cardName)){
             $this->succeed(stripslashes($cardUrl));
         }
         else{
@@ -669,14 +690,14 @@ class Lives extends BaseController
 
     private function makeInvitationCard($qrCodeImage,$avatarUrl,$username,$subject,$owner,$time)
     {
-        $im = imagecreatetruecolor(536, 950);
+        $im = imagecreatetruecolor(750, 1334);
         //card output path
         $outputName = "card_".rand().".png";
         $outputPath = "./tmp/".$outputName;
 
         //Resource
-        $fontFile = "./resources/fonts/微软vista正黑体.ttf";
-        $backgroundUrl = "./resources/images/bg.jpeg";
+        $fontFile = "./resources/fonts/PingFang Regular.ttf";
+        $backgroundUrl = "./resources/images/bg1.jpg";
 
         //color
         $black = imagecolorallocate($im, 10, 10, 10);
@@ -685,51 +706,52 @@ class Lives extends BaseController
 
         //bgImage
         $bgImg = imagecreatefromjpeg($backgroundUrl);
-        $width = ImageSX($bgImg);//640
-        $height = ImageSY($bgImg);//1136
+        $width = ImageSX($bgImg);//750
+        $height = ImageSY($bgImg);//1334
 
         //username
-        $usernameFontSize = 20;
+        $usernameFontSize = 26;
         $usernameWidth = $this->charWidth($usernameFontSize, $fontFile, $username);
         $usernameX = ceil(($width - $usernameWidth) / 2);
-        $usernameY = 255;
+        $usernameY = 380;
 
         //live subject
-        $subjectFontSize = 36;
-        $subjectWrap = $this->autowrap($subjectFontSize, $fontFile, $subject, 450);
+        $subject=$this->filterEmoji($subject);
+        $subjectFontSize = 32;
+        $subjectWrap = $this->autoWrap($subjectFontSize, $fontFile, $subject, 450);
         $subject = $subjectWrap;
         $subjectWidth = $this->charWidth($subjectFontSize, $fontFile, $subject);
         $subjectX = ceil (($width - $subjectWidth) /2);
-        $subjectY = 480;
+        $subjectY = 650;
 
         //owner name
-        $ownerFontSize = 20;
+        $ownerFontSize = 26;
         $ownerWidth = $this->charWidth($ownerFontSize, $fontFile, $owner);
         $ownerX = ceil (($width - $ownerWidth) /2);
-        $ownerY = 400;
+        $ownerY = 564;
 
         //time
         $date = date_create($time);
         $time = date_format($date,"Y/m/d H:i");
-        $timeFontSize = 25;
+        $timeFontSize = 28;
         $timeWidth = $this->charWidth($timeFontSize, $fontFile, $time);
         $timeX = ceil (($width - $timeWidth) /2);
-        $timeY = 700;
+        $timeY = 820;
 
         //avatar
         $avatarImg = $this->openAllTypeImage($avatarUrl);//获得头像图片
         $avatarW = ImageSX($avatarImg);
         $avatarH = ImageSY($avatarImg);
-        $avatarSize = 120;
+        $avatarSize = 140;
         $avatarX = $width/2 - $avatarSize/2;
-        $avatarTop = 95;
+        $avatarTop = 221;
 
         //qrcode
         $qrcodeImg= imagecreatefromstring($qrCodeImage);
         $qrCodeOriginalSize = ImageSX($qrcodeImg);
-        $qrCodeSize = 140;
+        $qrCodeSize = 200;
         $qrcodeX = $width/2 - $qrCodeSize/2;
-        $qrcodeY = 890;
+        $qrcodeY = 1064;
 
         //resampled copy avatar
         imagecopyresampled($bgImg, $avatarImg, $avatarX,$avatarTop, 0, 0, $avatarSize, $avatarSize, $avatarW, $avatarH);
@@ -785,9 +807,6 @@ class Lives extends BaseController
             ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
             ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
             ->setWriterByName('png');
-        //header('Content-Type: ' . $qrcode->getContentType());
-        //$qrcode->render();
-        //echo $qrcode->render();
         return $qrcode->writeString();
     }
 
@@ -797,8 +816,9 @@ class Lives extends BaseController
       return $width;
     }
 
-   private function autowrap($fontsize, $fontface, $string, $width) {
+   private function autoWrap($fontsize, $fontface, $string, $width) {
       $content = "";
+      $letter = [];
       // 将字符串拆分成一个个单字 保存到数组 letter 中
       for ($i = 0;$i < mb_strlen($string); $i++) {
           $letter[] = mb_substr($string, $i, 1);
@@ -814,4 +834,20 @@ class Lives extends BaseController
       }
       return $content;
     }
+
+   /**
+    * 剔除字符串中的 Emoji 字符
+    * @param string $str
+    * @return string
+    */
+   private function filterEmoji($str){
+       $str = preg_replace_callback(
+            '/./u',
+            function (array $match) {
+                return strlen($match[0]) >= 4 ? '' : $match[0];
+                //大于四个字节则替换
+            },
+            $str);
+       return $str;
+   }
 }

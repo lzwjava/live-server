@@ -102,9 +102,21 @@ func getLive(c *Client, liveId string) *simplejson.Json {
 	return live
 }
 
-func TestLives_livings(t *testing.T) {
+func TestLives_lives_by_time(t *testing.T) {
 	c := NewClient()
-	res := c.get("lives/on", url.Values{})
+	res := c.get("lives/time", url.Values{})
+	assert.NotNil(t, res)
+}
+
+func TestLives_lives_by_attendance(t *testing.T) {
+	c := NewClient()
+	res := c.get("lives/attendance", url.Values{})
+	assert.NotNil(t, res)
+}
+
+func TestLives_search_without_detail(t *testing.T) {
+	c := NewClient()
+	res := c.get("lives/search", url.Values{"keyword":{"C++"}})
 	assert.NotNil(t, res)
 }
 
