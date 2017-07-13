@@ -687,14 +687,14 @@ class Lives extends BaseController
 
     private function makeInvitationCard($qrCodeImage,$avatarUrl,$username,$subject,$owner,$time)
     {
-        $im = imagecreatetruecolor(536, 950);
+        $im = imagecreatetruecolor(750, 1334);
         //card output path
         $outputName = "card_".rand().".png";
         $outputPath = "./tmp/".$outputName;
 
         //Resource
-        $fontFile = "./resources/fonts/微软vista正黑体.ttf";
-        $backgroundUrl = "./resources/images/bg.jpeg";
+        $fontFile = "./resources/fonts/PingFang Regular.ttf";
+        $backgroundUrl = "./resources/images/bg1.jpg";
 
         //color
         $black = imagecolorallocate($im, 10, 10, 10);
@@ -702,53 +702,53 @@ class Lives extends BaseController
         $red = imagecolorallocate($im, 222, 0, 2);
 
         //bgImage
-        $bgImg = imagecreatefromjpeg($backgroundUrl);
-        $width = ImageSX($bgImg);//640
-        $height = ImageSY($bgImg);//1136
+        $bgImg = imagecreatefromjpg($backgroundUrl);
+        $width = ImageSX($bgImg);//750
+        $height = ImageSY($bgImg);//1334
 
         //username
-        $usernameFontSize = 20;
+        $usernameFontSize = 26;
         $usernameWidth = $this->charWidth($usernameFontSize, $fontFile, $username);
         $usernameX = ceil(($width - $usernameWidth) / 2);
-        $usernameY = 255;
+        $usernameY = 380;
 
         //live subject
         $subject=$this->filterEmoji($subject);
-        $subjectFontSize = 36;
+        $subjectFontSize = 32;
         $subjectWrap = $this->autoWrap($subjectFontSize, $fontFile, $subject, 450);
         $subject = $subjectWrap;
         $subjectWidth = $this->charWidth($subjectFontSize, $fontFile, $subject);
         $subjectX = ceil (($width - $subjectWidth) /2);
-        $subjectY = 480;
+        $subjectY = 650;
 
         //owner name
-        $ownerFontSize = 20;
+        $ownerFontSize = 26;
         $ownerWidth = $this->charWidth($ownerFontSize, $fontFile, $owner);
         $ownerX = ceil (($width - $ownerWidth) /2);
-        $ownerY = 400;
+        $ownerY = 564;
 
         //time
         $date = date_create($time);
         $time = date_format($date,"Y/m/d H:i");
-        $timeFontSize = 25;
+        $timeFontSize = 28;
         $timeWidth = $this->charWidth($timeFontSize, $fontFile, $time);
         $timeX = ceil (($width - $timeWidth) /2);
-        $timeY = 700;
+        $timeY = 820;
 
         //avatar
         $avatarImg = $this->openAllTypeImage($avatarUrl);//获得头像图片
         $avatarW = ImageSX($avatarImg);
         $avatarH = ImageSY($avatarImg);
-        $avatarSize = 120;
+        $avatarSize = 140;
         $avatarX = $width/2 - $avatarSize/2;
-        $avatarTop = 95;
+        $avatarTop = 221;
 
         //qrcode
         $qrcodeImg= imagecreatefromstring($qrCodeImage);
         $qrCodeOriginalSize = ImageSX($qrcodeImg);
-        $qrCodeSize = 140;
+        $qrCodeSize = 200;
         $qrcodeX = $width/2 - $qrCodeSize/2;
-        $qrcodeY = 890;
+        $qrcodeY = 1064;
 
         //resampled copy avatar
         imagecopyresampled($bgImg, $avatarImg, $avatarX,$avatarTop, 0, 0, $avatarSize, $avatarSize, $avatarW, $avatarH);
