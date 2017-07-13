@@ -707,14 +707,14 @@ class Lives extends BaseController
         $height = ImageSY($bgImg);//1334
 
         //username
-        $usernameFontSize = 26;
+        $usernameFontSize = 20;
         $usernameWidth = $this->charWidth($usernameFontSize, $fontFile, $username);
         $usernameX = ceil(($width - $usernameWidth) / 2);
-        $usernameY = 400;
+        $usernameY = 406;
 
         //live subject
         $subject=$this->filterEmoji($subject);
-        $subjectFontSize = 32;
+        $subjectFontSize = 22;
         $subjectWrap = $this->autoWrap($subjectFontSize, $fontFile, $subject, 450);
         $subject = $subjectWrap;
         $subjectWidth = $this->charWidth($subjectFontSize, $fontFile, $subject);
@@ -722,7 +722,7 @@ class Lives extends BaseController
         $subjectY = 680;
 
         //owner name
-        $ownerFontSize = 26;
+        $ownerFontSize = 20;
         $ownerWidth = $this->charWidth($ownerFontSize, $fontFile, $owner);
         $ownerX = ceil (($width - $ownerWidth) /2);
         $ownerY = 588;
@@ -730,10 +730,10 @@ class Lives extends BaseController
         //time
         $date = date_create($time);
         $time = date_format($date,"Y/m/d H:i");
-        $timeFontSize = 28;
+        $timeFontSize = 24;
         $timeWidth = $this->charWidth($timeFontSize, $fontFile, $time);
         $timeX = ceil (($width - $timeWidth) /2);
-        $timeY = 865;
+        $timeY = 880;
 
         //avatar
         $avatarImg = $this->openAllTypeImage($avatarUrl);//获得头像图片
