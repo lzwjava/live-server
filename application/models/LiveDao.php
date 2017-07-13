@@ -74,7 +74,7 @@ class LiveDao extends BaseDao
         return null;
     }
 
-    function getHomeLives($skip, $limit, $user)
+    function getLivesOrderBy_planTs($skip, $limit, $user)
     {
         $sql = "SELECT liveId FROM lives
                 WHERE status>=? and status != ?
@@ -83,6 +83,17 @@ class LiveDao extends BaseDao
         $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
         $ids = $this->extractLiveIds($lives);
         return $this->getLivesWithoutDetail($ids, $user, true);
+    }
+
+    function getLivesOrderBy_attendanceCount($skip, $limit, $user)
+    {
+        $sql = "SELECT liveId FROM lives
+                WHERE status>=? and status != ?
+                ORDER BY attendanceCount DESC
+                limit $limit offset $skip";
+        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+        $ids = $this->extractLiveIds($lives);
+        return $this->getLivesWithoutDetail($ids, $user, true, 'attendanceCount');
     }
 
     function getRecommendLives($skip, $limit, $user, $skipLiveId)
@@ -97,6 +108,21 @@ class LiveDao extends BaseDao
         return $this->getLivesWithoutDetail($ids, $user, true);
     }
 
+    function searchWithoutDetail($skip, $limit, $keyword)
+    {
+
+      $sql = "select l.liveId ,l.subject, u.username, l.coverUrl from lives as l
+              left join users as u on u . userId = l . ownerId
+              where  status>=? and status!=? and (l.subject like '%$keyword%' or u.username like '%$keyword%')
+              order by planTs desc
+              limit $limit offset $skip";
+
+      return $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+
+    }
+
+
+
     private function extractLiveIds($lives)
     {
         $ids = array();
@@ -106,9 +132,9 @@ class LiveDao extends BaseDao
         return $ids;
     }
 
-    private function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false)
+    private function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false, $extraSortField = null)
     {
-        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs);
+        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs , $extraSortField);
         foreach ($lvs as $lv) {
             unset($lv->detail);
             unset($lv->speakerIntro);
@@ -116,7 +142,7 @@ class LiveDao extends BaseDao
         return $lvs;
     }
 
-    private function getLives($liveIds, $user, $sortByPlanTs = false)
+    private function getLives($liveIds, $user, $sortByPlanTs = false ,$extraSortField = '')
     {
         $userId = -1;
         if ($user) {
@@ -130,6 +156,9 @@ class LiveDao extends BaseDao
             $sortField = "l.planTs";
         } else {
             $sortField = "l.created";
+        }
+        if(!empty($extraSortField)){
+            $sortField = $extraSortField;
         }
         $fields = $this->livePublicFields('l');
         $topicFields = $this->topicDao->topicPublicFields('t', true);

@@ -401,6 +401,7 @@ define('KEY_DETAIL', 'detail');
 define('KEY_NEED_PAY', 'needPay');
 define('KEY_NOTICE', 'notice');
 define('KEY_SHARE_ICON', 'shareIcon');
+define('KEY_LIVE_KEYWORD', 'keyword');
 
 define('SHARE_ICON_AVATAR', 0);
 define('SHARE_ICON_COVER', 1);
@@ -834,6 +835,8 @@ define('EVENT_SCAN', 'SCAN');
 
 define('WECHAT_WELCOME_WORD', <<<EOD
 欢迎关注趣直播，趣直播是知识直播平台，邀请了大咖来分享知识或经历。
+
+彩蛋: 在公众号聊天框 回复您感兴趣的直播主题或者大咖的名字  有惊喜哦! 快来试试吧!
 
 <a href="http://m.quzhiboapp.com/?liveId=0">最新直播</a>
 
