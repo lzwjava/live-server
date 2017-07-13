@@ -576,7 +576,6 @@ class WeChatPlatform
         if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
             return true;
         } else {
-            logInfo("不能发送客服信息,发送模板信息");
             return $this->notifyByWeChat($user, 'o6Mtcjn4w2aQ7DqwyQdFcwzC57Sr8-O1sK-5s_kuG9Q', $url, $tmplData);
         }
 
