@@ -108,9 +108,9 @@ class WeChatPlatform
             return false;
         }
 
-        $liveDatas = array();
-        foreach ($liveDatas as $value) {
-            array_push($liveDatas,array(
+        $liveArticlesArray = array();
+        foreach ($lives as $value) {
+            array_push($liveArticlesArray,array(
                 "title" => $value->subject,
                 "description" => '直播描述',
                 "url" => 'http://m.quzhiboapp.com/?liveId=' . $value->liveId,
@@ -118,10 +118,10 @@ class WeChatPlatform
             ));
         }
 
-        logInfo("lsx:liveData" . json_encode($liveDatas));
+        logInfo("lsx:liveData" . json_encode($liveArticlesArray));
         $customMsgData = array(
             'msgtype' => 'news',
-            'news' => array('articles' => $liveDatas)
+            'news' => array('articles' => $liveArticlesArray)
         );
 
         logInfo("lsx:customMsgData " . json_encode($customMsgData));
