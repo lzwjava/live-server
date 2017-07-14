@@ -92,34 +92,39 @@ class WeChatPlatform
         }
     }
 
-    function searchLivesByWechat($userId, $keyword)
-    {    // 公众号输入关键词，搜索直播
+    /**
+     * 在微信平台上 以多篇文章的形式 向用户发送直播信息
+     * @param $userId
+     * @param $resultLives
+     * @return bool
+     */
+    function sendLivesByWechat($userId, $lives)
+
+    {
         $user = $this->userDao->findUserById($userId);
-        $resultLives = $this->liveDao->searchWithoutDetail(0, 8,  $keyword);
-        logInfo("lsx0:resultLives " . json_encode($resultLives));
-        if (empty($resultLives)){
-            $resultLives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, null);
-            logInfo("lsx0:resultLives getLives_attendanceCount " . json_encode($resultLives));
+
+        if (empty($lives)){
+            logInfo("lsx:resultLives" . json_encode($lives));
+            return false;
         }
 
         $liveDatas = array();
-
-        foreach ($resultLives as $key => $value) {
-          array_push($liveDatas,array(
-            "title" => $value->subject,
-            "description" => '直播描述',
-            "url" => 'http://m.quzhiboapp.com/?liveId=' . $value->liveId,
-            "picurl" => $value->coverUrl
-          ));
+        foreach ($liveDatas as $value) {
+            array_push($liveDatas,array(
+                "title" => $value->subject,
+                "description" => '直播描述',
+                "url" => 'http://m.quzhiboapp.com/?liveId=' . $value->liveId,
+                "picurl" => $value->coverUrl
+            ));
         }
 
-        logInfo("lsx2:liveData" . json_encode($liveDatas));
+        logInfo("lsx:liveData" . json_encode($liveDatas));
         $customMsgData = array(
             'msgtype' => 'news',
             'news' => array('articles' => $liveDatas)
         );
 
-        logInfo("lsx3:liveData " . json_encode($customMsgData));
+        logInfo("lsx:customMsgData " . json_encode($customMsgData));
         if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
             return true;
         }
