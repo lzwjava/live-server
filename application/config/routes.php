@@ -75,6 +75,7 @@ $route['lives/on']['GET'] = 'lives/listOrderByPlanTs';
 $route['lives/time']['GET'] = 'lives/listOrderByPlanTs';
 $route['lives/attendance']['GET'] = 'lives/listOrderByAttendance';
 $route['lives/search']['GET'] = 'lives/searchWithoutDetail';
+$route['lives/count']['GET'] = 'lives/count';
 $route['lives/recommend']['GET'] = 'lives/recommend';
 $route['lives/(\d+)']['GET'] = 'lives/one/$1';
 $route['lives']['POST'] = 'lives/create';
