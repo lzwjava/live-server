@@ -388,7 +388,6 @@ class Wechat extends BaseController
 
                     $this->replyToWeChat($textReply);
                 } else {
-                    logInfo("lsx: 接受到微信公众号信息:".$keyword.'from '.$userId);
                     $resultLives = $this->liveDao->searchWithoutDetail(0, 8,  $keyword);
                     if (empty($resultLives)){
                         $contentStr = sprintf("没有搜索到关键字为：%s的直播,您可以查看<a href='http://m.quzhiboapp.com/'>最新直播</a>",$keyword);
