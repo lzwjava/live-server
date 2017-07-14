@@ -210,6 +210,12 @@ class Lives extends BaseController
         $this->succeed($lives);
     }
 
+    function count_get()
+    {
+        $count = $this->liveDao->getLivesCount();
+        $this->succeed($count);
+    }
+
     function recommend_get()
     {
         $skip = $this->skip();
