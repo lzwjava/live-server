@@ -104,7 +104,6 @@ class WeChatPlatform
         $user = $this->userDao->findUserById($userId);
 
         if (empty($lives)){
-            logInfo("lsx:resultLives" . json_encode($lives));
             return false;
         }
 
@@ -118,13 +117,11 @@ class WeChatPlatform
             ));
         }
 
-        logInfo("lsx:liveData" . json_encode($liveArticlesArray));
         $customMsgData = array(
             'msgtype' => 'news',
             'news' => array('articles' => $liveArticlesArray)
         );
 
-        logInfo("lsx:customMsgData " . json_encode($customMsgData));
         if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
             return true;
         }
