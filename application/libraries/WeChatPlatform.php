@@ -92,34 +92,36 @@ class WeChatPlatform
         }
     }
 
-    function searchLivesByWechat($userId, $keyword)
-    {    // 公众号输入关键词，搜索直播
+    /**
+     * 在微信平台上 以多篇文章的形式 向用户发送直播信息
+     * @param $userId
+     * @param $resultLives
+     * @return bool
+     */
+    function sendLivesByWechat($userId, $lives)
+
+    {
         $user = $this->userDao->findUserById($userId);
-        $resultLives = $this->liveDao->searchWithoutDetail(0, 8,  $keyword);
-        logInfo("lsx0:resultLives " . json_encode($resultLives));
-        if (empty($resultLives)){
-            $resultLives = $this->liveDao->getLivesOrderBy_attendanceCount(0, 8, null);
-            logInfo("lsx0:resultLives getLives_attendanceCount " . json_encode($resultLives));
+
+        if (empty($lives)){
+            return false;
         }
 
-        $liveDatas = array();
-
-        foreach ($resultLives as $key => $value) {
-          array_push($liveDatas,array(
-            "title" => $value->subject,
-            "description" => '直播描述',
-            "url" => 'http://m.quzhiboapp.com/?liveId=' . $value->liveId,
-            "picurl" => $value->coverUrl
-          ));
+        $liveArticlesArray = array();
+        foreach ($lives as $value) {
+            array_push($liveArticlesArray,array(
+                "title" => $value->subject,
+                "description" => '主播： ' . $value->username,
+                "url" => 'http://m.quzhiboapp.com/?liveId=' . $value->liveId,
+                "picurl" => $value->coverUrl
+            ));
         }
 
-        logInfo("lsx2:liveData" . json_encode($liveDatas));
         $customMsgData = array(
             'msgtype' => 'news',
-            'news' => array('articles' => $liveDatas)
+            'news' => array('articles' => $liveArticlesArray)
         );
 
-        logInfo("lsx3:liveData " . json_encode($customMsgData));
         if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
             return true;
         }
@@ -518,4 +520,66 @@ class WeChatPlatform
         return true;
     }
 
+    /**
+     * 用户报名成功 通过微信模板消息提醒用户
+     * @param int  $userId  用户ID
+     * @param object  $live    直播ID
+     * @return bool  是否推送成功
+     */
+    public function notifyUserAttendanceSuccessByWeChat($userId, $live)
+    {
+        $user = $this->userDao->findUserById($userId);
+        $hourStr = null;
+        $word = '，您参与的直播已经报名成功';
+
+        $url = 'http://m.quzhiboapp.com/?liveId=' . $live->liveId;
+
+        $tmplData = array(
+            'first' => array(
+                'value' => $user->username . $word,
+                'color' => '#D00019',
+            ),
+            'keyword1' => array(
+                'value' => $user->username,
+                'color' => '#173177',
+            ),
+            'keyword2' => array(
+                'value' => $live->subject,
+                'color' => '#173177',
+            ),
+            'keyword3' => array(
+                'value' => $live->planTs,
+                'color' => '#173177',
+            ),
+            'keyword4' => array(
+                'value' => $live->liveId,
+                'color' => '#173177',
+            ),
+            'remark' => array(
+                'value' => '点击进入直播，不见不散。',
+                'color' => '#000',
+            )
+        );
+
+        $customMsgData = array(
+            'msgtype' => 'news',
+            'news' => array(
+                'articles' => array(
+                    array(
+                        'title' => $user->username . $word,
+                        'description' => "您已经成功报名直播:『{$live->subject}』\n\n开播时间: {$live->planTs} \n\n点击进入直播",
+                        'url' => $url,
+                        'picurl' => $live->coverUrl
+                    ),
+                )
+            )
+        );
+
+        if ($this->notifyLiveByWeChatCustom($user, $customMsgData)) {
+            return true;
+        } else {
+            return $this->notifyByWeChat($user, 'o6Mtcjn4w2aQ7DqwyQdFcwzC57Sr8-O1sK-5s_kuG9Q', $url, $tmplData);
+        }
+
+    }
 }

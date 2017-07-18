@@ -210,6 +210,12 @@ class Lives extends BaseController
         $this->succeed($lives);
     }
 
+    function count_get()
+    {
+        $count = $this->liveDao->getLivesCount();
+        $this->succeed($count);
+    }
+
     function recommend_get()
     {
         $skip = $this->skip();
@@ -227,9 +233,6 @@ class Lives extends BaseController
     {
         $user = $this->getSessionUser();
         $live = $this->liveDao->getLive($id, $user);
-        if(!$live){
-            $live = $this->liveDao->getLivesOrderBy_planTs(0, 1000, $user);
-        }
         $this->succeed($live);
     }
 
@@ -701,7 +704,7 @@ class Lives extends BaseController
 
         //color
         $black = imagecolorallocate($im, 10, 10, 10);
-        $blue = imagecolorallocate($im, 0, 0, 252);
+        $blue = imagecolorallocate($im, 14, 138, 146);
         $red = imagecolorallocate($im, 222, 0, 2);
 
         //bgImage
@@ -710,41 +713,41 @@ class Lives extends BaseController
         $height = ImageSY($bgImg);//1334
 
         //username
-        $usernameFontSize = 26;
+        $usernameFontSize = 20;
         $usernameWidth = $this->charWidth($usernameFontSize, $fontFile, $username);
         $usernameX = ceil(($width - $usernameWidth) / 2);
-        $usernameY = 380;
+        $usernameY = 406;
 
         //live subject
         $subject=$this->filterEmoji($subject);
-        $subjectFontSize = 32;
+        $subjectFontSize = 22;
         $subjectWrap = $this->autoWrap($subjectFontSize, $fontFile, $subject, 450);
         $subject = $subjectWrap;
         $subjectWidth = $this->charWidth($subjectFontSize, $fontFile, $subject);
         $subjectX = ceil (($width - $subjectWidth) /2);
-        $subjectY = 650;
+        $subjectY = 680;
 
         //owner name
-        $ownerFontSize = 26;
+        $ownerFontSize = 20;
         $ownerWidth = $this->charWidth($ownerFontSize, $fontFile, $owner);
         $ownerX = ceil (($width - $ownerWidth) /2);
-        $ownerY = 564;
+        $ownerY = 588;
 
         //time
         $date = date_create($time);
         $time = date_format($date,"Y/m/d H:i");
-        $timeFontSize = 28;
+        $timeFontSize = 24;
         $timeWidth = $this->charWidth($timeFontSize, $fontFile, $time);
         $timeX = ceil (($width - $timeWidth) /2);
-        $timeY = 820;
+        $timeY = 880;
 
         //avatar
         $avatarImg = $this->openAllTypeImage($avatarUrl);//获得头像图片
         $avatarW = ImageSX($avatarImg);
         $avatarH = ImageSY($avatarImg);
-        $avatarSize = 140;
+        $avatarSize = 120;
         $avatarX = $width/2 - $avatarSize/2;
-        $avatarTop = 221;
+        $avatarTop = 243;
 
         //qrcode
         $qrcodeImg= imagecreatefromstring($qrCodeImage);
@@ -758,17 +761,16 @@ class Lives extends BaseController
         //resampled copy qrcode
         imagecopyresampled($bgImg, $qrcodeImg, $qrcodeX,$qrcodeY, 0, 0, $qrCodeSize, $qrCodeSize, $qrCodeOriginalSize, $qrCodeOriginalSize);
         //user name
-        imagettftext($bgImg, $usernameFontSize, 0, $usernameX, $usernameY, $black, $fontFile, $username);//用户名
+        imagettftext($bgImg, $usernameFontSize, 0, $usernameX, $usernameY, $blue, $fontFile, $username);//用户名
         //subject
-        imagettftext($bgImg, $subjectFontSize, 0, $subjectX, $subjectY, $black, $fontFile, $subject);
+        imagettftext($bgImg, $subjectFontSize, 0, $subjectX, $subjectY, $blue, $fontFile, $subject);
         //owner
-        imagettftext($bgImg, $ownerFontSize, 0, $ownerX, $ownerY, $black, $fontFile, $owner);
+        imagettftext($bgImg, $ownerFontSize, 0, $ownerX, $ownerY, $blue, $fontFile, $owner);
         //plan time
-        imagettftext($bgImg, $timeFontSize, 0, $timeX, $timeY, $black, $fontFile, $time);
+        imagettftext($bgImg, $timeFontSize, 0, $timeX, $timeY, $blue, $fontFile, $time);
 
         //header('content-type:image/gif');  //设置gif Image
         //imagegif($bgImg);
-
         imagepng($bgImg,$outputPath);
         imagedestroy($bgImg); //销毁
         return $outputName;

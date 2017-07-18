@@ -385,10 +385,17 @@ class Wechat extends BaseController
                     }
                     $contentStr = '退订成功，新收入提醒将不再通知您。';
                     $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
+
                     $this->replyToWeChat($textReply);
                 } else {
-                    logInfo("lsx: 接受到微信公众号信息:".$keyword.'from '.$userId);
-                    $this->weChatPlatform->searchLivesByWechat($userId, $keyword);
+                    $resultLives = $this->liveDao->searchWithoutDetail(0, 8,  $keyword);
+                    if (empty($resultLives)){
+                        $contentStr = sprintf("没有搜索到关键字为：%s的直播,您可以查看<a href='http://m.quzhiboapp.com/'>最新直播</a>",$keyword);
+                        $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
+                        $this->replyToWeChat($textReply);
+                    } else{
+                        $this->weChatPlatform->sendLivesByWechat($userId, $resultLives);
+                    }
                 }
             } else if ($msgType == MSG_TYPE_EVENT) {
                 $event = $postObj[KEY_EVENT];
