@@ -96,6 +96,14 @@ class LiveDao extends BaseDao
         return $this->getLivesWithoutDetail($ids, $user, true, 'attendanceCount');
     }
 
+    function getLivesCount()
+    {
+        $sql = "SELECT COUNT(*) as count FROM lives
+                WHERE status>=? and status != ?";
+        $count = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+        return $count;
+    }
+
     function getRecommendLives($skip, $limit, $user, $skipLiveId)
     {
         $sql = "SELECT liveId FROM lives
