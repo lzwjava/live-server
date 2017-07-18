@@ -111,7 +111,7 @@ class WeChatPlatform
         foreach ($lives as $value) {
             array_push($liveArticlesArray,array(
                 "title" => $value->subject,
-                "description" => '直播描述',
+                "description" => '主播： ' . $value->username,
                 "url" => 'http://m.quzhiboapp.com/?liveId=' . $value->liveId,
                 "picurl" => $value->coverUrl
             ));
