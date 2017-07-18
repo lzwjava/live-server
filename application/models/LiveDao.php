@@ -210,8 +210,8 @@ class LiveDao extends BaseDao
     private function thirdHlsServers()
     {
         return array(
-            'hls-xycdn.quzhiboapp.com/live',
-            'hls-xycdn1.quzhiboapp.com/live',
+      //      'hls-xycdn.quzhiboapp.com/live',
+        //    'hls-xycdn1.quzhiboapp.com/live',
             'upyun.quzhiboapp.com/live'
         );
     }
