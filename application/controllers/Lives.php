@@ -673,48 +673,53 @@ class Lives extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        //生成邀请二维码
-        $qrCodeImage = $this->makeQrcode('http://m.quzhiboapp.com/?liveId='.$live->liveId.
-                                         '&fromUserId='.$user->userId);
-        //生成邀请卡
-        $cardName = $this->makeInvitationCard($qrCodeImage,
-                                           $user->avatarUrl,
-                                           $user->username,
-                                           $live->subject,
-                                           $live->owner->username,
-                                           $live->planTs);
-        $cardUrl = get_instance()->config->slash_item('base_url').'tmp/'.$cardName;
-        if (file_exists('./tmp/'.$cardName)){
+
+        //card output path
+        $outputName = md5($live->liveId.$user->userId)."png";
+        $outputPath = "tmp/".$outputName;
+        $cardUrl = config_item('base_url').$outputPath;
+
+        //如果没有缓存
+        if(!file_exists($outputPath)) {
+            //生成邀请二维码
+            $qrCodeImage = $this->makeQrcode('http://m.quzhiboapp.com/?liveId=' . $live->liveId .
+                '&fromUserId=' . $user->userId);
+            //生成邀请卡
+            $this->makeInvitationCard($outputPath,
+                $qrCodeImage,
+                $user->avatarUrl,
+                $user->username,
+                $live->subject,
+                $live->owner->username,
+                $live->planTs);
+        }
+
+        if (file_exists($outputPath)) {
             $this->succeed(stripslashes($cardUrl));
         }
-        else{
-            $this->failure("cant not make the invitationCard"."./tmp/".$cardName);
+        else {
+            $this->failure("Cant not make the Invitation Card :" . $cardUrl);
         }
     }
 
-    private function makeInvitationCard($qrCodeImage,$avatarUrl,$usernameStr,
+    private function makeInvitationCard($outputPath,$qrCodeImage,$avatarUrl,$usernameStr,
                                         $subjectStr,$ownernameStr,$timeStr)
     {
-        $im = imagecreatetruecolor(750, 1334);
-        //card output path
-        $outputName = "card_".rand().".png";
-        $outputPath = "./tmp/".$outputName;
-
         //Resource
         $fontFile = "./resources/fonts/PingFang Regular.ttf";
         $fontFile2 = "./resources/fonts/PingFang Bold.ttf";
         $backgroundUrl = "./resources/images/bg.jpg";
 
-        //color
-        $black = imagecolorallocate($im, 10, 10, 10);
-        $blue = imagecolorallocate($im, 14, 138, 146);
-        $red = imagecolorallocate($im, 222, 0, 2);
-        $darkGreen = imagecolorallocate($im,0,71,76);
-
         //bgImage
         $bgImg = imagecreatefromjpeg($backgroundUrl);
         $width = ImageSX($bgImg);//750
         $height = ImageSY($bgImg);//1334
+
+        //color
+        $black = imagecolorallocate($bgImg, 10, 10, 10);
+        $blue = imagecolorallocate($bgImg, 14, 138, 146);
+        $red = imagecolorallocate($bgImg, 222, 0, 2);
+        $darkGreen = imagecolorallocate($bgImg,0,71,76);
 
         //username
         $usernameStr = $this->filterEmoji($usernameStr);
@@ -767,7 +772,6 @@ class Lives extends BaseController
         // return;
         imagepng($bgImg,$outputPath);
         imagedestroy($bgImg); //销毁
-        return $outputName;
     }
 
     private function openAllTypeImage($image)
