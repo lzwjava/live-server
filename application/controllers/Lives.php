@@ -675,7 +675,7 @@ class Lives extends BaseController
         }
 
         //card output path
-        $outputName = md5($live->liveId.$user->userId)."png";
+        $outputName = md5($live->liveId.$user->userId).".png";
         $outputPath = "tmp/".$outputName;
         $cardUrl = config_item('base_url').$outputPath;
 
