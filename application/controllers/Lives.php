@@ -675,7 +675,7 @@ class Lives extends BaseController
         }
 
         //card output path
-        $outputName = md5($live->liveId.$user->userId).".png";
+        $outputName = md5($live->liveId.$user->userId).".jpg";
         $outputPath = "tmp/".$outputName;
         $cardUrl = config_item('base_url').$outputPath;
 
@@ -770,7 +770,7 @@ class Lives extends BaseController
         // header('content-type:image/gif');
         // imagegif($bgImg);
         // return;
-        imagepng($bgImg,$outputPath);
+        imagejpeg($bgImg,$outputPath);
         imagedestroy($bgImg); //销毁
     }
 
