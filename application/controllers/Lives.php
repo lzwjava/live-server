@@ -77,6 +77,13 @@ class Lives extends BaseController
             $this->failure(ERROR_LIVE_NOT_WAIT);
             return;
         }
+        //不能早于计划直播时间30分钟
+        $offset = 30*60;
+        if (strtotime($live->planTs) - time() > $offset) {
+            $this->failure(ERROR_LIVETIME_BEGIN);
+            return;
+        }
+
         $this->statusDao->open($liveId);
         $ok = $this->liveDao->beginLive($liveId);
         if (!$ok) {
