@@ -77,11 +77,9 @@ class Lives extends BaseController
             $this->failure(ERROR_LIVE_NOT_WAIT);
             return;
         }
-
-        $planTime = $live->planTs;
-        $minute=floor((strtotime($planTime)-time())%86400/60);
-
-        if($minute>30){
+        //不能早于计划直播时间30分钟
+        $offset = 30*60;
+        if (strtotime($live->planTs) - time() > $offset) {
             $this->failure(ERROR_LIVETIME_BEGIN);
             return;
         }
