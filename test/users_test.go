@@ -15,7 +15,7 @@ func TestUser_RegisterAndLogin(t *testing.T) {
 	name := randomString()
 	mobile := randomMobile()
 	res := c.postData("users", url.Values{"mobilePhoneNumber": {mobile},
-		"username": {name}, "smsCode": {"5555"}, "avatarUrl": {"http://i.quzhiboapp.com/defaultAvatar1.png"}})
+		"username": {name}, "smsCode": {"5555"}, "avatarUrl": {"https://i.quzhiboapp.com/defaultAvatar1.png"}})
 	assert.Equal(t, name, res.Get("username").MustString())
 	assert.NotNil(t, res.Get("userId"))
 	assert.NotNil(t, res.Get("created"))
@@ -25,7 +25,7 @@ func TestUser_RegisterAndLogin(t *testing.T) {
 		"smsCode": {"5555"}})
 	assert.Equal(t, name, res.Get("username").MustString())
 	assert.Equal(t, mobile, res.Get("mobilePhoneNumber").MustString())
-	assert.Equal(t, "http://i.quzhiboapp.com/defaultAvatar1.png", res.Get("avatarUrl").MustString())
+	assert.Equal(t, "//i.quzhiboapp.com/defaultAvatar1.png", res.Get("avatarUrl").MustString())
 }
 
 func TestUser_SpecialPhone(t *testing.T) {
@@ -33,7 +33,7 @@ func TestUser_SpecialPhone(t *testing.T) {
 	c := NewClient()
 	name := randomString()
 	res := c.postData("users", url.Values{"mobilePhoneNumber": {"817015130624"},
-		"username": {name}, "smsCode": {"123456"}, "avatarUrl": {"http://i.quzhiboapp.com/defaultAvatar1.png"}})
+		"usernamexxxxxxxxx": {name}, "smsCode": {"123456"}, "avatarUrl": {"https://i.quzhiboapp.com/defaultAvatar1.png"}})
 	assert.NotNil(t, res.Get("username").Interface())
 }
 
@@ -41,7 +41,7 @@ func TestUser_Update(t *testing.T) {
 	c := NewClient()
 	user := registerNewUser(c)
 	updated := user.Get("updated").MustString()
-	avatarUrl := "http://7xotd0.com1.z0.glb.clouddn.com/header_logo.png"
+	avatarUrl := "https://i.quzhiboapp.com/Fh8sFD"
 
 	time.Sleep(time.Second)
 
@@ -50,7 +50,7 @@ func TestUser_Update(t *testing.T) {
 		"avatarUrl": {avatarUrl}})
 
 	assert.Equal(t, newName, res.Get("username").MustString())
-	assert.Equal(t, avatarUrl, res.Get("avatarUrl").MustString())
+	assert.Equal(t, "//i.quzhiboapp.com/Fh8sFD", res.Get("avatarUrl").MustString())
 	assert.NotEqual(t, updated, res.Get("updated").MustString())
 
 	// Same username

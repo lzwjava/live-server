@@ -197,3 +197,16 @@ if (!function_exists("liveSort")) {
         }
     }
 }
+
+
+if (!function_exists("filterHost")) {
+    /**
+     * 应更换https的需要,剔除qiniu路径中的协议头
+     * @param $url
+     * @return string 替换后的字符串
+     */
+    function filterHost($url)
+    {
+        return str_replace(QINIU_FILE_HOST, QINIU_FILE_HOST_WITHOUT_SCHEME, $url);
+    }
+}
