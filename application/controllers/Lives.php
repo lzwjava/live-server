@@ -77,6 +77,17 @@ class Lives extends BaseController
             $this->failure(ERROR_LIVE_NOT_WAIT);
             return;
         }
+
+        $currentTime = date("Y-m-d h:i:s");
+        $planTime = $live->planTs;
+        $minute=floor((strtotime($planTime)-strtotime($currentTime))%86400/60);
+
+        if($minute>30){
+            $this->failure(ERROR_LIVETIME_BEGIN);
+            return;
+        }
+
+
         $this->statusDao->open($liveId);
         $ok = $this->liveDao->beginLive($liveId);
         if (!$ok) {

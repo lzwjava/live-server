@@ -135,6 +135,7 @@ define('ERROR_LIVE_NOT_REVIEW', 'live_not_review');
 define('ERROR_LIVE_NOT_ON', 'live_not_on');
 define('ERROR_SPEAKER_INTRO_TOO_SHORT', 'speaker_intro_too_short');
 define('ERROR_PLAYBACK_FAIL', 'playback_fail');
+define('ERROR_LIVETIME_BEGIN','live_before_start');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -271,6 +272,7 @@ if (!function_exists('errorInfos')) {
             ERROR_LIVE_NOT_TRANSCODE => '直播没有在转码状态,无法结束',
             ERROR_PLAYBACK_FAIL => '生成回放失败',
             ERROR_LIVE_NOT_REVIEW => '直播不在审核状态,无法完成该操作',
+            ERROR_LIVETIME_BEGIN =>'只能在计划直播时间前30分钟开始直播',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
