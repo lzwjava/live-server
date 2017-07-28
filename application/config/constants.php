@@ -717,8 +717,8 @@ define('WXAPP_APPID', 'wxf7383d242dd0d2b7');
 define('WXAPP_SECRET', 'd855fa3f5d519fbd4be1e30ac08881cd');
 
 
-define('QINIU_FILE_HOST', 'http://i.quzhiboapp.com');
-define('QINIU_FILE_HOST_SLASH', 'http://i.quzhiboapp.com/');
+define('QINIU_FILE_HOST', 'https://i.quzhiboapp.com');
+define('QINIU_FILE_HOST_SLASH', 'https://i.quzhiboapp.com/');
 define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
 define('QINIU_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');
 define('QINIU_HUB', 'qulive');
@@ -802,8 +802,8 @@ if (!function_exists('specialPhones')) {
     }
 }
 
-define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
-define('VIDEO_ALI_HOST_URL', 'http://video-cdn.quzhiboapp.com/');
+define('VIDEO_HOST_URL', 'https://video-qncdn.quzhiboapp.com/');
+define('VIDEO_ALI_HOST_URL', 'https://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',

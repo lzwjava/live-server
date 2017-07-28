@@ -222,7 +222,7 @@ class LiveDao extends BaseDao
             'upyun.quzhiboapp.com/live'
         );
         $server = random_element($servers);
-        $hlsUrl = 'http://' . $server . '/' . $rtmpKey . '.m3u8';
+        $hlsUrl = 'https://' . $server . '/' . $rtmpKey . '.m3u8';
         return $hlsUrl;
     }
 
