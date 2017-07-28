@@ -33,7 +33,7 @@ func TestUser_SpecialPhone(t *testing.T) {
 	c := NewClient()
 	name := randomString()
 	res := c.postData("users", url.Values{"mobilePhoneNumber": {"817015130624"},
-		"usernamexxxxxxxxx": {name}, "smsCode": {"123456"}, "avatarUrl": {"https://i.quzhiboapp.com/defaultAvatar1.png"}})
+		"username": {name}, "smsCode": {"123456"}, "avatarUrl": {"https://i.quzhiboapp.com/defaultAvatar1.png"}})
 	assert.NotNil(t, res.Get("username").Interface())
 }
 
