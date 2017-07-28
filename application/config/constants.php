@@ -721,6 +721,7 @@ define('WXAPP_SECRET', 'd855fa3f5d519fbd4be1e30ac08881cd');
 
 define('QINIU_FILE_HOST', 'https://i.quzhiboapp.com');
 define('QINIU_FILE_HOST_SLASH', 'https://i.quzhiboapp.com/');
+define('QINIU_FILE_HOST_WITHOUT_SCHEME', '//i.quzhiboapp.com');
 define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
 define('QINIU_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');
 define('QINIU_HUB', 'qulive');

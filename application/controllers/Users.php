@@ -100,7 +100,7 @@ class Users extends BaseController
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
         $username = $this->post(KEY_USERNAME);
         $smsCode = $this->post(KEY_SMS_CODE);
-        $avatarUrl = $this->post(KEY_AVATAR_URL);
+        $avatarUrl = filterHost($this->post(KEY_AVATAR_URL));
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
         } elseif ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
@@ -230,6 +230,9 @@ class Users extends BaseController
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
+        }
+        if (isset($data[KEY_AVATAR_URL])) {
+            $data[KEY_AVATAR_URL] = filterHost($data[KEY_AVATAR_URL]);
         }
         if (isset($data[KEY_USERNAME])) {
             $username = $data[KEY_USERNAME];
