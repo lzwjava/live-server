@@ -51,7 +51,7 @@ func deleteSnsUser2() {
 func insertSnsUserWithUsername(userId string, username string) {
 	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
 		"ol0AFwFe5jFoXcQby4J7AWJaWXIM", username,
-		"http://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
+		"https://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
 		"wechat", userId, "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
 	runSql(sql, false)
 
@@ -66,7 +66,7 @@ func insertSnsUser(userId string) {
 func insertSnsUser2(userId string) {
 	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
 		"ol0AFwLgaHJ4rjhfRdUPtvBzlrt8", "李智维lzwjava",
-		"http://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
+		"https://wx.qlogo.cn/mmopen/NINuDc2FdYUJUPu6kmiajFweydQ5dfC2ibgOTibQQVEfj1IVnwXH7ZMRXKPvsmwLpoSk1xJIGXg6tVZrOiaCfsIeHWkCfbMAL2CH/0",
 		"wechat", userId, "oFRlVwXQIzb7TNDS45hQCT8MidQc")
 	runSql(sql, false)
 
@@ -340,7 +340,7 @@ func TestWeChat_registerByApp(t *testing.T) {
 	loginRes := c.postData("wechat/login", url.Values{"code": {"abc"}})
 	res := c.post("wechat/registerByApp", url.Values{
 		"thirdSession":  {loginRes.Get("thirdSession").MustString()},
-		"rawData":       {"{\"nickName\":\"李智维-趣直播\",\"gender\":1,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"Beijing\",\"country\":\"CN\",\"avatarUrl\":\"http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLyxI8Q0XqyejNIaMaJSofP2sN5z0xg0FibXmGMBtlTEkKxuoLJzktAO3wUMfJlPHfDZH3GQvPfm0A/0\"}"},
+		"rawData":       {"{\"nickName\":\"李智维-趣直播\",\"gender\":1,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"Beijing\",\"country\":\"CN\",\"avatarUrl\":\"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLyxI8Q0XqyejNIaMaJSofP2sN5z0xg0FibXmGMBtlTEkKxuoLJzktAO3wUMfJlPHfDZH3GQvPfm0A/0\"}"},
 		"signature":     {"4a1f895cbb21b16b96a55ad02179cf36d74145aa"},
 		"iv":            {"NZFYdaE6piO6Mx0beQZgKg=="},
 		"encryptedData": {"l0f5xj2wPddt+QI9sVpwkzVEacCnqVoujIWldcBHtqm0f//fgP8wJAWnAJ79jKHjurFksGhmt5mnhaiPSmYGyv9acR4SuOvorsx6raxRoKI4kvdgoXDeB4ldo9GlwPDOVnp7eN4Pplh6giQlkX112CuoaRaEJ05mhBxTYlGAW6d9N2XPCZBdf3m4IC0sedHPslm4HCK68/BZ1W2VAzhDsVNg9BV37KNtaatQIaoXqvSVn0ghRw2fFNZqfZCUtU+u+ppms31oV8nKcKEs4ViGKmU0CQULaXDzOL7X6Huj1409RkFBl3spkpo2AXh7xg2UgXEkcRWtIfOEvYCs7rA7pEhRjJS5stVzaFpwybglnwNHc+mJqVEVI6bOnI3tnIfM3z1+PJr2WIWwxQSlw+yVwEpjFvwVHE6gF+IOSZYSAYYG1DHY/ocj/N6B/6Paz/aPcIqNTOGn7uzkkpQCiMbKhb9wzPD4oVyCUJPWkt+CMxkCq9soS/azluYKJp0LIH2eeYoQAuV8Lk7OWZmiwaGUMQ=="}})
@@ -350,7 +350,7 @@ func TestWeChat_registerByApp(t *testing.T) {
 func insertAppSnsUser(userId string) {
 	sql := fmt.Sprintf("replace into sns_users (openId, username, avatarUrl, platform, userId, unionId) values('%s','%s','%s','%s', '%s', '%s')",
 		"o72gJ0ds_nwh2pxkQ1iexCc_fwZU", "李智维-趣直播",
-		"http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLyxI8Q0XqyejNIaMaJSofP2sN5z0xg0FibXmGMBtlTEkKxuoLJzktAO3wUMfJlPHfDZH3GQvPfm0A/0",
+		"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLyxI8Q0XqyejNIaMaJSofP2sN5z0xg0FibXmGMBtlTEkKxuoLJzktAO3wUMfJlPHfDZH3GQvPfm0A/0",
 		"wxapp", userId, "oFRlVwXY7GkRhpKyfjvTo6oW7kw8")
 	runSql(sql, false)
 }
