@@ -100,6 +100,7 @@ class Users extends BaseController
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
         $username = $this->post(KEY_USERNAME);
         $smsCode = $this->post(KEY_SMS_CODE);
+        $avatarUrl = $this->post(KEY_AVATAR_URL);
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
         } elseif ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
