@@ -212,7 +212,8 @@ class LiveDao extends BaseDao
         return array(
       //      'hls-xycdn.quzhiboapp.com/live',
         //    'hls-xycdn1.quzhiboapp.com/live',
-            'upyun.quzhiboapp.com/live'
+            'live-cdn.quzhiboapp.com/live',
+            //'upyun.quzhiboapp.com/live'
         );
     }
 
