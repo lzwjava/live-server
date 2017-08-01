@@ -231,9 +231,6 @@ class Users extends BaseController
         if (!$user) {
             return;
         }
-        if (isset($data[KEY_AVATAR_URL])) {
-            $data[KEY_AVATAR_URL] = filterHost($data[KEY_AVATAR_URL]);
-        }
         if (isset($data[KEY_USERNAME])) {
             $username = $data[KEY_USERNAME];
             if ($username != $user->username) {
