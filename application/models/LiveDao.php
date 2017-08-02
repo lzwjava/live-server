@@ -213,7 +213,7 @@ class LiveDao extends BaseDao
       //      'hls-xycdn.quzhiboapp.com/live',       //星域CDN
             'hls-xycdn1.quzhiboapp.com/live',        //星域CDN 1   15s      回源模式
             'live-cdn.quzhiboapp.com/live',          //阿里云线路   30s      推流
-            'pili-live-hls.quzhiboapp.com/qulive/',  //七牛CDN线路  30s      推流
+            'pili-live-hls.quzhiboapp.com/qulive',  //七牛CDN线路  30s      推流
             //'upyun.quzhiboapp.com/live'  //upyun线路在维护
         );
     }
@@ -224,7 +224,7 @@ class LiveDao extends BaseDao
             //      'hls-xycdn.quzhiboapp.com/live',       //星域CDN
             //'hls-xycdn1.quzhiboapp.com/live',        //星域CDN 1   15s      回源模式
             'live-cdn.quzhiboapp.com/live',          //阿里云线路   30s      推流
-            'pili-live-hls.quzhiboapp.com/qulive/',  //七牛CDN线路  30s      推流
+            'pili-live-hls.quzhiboapp.com/qulive',  //七牛CDN线路  30s      推流
             //'upyun.quzhiboapp.com/live'  //upyun线路在维护
         );
         $server = random_element($servers);
