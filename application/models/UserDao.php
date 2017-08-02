@@ -277,7 +277,7 @@ class UserDao extends BaseDao
 
         //如果微信用户没有头像给个默认头像
         if(!filter_var($snsUser->avatarUrl, FILTER_VALIDATE_URL)){
-            $snsUser->avatarUrl = 'http://wx3.sinaimg.cn/large/005LOzcmly1fhpc3e8j60j305k05kjr7.jpg';
+            $snsUser->avatarUrl = 'https://i.quzhiboapp.com/touxiang.jpg';
         }
         list($imageUrl, $imageKey, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
         if ($error) {
