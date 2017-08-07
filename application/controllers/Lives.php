@@ -121,8 +121,9 @@ class Lives extends BaseController
         if (isset($data[KEY_NEED_PAY])) {
 
         }
+        //todo: store resources only as filename without cdn host
 
-        if (isset($data[KEY_COVER_URL])) {
+/*        if (isset($data[KEY_COVER_URL])) {
             $data[KEY_COVER_URL] = filterHost($data[KEY_COVER_URL]);
         }
 
@@ -132,7 +133,7 @@ class Lives extends BaseController
 
         if (isset($data[KEY_NOTICE])) {
             $data[KEY_NOTICE] = filterHost($data[KEY_NOTICE]);
-        }
+        }*/
 
         if (isset($data[KEY_AMOUNT])) {
             $data[KEY_AMOUNT] = $this->toNumber($data[KEY_AMOUNT]);
