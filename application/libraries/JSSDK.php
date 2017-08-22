@@ -155,7 +155,7 @@ class JSSDK
                 ),
                 array(
                     'type' => 'view',
-                    'name' => '我的',
+                    'name' => '个人主页',
                     'url' => 'http://m.quzhiboapp.com/#profile',
                 ),
                 array(
@@ -163,28 +163,13 @@ class JSSDK
                     'sub_button' => array(
                         array(
                             'type' => 'view',
-                            'name' => '出发创业',
-                            'url' => 'http://mp.weixin.qq.com/s/KVr_s8bWOBfeexCmhHBpIw'
+                            'name' => '趣直播融资',
+                            'url' => 'http://mp.weixin.qq.com/s/g_jeEG8ee6kF2lL6wzUPwg'
                         ),
                         array(
-                            'type' => 'view',
-                            'name' => '趣直播发布会',
-                            'url' => 'http://mp.weixin.qq.com/s/-ebQBwpCT0YWs-0rM0fB2w'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '趣直播首战告捷',
-                            'url' => 'http://mp.weixin.qq.com/s/UvBP3Y9Aw3x0g0bFGa5mdQ'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '上线两个月感想',
-                            'url' => 'http://mp.weixin.qq.com/s/5ww7zVtXnKWfL2mCaBN8Og'
-                        ),
-                        array(
-                            'type' => 'view',
-                            'name' => '上线三个月感想',
-                            'url' => 'http://mp.weixin.qq.com/s/rhlWGg4GXpUEHl2VPYru4Q'
+                            'type' => 'media_id',
+                            'name' => '创始人微信',
+                            'media_id' => '4JUYm2nOjNSMcz26AidpLSJGCOknYQcUu1Lw8PlWMxE'
                         )
                     )
                 )
@@ -213,7 +198,7 @@ class JSSDK
 
     function uploadImg()
     {
-        $fullPath = FCPATH . 'tmp/pic.jpg';
+        $fullPath = FCPATH . 'tmp/menu.jpg';
         $data = array(
             'media' => new CURLFile($fullPath, 'image/jpg', 'pic.jpg')
         );

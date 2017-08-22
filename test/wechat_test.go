@@ -372,6 +372,7 @@ func TestWeChat_group(t *testing.T) {
 // 	res := c.get("wechat/uploadImg", url.Values{})
 // 	assert.NotNil(t, res.Interface())
 // }
+
 //
 // func TestWeChat_sendMassMsg(t *testing.T) {
 // 	c := NewClient()
