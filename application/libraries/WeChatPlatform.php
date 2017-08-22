@@ -103,13 +103,13 @@ class WeChatPlatform
     {
         $user = $this->userDao->findUserById($userId);
 
-        if (empty($lives)){
+        if (empty($lives)) {
             return false;
         }
 
         $liveArticlesArray = array();
         foreach ($lives as $value) {
-            array_push($liveArticlesArray,array(
+            array_push($liveArticlesArray, array(
                 "title" => $value->subject,
                 "description" => '主播： ' . $value->username,
                 "url" => 'http://m.quzhiboapp.com/?liveId=' . $value->liveId,
@@ -522,8 +522,8 @@ class WeChatPlatform
 
     /**
      * 用户报名成功 通过微信模板消息提醒用户
-     * @param int  $userId  用户ID
-     * @param object  $live    直播ID
+     * @param int $userId 用户ID
+     * @param object $live 直播ID
      * @return bool  是否推送成功
      */
     public function notifyUserAttendanceSuccessByWeChat($userId, $live)

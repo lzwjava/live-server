@@ -27,7 +27,7 @@ class WeChatClient
         $error = null;
         $data = null;
         if ($respStr === false) {
-            $error = 'network error';
+            $error = 'curl error';
         } else {
             $respData = json_decode($respStr);
             if (isset($respData->errcode) && $respData->errcode != 0) {

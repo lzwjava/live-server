@@ -810,7 +810,7 @@ define('VIDEO_ALI_HOST_URL', 'https://video-cdn.quzhiboapp.com/');
 
 
 define('TMP_WECHAT_ACCESS_TOKEN',
-'TWHBEDD4qAptbhHl_tou7t1JabEBa3YFV-JrE4ctOlZtoIXGktEdsjSTDLlO5Uv-omAnZi8YLBoOiYLOtaJdfzLum7VkScOjm05ynUrygF8LFWgAFADXO');
+'b9UqRuTXsG7vWnBOYLlA2ZVwKvQSyTYHElIScdNHKzpDMjHIc5lnOh8-Lgxd99524HTwCoKiZqyGZ5b0Mk57C6CmeMHAwHvnXhFMVzSu-xYAUAdAEADXD');
 define('TMP_WECHAT_JSAPI_TICKET',
 'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 
@@ -877,8 +877,8 @@ define('MIN_WITHDRAW_AMOUNT', 1 * 100);
 define('ADMIN_OP_USER_ID', 1);
 define('ADMIN_OP_SYSTEM_ID', 100000);
 
-define('ANCHOR_INCOME_RATE', 0.7);
-define('INVITE_INCOME_RATE', 0.2);
+define('ANCHOR_INCOME_RATE', 0.5);
+define('INVITE_INCOME_RATE', 0.3);
 
 define('ANCHOR_INCOME_REWARD_RATE', 0.9);
 

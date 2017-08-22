@@ -116,7 +116,7 @@ func TestLives_lives_by_attendance(t *testing.T) {
 
 func TestLives_search_without_detail(t *testing.T) {
 	c := NewClient()
-	res := c.get("lives/search", url.Values{"keyword":{"C++"}})
+	res := c.get("lives/search", url.Values{"keyword": {"C++"}})
 	assert.NotNil(t, res)
 }
 
@@ -171,7 +171,7 @@ func TestLives_update_one(t *testing.T) {
 	liveId := lastPrepareLive(c)
 	planTs := time.Now().Add(1 * time.Hour).Format("2006-01-02 15:04:05")
 	res := c.postData("lives/"+liveId, url.Values{"subject": {"C++ 编程"},
-                "coverUrl":      {"https://i.quzhiboapp.com/mXpQm9"},
+		"coverUrl":      {"https://i.quzhiboapp.com/mXpQm9"},
 		"coursewareKey": {"jMyBvR.pdf"},
 		"liveQrcodeKey": {"MxFMKa"},
 		"amount":        {"30000"}, "detail": {"我是周子敬，以太资本创始人兼  CEO 。曾任华兴资本副总裁，领导完成多个融资项目，包括美乐乐，途家，猎聘，唱吧，友盟，中清龙图，有缘网等。曾任阿里巴巴资深产品经理，并有过网游公司的创业经验。2014  年创立以太资本，至今，已为超过 350 个项目完成融资，融资总额逾 13 亿美元。成功案例包括知乎，映客，河狸家，蘑菇街，铜板街，达达，小猪短租等。作为资深天使投资人，曾投资今日头条、Loho、团车网以及小麦公社等著名企业。2015 年 11 月，《财富》（中文版）评选中国 40 位 40 岁以下的商界精英，名列第 33 位。本次 Live 我将就创业者最关注的一些融资问题进行解答，希望能帮助到正走在创业道路上的伙伴们。"},
@@ -446,6 +446,6 @@ func TestLives_notifyNewLive(t *testing.T) {
 
 func TestLives_card(t *testing.T) {
 	c, _ := NewClientAndUser()
- 	res := c.getData("lives/1/card", url.Values{})
+	res := c.getData("lives/1/card", url.Values{})
 	assert.NotNil(t, res.Interface())
 }
