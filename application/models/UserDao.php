@@ -78,6 +78,7 @@ class UserDao extends BaseDao
     {
         $user = $this->findActualUser($field, $value);
         if ($user) {
+            $user->avatarUrl = fixHttpsUrl($user->avatarUrl);
             if ($cleanFields) {
                 $this->cleanUserFieldsForAll($user);
             }
@@ -276,7 +277,7 @@ class UserDao extends BaseDao
         }
 
         //如果微信用户没有头像给个默认头像
-        if(!filter_var($snsUser->avatarUrl, FILTER_VALIDATE_URL)){
+        if (!filter_var($snsUser->avatarUrl, FILTER_VALIDATE_URL)) {
             $snsUser->avatarUrl = 'https://i.quzhiboapp.com/touxiang.jpg';
         }
         list($imageUrl, $imageKey, $error) = $this->qiniuDao->fetchImageAndUpload($snsUser->avatarUrl);
@@ -343,6 +344,16 @@ class UserDao extends BaseDao
     function findAllLiveSubscribeUsers()
     {
         return $this->getListFromTable(TABLE_USERS, KEY_LIVE_SUBSCRIBE, 1, '*', null, 0, ROW_MAX);
+    }
+
+    public function fixUsersAvatars($users)
+    {
+        if (!$users) {
+            return;
+        }
+        foreach ($users as $user) {
+            $user->avatarUrl = fixHttpsUrl($user->avatarUrl);
+        }
     }
 
 }
