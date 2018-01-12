@@ -210,3 +210,10 @@ if (!function_exists("filterHost")) {
         return str_replace(QINIU_FILE_HOST, QINIU_FILE_HOST_WITHOUT_SCHEME, $url);
     }
 }
+
+if (!function_exists('fixHttpsUrl')) {
+    function fixHttpsUrl($url)
+    {
+        return str_replace('https://', 'http://', $url);
+    }
+}

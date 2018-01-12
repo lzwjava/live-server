@@ -98,8 +98,8 @@ class LiveDao extends BaseDao
 
     function getLivesCount()
     {
-        $sql = "SELECT COUNT(*) as count FROM lives
-                WHERE status>=? and status != ?";
+        $sql = "SELECT COUNT(*) AS count FROM lives
+                WHERE status>=? AND status != ?";
         $count = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
         return $count;
     }
@@ -119,16 +119,15 @@ class LiveDao extends BaseDao
     function searchWithoutDetail($skip, $limit, $keyword)
     {
 
-      $sql = "select l.liveId ,l.subject, u.username, l.coverUrl from lives as l
+        $sql = "select l.liveId ,l.subject, u.username, l.coverUrl from lives as l
               left join users as u on u . userId = l . ownerId
               where  status>=? and status!=? and (l.subject like '%$keyword%' or u.username like '%$keyword%')
               order by planTs desc
               limit $limit offset $skip";
 
-      return $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+        return $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
 
     }
-
 
 
     private function extractLiveIds($lives)
@@ -142,7 +141,7 @@ class LiveDao extends BaseDao
 
     private function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false, $extraSortField = null)
     {
-        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs , $extraSortField);
+        $lvs = $this->getLives($liveIds, $user, $sortByPlanTs, $extraSortField);
         foreach ($lvs as $lv) {
             unset($lv->detail);
             unset($lv->speakerIntro);
@@ -150,7 +149,7 @@ class LiveDao extends BaseDao
         return $lvs;
     }
 
-    private function getLives($liveIds, $user, $sortByPlanTs = false ,$extraSortField = '')
+    private function getLives($liveIds, $user, $sortByPlanTs = false, $extraSortField = '')
     {
         $userId = -1;
         if ($user) {
@@ -165,7 +164,7 @@ class LiveDao extends BaseDao
         } else {
             $sortField = "l.created";
         }
-        if(!empty($extraSortField)){
+        if (!empty($extraSortField)) {
             $sortField = $extraSortField;
         }
         $fields = $this->livePublicFields('l');
@@ -210,10 +209,11 @@ class LiveDao extends BaseDao
     private function thirdHlsServers()
     {
         return array(
-      //      'hls-xycdn.quzhiboapp.com/live',       //星域CDN
-            'hls-xycdn1.quzhiboapp.com/live',        //星域CDN 1   15s      回源模式
-            'live-cdn.quzhiboapp.com/live',          //阿里云线路   30s      推流
-            'pili-live-hls.quzhiboapp.com/qulive',  //七牛CDN线路  30s      推流
+            //      'hls-xycdn.quzhiboapp.com/live',       //星域CDN
+            //'hls-xycdn1.quzhiboapp.com/live',        //星域CDN 1   15s      回源模式
+            'cheer.quzhiboapp.com/live'
+//            'live-cdn.quzhiboapp.com/live',          //阿里云线路   30s      推流
+            //'pili-live-hls.quzhiboapp.com/qulive',  //七牛CDN线路  30s      推流
             //'upyun.quzhiboapp.com/live'  //upyun线路在维护
         );
     }
@@ -221,10 +221,11 @@ class LiveDao extends BaseDao
     private function webHlsUrl($rtmpKey)
     {
         $servers = array(
+            'cheer.quzhiboapp.com/live'
             //      'hls-xycdn.quzhiboapp.com/live',       //星域CDN
             //'hls-xycdn1.quzhiboapp.com/live',        //星域CDN 1   15s      回源模式
-            'live-cdn.quzhiboapp.com/live',          //阿里云线路   30s      推流
-            'pili-live-hls.quzhiboapp.com/qulive',  //七牛CDN线路  30s      推流
+//            'live-cdn.quzhiboapp.com/live',          //阿里云线路   30s      推流
+            //'pili-live-hls.quzhiboapp.com/qulive',  //七牛CDN线路  30s      推流
             //'upyun.quzhiboapp.com/live'  //upyun线路在维护
         );
         $server = random_element($servers);
@@ -323,6 +324,7 @@ class LiveDao extends BaseDao
             $live->owner = extractFields($live, $us, 'u');
             $topicFields = $this->prefixFields($this->topicDao->topicFields(), 't');
             $live->topic = extractFields($live, $topicFields, 't');
+            $live->owner->avatarUrl = fixHttpsUrl($live->owner->avatarUrl);
             if ($live->attendanceId || ($user && $user->userId == $live->ownerId)) {
                 // 参加了或是创建者
                 $hlsHostLive = $this->electHlsServer();
