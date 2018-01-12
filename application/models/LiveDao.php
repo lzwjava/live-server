@@ -325,6 +325,7 @@ class LiveDao extends BaseDao
             $topicFields = $this->prefixFields($this->topicDao->topicFields(), 't');
             $live->topic = extractFields($live, $topicFields, 't');
             $live->owner->avatarUrl = fixHttpsUrl($live->owner->avatarUrl);
+            $live->coverUrl = fixHttpsUrl($live->coverUrl);
             if ($live->attendanceId || ($user && $user->userId == $live->ownerId)) {
                 // 参加了或是创建者
                 $hlsHostLive = $this->electHlsServer();
@@ -482,6 +483,7 @@ class LiveDao extends BaseDao
                limit $limit OFFSET $skip";
         $binds = array($liveId);
         $users = $this->db->query($sql, $binds)->result();
+        $this->userDao->fixUsersAvatars($users);
         return $users;
     }
 

@@ -12,6 +12,8 @@ class AttendanceDao extends BaseDao
     public $liveDao;
     /** @var WeChatPlatform */
     public $weChatPlatform;
+    /* @var $userDao */
+    public $userDao;
 
     public function __construct()
     {
@@ -20,6 +22,8 @@ class AttendanceDao extends BaseDao
         $this->liveDao = new LiveDao();
         $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
+        $this->load->model(UserDao::class);
+        $this->userDao = new UserDao();
     }
 
     private function addAttendance($userId, $liveId, $orderNo, $fromUserId)
@@ -51,7 +55,7 @@ class AttendanceDao extends BaseDao
 
         //用户报名成功后  通过微信通知用户
         $live = $this->liveDao->getLive($liveId);
-        $this->weChatPlatform->notifyUserAttendanceSuccessByWeChat($userId,$live);
+        $this->weChatPlatform->notifyUserAttendanceSuccessByWeChat($userId, $live);
         return $id;
     }
 
@@ -109,6 +113,7 @@ class AttendanceDao extends BaseDao
                 limit $limit offset $skip";
         $binds = array($liveId);
         $inviteUsers = $this->db->query($sql, $binds)->result();
+        $this->userDao->fixUsersAvatars($inviteUsers);
         return $inviteUsers;
     }
 
