@@ -805,7 +805,7 @@ if (!function_exists('specialPhones')) {
     }
 }
 
-define('VIDEO_HOST_URL', 'https://video-qncdn.quzhiboapp.com/');
+define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
 define('VIDEO_ALI_HOST_URL', 'https://video-cdn.quzhiboapp.com/');
 
 
