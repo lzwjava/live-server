@@ -877,7 +877,7 @@ define('MIN_WITHDRAW_AMOUNT', 1 * 100);
 define('ADMIN_OP_USER_ID', 1);
 define('ADMIN_OP_SYSTEM_ID', 100000);
 
-define('ANCHOR_INCOME_RATE', 0.4);
+define('ANCHOR_INCOME_RATE', 0);
 define('INVITE_INCOME_RATE', 0.1);
 
 define('ANCHOR_INCOME_REWARD_RATE', 0.9);
