@@ -214,6 +214,7 @@ if (!function_exists("filterHost")) {
 if (!function_exists('fixHttpsUrl')) {
     function fixHttpsUrl($url)
     {
+//        return $url;
         return str_replace('https://', 'http://', $url);
     }
 }
