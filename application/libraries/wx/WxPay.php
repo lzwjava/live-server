@@ -29,7 +29,7 @@ class WxPay
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag('');
-        $input->SetNotify_url("https://api.quzhiboapp.com/wechat/wxpayNotify");
+        $input->SetNotify_url("http://api.quzhiboapp.com/wechat/wxpayNotify");
         $input->SetTrade_type($tradeType);
         $input->SetAppid($appId);
         if ($tradeType == "JSAPI") {
