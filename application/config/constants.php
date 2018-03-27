@@ -441,6 +441,12 @@ define('SMS_TIME', 'time');
 define('SMS_OWNER_NAME', 'ownerName');
 define('SMS_LINK', 'link');
 
+// 阿里云短信
+define('ALIYUN_KEY_ID', 'kaicyttt');
+define('ALIYUN_KEY_SECRET', '123456Abc');
+define("ALIYUN_TEMPLATE_CODE", '');
+define('ALIYUN_SIGN_NAME', '趣直播');
+
 // users
 define('TABLE_USERS', 'users');
 define('KEY_MOBILE_PHONE_NUMBER', 'mobilePhoneNumber');
