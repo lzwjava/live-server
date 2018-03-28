@@ -441,6 +441,12 @@ define('SMS_TIME', 'time');
 define('SMS_OWNER_NAME', 'ownerName');
 define('SMS_LINK', 'link');
 
+// 阿里云短信
+define('ALIYUN_KEY_ID', 'LTAIcp6nw2eSY5iA');
+define('ALIYUN_KEY_SECRET', 'OGPChhTPODu7RsX76A3Edu3BJouE62');
+define("ALIYUN_TEMPLATE_CODE", 'SMS_129745079');
+define('ALIYUN_SIGN_NAME', 'bbox直播');
+
 // users
 define('TABLE_USERS', 'users');
 define('KEY_MOBILE_PHONE_NUMBER', 'mobilePhoneNumber');
