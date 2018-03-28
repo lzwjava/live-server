@@ -24,6 +24,7 @@ def prepare_remote_dirs():
     _set_user_dir()
     if not exists(server_dir):
         sudo('mkdir -p %s' % server_dir)
+        sudo('mkdir -p %s' % web_tmp_dir)
         sudo('chmod -R 755 %s' % server_dir)
         sudo('chmod -R 777 %s' % web_tmp_dir)
         sudo('chown %s %s' % ('root', server_dir))
