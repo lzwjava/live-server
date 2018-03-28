@@ -197,36 +197,20 @@ class LiveDao extends BaseDao
         return $this->getListFromTable(TABLE_LIVES, KEY_STATUS, $status);
     }
 
-    private function selfHlsServers()
-    {
-        return array(
-            'video.quzhiboapp.com/live',
-            'hls1.quzhiboapp.com/live',
-            'hls2.quzhiboapp.com/live',
-        );
-    }
+
 
     private function thirdHlsServers()
     {
         return array(
-            //      'hls-xycdn.quzhiboapp.com/live',       //星域CDN
-            //'hls-xycdn1.quzhiboapp.com/live',        //星域CDN 1   15s      回源模式
-            'cheer.quzhiboapp.com/live'
-//            'live-cdn.quzhiboapp.com/live',          //阿里云线路   30s      推流
-            //'pili-live-hls.quzhiboapp.com/qulive',  //七牛CDN线路  30s      推流
-            //'upyun.quzhiboapp.com/live'  //upyun线路在维护
+            '18.188.129.248/live'
         );
     }
 
     private function webHlsUrl($rtmpKey)
     {
         $servers = array(
-            'cheer.quzhiboapp.com/live'
-            //      'hls-xycdn.quzhiboapp.com/live',       //星域CDN
-            //'hls-xycdn1.quzhiboapp.com/live',        //星域CDN 1   15s      回源模式
-//            'live-cdn.quzhiboapp.com/live',          //阿里云线路   30s      推流
-            //'pili-live-hls.quzhiboapp.com/qulive',  //七牛CDN线路  30s      推流
-            //'upyun.quzhiboapp.com/live'  //upyun线路在维护
+            '18.188.129.248/live'
+
         );
         $server = random_element($servers);
         $hlsUrl = 'http://' . $server . '/' . $rtmpKey . '.m3u8';
@@ -259,13 +243,7 @@ class LiveDao extends BaseDao
         return $urls;
     }
 
-    private function selfFlvServers()
-    {
-        return array(
-            'flv1.quzhiboapp.com:8080/live',
-            'flv2.quzhiboapp.com:8080/live'
-        );
-    }
+
 
     private function thirdFlvServers()
     {
@@ -335,8 +313,8 @@ class LiveDao extends BaseDao
                 if ($user && $user->userId == $live->ownerId) {
 //                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey
 //                        . '?vhost=live-cdn.quzhiboapp.com';
-                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey;
-                    $live->foreignPushUrl = 'rtmp://vnet.quzhiboapp.com:31935/live/' . $live->rtmpKey;
+                    $live->pushUrl = 'rtmp://18.188.129.248:1935/live/' . $live->rtmpKey;
+                    $live->foreignPushUrl = 'rtmp://18.188.129.248:1935/live/' . $live->rtmpKey;
                 }
                 $live->coursewareUrl = empty($live->coursewareKey) ? "" : QINIU_FILE_HOST_SLASH . $live->coursewareKey;
                 $live->liveQrcodeUrl = $this->qrcodeUrlByKey($live->liveQrcodeKey);
@@ -348,7 +326,6 @@ class LiveDao extends BaseDao
                 $live->hlsUrl = random_element($hlsUrls);
                 $live->webHlsUrl = $this->webHlsUrl($live->rtmpKey);
 
-//                $live->hlsUrl = 'http://live-cdn.quzhiboapp.com/live/xtest.m3u8';
                 $live->webHlsUrl = $live->hlsUrl;
 
                 $live->flvUrl = 'http://' . $flvHostLive . '/' . $live->rtmpKey . '.flv';
