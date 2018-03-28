@@ -77,8 +77,8 @@ $dbBasicSetting = array(
     'dsn' => '',
     'hostname' => 'localhost',
     'username' => 'root',
-    'password' => 'WeImg4096',
-    'database' => 'qulive',
+    'password' => 'mUVDyKZR1P9m',
+    'database' => 'live',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,
@@ -97,23 +97,10 @@ $dbBasicSetting = array(
 
 $db['default'] = $dbBasicSetting;
 
-$db['lzwjava'] = $dbBasicSetting;
-$db['lzwjava']['hostname'] = 'localhost';
-$db['lzwjava']['username'] = 'lzw';
-$db['lzwjava']['password'] = '';
-
-$db['leo66'] = $dbBasicSetting;
-$db['leo66']['hostname'] = '127.0.0.1';
-$db['leo66']['username'] = 'root';
-$db['leo66']['password'] = 'root';
-$db['leo66']['port'] = 3306;
 
 $db['testing'] = $dbBasicSetting;
 
 switch (ENVIRONMENT) {
-    case'development':
-        $active_group = 'lzwjava';
-        break;
     case 'testing':
         $active_group = 'testing';
         break;

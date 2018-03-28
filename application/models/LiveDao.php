@@ -253,6 +253,7 @@ class LiveDao extends BaseDao
         $urls = array();
         foreach ($this->hlsServers() as $hlsServer) {
             $hlsUrl = 'http://' . $hlsServer . '/' . $rtmpKey . '.m3u8';
+//            $hlsUrl = 'http://live-cdn.quzhiboapp.com/live/xtest.m3u8';
             array_push($urls, $hlsUrl);
         }
         return $urls;
@@ -346,6 +347,9 @@ class LiveDao extends BaseDao
                 $live->hlsUrls = $hlsUrls;
                 $live->hlsUrl = random_element($hlsUrls);
                 $live->webHlsUrl = $this->webHlsUrl($live->rtmpKey);
+
+//                $live->hlsUrl = 'http://live-cdn.quzhiboapp.com/live/xtest.m3u8';
+                $live->webHlsUrl = $live->hlsUrl;
 
                 $live->flvUrl = 'http://' . $flvHostLive . '/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
