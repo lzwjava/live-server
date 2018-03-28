@@ -10,6 +10,8 @@
 if (!defined('BASEPATH'))
     exit ('No direct script access allowed');
 
+require_once APPPATH . '/libraries/smsDemo.php';
+
 class Users extends BaseController
 {
     public $leancloud;
@@ -37,6 +39,8 @@ class Users extends BaseController
         $this->liveDao = new LiveDao();
         $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
+
+
     }
 
     private function checkSmsCodeWrong($mobilePhoneNumber, $smsCode)
@@ -79,6 +83,54 @@ class Users extends BaseController
         } else {
             $this->failure(ERROR_SMS_WRONG, $return['result']);
         }
+    }
+
+    // 发送阿里云短信验证
+    public function loginSmsCode_post()
+    {
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER))
+        ) {
+            return;
+        }
+        $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
+        if (in_array($mobilePhoneNumber, specialPhones())) {
+            $this->succeed();
+            return;
+        }
+        sendSms($mobilePhoneNumber);
+        $this->succeed();
+    }
+
+    // 登录验证
+    public function phoneNumberLogin_post() {
+
+        if ($this->checkIfParamsNotExist($this->post(), array(
+            KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE, KEY_PASSWORD))
+        ) {
+            return;
+        }
+        $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
+        $password = $this -> post(KEY_PASSWORD);
+        $smsCode = $this->post(KEY_SMS_CODE);
+        if ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
+            logInfo("mobilePhone is used: " . $mobilePhoneNumber);
+            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
+            return;
+        } else if ($this->checkAliyunSms($mobilePhoneNumber, $smsCode)) {
+            return;
+        } else {
+            $userId = $this->userDao->createUserByLogin($mobilePhoneNumber, $password);
+            if (!$userId) {
+                $this->failure(ERROR_SQL_WRONG);
+                return;
+            }
+            $this->loginOrRegisterSucceed($userId);
+        }
+    }
+
+    // 验证短信
+    private function checkAliyunSms($mobilePhoneNumber, $smsCode) {
+        return true;
     }
 
     private function checkIfWrongPasswordFormat($password)
@@ -193,6 +245,7 @@ class Users extends BaseController
         $user = $this->userDao->findUserByMobile($mobilePhoneNumber);
         $this->loginOrRegisterSucceed($user->userId);
     }
+
 
     public function loginOrRegisterSucceed($userId)
     {

@@ -40,6 +40,27 @@ class UserDao extends BaseDao
         return $this->isUserUsed(KEY_MOBILE_PHONE_NUMBER, $mobilePhoneNumber);
     }
 
+    // 手机号验证码登录
+    function createUserByLogin($mobilePhoneNumber, $password)
+    {
+        $data = array(
+            KEY_USERNAME => "",
+            KEY_AVATAR_URL => 'https://i.quzhiboapp.com/touxiang.jpg',
+            KEY_SESSION_TOKEN => $this->genSessionToken(),
+        );
+        if ($mobilePhoneNumber) {
+            $data[KEY_MOBILE_PHONE_NUMBER] = $mobilePhoneNumber;
+        }
+        list($imageUrl, $imageKey, $error) = $this->qiniuDao->fetchImageAndUpload('https://i.quzhiboapp.com/touxiang.jpg');
+        if ($error) {
+            return array(ERROR_QINIU_UPLOAD, null);
+        }
+        $this->db->insert(TABLE_USERS, $data);
+        return $this->db->insert_id();
+
+
+    }
+
     function insertUser($username, $mobilePhoneNumber, $avatarUrl, $unionId = null, $subscribe = 0)
     {
         $data = array(

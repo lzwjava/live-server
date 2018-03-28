@@ -4,7 +4,7 @@ include 'Config.php';
 include_once 'Request/V20170525/SendSmsRequest.php';
 include_once 'Request/V20170525/QuerySendDetailsRequest.php';
 
-function sendSms($phoneNumber, $code) {
+function sendSms($phoneNumber) {
     
     //此处需要替换成自己的AK信息
     $accessKeyId = ALIYUN_KEY_ID;
@@ -30,8 +30,8 @@ function sendSms($phoneNumber, $code) {
     $request->setTemplateCode(ALIYUN_TEMPLATE_CODE);
     //选填-假如模板中存在变量需要替换则为必填(JSON格式)
     $request->setTemplateParam(json_encode(Array(  // 短信模板中字段的值
-        "name" => '趣直播',
-        "code"=>$code,
+        "name" => 'bbox直播',
+        "code"=>getRandomCheckCode(),
 //        "product"=>"dsd"
     )));
     //选填-发送短信流水号
@@ -39,7 +39,22 @@ function sendSms($phoneNumber, $code) {
     
     //发起访问请求
     $acsResponse = $acsClient->getAcsResponse($request);
-    var_dump($acsResponse);
+//    var_dump($acsResponse);
+}
+
+// 4位数的短信验证码
+function getRandomCheckCode()
+{
+    $chars = "0123456789";
+
+    mt_srand((double)microtime() * 10000 * getmypid());
+
+    $CheckCode = "";
+
+    while (strlen($CheckCode) < 4)
+        $CheckCode .= substr($chars, (mt_rand() % strlen($chars)), 1);
+
+    return $CheckCode;
 }
 
 function querySendDetails($phoneNumber) {
@@ -73,7 +88,7 @@ function querySendDetails($phoneNumber) {
     
     //发起访问请求
     $acsResponse = $acsClient->getAcsResponse($request);
-    var_dump($acsResponse);
+//    var_dump($acsResponse);
     
 }
 
