@@ -112,10 +112,13 @@ class Users extends BaseController
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
         $password = $this -> post(KEY_PASSWORD);
         $smsCode = $this->post(KEY_SMS_CODE);
-        if ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
-            logInfo("mobilePhone is used: " . $mobilePhoneNumber);
-            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
-            return;
+        if ($this->userDao->checkLogin($mobilePhoneNumber, $password)) {
+            $user = $this->userDao->findUserByMobile($mobilePhoneNumber);
+            $this->loginOrRegisterSucceed($user->userId);
+
+//            logInfo("mobilePhone is used: " . $mobilePhoneNumber);
+//            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
+//            return;
         } else if ($this->checkAliyunSms($mobilePhoneNumber, $smsCode)) {
             return;
         } else {

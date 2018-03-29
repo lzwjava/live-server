@@ -70,6 +70,9 @@ $route['users/userTopic']['GET'] = 'users/userTopic';
 $route['users/fixSystemId']['GET'] = 'users/fixSystemId';
 $route['users/usersByUsername']['GET'] = 'users/usersByUsername';
 
+$route['users/phoneNumberLogin']['POST'] = 'users/phoneNumberLogin';
+$route['users/loginSmsCode']['POST'] = 'users/loginSmsCode';
+
 // lives
 $route['lives/on']['GET'] = 'lives/listOrderByPlanTs';
 $route['lives/time']['GET'] = 'lives/listOrderByPlanTs';

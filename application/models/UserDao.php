@@ -51,6 +51,9 @@ class UserDao extends BaseDao
         if ($mobilePhoneNumber) {
             $data[KEY_MOBILE_PHONE_NUMBER] = $mobilePhoneNumber;
         }
+        if ($password) {
+            $data[KEY_PASSWORD] = sha1($password);;
+        }
         list($imageUrl, $imageKey, $error) = $this->qiniuDao->fetchImageAndUpload('https://i.quzhiboapp.com/touxiang.jpg');
         if ($error) {
             return array(ERROR_QINIU_UPLOAD, null);
