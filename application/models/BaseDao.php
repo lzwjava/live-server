@@ -114,12 +114,7 @@ class BaseDao extends CI_Model
 
     protected function newRedisClient($database, $prefix)
     {
-        return new Predis\Client([
-            'scheme' => 'tcp',
-            'host' => '127.0.0.1',
-            'port' => 6379,
-            'database' => $database
-        ], [
+        return new Predis\Client($this->config->item('redis_config'), [
             'prefix' => $prefix
         ]);
     }

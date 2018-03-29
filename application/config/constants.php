@@ -106,6 +106,8 @@ define('ERROR_WECHAT', 'wechat_error');
 // error users
 define('ERROR_NOT_IN_SESSION', 'not_in_session');
 define('ERROR_SMS_WRONG', 'sms_wrong');
+define('ERROR_SMS_SEND_WRONG', 'sms_send_wrong');
+define('ERROR_SMS_CODE_NOT_EXIST', 'sms_code_not_exist');
 define('ERROR_PASSWORD_FORMAT', 'password_format_wrong');
 define('ERROR_USERNAME_TAKEN', 'username_taken');
 define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
@@ -256,6 +258,8 @@ if (!function_exists('errorInfos')) {
             ERROR_ALREADY_BIND_PHONE => '已经绑定过手机号码了',
             ERROR_NOT_ATTEND_LIVE => '还没参加过直播,没有分类',
             ERROR_NOT_LIVE_TOPIC => '直播分类为空',
+            ERROR_SMS_WRONG => '短信验证码有误',
+            ERROR_SMS_CODE_NOT_EXIST => '短信验证码已过期或还未发送验证码',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',

@@ -20,6 +20,7 @@ class Users extends BaseController
     public $jsSdk;
     public $weChatPlatform;
     public $liveDao;
+    public $redisClient;
 
     function __construct()
     {
@@ -40,28 +41,27 @@ class Users extends BaseController
         $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
 
-
+        $this->redisClient = new Predis\Client($this->config->item('redis_config'));
     }
 
     private function checkSmsCodeWrong($mobilePhoneNumber, $smsCode)
     {
-        if (isDebug() && $smsCode == '5555') {
+        if (isDebug() && $smsCode == '555555') {
             // for test
-            return false;
+            return null;
         }
         if (in_array($mobilePhoneNumber, specialPhones())) {
-            return false;
+            return null;
         }
-        return false;
-//        $return = $this->leancloud->curlLeanCloud("verifySmsCode/" . $smsCode . "?mobilePhoneNumber=" .
-//            $mobilePhoneNumber,
-//            null);
-//        if ($return['status'] == 200) {
-//            return false;
-//        } else {
-//            $this->failure(ERROR_SMS_WRONG, $return['result']);
-//            return true;
-//        }
+        $key = "code:$mobilePhoneNumber";
+        $code = $this->redisClient->get($key);
+        if (!$code) {
+            return ERROR_SMS_CODE_NOT_EXIST;
+        }
+        if ($code != $smsCode) {
+            return ERROR_SMS_WRONG;
+        }
+        return null;
     }
 
     public function requestSmsCode_post()
@@ -98,7 +98,16 @@ class Users extends BaseController
             $this->succeed();
             return;
         }
-        sendSms($mobilePhoneNumber);
+        $code = random_string('numeric', 6);
+        $ackResponse = sendSms($mobilePhoneNumber, $code);
+        if ($ackResponse->Code != 'OK') {
+            $this->failure(ERROR_SMS_SEND_WRONG, $ackResponse->Message);
+            return;
+        }
+        $ok = $this->redisClient->setex("code:$mobilePhoneNumber", 60 * 5, $code);
+        if (!$ok) {
+            $this->failure(ERROR_REDIS_WRONG);
+        }
         $this->succeed();
     }
 
@@ -159,20 +168,22 @@ class Users extends BaseController
         $avatarUrl = $this->post(KEY_AVATAR_URL);
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
-        } elseif ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
-            logInfo("mobilePhone is used: " . $mobilePhoneNumber);
+        }
+        if ($this->userDao->isMobilePhoneNumberUsed($mobilePhoneNumber)) {
             $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
             return;
-        } else if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
-            return;
-        } else {
-            $userId = $this->userDao->insertUser($username, $mobilePhoneNumber, $avatarUrl);
-            if (!$userId) {
-                $this->failure(ERROR_SQL_WRONG);
-                return;
-            }
-            $this->loginOrRegisterSucceed($userId);
         }
+        $error = $this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode);
+        if ($error) {
+            $this->failure($error);
+            return;
+        }
+        $userId = $this->userDao->insertUser($username, $mobilePhoneNumber, $avatarUrl);
+        if (!$userId) {
+            $this->failure(ERROR_SQL_WRONG);
+            return;
+        }
+        $this->loginOrRegisterSucceed($userId);
     }
 
     public function registerBySns_post()
@@ -214,6 +225,7 @@ class Users extends BaseController
             return;
         }
         if ($this->checkSmsCodeWrong($mobile, $smsCode)) {
+            $this->failure(ERROR_SMS_WRONG);
             return;
         }
         $ok = $this->userDao->updateMobile($user->userId, $mobile);
@@ -243,7 +255,9 @@ class Users extends BaseController
         }
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
         $smsCode = $this->post(KEY_SMS_CODE);
-        if ($this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode)) {
+        $error = $this->checkSmsCodeWrong($mobilePhoneNumber, $smsCode);
+        if ($error) {
+            $this->failure($error);
             return;
         }
         $user = $this->userDao->findUserByMobile($mobilePhoneNumber);

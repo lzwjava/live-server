@@ -95,10 +95,34 @@ $dbBasicSetting = array(
     'save_queries' => TRUE
 );
 
+$localSetting = array(
+    'dsn' => '',
+    'hostname' => 'localhost',
+    'username' => 'lzw',
+    'password' => '',
+    'database' => 'qulive',
+    'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => TRUE,
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8mb4',
+    'dbcollat' => 'utf8mb4_unicode_ci',
+    'swap_pre' => '',
+    'encrypt' => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);
+
 $db['default'] = $dbBasicSetting;
 
 
 $db['testing'] = $dbBasicSetting;
+
+$db['local'] = $localSetting;
 
 switch (ENVIRONMENT) {
     case 'testing':
@@ -108,6 +132,6 @@ switch (ENVIRONMENT) {
         $active_group = 'default';
         break;
     default:
-        $active_group = 'default';
+        $active_group = 'local';
         break;
 }
