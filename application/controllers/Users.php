@@ -247,6 +247,9 @@ class Users extends BaseController
             return;
         }
         $user = $this->userDao->findUserByMobile($mobilePhoneNumber);
+        if (!$user) {
+            $this->failure(ERROR_PHONE_NOT_EXIST);
+        }
         $this->loginOrRegisterSucceed($user->userId);
     }
 

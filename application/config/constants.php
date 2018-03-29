@@ -228,6 +228,8 @@ define('ERROR_WITHDRAW_ALREADY_DONE', 'withdraw_already_done');
 // wechat groups
 define('ERROR_NO_AVAILABLE_GROUP', 'no_available_group');
 
+define('ERROR_PHONE_NOT_EXIST', 'phone_not_exist');
+
 if (!function_exists('errorInfos')) {
     function errorInfos()
     {
@@ -365,7 +367,8 @@ if (!function_exists('errorInfos')) {
             ERROR_WITHDRAW_ALREADY_DONE => '此提现已经处理过了',
 
             // groups
-            ERROR_NO_AVAILABLE_GROUP => '没有可用的群里, 请稍后再试'
+            ERROR_NO_AVAILABLE_GROUP => '没有可用的群里, 请稍后再试',
+            ERROR_PHONE_NOT_EXIST => '用户不存在，请注册一个'
         );
     }
 
