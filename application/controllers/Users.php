@@ -52,15 +52,16 @@ class Users extends BaseController
         if (in_array($mobilePhoneNumber, specialPhones())) {
             return false;
         }
-        $return = $this->leancloud->curlLeanCloud("verifySmsCode/" . $smsCode . "?mobilePhoneNumber=" .
-            $mobilePhoneNumber,
-            null);
-        if ($return['status'] == 200) {
-            return false;
-        } else {
-            $this->failure(ERROR_SMS_WRONG, $return['result']);
-            return true;
-        }
+        return false;
+//        $return = $this->leancloud->curlLeanCloud("verifySmsCode/" . $smsCode . "?mobilePhoneNumber=" .
+//            $mobilePhoneNumber,
+//            null);
+//        if ($return['status'] == 200) {
+//            return false;
+//        } else {
+//            $this->failure(ERROR_SMS_WRONG, $return['result']);
+//            return true;
+//        }
     }
 
     public function requestSmsCode_post()
@@ -113,13 +114,10 @@ class Users extends BaseController
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
         $password = $this->post(KEY_PASSWORD);
         $smsCode = $this->post(KEY_SMS_CODE);
+
         if ($this->userDao->checkLogin($mobilePhoneNumber, $password)) {
             $user = $this->userDao->findUserByMobile($mobilePhoneNumber);
             $this->loginOrRegisterSucceed($user->userId);
-
-//            logInfo("mobilePhone is used: " . $mobilePhoneNumber);
-//            $this->failure(ERROR_MOBILE_PHONE_NUMBER_TAKEN);
-//            return;
         } else if ($this->checkAliyunSms($mobilePhoneNumber, $smsCode)) {
             return;
         } else {
@@ -131,6 +129,7 @@ class Users extends BaseController
             $this->loginOrRegisterSucceed($userId);
         }
     }
+
 
     // 验证短信
     private function checkAliyunSms($mobilePhoneNumber, $smsCode)
