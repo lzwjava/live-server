@@ -10,7 +10,7 @@
 if (!defined('BASEPATH'))
     exit ('No direct script access allowed');
 
-require_once APPPATH . '/libraries/smsDemo.php';
+require_once APPPATH . 'libraries/smsDemo.php';
 
 class Users extends BaseController
 {
@@ -102,7 +102,8 @@ class Users extends BaseController
     }
 
     // 登录验证
-    public function phoneNumberLogin_post() {
+    public function phoneNumberLogin_post()
+    {
 
         if ($this->checkIfParamsNotExist($this->post(), array(
             KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE, KEY_PASSWORD))
@@ -110,7 +111,7 @@ class Users extends BaseController
             return;
         }
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
-        $password = $this -> post(KEY_PASSWORD);
+        $password = $this->post(KEY_PASSWORD);
         $smsCode = $this->post(KEY_SMS_CODE);
         if ($this->userDao->checkLogin($mobilePhoneNumber, $password)) {
             $user = $this->userDao->findUserByMobile($mobilePhoneNumber);
@@ -132,7 +133,8 @@ class Users extends BaseController
     }
 
     // 验证短信
-    private function checkAliyunSms($mobilePhoneNumber, $smsCode) {
+    private function checkAliyunSms($mobilePhoneNumber, $smsCode)
+    {
         return true;
     }
 
