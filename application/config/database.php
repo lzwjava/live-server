@@ -107,4 +107,7 @@ switch (ENVIRONMENT) {
     case 'production':
         $active_group = 'default';
         break;
+    default:
+        $active_group = 'default';
+        break;
 }

@@ -10,7 +10,7 @@
 if (!defined('BASEPATH'))
     exit ('No direct script access allowed');
 
-require_once APPPATH . 'libraries/smsDemo.php';
+require_once APPPATH . 'libraries/aliyun-php-sdk-core/SmsSend.php';
 
 class Users extends BaseController
 {

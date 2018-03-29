@@ -31,10 +31,13 @@ class Autoloader
 	
 	public static function autoload($className)
 	{
+		error_log('auto_load');
 		foreach (self::$autoloadPathArray as $path) {
 			$file = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.$path.DIRECTORY_SEPARATOR.$className.".php";
 			$file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
+			error_log($file);
 			if(is_file($file)){
+				error_log('load');
 				include_once $file;
 				break;
 			}

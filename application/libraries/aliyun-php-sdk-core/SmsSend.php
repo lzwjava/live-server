@@ -1,6 +1,6 @@
 <?php
     header("Content-type: text/html; charset=utf-8");
-include 'Config.php';
+include_once 'Config.php';
 include_once 'Request/V20170525/SendSmsRequest.php';
 include_once 'Request/V20170525/QuerySendDetailsRequest.php';
 

@@ -291,4 +291,5 @@ switch (ENVIRONMENT)
  */
 
 require 'vendor/autoload.php';
+require_once APPPATH . 'libraries/aliyun-php-sdk-core/Config.php';
 require_once BASEPATH.'core/CodeIgniter.php';
