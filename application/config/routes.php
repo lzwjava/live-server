@@ -72,6 +72,7 @@ $route['users/usersByUsername']['GET'] = 'users/usersByUsername';
 
 $route['users/phoneNumberLogin']['POST'] = 'users/phoneNumberLogin';
 $route['users/loginSmsCode']['POST'] = 'users/loginSmsCode';
+$route['users/adminLogin']['POST'] = 'users/adminLogin';
 
 // lives
 $route['lives/on']['GET'] = 'lives/listOrderByPlanTs';

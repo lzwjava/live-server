@@ -279,10 +279,10 @@ class UserDao extends BaseDao
         return $this->updateUser($userId, array(KEY_INCOME_SUBSCRIBE => $incomeSubscribe));
     }
 
-    function findAllUsers()
+    function findAllUsers($skip = 0, $limit = 100)
     {
         return $this->getListFromTable(TABLE_USERS, '1', '1',
-            $this->sessionUserFields(), null, 0, ROW_MAX);
+            $this->sessionUserFields(), 'userId desc', $skip, $limit);
     }
 
     function count()

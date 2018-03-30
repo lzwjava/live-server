@@ -198,7 +198,6 @@ class LiveDao extends BaseDao
     }
 
 
-
     private function thirdHlsServers()
     {
         return array(
@@ -242,7 +241,6 @@ class LiveDao extends BaseDao
         }
         return $urls;
     }
-
 
 
     private function thirdFlvServers()
@@ -303,7 +301,9 @@ class LiveDao extends BaseDao
             $live->owner = extractFields($live, $us, 'u');
             $topicFields = $this->prefixFields($this->topicDao->topicFields(), 't');
             $live->topic = extractFields($live, $topicFields, 't');
-            $live->owner->avatarUrl = fixHttpsUrl($live->owner->avatarUrl);
+            if ($live->owner) {
+                $live->owner->avatarUrl = fixHttpsUrl($live->owner->avatarUrl);
+            }
             $live->coverUrl = fixHttpsUrl($live->coverUrl);
             if ($live->attendanceId || ($user && $user->userId == $live->ownerId)) {
                 // 参加了或是创建者

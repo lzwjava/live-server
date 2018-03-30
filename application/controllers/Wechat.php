@@ -388,12 +388,12 @@ class Wechat extends BaseController
 
                     $this->replyToWeChat($textReply);
                 } else {
-                    $resultLives = $this->liveDao->searchWithoutDetail(0, 8,  $keyword);
-                    if (empty($resultLives)){
-                        $contentStr = sprintf("没有搜索到关键字为：%s的直播,您可以查看<a href='http://m.quzhiboapp.com/'>最新直播</a>",$keyword);
+                    $resultLives = $this->liveDao->searchWithoutDetail(0, 8, $keyword);
+                    if (empty($resultLives)) {
+                        $contentStr = sprintf("没有搜索到关键字为：%s的直播,您可以查看<a href='http://m.quzhiboapp.com/'>最新直播</a>", $keyword);
                         $textReply = $this->textReply($toUsername, $fromUsername, $contentStr);
                         $this->replyToWeChat($textReply);
-                    } else{
+                    } else {
                         $this->weChatPlatform->sendLivesByWechat($userId, $resultLives);
                     }
                 }
@@ -526,7 +526,7 @@ class Wechat extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-        $users = $this->userDao->findAllUsers();
+        $users = $this->userDao->findAllUsers(0, ROW_MAX);
         $subscribeCount = 0;
         for ($i = 0; $i < count($users); $i++) {
             $user = $users[$i];

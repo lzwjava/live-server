@@ -229,7 +229,7 @@ class BaseController extends REST_Controller
         } else {
             $user = $_SERVER['PHP_AUTH_USER'];
             $password = $_SERVER['PHP_AUTH_PW'];
-            if ($user != 'admin' && $password != 't3P3iYqF') {
+            if ($user != 'admin' || $password != 't3P3iYqF') {
                 $this->failure(ERROR_NOT_ADMIN);
                 return true;
             } else {

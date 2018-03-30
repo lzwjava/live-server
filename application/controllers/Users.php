@@ -466,4 +466,28 @@ class Users extends BaseController
         $users = $this->userDao->findUsersByUsername($this->get(KEY_USERNAME));
         $this->succeed($users);
     }
+
+    public function adminLogin_post()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $this->succeed();
+    }
+
+    public function adminList_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $users = $this->userDao->findAllUsers($skip, $limit);
+        $count = $this->userDao->count();
+        $this->succeed([
+            'list' => $users,
+            'total' => $count
+        ]);
+    }
+
 }
