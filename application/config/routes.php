@@ -108,6 +108,8 @@ $route['lives/(\d+)/notifyNewLive']['GET'] = 'lives/notifyNewLive/$1';
 $route['lives/userLives']['GET'] = 'lives/userLives';
 $route['lives/(\d+)/card']['GET'] = 'lives/invitationCard/$1';
 
+$route['lives/adminList']['GET'] = 'lives/adminList';
+
 // recorded videos
 $route['lives/(\d+)/recordedVideos'] = 'recordedVideos/list/$1';
 $route['recordedVideos/convert']['GET'] = 'recordedVideos/convert';

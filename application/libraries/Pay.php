@@ -62,6 +62,8 @@ class Pay
             return $this->wxpay->createAppCharge($orderNo, $amount, $subject, $body, $openId);
         } else if ($channel == CHANNEL_APPLE_IAP) {
             return array(null, array(KEY_ORDER_NO => $orderNo), null);
+        } else if ($channel == CHANNEL_QRCODE_PAY) {
+            return array(null, array(KEY_ORDER_NO => $orderNo), null);
         }
         return array(ERROR_PARAMETER_ILLEGAL, null, null);
     }

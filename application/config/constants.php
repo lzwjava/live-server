@@ -435,7 +435,7 @@ if (!function_exists('channelSet')) {
     function channelSet()
     {
         return array(CHANNEL_WECHAT_H5, CHANNEL_WECHAT_QRCODE, CHANNEL_ALIPAY_APP,
-            CHANNEL_WECHAT_APP, CHANNEL_APPLE_IAP);
+            CHANNEL_WECHAT_APP, CHANNEL_APPLE_IAP, CHANNEL_QRCODE_PAY);
     }
 }
 
@@ -483,6 +483,7 @@ define('CHANNEL_WECHAT_QRCODE', 'wechat_qrcode');
 define('CHANNEL_ALIPAY_APP', 'alipay_app');
 define('CHANNEL_WECHAT_APP', 'wechat_app');
 define('CHANNEL_APPLE_IAP', 'apple_iap');
+define('CHANNEL_QRCODE_PAY', 'qrcode_pay');
 
 define('KEY_PREPAY_ID', 'prepayId');
 

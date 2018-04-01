@@ -1,5 +1,7 @@
 <?php
+
 use Endroid\QrCode\QrCode;
+
 /**
  * Created by PhpStorm.
  * User: lzw
@@ -79,7 +81,7 @@ class Lives extends BaseController
         }
         //不能早于计划直播时间30分钟
         date_default_timezone_set('Asia/Shanghai');
-        $offset = 30*60;
+        $offset = 30 * 60;
         if (strtotime($live->planTs) - time() > $offset) {
             $this->failure(ERROR_LIVE_BEGIN_EARLY);
             return;
@@ -123,17 +125,17 @@ class Lives extends BaseController
         }
         //todo: store resources only as filename without cdn host
 
-/*        if (isset($data[KEY_COVER_URL])) {
-            $data[KEY_COVER_URL] = filterHost($data[KEY_COVER_URL]);
-        }
+        /*        if (isset($data[KEY_COVER_URL])) {
+                    $data[KEY_COVER_URL] = filterHost($data[KEY_COVER_URL]);
+                }
 
-        if (isset($data[KEY_DETAIL])) {
-            $data[KEY_DETAIL] = filterHost($data[KEY_DETAIL]);
-        }
+                if (isset($data[KEY_DETAIL])) {
+                    $data[KEY_DETAIL] = filterHost($data[KEY_DETAIL]);
+                }
 
-        if (isset($data[KEY_NOTICE])) {
-            $data[KEY_NOTICE] = filterHost($data[KEY_NOTICE]);
-        }*/
+                if (isset($data[KEY_NOTICE])) {
+                    $data[KEY_NOTICE] = filterHost($data[KEY_NOTICE]);
+                }*/
 
         if (isset($data[KEY_AMOUNT])) {
             $data[KEY_AMOUNT] = $this->toNumber($data[KEY_AMOUNT]);
@@ -212,6 +214,17 @@ class Lives extends BaseController
         $this->succeed($lives);
     }
 
+    function adminList_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $lives = $this->liveDao->getAdminLives($skip, $limit);
+        $this->succeed($lives);
+    }
+
     function listOrderByAttendance_get()
     {
         $skip = $this->skip();
@@ -223,10 +236,10 @@ class Lives extends BaseController
 
     function searchWithoutDetail_get()
     {
-        $keyword=$this->get(KEY_LIVE_KEYWORD);
+        $keyword = $this->get(KEY_LIVE_KEYWORD);
         $skip = $this->skip();
         $limit = $this->limit();
-        $lives = $this->liveDao->searchWithoutDetail($skip, $limit,$keyword);
+        $lives = $this->liveDao->searchWithoutDetail($skip, $limit, $keyword);
         $this->succeed($lives);
     }
 
@@ -681,7 +694,7 @@ class Lives extends BaseController
 
     function invitationCard_get($liveId)
     {
-        if (!function_exists('imagecreate')){
+        if (!function_exists('imagecreate')) {
             phpInfo("php不支持DG");
             return;
         }
@@ -695,12 +708,12 @@ class Lives extends BaseController
         }
 
         //card output path
-        $outputName = md5($live->liveId.$user->userId).".jpg";
-        $outputPath = "tmp/".$outputName;
-        $cardUrl = config_item('base_url').$outputPath;
+        $outputName = md5($live->liveId . $user->userId) . ".jpg";
+        $outputPath = "tmp/" . $outputName;
+        $cardUrl = config_item('base_url') . $outputPath;
 
         //如果没有缓存
-        if(!file_exists($outputPath)) {
+        if (!file_exists($outputPath)) {
             //生成邀请二维码
             $qrCodeImage = $this->makeQrcode('http://m.quzhiboapp.com/?liveId=' . $live->liveId .
                 '&fromUserId=' . $user->userId);
@@ -716,14 +729,13 @@ class Lives extends BaseController
 
         if (file_exists($outputPath)) {
             $this->succeed(stripslashes($cardUrl));
-        }
-        else {
+        } else {
             $this->failure("Cant not make the Invitation Card :" . $cardUrl);
         }
     }
 
-    private function makeInvitationCard($outputPath,$qrCodeImage,$avatarUrl,$usernameStr,
-                                        $subjectStr,$ownernameStr,$timeStr)
+    private function makeInvitationCard($outputPath, $qrCodeImage, $avatarUrl, $usernameStr,
+                                        $subjectStr, $ownernameStr, $timeStr)
     {
         //Resource
         $fontFile = "./resources/fonts/PingFang Regular.ttf";
@@ -739,79 +751,79 @@ class Lives extends BaseController
         $black = imagecolorallocate($bgImg, 10, 10, 10);
         $blue = imagecolorallocate($bgImg, 14, 138, 146);
         $red = imagecolorallocate($bgImg, 222, 0, 2);
-        $darkGreen = imagecolorallocate($bgImg,0,71,76);
+        $darkGreen = imagecolorallocate($bgImg, 0, 71, 76);
 
         //username
         $usernameStr = $this->filterEmoji($usernameStr);
-        $usernameTextLine = new textLine($bgImg,$usernameStr,23,$fontFile, $darkGreen,"center",405);
+        $usernameTextLine = new textLine($bgImg, $usernameStr, 23, $fontFile, $darkGreen, "center", 405);
         $usernameTextLine->draw();
 
         //live subject 需要换行 以文本框形式绘制
         $subjectStr = $this->filterEmoji($subjectStr);
-        $subjectTextBox = new textBox($bgImg,$subjectStr,"center",674,370,
-                              26,$fontFile2,50,"center",$darkGreen);
+        $subjectTextBox = new textBox($bgImg, $subjectStr, "center", 674, 370,
+            26, $fontFile2, 50, "center", $darkGreen);
         $subjectTextBox->draw();
 
         //owner name
         $ownernameStr = $this->filterEmoji($ownernameStr);
-        $ownerTextLine= new textLine($bgImg,$ownernameStr,23,$fontFile2, $darkGreen,"center",588);
+        $ownerTextLine = new textLine($bgImg, $ownernameStr, 23, $fontFile2, $darkGreen, "center", 588);
         $ownerTextLine->draw();
 
         //time
-        $timeTextLine = new textLine($bgImg,$timeStr,23,$fontFile, $darkGreen,"center",837);
+        $timeTextLine = new textLine($bgImg, $timeStr, 23, $fontFile, $darkGreen, "center", 837);
         $timeTextLine->draw();
 
         //avatar
         $avatar = [];
-        $avatar['img']   = $this->openAllTypeImage($avatarUrl);//获得头像图片
-        $avatar['w']     = imageSX($avatar['img'] );
-        $avatar['h']     = imageSY($avatar['img'] );
+        $avatar['img'] = $this->openAllTypeImage($avatarUrl);//获得头像图片
+        $avatar['w'] = imageSX($avatar['img']);
+        $avatar['h'] = imageSY($avatar['img']);
         $avatar['dst_w'] = 120;
         $avatar['dst_h'] = 120;
-        $avatar['dst_x'] = $width/2 -  $avatar['dst_w'] /2;
+        $avatar['dst_x'] = $width / 2 - $avatar['dst_w'] / 2;
         $avatar['dst_y'] = 243;
-        imagecopyresampled( $bgImg, $avatar['img'], $avatar['dst_x'], $avatar['dst_y'],
-                            0, 0, $avatar['dst_w'], $avatar['dst_h'],
-                            $avatar['w'], $avatar['h']);
+        imagecopyresampled($bgImg, $avatar['img'], $avatar['dst_x'], $avatar['dst_y'],
+            0, 0, $avatar['dst_w'], $avatar['dst_h'],
+            $avatar['w'], $avatar['h']);
 
         //qrcode
         $qrcode = [];
-        $qrcode['img']= imagecreatefromstring($qrCodeImage);
+        $qrcode['img'] = imagecreatefromstring($qrCodeImage);
         $qrcode['w'] = ImageSX($qrcode['img']);
         $qrcode['h'] = ImageSY($qrcode['img']);
         $qrcode['dst_size'] = 200;
-        $qrcode['dst_x'] = $width/2 - $qrcode['dst_size'] /2;
+        $qrcode['dst_x'] = $width / 2 - $qrcode['dst_size'] / 2;
         $qrcode['dst_y'] = 1064;
-        imagecopyresampled( $bgImg, $qrcode['img'], $qrcode['dst_x'], $qrcode['dst_y'],
-                            0, 0, $qrcode['dst_size'], $qrcode['dst_size'],
-                            $qrcode['w'], $qrcode['h']);
+        imagecopyresampled($bgImg, $qrcode['img'], $qrcode['dst_x'], $qrcode['dst_y'],
+            0, 0, $qrcode['dst_size'], $qrcode['dst_size'],
+            $qrcode['w'], $qrcode['h']);
 
         // 如果直接返回图片数据
         // header('content-type:image/gif');
         // imagegif($bgImg);
         // return;
-        imagejpeg($bgImg,$outputPath);
+        imagejpeg($bgImg, $outputPath);
         imagedestroy($bgImg); //销毁
     }
 
     private function openAllTypeImage($image)
     {
         $ename = getimagesize($image);
-        $ename = explode('/',$ename['mime']);
+        $ename = explode('/', $ename['mime']);
         $ext = $ename[1];
-        switch($ext){
-          case "png":
-            $image = imagecreatefrompng($image);
-            break;
-         case "jpeg":
-            $image = imagecreatefromjpeg($image);
-            break;
-         case "jpg":
-            $image = imagecreatefromjpeg($image);
-            break;
-         case "gif":
-            $image = imagecreatefromgif($image);
-            break;
+        switch ($ext) {
+            case "png":
+                $image = imagecreatefrompng($image);
+                break;
+            case "jpeg":
+                $image = imagecreatefromjpeg($image);
+                break;
+            case "jpg":
+                $image = imagecreatefromjpeg($image);
+                break;
+            case "gif":
+                $image = imagecreatefromgif($image);
+                break;
         }
         return $image;
     }
@@ -831,22 +843,24 @@ class Lives extends BaseController
     }
 
 
-   /**
-    * 剔除字符串中的 Emoji 字符
-    * @param string $str
-    * @return string
-    */
-   private function filterEmoji($str){
-       $str = preg_replace_callback(
+    /**
+     * 剔除字符串中的 Emoji 字符
+     * @param string $str
+     * @return string
+     */
+    private function filterEmoji($str)
+    {
+        $str = preg_replace_callback(
             '/./u',
             function (array $match) {
                 return strlen($match[0]) >= 4 ? '' : $match[0];
                 //大于四个字节则替换
             },
             $str);
-       return $str;
-   }
+        return $str;
+    }
 }
+
 class textLine
 {
     public $text;
@@ -878,23 +892,25 @@ class textLine
         }
     }
 
-    public function draw(){
+    public function draw()
+    {
         imagettftext($this->image,
-                    $this->size,
-                    0,
-                    $this->x,
-                    $this->y,
-                    $this->color,
-                    $this->fontFile,
-                    $this->text);
+            $this->size,
+            0,
+            $this->x,
+            $this->y,
+            $this->color,
+            $this->fontFile,
+            $this->text);
     }
 }
 
-class textBox {
-    public $image, $contentStr, $boxLeftX, $boxTopY,  $boxWidth, $fontSize,
+class textBox
+{
+    public $image, $contentStr, $boxLeftX, $boxTopY, $boxWidth, $fontSize,
         $font, $lineHeight, $alignment, $fontColor;
 
-    public function __construct($image, $contentStr,  $boxLeftX, $boxTopY, $boxWidth, $fontSize, $font, $lineHeight, $alignment, $fontColor)
+    public function __construct($image, $contentStr, $boxLeftX, $boxTopY, $boxWidth, $fontSize, $font, $lineHeight, $alignment, $fontColor)
     {
         $this->image = $image;
         $this->contentStr = $contentStr;
@@ -907,39 +923,40 @@ class textBox {
         $this->alignment = $alignment;
         $this->fontColor = $fontColor;
 
-        if($boxLeftX == "center"){
-            $this->boxLeftX = (imageSX($this->image) - $this->boxWidth)/2;
+        if ($boxLeftX == "center") {
+            $this->boxLeftX = (imageSX($this->image) - $this->boxWidth) / 2;
         }
     }
 
-    public function draw(){
+    public function draw()
+    {
         $line = "";
         $letters = [];
         $lines = [];
         // 将字符串拆分成一个个单字 保存到数组 letter 中
-        for ($i = 0;$i < mb_strlen($this->contentStr); $i++) {
+        for ($i = 0; $i < mb_strlen($this->contentStr); $i++) {
             $letters[] = mb_substr($this->contentStr, $i, 1);
         }
         foreach ($letters as $l) {
-            $teststr = $line." ".$l;
-            $teststr = $line." ".$l;
+            $teststr = $line . " " . $l;
+            $teststr = $line . " " . $l;
             $testbox = imagettfbbox($this->fontSize, 0, $this->font, $teststr);
             // 判断拼接后的字符串是否超过预设的宽度
             if (($testbox[2] > $this->boxWidth) && ($line !== "")) {
                 $lines[] = $line;     //此行内容写满，放入行数组
                 $line = $l;           //新字符接到下一行
-            } else{
+            } else {
                 $line .= $l;          //新字符续写
             }
         }
-        if($line){                    //剩余字符放最后一行
+        if ($line) {                    //剩余字符放最后一行
             $lines[] = $line;
         }
 
         //按行绘制
         foreach ($lines as $key => $lineContent) {
             //字符底边位置根据行高和文本框顶部确定
-            $thisLineBottomY = $this->boxTopY + $this->lineHeight*$key; //对最后一行 进行对齐
+            $thisLineBottomY = $this->boxTopY + $this->lineHeight * $key; //对最后一行 进行对齐
 
             $textWidth = measureTextWidth($this->fontSize, $this->font, $lineContent);//测量宽度
             switch ($this->alignment) {
@@ -947,10 +964,10 @@ class textBox {
                     $textLeftX = $this->boxLeftX;
                     break;
                 case "right":
-                    $textLeftX = $this->boxLeftX + $this->boxWidth -$textWidth;
+                    $textLeftX = $this->boxLeftX + $this->boxWidth - $textWidth;
                     break;
                 case "center":
-                    $textLeftX = $this->boxLeftX + ($this->boxWidth-$textWidth) / 2 ;
+                    $textLeftX = $this->boxLeftX + ($this->boxWidth - $textWidth) / 2;
                     break;
             }
             imagettftext($this->image, $this->fontSize, 0, $textLeftX, $thisLineBottomY,
@@ -959,7 +976,8 @@ class textBox {
     }
 }
 
-function measureTextWidth($fontSize, $fontFile, $text){
+function measureTextWidth($fontSize, $fontFile, $text)
+{
     $box = imagettfbbox($fontSize, 0, $fontFile, $text);
     $width = abs(max($box[2], $box[4]) - min($box[0], $box[6]));
     return $width;
