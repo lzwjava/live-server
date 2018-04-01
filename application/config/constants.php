@@ -570,8 +570,8 @@ define('KEY_SESSION_HEADER', 'X-Session');
 define('LC_TEST_APP_ID', 'YY3S7uNlnXUgX48BHTJlJx4i-gzGzoHsz');
 define('LC_TEST_APP_KEY', 'h9zCqcPSi7nDgQTQE6YsOT0z');
 
-define('LC_PROD_APP_ID', 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz');
-define('LC_PROD_APP_KEY', 'V4FPFLSmSeO1HaIwPVyhO9P3');
+define('LC_PROD_APP_ID', 'InbiUsSQ4e2szdR9hc65bxjH-gzGzoHsz');
+define('LC_PROD_APP_KEY', '2r0jJk4XRm0XAJzQklCTJrF5');
 
 // coupons
 define('TABLE_COUPONS', 'coupons');
