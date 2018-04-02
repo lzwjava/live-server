@@ -210,13 +210,6 @@ define('ERROR_ALREADY_APPLY', 'already_apply');
 define('ERROR_WECHAT_NUM_FORMAT', 'wechat_num_format');
 define('ERROR_MIN_INTRODUCTION_LEN', 'min_introduction_len');
 
-define('ERROR_PACKET_TOO_LITTLE', 'packet_too_little');
-define('ERROR_PACKET_TOO_MUCH', 'packet_too_much');
-define('ERROR_PACKET_NONE', 'packet_none');
-define('ERROR_ALREADY_GRAB', 'packet_already_grab');
-define('ERROR_PACKET_SEND', 'packet_send');
-define('ERROR_PACKET_AT_LEAST', 'packet_at_least');
-
 // accounts
 define('ERROR_VERIFY_RECEIPT', 'verify_receipt_wrong');
 
@@ -352,14 +345,6 @@ if (!function_exists('errorInfos')) {
             ERROR_MUST_BIND_PHONE => '必须先绑定手机',
             ERROR_WECHAT_NUM_FORMAT => '微信号应该只包含字母和数字, 请到微信设置中查看',
             ERROR_MIN_INTRODUCTION_LEN => '个人介绍不少于30个字符',
-
-            //packets
-            ERROR_PACKET_TOO_LITTLE => '红包最低1元',
-            ERROR_PACKET_TOO_MUCH => '红包最多1万元',
-            ERROR_PACKET_NONE => '红包已经被抢光了',
-            ERROR_ALREADY_GRAB => '您已经抢过红包了',
-            ERROR_PACKET_SEND => '发红包出错了',
-            ERROR_PACKET_AT_LEAST => '红包每个至少1元',
 
             // accounts
             ERROR_VERIFY_RECEIPT => '验证支付凭证失败',
@@ -633,18 +618,6 @@ define('MAX_INTRODUCTION_LEN', 500);
 define('MIN_INTRODUCTION_LEN', 30);
 define('MAX_REVIEW_MARK_LEN', 100);
 
-// packets
-define('TABLE_PACKETS', 'packets');
-define('KEY_PACKET_ID', 'packetId');
-define('KEY_TOTAL_AMOUNT', 'totalAmount');
-define('KEY_TOTAL_COUNT', 'totalCount');
-define('KEY_WISHING', 'wishing');
-define('KEY_REMAIN_COUNT', 'remainCount');
-
-// user_packets
-define('TABLE_USER_PACKETS', 'user_packets');
-define('KEY_USER_PACKET_ID', 'userPacketId');
-
 define('KEY_OP', 'op');
 
 define('OP_ADD', 'add');
@@ -786,14 +759,10 @@ define('FFMPEG_PATH', '/home/srs/trunk/objs/ffmpeg/bin/ffmpeg');
 define('LEAST_COMMON_REWARD', 100);
 define('MAX_COMMON_REWARD', 100 * 1000);
 
-// packets
-define('LEAST_COMMON_PACKET', 100);
-define('MAX_COMMON_PACKET', 100 * 100000);
 
 // charge type
 define('CHARGE_TYPE_ATTEND', 1);
 define('CHARGE_TYPE_REWARD', 2);
-define('CHARGE_TYPE_PACKET', 3);
 define('CHARGE_TYPE_BALANCE', 4);
 
 // oauth type
@@ -865,11 +834,6 @@ EOD
 
 define('WECHAT_LIVE_WORD', <<<EOD
 欢迎参与直播，请点击进入报名：<a href="http://m.quzhiboapp.com/?liveId=%s&type=live">%s</a>
-EOD
-);
-
-define('WECHAT_PACKET_WORD', <<<EOD
-您有一个%s的红包 <a href="http://m.quzhiboapp.com/?packetId=%s&type=packet">点击我进入领取</a>
 EOD
 );
 

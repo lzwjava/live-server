@@ -206,15 +206,6 @@ $route['applications/(\d+)/reject']['POST'] = 'applications/reviewReject/$1';
 $route['applications/(\d+)']['GET'] = 'applications/one/$1';
 $route['applications/me']['GET'] = 'applications/me/$1';
 
-// packets
-$route['packets']['POST'] = 'packets/create';
-$route['packets/(\w+)/grab']['GET'] = 'packets/grab/$1';
-$route['packets/me']['GET'] = 'packets/myPacket';
-$route['packets/meAll']['GET'] = 'packets/meAll';
-$route['packets/sendPacket']['GET'] = 'packets/sendPacket';
-$route['packets/(\w+)']['GET'] = 'packets/one/$1';
-$route['packets/(\w+)/userPackets']['GET'] = 'packets/allPacketsById/$1';
-
 // topics
 $route['topics']['POST'] = 'topics/create';
 $route['topics']['GET'] = 'topics/list';

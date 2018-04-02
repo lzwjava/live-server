@@ -17,7 +17,6 @@ class Wechat extends BaseController
     public $wxPay;
     public $notify;
     public $liveDao;
-    public $packetDao;
     public $weChatPlatform;
     /**@var WxDao */
     public $wxDao;
@@ -43,8 +42,6 @@ class Wechat extends BaseController
         $this->notify = new WxPayCallback();
         $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
-        $this->load->model(PacketDao::class);
-        $this->packetDao = new PacketDao();
         $this->load->model(WxDao::class);
         $this->wxDao = new WxDao();
         $this->load->model(WxSessionDao::class);
@@ -347,11 +344,6 @@ class Wechat extends BaseController
                 $liveId = $sceneData->liveId;
                 $live = $this->liveDao->getLive($liveId);
                 $extraWord = sprintf(WECHAT_LIVE_WORD, $liveId, $live->subject);
-            } else if ($sceneData->type == 'packet') {
-                $packetId = $sceneData->packetId;
-                $packet = $this->packetDao->getPacketById($packetId);
-                $extraWord = sprintf(WECHAT_PACKET_WORD,
-                    $packet->user->username, $packetId);
             }
         }
         return $extraWord;
@@ -610,12 +602,9 @@ class Wechat extends BaseController
         }
         $type = $this->get(KEY_TYPE);
         $liveId = $this->toNumber($this->get(KEY_LIVE_ID));
-        $packetId = $this->get(KEY_PACKET_ID);
         $data = null;
         if ($type == 'live') {
             $data = array(KEY_TYPE => $type, KEY_LIVE_ID => $liveId);
-        } else if ($type == 'packet') {
-            $data = array(KEY_TYPE => $type, KEY_PACKET_ID => $packetId);
         }
         list($error, $data) = $this->jsSdk->genQrcode($data);
         if ($error) {

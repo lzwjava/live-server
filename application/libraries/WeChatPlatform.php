@@ -280,46 +280,6 @@ class WeChatPlatform
         return $this->notifyByWeChat($user, '96n9JfS5RcMraNsZcM_kQu7wyXede2gB7h77El386hM', $url, $tmplData);
     }
 
-    function notifyOwnerByUserPacket($grabUserId, $ownerUserId, $packetId,
-                                     $amount, $wishing, $toOwner = true)
-    {
-        $user = $this->userDao->findUserById($grabUserId);
-        $owner = $this->userDao->findUserById($ownerUserId);
-        $result = null;
-        if ($toOwner) {
-            $result = $user->username . '抢到了您的红包';
-        } else {
-            $result = $user->username . '，您抢到了' . $owner->username . '的红包';
-        }
-        $username = null;
-        if ($toOwner) {
-            $username = $user->username;
-        } else {
-            $username = $owner->username;
-        }
-        $url = 'http://m.quzhiboapp.com/?type=packet&packetId=' . $packetId;
-        $remark = $wishing;
-        $tmplData = array(
-            'first' => array(
-                'value' => $result,
-                'color' => '#000'
-            ),
-            'keyword1' => array(
-                'value' => floor($amount / 100.0) . '元',
-                'color' => '#173177'
-            ),
-            'keyword2' => array(
-                'value' => $username,
-                'color' => '#173177'
-            ),
-            'remark' => array(
-                'value' => $remark,
-                'color' => '#000'
-            )
-        );
-        return $this->notifyByWeChat($owner, 'H7LOlSlgG1O8ohoese6k4_kqwjarXAdsOgbn0x8vTQU', $url, $tmplData);
-    }
-
     function notifyWithdraw($withdraw, $systemAuto = false)
     {
         $user = $this->userDao->findUserById($withdraw->userId);
