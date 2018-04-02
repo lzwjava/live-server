@@ -222,7 +222,11 @@ class Lives extends BaseController
         $skip = $this->skip();
         $limit = $this->limit();
         $lives = $this->liveDao->getAdminLives($skip, $limit);
-        $this->succeed($lives);
+        $count = $this->liveDao->countAdminLives();
+        $this->succeed(array(
+            'list' => $lives,
+            'total' => $count
+        ));
     }
 
     function listOrderByAttendance_get()

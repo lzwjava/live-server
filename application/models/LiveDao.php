@@ -95,6 +95,14 @@ class LiveDao extends BaseDao
         return $this->getLivesWithoutDetail($ids, null, true);
     }
 
+    function countAdminLives()
+    {
+        $sql = "SELECT count(liveId) AS cnt FROM lives
+                WHERE status>=? ORDER BY planTs DESC";
+        $row = $this->db->query($sql, array(LIVE_STATUS_REVIEW))->row();
+        return $row->cnt;
+    }
+
     function getLivesOrderBy_attendanceCount($skip, $limit, $user)
     {
         $sql = "SELECT liveId FROM lives
