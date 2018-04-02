@@ -252,7 +252,7 @@ class LiveDao extends BaseDao
 
     private function qrcodeUrlByKey($liveQrcodeKey)
     {
-        return empty($liveQrcodeKey) ? QINIU_FILE_HOST_SLASH . QINIU_QULIVE_QRCODE_KEY : QINIU_FILE_HOST_SLASH . $liveQrcodeKey;
+        return empty($liveQrcodeKey) ? QINIU_FILE_HOST_SLASH . 'bbox.jpg' : QINIU_FILE_HOST_SLASH . $liveQrcodeKey;
     }
 
     private function hlsUrls($rtmpKey)
