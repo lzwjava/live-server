@@ -172,4 +172,22 @@ class Charges extends BaseController
             'total' => $total
         ));
     }
+
+    function adminPay_post()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        if ($this->checkIfParamsNotExist($this->post(), array(KEY_ORDER_NO))) {
+            return;
+        }
+        $orderNo = $this->post(KEY_ORDER_NO);
+
+        $error = $this->payNotifyDao->handleChargeSucceed($orderNo);
+        if ($error) {
+            $this->failure($error);
+            return;
+        }
+        $this->succeed();
+    }
 }
