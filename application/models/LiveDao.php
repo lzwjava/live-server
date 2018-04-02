@@ -202,6 +202,12 @@ class LiveDao extends BaseDao
         return $this->getOneFromTable(TABLE_LIVES, KEY_LIVE_ID, $liveId);
     }
 
+    function getRawLiveWithoutDetail($liveId)
+    {
+        $fields = $this->livePublicFieldsWithoutDetail();
+        return $this->getOneFromTable(TABLE_LIVES, KEY_LIVE_ID, $liveId, $fields);
+    }
+
     function getRawLivesByStatus($status)
     {
         return $this->getListFromTable(TABLE_LIVES, KEY_STATUS, $status);

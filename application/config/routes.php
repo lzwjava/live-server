@@ -192,6 +192,7 @@ $route['charges/one']['GET'] = 'charges/one';
 $route['charges/remark']['POST'] = 'charges/remark';
 $route['charges']['POST'] = 'charges/create';
 $route['charges/appleCallback']['POST'] = 'charges/appleCallback';
+$route['charges/adminList']['GET'] = 'charges/adminList';
 
 // stats
 $route['stats']['GET'] = 'stats/all';
@@ -243,3 +244,4 @@ $route['wechatGroups']['GET'] = 'wechatGroups/list';
 $route['wechatGroups/one']['GET'] = 'wechatGroups/one';
 $route['wechatGroups/current']['GET'] = 'wechatGroups/current';
 $route['wechatGroups/update']['POST'] = 'wechatGroups/update';
+

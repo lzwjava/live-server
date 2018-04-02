@@ -164,7 +164,7 @@ if (!function_exists('truncate')) {
 if (!function_exists('genOrderNo')) {
     function genOrderNo()
     {
-        return getToken(16);
+        return random_string('numeric', 6);
     }
 }
 

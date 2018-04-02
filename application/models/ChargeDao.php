@@ -8,6 +8,19 @@
  */
 class ChargeDao extends BaseDao
 {
+    public $userDao;
+    public $liveDao;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model(UserDao::class);
+        $this->userDao = new UserDao();
+        $this->load->model(LiveDao::class);
+        $this->liveDao = new LiveDao();
+    }
+
+
     public function add($orderNo, $amount, $channel, $creator, $creatorIP, $metaData, $prepayId)
     {
         if (!$prepayId) {
@@ -44,6 +57,20 @@ class ChargeDao extends BaseDao
         $this->db->where(KEY_ORDER_NO, $orderNo);
         $this->db->update(TABLE_CHARGES, array(KEY_REMARK => $remark));
         return $this->db->affected_rows() > 0;
+    }
+
+    function queryAdminList($skip = 0, $limit = 100)
+    {
+        $list = $this->getListFromTable('charges', '1', '1', '*', 'chargeId desc', $skip, $limit);
+        $total = $this->countRows('charges', '1', '1');
+        foreach ($list as $item) {
+            $metaData = json_decode($item->metaData);
+            if ($metaData->type == 1) {
+                $item->creatorUser = $this->userDao->findPublicUser('userId', $item->creator);
+                $item->live = $this->liveDao->getRawLiveWithoutDetail($metaData->liveId);
+            }
+        }
+        return array($list, $total);
     }
 
 }

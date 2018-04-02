@@ -97,6 +97,13 @@ class BaseDao extends CI_Model
             KEY_DETAIL, KEY_NOTICE, KEY_SHARE_ICON, KEY_CREATED, KEY_UPDATED);
     }
 
+    protected function livePublicFieldsWithoutDetail($prefix = TABLE_LIVES, $alias = false)
+    {
+        $fields = $this->liveFields();
+        $diffFields = array_diff($fields, array(KEY_SPEAKER_INTRO, KEY_DETAIL));
+        return $this->mergeFields($diffFields, $prefix, $alias);
+    }
+
     protected function livePublicFields($prefix = TABLE_LIVES, $alias = false)
     {
         return $this->mergeFields($this->liveFields(), $prefix, $alias);

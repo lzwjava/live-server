@@ -160,4 +160,16 @@ class Charges extends BaseController
         }
         return $data;
     }
+
+    function adminList_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        list($list, $total) = $this->chargeDao->queryAdminList();
+        $this->succeed(array(
+            'list' => $list,
+            'total' => $total
+        ));
+    }
 }
