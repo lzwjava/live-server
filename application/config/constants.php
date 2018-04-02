@@ -141,6 +141,7 @@ define('ERROR_LIVE_BEGIN_EARLY', 'live_begin_early');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
+define('ERROR_ALREADY_ATTEND_ADMIN', 'already_attend_admin');
 define('ERROR_CHARGE_CREATE', 'create_charge_failed');
 define('ERROR_NOT_ALLOW_ATTEND', 'not_allow_attend');
 
@@ -282,6 +283,7 @@ if (!function_exists('errorInfos')) {
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
+            ERROR_ALREADY_ATTEND_ADMIN => '该用户已经审核通过报名，无需再通过',
             ERROR_CHARGE_CREATE => '创建支付失败',
             ERROR_NOT_ALLOW_ATTEND => '直播尚在编辑之中或者已结束,无法报名',
 

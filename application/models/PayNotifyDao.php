@@ -110,6 +110,10 @@ class PayNotifyDao extends BaseDao
             if (isset($metadata->fromUserId)) {
                 $inviteFromUserId = $metadata->fromUserId;
             }
+            $attendance = $this->attendanceDao->getAttendanceByUserIdAndLiveId($userId, $liveId);
+            if ($attendance) {
+                return ERROR_ALREADY_ATTEND_ADMIN;
+            }
             $this->db->trans_begin();
             $error = $this->updatePaidAndNewCharge($orderNo, $charge, $channel, $userId);
             if ($error) {

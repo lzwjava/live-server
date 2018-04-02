@@ -134,6 +134,14 @@ class AttendanceDao extends BaseDao
         return $attendances;
     }
 
+    public function getAttendanceByUserIdAndLiveId($userId, $liveId)
+    {
+        $sql = "SELECT * FROM attendances WHERE liveId= ? AND userId=? LIMIT 1";
+        $binds = array($liveId, $userId);
+        $attendance = $this->db->query($sql, $binds)->row();
+        return $attendance;
+    }
+
     protected function handleAttendances($attendances)
     {
         foreach ($attendances as $attendance) {

@@ -193,6 +193,7 @@ $route['charges/remark']['POST'] = 'charges/remark';
 $route['charges']['POST'] = 'charges/create';
 $route['charges/appleCallback']['POST'] = 'charges/appleCallback';
 $route['charges/adminList']['GET'] = 'charges/adminList';
+$route['charges/adminPay']['POST'] = 'charges/adminPay';
 
 // stats
 $route['stats']['GET'] = 'stats/all';
