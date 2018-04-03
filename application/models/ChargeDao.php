@@ -59,10 +59,32 @@ class ChargeDao extends BaseDao
         return $this->db->affected_rows() > 0;
     }
 
-    function queryAdminList($skip = 0, $limit = 100)
+    function countAdminList($orderNo, $creator)
     {
-        $list = $this->getListFromTable('charges', '1', '1', '*', 'chargeId desc', $skip, $limit);
-        $total = $this->countRows('charges', '1', '1');
+        if ($orderNo) {
+            $this->db->where(KEY_ORDER_NO, $orderNo);
+        }
+        if ($creator) {
+            $this->db->where(KEY_CREATOR, $creator);
+        }
+        return $this->db->count_all(TABLE_CHARGES);
+    }
+
+    function queryAdminList($skip = 0, $limit = 100, $orderNo, $creator)
+    {
+        if ($orderNo) {
+            $this->db->where(KEY_ORDER_NO, $orderNo);
+        }
+        if ($creator) {
+            $this->db->where(KEY_CREATOR, $creator);
+        }
+        $this->db->order_by(KEY_CHARGE_ID, 'desc');
+        $this->db->limit($limit);
+        $this->db->offset($skip);
+        $list = $this->db->get(TABLE_CHARGES)->result();
+
+        $total = $this->countAdminList($orderNo, $creator);
+
         foreach ($list as $item) {
             $metaData = json_decode($item->metaData);
             if ($metaData->type == 1) {

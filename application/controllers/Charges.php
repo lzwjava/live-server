@@ -166,7 +166,11 @@ class Charges extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-        list($list, $total) = $this->chargeDao->queryAdminList();
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $orderNo = $this->get(KEY_ORDER_NO);
+        $creator = $this->get(KEY_CREATOR);
+        list($list, $total) = $this->chargeDao->queryAdminList($skip, $limit, $orderNo, $creator);
         $this->succeed(array(
             'list' => $list,
             'total' => $total
