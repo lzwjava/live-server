@@ -67,7 +67,7 @@ class ChargeDao extends BaseDao
             $metaData = json_decode($item->metaData);
             if ($metaData->type == 1) {
                 $item->creatorUser = $this->userDao->findPublicUser('userId', $item->creator);
-                $item->live = $this->liveDao->getRawLiveWithoutDetail($metaData->liveId);
+                $item->live = $this->liveDao->getLiveWithoutDetail($metaData->liveId);
             }
         }
         return array($list, $total);

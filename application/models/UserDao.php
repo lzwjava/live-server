@@ -45,7 +45,7 @@ class UserDao extends BaseDao
     {
         $data = array(
             KEY_USERNAME => "",
-            KEY_AVATAR_URL => 'https://i.quzhiboapp.com/touxiang.jpg',
+            KEY_AVATAR_URL => 'https://i.quzhiboapp.com/logo.jpg',
             KEY_SESSION_TOKEN => $this->genSessionToken(),
         );
         if ($mobilePhoneNumber) {

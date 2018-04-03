@@ -157,7 +157,16 @@ class LiveDao extends BaseDao
         return $ids;
     }
 
-    private function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false, $extraSortField = null)
+    function getLiveWithoutDetail($liveId)
+    {
+        $lives = $this->getLivesWithoutDetail(array($liveId), null);
+        if (count($lives) == 0) {
+            return null;
+        }
+        return $lives[0];
+    }
+
+    function getLivesWithoutDetail($liveIds, $user, $sortByPlanTs = false, $extraSortField = null)
     {
         $lvs = $this->getLives($liveIds, $user, $sortByPlanTs, $extraSortField);
         foreach ($lvs as $lv) {
