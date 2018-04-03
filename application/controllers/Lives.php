@@ -701,8 +701,14 @@ class Lives extends BaseController
         if ($this->checkIfNotAdmin()) {
             return;
         }
-        $stats = $this->liveDao->getLiveStats();
-        $this->succeed($stats);
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $stats = $this->liveDao->getLiveStats($skip, $limit);
+        $count = $this->liveDao->countLiveStats();
+        $this->succeed(array(
+            'list' => $stats,
+            'total' => $count
+        ));
     }
 
     function invitationCard_get($liveId)
