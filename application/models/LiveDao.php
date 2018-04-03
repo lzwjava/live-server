@@ -550,4 +550,15 @@ class LiveDao extends BaseDao
         return $userIds;
     }
 
+    function getLiveStats()
+    {
+        $fields = $this->livePublicFieldsWithoutDetail('l', false);
+        $sql = "SELECT a.liveId, ifnull(sum(c.amount),0) AS sumMoney, $fields FROM attendances AS a 
+                LEFT JOIN charges AS c ON c.orderNo=a.orderNo 
+                LEFT JOIN lives AS l ON l.liveId = a.liveId 
+                GROUP BY a.liveId ORDER BY a.liveId DESC";
+        $lives = $this->db->query($sql)->result();
+        return $lives;
+    }
+
 }

@@ -696,6 +696,15 @@ class Lives extends BaseController
         );
     }
 
+    function stats_get()
+    {
+        if ($this->checkIfNotAdmin()) {
+            return;
+        }
+        $stats = $this->liveDao->getLiveStats();
+        $this->succeed($stats);
+    }
+
     function invitationCard_get($liveId)
     {
         if (!function_exists('imagecreate')) {
