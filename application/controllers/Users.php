@@ -313,23 +313,6 @@ class Users extends BaseController
                 }
             }
         }
-        if (isset($data[KEY_LIVE_SUBSCRIBE])) {
-            $liveSubscribe = intval($data[KEY_LIVE_SUBSCRIBE]);
-            if ($liveSubscribe != 0 && $liveSubscribe != 1) {
-                $this->failure(ERROR_PARAMETER_ILLEGAL);
-                return;
-            }
-            if ($liveSubscribe == 1 && $user->wechatSubscribe == 0) {
-                $this->failure(ERROR_MUST_SUBSCRIBE);
-                return;
-            }
-            if ($liveSubscribe == 1) {
-                $live = $this->liveDao->findLatestWaitLive();
-                if ($live) {
-                    $this->weChatPlatform->notifyNewLive($user->userId, $live);
-                }
-            }
-        }
         $user = $this->userDao->updateUserAndGet($user, $data);
         $this->succeed($user);
     }
