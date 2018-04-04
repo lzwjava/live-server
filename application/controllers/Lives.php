@@ -734,8 +734,10 @@ class Lives extends BaseController
         //如果没有缓存
         if (!file_exists($outputPath)) {
             //生成邀请二维码
-            $qrCodeImage = $this->makeQrcode('http://m.quzhiboapp.com/?liveId=' . $live->liveId .
-                '&fromUserId=' . $user->userId);
+
+            $host = MOBILE_WEB_HOST;
+
+            $qrCodeImage = $this->makeQrcode("$host/?liveId=$live->liveId&fromUserId=$user->userId");
             //生成邀请卡
             $this->makeInvitationCard($outputPath,
                 $qrCodeImage,

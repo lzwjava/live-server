@@ -865,3 +865,5 @@ define('ANCHOR_INCOME_REWARD_RATE', 0.9);
 define('KEY_MEDIA_ID', 'mediaId');
 
 define('QINIU_QULIVE_QRCODE_KEY', 'WRuqRV');    // 直播倒计时页面显示的默认二维码
+
+define('MOBILE_WEB_HOST', 'http://bbox.tv');，
