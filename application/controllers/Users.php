@@ -64,6 +64,11 @@ class Users extends BaseController
         return null;
     }
 
+    private function isPhoneLegal($phone)
+    {
+        return preg_match('/^1\d{10}$/', $phone);
+    }
+
     public function requestSmsCode_post()
     {
         if ($this->checkIfParamsNotExist($this->post(), array(KEY_MOBILE_PHONE_NUMBER))
@@ -71,6 +76,10 @@ class Users extends BaseController
             return;
         }
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
+        if (!$this->isPhoneLegal($mobilePhoneNumber)) {
+            $this->failure(ERROR_PHONE_ILLEGAL);
+            return;
+        }
         if (in_array($mobilePhoneNumber, specialPhones())) {
             $this->succeed();
             return;
@@ -94,6 +103,10 @@ class Users extends BaseController
             return;
         }
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
+        if (!$this->isPhoneLegal($mobilePhoneNumber)) {
+            $this->failure(ERROR_PHONE_ILLEGAL);
+            return;
+        }
         if (in_array($mobilePhoneNumber, specialPhones())) {
             $this->succeed();
             return;
@@ -123,6 +136,11 @@ class Users extends BaseController
         $mobilePhoneNumber = $this->post(KEY_MOBILE_PHONE_NUMBER);
         $password = $this->post(KEY_PASSWORD);
         $smsCode = $this->post(KEY_SMS_CODE);
+
+        if (!$this->isPhoneLegal($mobilePhoneNumber)) {
+            $this->failure(ERROR_PHONE_ILLEGAL);
+            return;
+        }
 
         if ($this->userDao->checkLogin($mobilePhoneNumber, $password)) {
             $user = $this->userDao->findUserByMobile($mobilePhoneNumber);
@@ -166,6 +184,10 @@ class Users extends BaseController
         $username = $this->post(KEY_USERNAME);
         $smsCode = $this->post(KEY_SMS_CODE);
         $avatarUrl = $this->post(KEY_AVATAR_URL);
+        if (!$this->isPhoneLegal($mobilePhoneNumber)) {
+            $this->failure(ERROR_PHONE_ILLEGAL);
+            return;
+        }
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
         }

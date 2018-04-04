@@ -225,6 +225,7 @@ define('ERROR_WITHDRAW_ALREADY_DONE', 'withdraw_already_done');
 define('ERROR_NO_AVAILABLE_GROUP', 'no_available_group');
 
 define('ERROR_PHONE_NOT_EXIST', 'phone_not_exist');
+define('ERROR_PHONE_ILLEGAL', 'phone_illegal');
 
 if (!function_exists('errorInfos')) {
     function errorInfos()
@@ -254,6 +255,7 @@ if (!function_exists('errorInfos')) {
             ERROR_NOT_LIVE_TOPIC => '直播分类为空',
             ERROR_SMS_WRONG => '短信验证码有误',
             ERROR_SMS_CODE_NOT_EXIST => '短信验证码已过期或还未发送验证码',
+            ERROR_PHONE_ILLEGAL => '手机号码不符合规范哦',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
