@@ -14,9 +14,8 @@ class QiniuDao extends BaseDao
 {
     private function getUpToken()
     {
-        $bucket = 'qulive';
         $auth = new Auth(QINIU_ACCESS_KEY, QINIU_SECRET_KEY);
-        $upToken = $auth->uploadToken($bucket);
+        $upToken = $auth->uploadToken(QINIU_BUCKET);
         return $upToken;
     }
 
