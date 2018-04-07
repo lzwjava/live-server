@@ -268,7 +268,7 @@ if (!function_exists('errorInfos')) {
             ERROR_CREATE_LIVE => '创建直播失败',
             ERROR_DETAIL_TOO_SHORT => '直播详情至少要 100 字',
             ERROR_ALREADY_REVIEW => '已经在审核或审核过了',
-            ERROR_LIVE_NOT_WAIT => '直播不是报名状态,无法开始',
+            ERROR_LIVE_NOT_WAIT => '直播还没通过审核，无法开始',
             ERROR_LIVE_NOT_START => '直播不是进行中状态,无法结束',
             ERROR_LIVE_NOT_ON => '直播并不是测试开始状态,无法恢复到报名中',
             ERROR_LIVE_NOT_TRANSCODE => '直播没有在转码状态,无法结束',
