@@ -275,6 +275,7 @@ if (!function_exists('errorInfos')) {
             ERROR_PLAYBACK_FAIL => '生成回放失败',
             ERROR_LIVE_NOT_REVIEW => '直播不在审核状态,无法完成该操作',
             ERROR_LIVE_BEGIN_EARLY => '直播不能开始的太早',
+            ERROR_SPEAKER_INTRO_TOO_SHORT => '主播介绍不得少于50字哦',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
