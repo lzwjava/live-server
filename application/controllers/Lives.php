@@ -152,6 +152,12 @@ class Lives extends BaseController
                 }
             }
         }
+        if (isset($data[KEY_NOTICE])) {
+            if (mb_strlen($data[KEY_NOTICE]) > MAX_NOTICE_LEN) {
+                $this->failure(ERROR_LIVE_NOTICE_LEN);
+                return;
+            }
+        }
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;

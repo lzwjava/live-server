@@ -139,6 +139,7 @@ define('ERROR_SPEAKER_INTRO_TOO_SHORT', 'speaker_intro_too_short');
 define('ERROR_PLAYBACK_FAIL', 'playback_fail');
 define('ERROR_LIVE_BEGIN_EARLY', 'live_begin_early');
 define('ERROR_LIVE_STATUS_ON', 'live_status_on');
+define('ERROR_LIVE_NOTICE_LEN', 'live_notice_len');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -281,6 +282,7 @@ if (!function_exists('errorInfos')) {
             ERROR_LIVE_BEGIN_EARLY => '直播不能开始的太早',
             ERROR_SPEAKER_INTRO_TOO_SHORT => '主播介绍不得少于50字哦',
             ERROR_LIVE_STATUS_ON => '已经在直播中，无需再次开始',
+            ERROR_LIVE_NOTICE_LEN => '直播公告最多300个字符哦',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
@@ -884,3 +886,4 @@ define('MOBILE_WEB_HOST', 'http://bbox.tv');
 define('MAX_USERNAME_LEN', 15);
 define('MAX_SPEAKER_INTRO_LEN', 50);
 define('MAX_LIVE_DETAIL_LEN', 100);
+define('MAX_NOTICE_LEN', 300);
