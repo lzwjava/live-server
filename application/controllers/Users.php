@@ -184,6 +184,10 @@ class Users extends BaseController
         $username = $this->post(KEY_USERNAME);
         $smsCode = $this->post(KEY_SMS_CODE);
         $avatarUrl = $this->post(KEY_AVATAR_URL);
+        if (mb_strlen($username) > MAX_USERNAME_LEN) {
+            $this->failure(ERROR_USERNAME_LEN);
+            return;
+        }
         if (!$this->isPhoneLegal($mobilePhoneNumber)) {
             $this->failure(ERROR_PHONE_ILLEGAL);
             return;

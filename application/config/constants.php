@@ -228,6 +228,8 @@ define('ERROR_NO_AVAILABLE_GROUP', 'no_available_group');
 define('ERROR_PHONE_NOT_EXIST', 'phone_not_exist');
 define('ERROR_PHONE_ILLEGAL', 'phone_illegal');
 
+define('ERROR_USERNAME_LEN', 'username_len');
+
 if (!function_exists('errorInfos')) {
     function errorInfos()
     {
@@ -257,6 +259,7 @@ if (!function_exists('errorInfos')) {
             ERROR_SMS_WRONG => '短信验证码有误',
             ERROR_SMS_CODE_NOT_EXIST => '短信验证码已过期或还未发送验证码',
             ERROR_PHONE_ILLEGAL => '手机号码不符合规范哦',
+            ERROR_USERNAME_LEN => '昵称最多15个字符哦',
 
             // lives
             ERROR_AMOUNT_UNIT => 'amount 必须为整数, 单位为分钱. 例如 10 元, amount = 1000.',
@@ -877,3 +880,5 @@ define('KEY_MEDIA_ID', 'mediaId');
 define('QINIU_QULIVE_QRCODE_KEY', 'WRuqRV');    // 直播倒计时页面显示的默认二维码
 
 define('MOBILE_WEB_HOST', 'http://bbox.tv');
+
+define('MAX_USERNAME_LEN', 15);
