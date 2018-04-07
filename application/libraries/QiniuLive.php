@@ -12,7 +12,7 @@ class QiniuLive
 
     function __construct()
     {
-        $credentials = new \Qiniu\Credentials(QINIU_ACCESS_KEY, QINIU_SECRET_KEY);
+        $credentials = new \Qiniu\Credentials(QINIU_LIVE_ACCESS_KEY, QINIU_LIVE_SECRET_KEY);
         $this->hub = new \Pili\Hub($credentials, QINIU_HUB);
     }
 
@@ -23,12 +23,9 @@ class QiniuLive
             $result = $stream->segments();
 //            $start = $result['start'];
 //            $end = $result['end'];
-
-//
             $segment0 = $result['segments'][0];
             $start = $segment0['start'];
             $end = $segment0['end'];
-
             $resp = $stream->saveAs('playback.m3u8', 'm3u8', $start, $end);
             $playbackUrl = $resp['url'];
             return $playbackUrl;

@@ -713,11 +713,15 @@ define('WXAPP_APPID', 'wxf7383d242dd0d2b7');
 define('WXAPP_SECRET', 'd855fa3f5d519fbd4be1e30ac08881cd');
 
 
-define('QINIU_FILE_HOST', 'https://i.quzhiboapp.com');
-define('QINIU_FILE_HOST_SLASH', 'https://i.quzhiboapp.com/');
-define('QINIU_FILE_HOST_WITHOUT_SCHEME', '//i.quzhiboapp.com');
-define('QINIU_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
-define('QINIU_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');
+define('QINIU_FILE_HOST', 'http://p6t0dhy64.bkt.clouddn.com');
+define('QINIU_FILE_HOST_SLASH', 'http://p6t0dhy64.bkt.clouddn.com/');
+define('QINIU_FILE_HOST_WITHOUT_SCHEME', '//p6t0dhy64.bkt.clouddn.com');
+
+define('QINIU_ACCESS_KEY', 'k3aZ4KvIjDp_nDmhQ61kdLAfShzW62p65T-72acp');
+define('QINIU_SECRET_KEY', 'RlVdN2QDPlueXcC0KOIJITrfrCw1lYpNEMHm37_8');
+
+define('QINIU_LIVE_ACCESS_KEY', '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g');
+define('QINIU_LIVE_SECRET_KEY', 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x');
 define('QINIU_HUB', 'qulive');
 
 define('WECHAT_TOKEN', 'mLYmAdMrVkKO');
