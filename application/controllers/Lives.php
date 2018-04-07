@@ -361,19 +361,19 @@ class Lives extends BaseController
         if ($live->needPay && $this->checkIfAmountWrong($live->amount)) {
             return;
         }
-        if (mb_strlen($live->detail) < 100) {
+        if (mb_strlen($live->detail) < MAX_LIVE_DETAIL_LEN) {
             $this->failure(ERROR_DETAIL_TOO_SHORT);
             return;
         }
-        if (isTimeBeforeNow($live->planTs)) {
-            $this->failure(ERROR_PLAN_TS_INVALID);
-            return;
-        }
+//        if (isTimeBeforeNow($live->planTs)) {
+//            $this->failure(ERROR_PLAN_TS_INVALID);
+//            return;
+//        }
         if ($live->status >= LIVE_STATUS_REVIEW) {
             $this->failure(ERROR_ALREADY_REVIEW);
             return;
         }
-        if (mb_strlen($live->speakerIntro) < 50) {
+        if (mb_strlen($live->speakerIntro) < MAX_SPEAKER_INTRO_LEN) {
             $this->failure(ERROR_SPEAKER_INTRO_TOO_SHORT);
             return;
         }

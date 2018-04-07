@@ -882,3 +882,5 @@ define('QINIU_QULIVE_QRCODE_KEY', 'WRuqRV');    // 直播倒计时页面显示�
 define('MOBILE_WEB_HOST', 'http://bbox.tv');
 
 define('MAX_USERNAME_LEN', 15);
+define('MAX_SPEAKER_INTRO_LEN', 50);
+define('MAX_LIVE_DETAIL_LEN', 100);
