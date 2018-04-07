@@ -75,8 +75,12 @@ class Lives extends BaseController
         if ($this->checkIfObjectNotExists($live)) {
             return;
         }
-        if ($live->status != LIVE_STATUS_WAIT) {
+        if ($live->status <= LIVE_STATUS_REVIEW) {
             $this->failure(ERROR_LIVE_NOT_WAIT);
+            return;
+        }
+        if ($live->status >= LIVE_STATUS_ON) {
+            $this->failure(ERROR_LIVE_STATUS_ON);
             return;
         }
         //不能早于计划直播时间30分钟

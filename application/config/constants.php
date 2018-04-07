@@ -138,6 +138,7 @@ define('ERROR_LIVE_NOT_ON', 'live_not_on');
 define('ERROR_SPEAKER_INTRO_TOO_SHORT', 'speaker_intro_too_short');
 define('ERROR_PLAYBACK_FAIL', 'playback_fail');
 define('ERROR_LIVE_BEGIN_EARLY', 'live_begin_early');
+define('ERROR_LIVE_STATUS_ON', 'live_status_on');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -276,6 +277,7 @@ if (!function_exists('errorInfos')) {
             ERROR_LIVE_NOT_REVIEW => '直播不在审核状态,无法完成该操作',
             ERROR_LIVE_BEGIN_EARLY => '直播不能开始的太早',
             ERROR_SPEAKER_INTRO_TOO_SHORT => '主播介绍不得少于50字哦',
+            ERROR_LIVE_STATUS_ON => '已经在直播中，无需再次开始',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
