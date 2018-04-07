@@ -44,8 +44,8 @@ class UserDao extends BaseDao
     function createUserByLogin($mobilePhoneNumber, $password)
     {
         $data = array(
-            KEY_USERNAME => "",
-            KEY_AVATAR_URL => 'https://i.quzhiboapp.com/logo.jpg',
+            KEY_USERNAME => '',
+            KEY_AVATAR_URL => QINIU_FILE_HOST_SLASH . 'defaultAvatar.png',
             KEY_SESSION_TOKEN => $this->genSessionToken(),
         );
         if ($mobilePhoneNumber) {
@@ -54,14 +54,8 @@ class UserDao extends BaseDao
         if ($password) {
             $data[KEY_PASSWORD] = sha1($password);;
         }
-        list($imageUrl, $imageKey, $error) = $this->qiniuDao->fetchImageAndUpload('https://i.quzhiboapp.com/touxiang.jpg');
-        if ($error) {
-            return array(ERROR_QINIU_UPLOAD, null);
-        }
         $this->db->insert(TABLE_USERS, $data);
         return $this->db->insert_id();
-
-
     }
 
     function insertUser($username, $mobilePhoneNumber, $avatarUrl, $unionId = null, $subscribe = 0)
