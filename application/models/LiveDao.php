@@ -234,15 +234,14 @@ class LiveDao extends BaseDao
     private function thirdHlsServers()
     {
         return array(
-            '18.188.129.248/live'
+            '18.188.154.243/live'
         );
     }
 
     private function webHlsUrl($rtmpKey)
     {
         $servers = array(
-            '18.188.129.248/live'
-
+            '18.188.154.243/live'
         );
         $server = random_element($servers);
         $hlsUrl = 'http://' . $server . '/' . $rtmpKey . '.m3u8';
@@ -346,8 +345,8 @@ class LiveDao extends BaseDao
                 if ($user && $user->userId == $live->ownerId) {
 //                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey
 //                        . '?vhost=live-cdn.quzhiboapp.com';
-                    $live->pushUrl = 'rtmp://18.188.129.248:1935/live/' . $live->rtmpKey;
-                    $live->foreignPushUrl = 'rtmp://18.188.129.248:1935/live/' . $live->rtmpKey;
+                    $live->pushUrl = 'rtmp://18.188.154.243/live/' . $live->rtmpKey;
+                    $live->foreignPushUrl = 'rtmp://18.188.154.243/live/' . $live->rtmpKey;
                 }
                 $live->coursewareUrl = empty($live->coursewareKey) ? "" : QINIU_FILE_HOST_SLASH . $live->coursewareKey;
                 $live->liveQrcodeUrl = $this->qrcodeUrlByKey($live->liveQrcodeKey);
@@ -358,8 +357,6 @@ class LiveDao extends BaseDao
                 $live->hlsUrls = $hlsUrls;
                 $live->hlsUrl = random_element($hlsUrls);
                 $live->webHlsUrl = $this->webHlsUrl($live->rtmpKey);
-
-                $live->webHlsUrl = $live->hlsUrl;
 
                 $live->flvUrl = 'http://' . $flvHostLive . '/' . $live->rtmpKey . '.flv';
                 $live->canJoin = true;
