@@ -268,7 +268,6 @@ class LiveDao extends BaseDao
         $urls = array();
         foreach ($this->hlsServers() as $hlsServer) {
             $hlsUrl = 'http://' . $hlsServer . '/' . $rtmpKey . '.m3u8';
-//            $hlsUrl = 'http://live-cdn.quzhiboapp.com/live/xtest.m3u8';
             array_push($urls, $hlsUrl);
         }
         return $urls;
@@ -343,8 +342,6 @@ class LiveDao extends BaseDao
                 $rtmpHostLive = $this->electRtmpServer();
                 $flvHostLive = $this->electFlvServer();
                 if ($user && $user->userId == $live->ownerId) {
-//                    $live->pushUrl = 'rtmp://cheer.quzhiboapp.com/live/' . $live->rtmpKey
-//                        . '?vhost=live-cdn.quzhiboapp.com';
                     $live->pushUrl = 'rtmp://18.188.154.243/live/' . $live->rtmpKey;
                     $live->foreignPushUrl = 'rtmp://18.188.154.243/live/' . $live->rtmpKey;
                 }
