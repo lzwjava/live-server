@@ -1,1 +1,1 @@
-fab -H ubuntu@18.220.176.221 deploy
+fab -H ubuntu@36.41.187.152 deploy

@@ -4,8 +4,8 @@ from fabric.api import run, sudo, env, cd, local, prefix, put, lcd, settings
 from fabric.contrib.project import rsync_project
 from fabric.contrib.files import exists, sed
 
-server_dir = '/home/wwwroot/api'
-web_tmp_dir = '/home/wwwroot/api/tmp'
+server_dir = '/www/wwwroot/bbox/api'
+web_tmp_dir = '/www/wwwroot/bbox/api/tmp'
 tmp_dir = '/tmp/live-server' + str(os.getpid()) + '/'
 
 
