@@ -234,7 +234,7 @@ if (isDebug()) {
 if (isDebug()) {
     $config['log_path'] = APPPATH . 'logs/';
 } else {
-    $config['log_path'] = '/home/live-server-logs/';
+    $config['log_path'] = '/www/wwwroot/bbox/api-logs/';
 }
 
 /*
