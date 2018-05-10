@@ -241,7 +241,7 @@ class LiveDao extends BaseDao
     private function webHlsUrl($rtmpKey)
     {
         $servers = array(
-            '18.188.154.243/live'
+            '36.41.187.95:8889/live'
         );
         $server = random_element($servers);
         $hlsUrl = 'http://' . $server . '/' . $rtmpKey . '.m3u8';
@@ -342,8 +342,8 @@ class LiveDao extends BaseDao
                 $rtmpHostLive = $this->electRtmpServer();
                 $flvHostLive = $this->electFlvServer();
                 if ($user && $user->userId == $live->ownerId) {
-                    $live->pushUrl = 'rtmp://18.188.154.243/live/' . $live->rtmpKey;
-                    $live->foreignPushUrl = 'rtmp://18.188.154.243/live/' . $live->rtmpKey;
+                    $live->pushUrl = 'rtmp://36.41.187.95/live/' . $live->rtmpKey;
+                    $live->foreignPushUrl = 'rtmp://36.41.187.95/live/' . $live->rtmpKey;
                 }
                 $live->coursewareUrl = empty($live->coursewareKey) ? "" : QINIU_FILE_HOST_SLASH . $live->coursewareKey;
                 $live->liveQrcodeUrl = $this->qrcodeUrlByKey($live->liveQrcodeKey);
