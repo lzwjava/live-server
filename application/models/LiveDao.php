@@ -241,7 +241,7 @@ class LiveDao extends BaseDao
     private function webHlsUrl($rtmpKey)
     {
         $servers = array(
-            '36.41.187.95:8889/live'
+            'pili-live-hls.quzhiboapp.com/qulive'
         );
         $server = random_element($servers);
         $hlsUrl = 'http://' . $server . '/' . $rtmpKey . '.m3u8';
