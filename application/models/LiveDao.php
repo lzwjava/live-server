@@ -234,7 +234,7 @@ class LiveDao extends BaseDao
     private function thirdHlsServers()
     {
         return array(
-            '36.41.187.95:8889/live'
+            'pili-live-hls.quzhiboapp.com/qulive'
         );
     }
 
