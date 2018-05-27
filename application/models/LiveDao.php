@@ -234,7 +234,7 @@ class LiveDao extends BaseDao
     private function thirdHlsServers()
     {
         return array(
-            '18.188.154.243/live'
+            '36.41.187.95:8889/live'
         );
     }
 
