@@ -123,7 +123,7 @@ class LiveDao extends BaseDao
     }
 
     function getLiveByLiveKey($liveKey) {
-        $sql = "SELECT * FROM lives WHERE key_rtmp_key = ?";
+        $sql = "SELECT * FROM lives WHERE rtmpKey = ?";
         return $this->db->query($sql, array($liveKey))->row();
     }
 
