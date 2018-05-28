@@ -106,6 +106,7 @@ $route['lives/(\d+)/notifyRelated']['GET'] = 'lives/notifyLiveStartRecommend/$1'
 $route['lives/(\d+)/topic']['POST'] = 'lives/updateTopic/$1';
 $route['lives/(\d+)/notifyNewLive']['GET'] = 'lives/notifyNewLive/$1';
 $route['lives/userLives']['GET'] = 'lives/userLives';
+$route['lives/checkStream']['POST'] = 'lives/checkStream';
 $route['lives/(\d+)/card']['GET'] = 'lives/invitationCard/$1';
 
 $route['lives/adminList']['GET'] = 'lives/adminList';

@@ -122,6 +122,11 @@ class LiveDao extends BaseDao
         return $count;
     }
 
+    function getLiveByLiveKey($liveKey) {
+        $sql = "SELECT * FROM lives WHERE key_rtmp_key = ?";
+        return $this->db->query($sql, array($liveKey))->row();
+    }
+
     function getRecommendLives($skip, $limit, $user, $skipLiveId)
     {
         $sql = "SELECT liveId FROM lives

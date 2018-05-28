@@ -319,6 +319,12 @@ class Lives extends BaseController
         $this->succeed($ok);
     }
 
+    function checkStream_post() {
+        $key = $this->post('stream');
+        $live = $this->liveDao->getLiveByLiveKey($key);
+        $this->response($live ? 0 : 1, 200);
+    }
+
     function finish_get($id)
     {
         $user = $this->checkAndGetSessionUser();
