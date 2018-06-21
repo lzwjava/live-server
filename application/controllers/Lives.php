@@ -158,8 +158,14 @@ class Lives extends BaseController
                 return;
             }
         }
+        if (isset($data[KEY_SUBJECT])) {
+            if (mb_strlen($data[KEY_SUBJECT]) > MAX_SUBJECT_LEN) {
+                $this->failure(ERROR_SUBJECT_LEN);
+                return;
+            }
+        }
         if (isset($data[KEY_SPEAKER_INTRO])) {
-            if (mb_strlen($data[KEY_SPEAKER_INTRO] > MAX_SPEAKER_INTRO_LEN)) {
+            if (mb_strlen($data[KEY_SPEAKER_INTRO]) > MAX_SPEAKER_INTRO_LEN) {
                 $this->failure(ERROR_SPEAKER_INTRO_LEN);
                 return;
             }

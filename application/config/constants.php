@@ -142,6 +142,7 @@ define('ERROR_LIVE_STATUS_ON', 'live_status_on');
 define('ERROR_LIVE_NOTICE_LEN', 'live_notice_len');
 define('ERROR_SPEAKER_INTRO_LEN', 'speaker_intro_len');
 define('ERROR_DETAIL_LEN', 'detail_len');
+define('ERROR_SUBJECT_LEN', 'subject_len');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -287,6 +288,7 @@ if (!function_exists('errorInfos')) {
             ERROR_LIVE_NOTICE_LEN => '直播公告最多300个字符哦',
             ERROR_SPEAKER_INTRO_LEN => '主播介绍最多1000个字符哦',
             ERROR_DETAIL_LEN => '直播详情最多8000个字符哦',
+            ERROR_SUBJECT_LEN => '直播主题最多60个字符哦',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
@@ -424,6 +426,7 @@ define('LIVE_STATUS_TRANSCODE', 25);
 define('LIVE_STATUS_OFF', 30);
 define('LIVE_STATUS_ERROR', 35);
 
+define('MAX_SUBJECT_LEN', 60);
 define('MAX_SPEAKER_INTRO_LEN', 1000);
 define('MAX_DETAIL_LEN', 8000);
 
