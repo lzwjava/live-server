@@ -288,7 +288,7 @@ if (!function_exists('errorInfos')) {
             ERROR_LIVE_NOTICE_LEN => '直播公告最多300个字符哦',
             ERROR_SPEAKER_INTRO_LEN => '主播介绍最多1000个字符哦',
             ERROR_DETAIL_LEN => '直播详情最多8000个字符哦',
-            ERROR_SUBJECT_LEN => '直播主题最多60个字符哦',
+            ERROR_SUBJECT_LEN => '直播标题最多60个字符哦',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
