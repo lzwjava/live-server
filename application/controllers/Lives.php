@@ -158,6 +158,18 @@ class Lives extends BaseController
                 return;
             }
         }
+        if (isset($data[KEY_SPEAKER_INTRO])) {
+            if (mb_strlen($data[KEY_SPEAKER_INTRO] > MAX_SPEAKER_INTRO_LEN)) {
+                $this->failure(ERROR_SPEAKER_INTRO_LEN);
+                return;
+            }
+        }
+        if (isset($data[KEY_DETAIL])) {
+            if (mb_strlen($data[KEY_DETAIL]) > MAX_DETAIL_LEN) {
+                $this->failure(ERROR_DETAIL_LEN);
+                return;
+            }
+        }
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
@@ -319,7 +331,8 @@ class Lives extends BaseController
         $this->succeed($ok);
     }
 
-    function checkStream_post() {
+    function checkStream_post()
+    {
         $key = $this->post('stream');
         $live = $this->liveDao->getLiveByLiveKey($key);
         $this->response($live ? 0 : 1, 200);
@@ -373,7 +386,7 @@ class Lives extends BaseController
         if ($live->needPay && $this->checkIfAmountWrong($live->amount)) {
             return;
         }
-        if (mb_strlen($live->detail) < MAX_LIVE_DETAIL_LEN) {
+        if (mb_strlen($live->detail) < MIN_LIVE_DETAIL_LEN) {
             $this->failure(ERROR_DETAIL_TOO_SHORT);
             return;
         }
@@ -385,7 +398,7 @@ class Lives extends BaseController
             $this->failure(ERROR_ALREADY_REVIEW);
             return;
         }
-        if (mb_strlen($live->speakerIntro) < MAX_SPEAKER_INTRO_LEN) {
+        if (mb_strlen($live->speakerIntro) < MIN_SPEAKER_INTRO_LEN) {
             $this->failure(ERROR_SPEAKER_INTRO_TOO_SHORT);
             return;
         }

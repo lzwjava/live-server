@@ -140,6 +140,8 @@ define('ERROR_PLAYBACK_FAIL', 'playback_fail');
 define('ERROR_LIVE_BEGIN_EARLY', 'live_begin_early');
 define('ERROR_LIVE_STATUS_ON', 'live_status_on');
 define('ERROR_LIVE_NOTICE_LEN', 'live_notice_len');
+define('ERROR_SPEAKER_INTRO_LEN', 'speaker_intro_len');
+define('ERROR_DETAIL_LEN', 'detail_len');
 
 // attendances
 define('ERROR_ALREADY_ATTEND', 'already_attend');
@@ -283,6 +285,8 @@ if (!function_exists('errorInfos')) {
             ERROR_SPEAKER_INTRO_TOO_SHORT => '主播介绍不得少于50字哦',
             ERROR_LIVE_STATUS_ON => '已经在直播中，无需再次开始',
             ERROR_LIVE_NOTICE_LEN => '直播公告最多300个字符哦',
+            ERROR_SPEAKER_INTRO_LEN => '主播介绍最多1000个字符哦',
+            ERROR_DETAIL_LEN => '直播详情最多8000个字符哦',
 
             // attendances
             ERROR_ALREADY_ATTEND => '您已报名,无需再次报名.',
@@ -385,7 +389,7 @@ define('KEY_LIMIT', 'limit');
 define('KEY_CREATED', 'created');
 define('KEY_UPDATED', 'updated');
 
-// live
+// lives
 define('TABLE_LIVES', 'lives');
 define('KEY_LIVE_ID', 'liveId');
 define('KEY_SUBJECT', 'subject');
@@ -419,6 +423,13 @@ define('LIVE_STATUS_ON', 20);
 define('LIVE_STATUS_TRANSCODE', 25);
 define('LIVE_STATUS_OFF', 30);
 define('LIVE_STATUS_ERROR', 35);
+
+define('MAX_SPEAKER_INTRO_LEN', 1000);
+define('MAX_DETAIL_LEN', 8000);
+
+define('MIN_SPEAKER_INTRO_LEN', 50);
+define('MIN_LIVE_DETAIL_LEN', 100);
+define('MAX_NOTICE_LEN', 300);
 
 if (!function_exists('liveStatusSet')) {
     function liveStatusSet()
@@ -880,6 +891,3 @@ define('QINIU_QULIVE_QRCODE_KEY', 'WRuqRV');    // 直播倒计时页面显示�
 define('MOBILE_WEB_HOST', 'http://bbox.tv');
 
 define('MAX_USERNAME_LEN', 15);
-define('MAX_SPEAKER_INTRO_LEN', 50);
-define('MAX_LIVE_DETAIL_LEN', 100);
-define('MAX_NOTICE_LEN', 300);
