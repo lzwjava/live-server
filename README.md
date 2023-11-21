@@ -6,10 +6,6 @@
 
 <div align="center"><img src="./img/img1.jpg" width="300px" /><img/></div>
 
-<!-- ![img1](./img/img1.jpg) -->
-
-![img2](./img/img2.jpg)
-
 <div align="center"><img src="./img/img2.jpg" width="300px" /><img/></div>
 
 ![img3](./img/img3.jpg)
