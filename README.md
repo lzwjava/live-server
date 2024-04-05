@@ -46,7 +46,6 @@ Fun Live is a cutting-edge knowledge live broadcast platform designed to facilit
 ├── config
 │   ├── alipay.php
 │   ├── autoload.php
-│   ├── cacert.pem
 │   ├── config.php
 │   ├── constants.php
 │   ├── database.php
