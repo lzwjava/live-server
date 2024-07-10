@@ -49,3 +49,5 @@ Session.vim
 tags
 # apache file
 /.htaccess
+
+deploy-prod.sh
