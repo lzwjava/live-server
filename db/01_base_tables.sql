@@ -3,7 +3,7 @@ SET NAMES utf8mb4;
 SHOW VARIABLES LIKE 'character_set_%';
 SHOW VARIABLES LIKE 'collation_%';
 
-CREATE DATABASE `qulive`
+CREATE DATABASE IF NOT EXISTS `qulive`
   DEFAULT CHARACTER SET utf8mb4;
 
 CREATE TABLE `users` (

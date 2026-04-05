@@ -36,8 +36,16 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html/
 
-# Skip composer install due to security advisories on legacy packages
-# The app works without these optional dependencies
+# Install CodeIgniter 4 framework
+RUN composer install --no-dev --prefer-dist --ignore-platform-reqs --no-interaction --no-progress || true
+
+# Create writable directories
+RUN mkdir -p /var/www/html/writable/cache \
+             /var/www/html/writable/logs \
+             /var/www/html/writable/session \
+             /var/www/html/writable/uploads \
+             /var/www/html/writable/debugbar \
+             && chmod -R 777 /var/www/html/writable
 
 # Expose port 9000
 EXPOSE 9000

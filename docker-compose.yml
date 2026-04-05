@@ -7,9 +7,9 @@ services:
     environment:
       - CI_ENV=production
       - DB_HOST=database
-      - DB_NAME=live_server
+      - DB_NAME=qulive
       - DB_USER=root
-      - DB_PASS=changeme
+      - DB_PASS=WeImg4096
       - REDIS_HOST=redis
     volumes:
       - ./:/var/www/html
@@ -34,8 +34,8 @@ services:
   database:
     image: mysql:5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=changeme
-      - MYSQL_DATABASE=live_server
+      - MYSQL_ROOT_PASSWORD=WeImg4096
+      - MYSQL_DATABASE=qulive
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db:/docker-entrypoint-initdb.d
