@@ -1,8 +1,12 @@
 <?php
-
-use AppModelsUserDao;
-
 namespace App\Controllers;
+use App\Models\UserDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -16,12 +20,14 @@ class Stats extends BaseController
     /** @var UserDao */
     public $userDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(UserDao::class);
+        parent::initController($request, $response, $logger);
         $this->userDao = new UserDao();
-    }
+}
+
 
     public function all()
     {

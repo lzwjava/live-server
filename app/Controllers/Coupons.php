@@ -1,8 +1,12 @@
 <?php
-
-use AppModelsCouponDao;
-
 namespace App\Controllers;
+use App\Models\CouponDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -14,12 +18,14 @@ class Coupons extends BaseController
 {
     public $couponDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(CouponDao::class);
+        parent::initController($request, $response, $logger);
         $this->couponDao = new CouponDao();
-    }
+}
+
 
     public function create()
     {

@@ -1,8 +1,13 @@
 <?php
-
-use AppModelsApplicationDao;
-
 namespace App\Controllers;
+use App\Models\ApplicationDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\WeChatPlatform;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -15,14 +20,15 @@ class Applications extends BaseController
     public $applicationDao;
     public $wechatPlatform;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(ApplicationDao::class);
+        parent::initController($request, $response, $logger);
         $this->applicationDao = new ApplicationDao();
-        $this->load->library(WeChatPlatform::class);
         $this->wechatPlatform = new WeChatPlatform();
-    }
+}
+
 
     public function create()
     {
@@ -116,7 +122,7 @@ class Applications extends BaseController
         $this->succeed();
     }
 
-    function reviewSucceed_post($applicationId)
+    function reviewSucceed($applicationId)
     {
         if ($this->checkIfNotAdmin()) {
             return;
@@ -134,7 +140,7 @@ class Applications extends BaseController
         $this->succeed();
     }
 
-    function reviewReject_post($applicationId)
+    function reviewReject($applicationId)
     {
         if ($this->checkIfNotAdmin()) {
             return;

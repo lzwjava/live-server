@@ -1,8 +1,12 @@
 <?php
-
-use AppModelsStaffDao;
-
 namespace App\Controllers;
+use App\Models\StaffDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -15,12 +19,14 @@ class Staffs extends BaseController
     /** @var StaffDao */
     public $staffDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(StaffDao::class);
+        parent::initController($request, $response, $logger);
         $this->staffDao = new StaffDao();
-    }
+}
+
 
     public function create()
     {

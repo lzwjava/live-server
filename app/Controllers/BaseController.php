@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controllers;
-
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -10,6 +8,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\HTTP\Response;
 use Psr\Log\LoggerInterface;
 use App\Models\UserDao;
+
+
 
 /**
  * Class BaseController

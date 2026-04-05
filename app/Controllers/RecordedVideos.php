@@ -1,9 +1,13 @@
 <?php
-
-use AppModelsRecordedVideoDao;
-use AppModelsLiveDao;
-
 namespace App\Controllers;
+use App\Models\RecordedVideoDao;
+use App\Models\LiveDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -16,14 +20,15 @@ class RecordedVideos extends BaseController
     public $liveDao;
     public $recordedVideos;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(LiveDao::class);
+        parent::initController($request, $response, $logger);
         $this->liveDao = new LiveDao();
-        $this->load->model(RecordedVideoDao::class);
         $this->recordedVideos = new RecordedVideoDao();
-    }
+}
+
 
     public function one()
     {

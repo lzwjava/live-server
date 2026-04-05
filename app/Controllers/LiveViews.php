@@ -1,9 +1,13 @@
 <?php
-
-use AppModelsViewDao;
-use AppModelsLiveViewDao;
-
 namespace App\Controllers;
+use App\Models\ViewDao;
+use App\Models\LiveViewDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -15,12 +19,14 @@ class LiveViews extends BaseController
 {
     public $liveViewDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(LiveViewDao::class);
+        parent::initController($request, $response, $logger);
         $this->liveViewDao = new LiveViewDao();
-    }
+}
+
 
     public function create()
     {

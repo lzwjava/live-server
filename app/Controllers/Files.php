@@ -1,8 +1,13 @@
 <?php
-
-use AppModelsQiniuDao;
-
 namespace App\Controllers;
+use App\Models\QiniuDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\JSSDK;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -15,21 +20,22 @@ class Files extends BaseController
     public $qiniuDao;
     public $jsSdk;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(QiniuDao::class);
+        parent::initController($request, $response, $logger);
         $this->qiniuDao = new QiniuDao();
-        $this->load->library(JSSDK::class);
         $this->jsSdk = new JSSDK();
-    }
+}
+
 
     public function uptoken()
     {
         $this->succeed($this->qiniuDao->getUpTokenResult());
     }
 
-    function wechatToQiniu_get()
+    function wechatToQiniu()
     {
         if ($this->checkIfParamsNotExist($this->request->getGet(), array(KEY_MEDIA_ID))) {
             return;

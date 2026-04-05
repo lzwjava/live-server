@@ -1,11 +1,17 @@
 <?php
-
-use AppModelsUserPacketDao;
-use AppModelsUserDao;
-use AppModelsSnsUserDao;
-use AppModelsPacketDao;
-
 namespace App\Controllers;
+use App\Models\UserPacketDao;
+use App\Models\UserDao;
+use App\Models\SnsUserDao;
+use App\Models\PacketDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\Pay;
+use App\Libraries\WeChatPlatform;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -22,22 +28,19 @@ class Packets extends BaseController
     public $userDao;
     public $weChatPlatform;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->library(Pay::class);
+        parent::initController($request, $response, $logger);
         $this->pay = new Pay();
-        $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
-        $this->load->model(UserPacketDao::class);
         $this->userPacketDao = new UserPacketDao();
-        $this->load->model(PacketDao::class);
         $this->packetDao = new PacketDao();
-        $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
-        $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
-    }
+}
+
 
     protected function checkIfPacketAmountWrong($amount)
     {
@@ -198,7 +201,7 @@ class Packets extends BaseController
         }
     }
 
-    function myPacket_get()
+    function myPacket()
     {
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
@@ -214,7 +217,7 @@ class Packets extends BaseController
         $this->succeed($packet);
     }
 
-    function meAll_get()
+    function meAll()
     {
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
@@ -224,13 +227,13 @@ class Packets extends BaseController
         $this->succeed($packets);
     }
 
-    function allPacketsById_get($packetId)
+    function allPacketsById($packetId)
     {
         $userPackets = $this->userPacketDao->getUserPackets($packetId);
         $this->succeed($userPackets);
     }
 
-    function sendPacket_get()
+    function sendPacket()
     {
         list($ok, $data) = $this->pay->sendGroupRedPacket('ol0AFwFe5jFoXcQby4J7AWJaWXIM',
             '李智维', 10, '新年快乐!');

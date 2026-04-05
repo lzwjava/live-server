@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\AttendanceDao;
+use App\Models\ChargeDao;
+use App\Models\LiveDao;
+use App\Libraries\WeChatPlatform;
 
 /**
  * Created by PhpStorm.

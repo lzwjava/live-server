@@ -1,13 +1,19 @@
 <?php
-
-use AppModelsUserDao;
-use AppModelsSnsUserDao;
-use AppModelsShareDao;
-use AppModelsLiveDao;
-use AppModelsChargeDao;
-use AppModelsAttendanceDao;
-
 namespace App\Controllers;
+use App\Models\UserDao;
+use App\Models\SnsUserDao;
+use App\Models\ShareDao;
+use App\Models\LiveDao;
+use App\Models\ChargeDao;
+use App\Models\AttendanceDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\Pay;
+use App\Libraries\WeChatPlatform;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -25,24 +31,20 @@ class Attendances extends BaseController
     public $shareDao;
     public $weChatPlatform;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(LiveDao::class);
+        parent::initController($request, $response, $logger);
         $this->liveDao = new LiveDao();
-        $this->load->model(AttendanceDao::class);
         $this->attendanceDao = new AttendanceDao();
-        $this->load->model(ChargeDao::class);
         $this->chargeDao = new ChargeDao();
-        $this->load->library(Pay::class);
         $this->pay = new Pay();
-        $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
-        $this->load->model(ShareDao::class);
         $this->shareDao = new ShareDao();
-        $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
-    }
+}
+
 
     public function create()
     {
@@ -139,7 +141,7 @@ class Attendances extends BaseController
         $this->succeed($attendance);
     }
 
-    function myList_get()
+    function myList()
     {
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
@@ -151,7 +153,7 @@ class Attendances extends BaseController
         $this->succeed($attendances);
     }
 
-    function liveList_get($liveId)
+    function liveList($liveId)
     {
         $skip = $this->skip();
         $limit = $this->limit();

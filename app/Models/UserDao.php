@@ -4,6 +4,8 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 use App\Libraries\JSSDK;
+use App\Models\QiniuDao;
+use App\Models\SnsUserDao;
 
 /**
  * Created by PhpStorm.

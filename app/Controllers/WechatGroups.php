@@ -1,9 +1,13 @@
 <?php
-
-use AppModelsWechatGroupDao;
-use AppModelsGroupDao;
-
 namespace App\Controllers;
+use App\Models\WechatGroupDao;
+use App\Models\GroupDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -16,12 +20,14 @@ class WechatGroups extends BaseController
     /**@var WechatGroupDao */
     public $wechatGroupDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(WechatGroupDao::class);
+        parent::initController($request, $response, $logger);
         $this->wechatGroupDao = new WechatGroupDao();
-    }
+}
+
 
     public function create()
     {

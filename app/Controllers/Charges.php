@@ -1,12 +1,17 @@
 <?php
-
-use AppModelsUserDao;
-use AppModelsSnsUserDao;
-use AppModelsPayNotifyDao;
-use AppModelsNotifyDao;
-use AppModelsChargeDao;
-
 namespace App\Controllers;
+use App\Models\UserDao;
+use App\Models\SnsUserDao;
+use App\Models\PayNotifyDao;
+use App\Models\NotifyDao;
+use App\Models\ChargeDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\Pay;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -28,18 +33,17 @@ class Charges extends BaseController
     /** @var SnsUserDao */
     public $snsUserDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(ChargeDao::class);
+        parent::initController($request, $response, $logger);
         $this->chargeDao = new ChargeDao();
-        $this->load->library(Pay::class);
         $this->pay = new Pay();
-        $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
-        $this->load->model(PayNotifyDao::class);
         $this->payNotifyDao = new PayNotifyDao();
-    }
+}
+
 
     public function one()
     {
@@ -102,7 +106,7 @@ class Charges extends BaseController
         $this->succeed($ch);
     }
 
-    function appleCallback_post()
+    function appleCallback()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_RECEIPT, KEY_ORDER_NO))) {
             return;

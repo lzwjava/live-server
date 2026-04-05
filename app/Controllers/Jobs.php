@@ -1,12 +1,16 @@
 <?php
-
-use AppModelsStatusDao;
-use AppModelsParamDao;
-use AppModelsJobHelperDao;
-use AppModelsJobDao;
-use AppModelsHelperDao;
-
 namespace App\Controllers;
+use App\Models\StatusDao;
+use App\Models\ParamDao;
+use App\Models\JobHelperDao;
+use App\Models\JobDao;
+use App\Models\HelperDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -21,18 +25,17 @@ class Jobs extends BaseController
     public $jobHelperDao;
     public $paramDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(StatusDao::class);
+        parent::initController($request, $response, $logger);
         $this->statusDao = new StatusDao();
-        $this->load->model(JobDao::class);
         $this->jobDao = new JobDao();
-        $this->load->model(JobHelperDao::class);
         $this->jobHelperDao = new JobHelperDao();
-        $this->load->model(ParamDao::class);
         $this->paramDao = new ParamDao();
-    }
+}
+
 
     public function alive()
     {

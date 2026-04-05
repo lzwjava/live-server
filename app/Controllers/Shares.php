@@ -1,8 +1,12 @@
 <?php
-
-use AppModelsShareDao;
-
 namespace App\Controllers;
+use App\Models\ShareDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -16,12 +20,14 @@ class Shares extends BaseController
     /** @var ShareDao */
     public $shareDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(ShareDao::class);
+        parent::initController($request, $response, $logger);
         $this->shareDao = new ShareDao();
-    }
+}
+
 
     public function create()
     {

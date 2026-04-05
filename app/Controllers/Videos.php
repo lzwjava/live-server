@@ -1,9 +1,13 @@
 <?php
-
-use AppModelsVideoDao;
-use AppModelsLiveDao;
-
 namespace App\Controllers;
+use App\Models\VideoDao;
+use App\Models\LiveDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -18,14 +22,15 @@ class Videos extends BaseController
     /**@var LiveDao */
     public $liveDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(LiveDao::class);
+        parent::initController($request, $response, $logger);
         $this->liveDao = new LiveDao();
-        $this->load->model(VideoDao::class);
         $this->videoDao = new VideoDao();
-    }
+}
+
 
     public function import()
     {
@@ -77,7 +82,7 @@ class Videos extends BaseController
         $this->succeed(array(KEY_VIDEO_ID => $videoId));
     }
 
-    function mp4Ready_get()
+    function mp4Ready()
     {
         if ($this->checkIfNotAdmin()) {
             return;

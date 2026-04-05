@@ -1,13 +1,19 @@
 <?php
-
-use AppModelsUserDao;
-use AppModelsSnsUserDao;
-use AppModelsRewardDao;
-use AppModelsPayNotifyDao;
-use AppModelsNotifyDao;
-use AppModelsLiveDao;
-
 namespace App\Controllers;
+use App\Models\UserDao;
+use App\Models\SnsUserDao;
+use App\Models\RewardDao;
+use App\Models\PayNotifyDao;
+use App\Models\NotifyDao;
+use App\Models\LiveDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\Alipay;
+use App\Libraries\Pay;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -24,22 +30,19 @@ class Rewards extends BaseController
     public $snsUserDao;
     public $rewardDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->library('alipay/' . Alipay::class);
+        parent::initController($request, $response, $logger);
         $this->alipay = new Alipay();
-        $this->load->model(PayNotifyDao::class);
         $this->payNotifyDao = new PayNotifyDao();
-        $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
-        $this->load->library(Pay::class);
         $this->pay = new Pay();
-        $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
-        $this->load->model(RewardDao::class);
         $this->rewardDao = new RewardDao();
-    }
+}
+
 
     protected function checkIfRewardAmountWrong($amount)
     {
@@ -58,7 +61,7 @@ class Rewards extends BaseController
         return false;
     }
 
-    public public function create()
+    public function create()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_LIVE_ID,
             KEY_AMOUNT, KEY_CHANNEL))
@@ -124,7 +127,7 @@ class Rewards extends BaseController
         $this->succeed($rewards);
     }
 
-    public public function notify()
+    public function notify()
     {
         $content = file_get_contents("php://input");
         if ($this->alipay->isSignVerify($_POST, $_POST['sign'])) {

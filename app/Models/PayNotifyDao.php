@@ -3,6 +3,16 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\AttendanceDao;
+use App\Models\ChargeDao;
+use App\Models\LiveDao;
+use App\Models\PacketDao;
+use App\Libraries\Pay;
+use App\Models\RewardDao;
+use App\Models\SnsUserDao;
+use App\Models\UserDao;
+use App\Libraries\WeChatPlatform;
+use App\Models\WithdrawDao;
 
 /**
  * Created by PhpStorm.

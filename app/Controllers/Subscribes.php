@@ -1,8 +1,12 @@
 <?php
-
-use AppModelsSubscribeDao;
-
 namespace App\Controllers;
+use App\Models\SubscribeDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -14,12 +18,14 @@ class Subscribes extends BaseController
 {
     public $subscribeDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(SubscribeDao::class);
+        parent::initController($request, $response, $logger);
         $this->subscribeDao = new SubscribeDao();
-    }
+}
+
 
     public function create()
     {

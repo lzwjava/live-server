@@ -1,14 +1,19 @@
 <?php
-
-use AppModelsWithdrawDao;
-use AppModelsUserDao;
-use AppModelsSnsUserDao;
-use AppModelsPayNotifyDao;
-use AppModelsNotifyDao;
-use AppModelsLiveDao;
-use AppModelsAccountDao;
-
 namespace App\Controllers;
+use App\Models\WithdrawDao;
+use App\Models\UserDao;
+use App\Models\SnsUserDao;
+use App\Models\PayNotifyDao;
+use App\Models\NotifyDao;
+use App\Models\LiveDao;
+use App\Models\AccountDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\WeChatPlatform;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -36,22 +41,19 @@ class Withdraws extends BaseController
     /** @var WeChatPlatform */
     public $weChatPlatform;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(WithdrawDao::class);
+        parent::initController($request, $response, $logger);
         $this->withdrawDao = new WithdrawDao();
-        $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
-        $this->load->model(AccountDao::class);
         $this->accountDao = new AccountDao();
-        $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
-        $this->load->model(PayNotifyDao::class);
         $this->payNotifyDao = new PayNotifyDao();
-        $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
-    }
+}
+
 
     public function create()
     {
@@ -100,7 +102,7 @@ class Withdraws extends BaseController
         $this->succeed();
     }
 
-    function createByManual_post()
+    function createByManual()
     {
         if ($this->checkIfNotAdmin()) {
             return;
@@ -166,14 +168,14 @@ class Withdraws extends BaseController
         $this->succeed($res);
     }
 
-    function withdrawAnchor_get()
+    function withdrawAnchor()
     {
         // 主播提现
         $anchorUserIds = $this->liveDao->getHasLivesUserIds();
         return $this->withdrawAll($anchorUserIds);
     }
 
-    function withdrawNonAnchor_get()
+    function withdrawNonAnchor()
     {
         $accounts = $this->accountDao->queryAccountsHaveBalance();
         $userIds = array_column($accounts, 'userId');

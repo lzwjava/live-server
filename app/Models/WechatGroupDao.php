@@ -46,7 +46,7 @@ class WechatGroupDao extends BaseDao
         return $this->getListFromTable(TABLE_WECHAT_GROUPS, '1', '1');
     }
 
-    private function update($groupUserName, $data)
+    private function updateRow($groupUserName, $data): bool
     {
         $this->db->where(KEY_GROUP_USER_NAME, $groupUserName);
         $this->db->update(TABLE_WECHAT_GROUPS, $data);

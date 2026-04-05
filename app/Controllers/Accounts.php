@@ -1,8 +1,12 @@
 <?php
-
 namespace App\Controllers;
-
 use App\Models\AccountDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Accounts Controller
@@ -11,10 +15,14 @@ class Accounts extends BaseController
 {
     protected $accountDao;
 
-    public function __construct()
+    public 
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
+        parent::initController($request, $response, $logger);
         $this->accountDao = new AccountDao();
-    }
+}
+
 
     public function me()
     {

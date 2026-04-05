@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\LiveDao;
+use App\Models\UserDao;
+use App\Libraries\WeChatPlatform;
 
 /**
  * Created by PhpStorm.
@@ -86,7 +89,7 @@ class AttendanceDao extends BaseDao
         return $this->db->query($sql, $binds)->row();
     }
 
-    private function update($attendanceId, $data)
+    private function updateRow($attendanceId, $data): bool
     {
         $this->db->where(KEY_ATTENDANCE_ID, $attendanceId);
         return $this->db->update(TABLE_ATTENDANCES, $data);

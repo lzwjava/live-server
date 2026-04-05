@@ -1,10 +1,14 @@
 <?php
-
-use AppModelsVideoDao;
-use AppModelsRecordedVideoDao;
-use AppModelsLiveDao;
-
 namespace App\Controllers;
+use App\Models\VideoDao;
+use App\Models\RecordedVideoDao;
+use App\Models\LiveDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -18,16 +22,17 @@ class LiveHooks extends BaseController
     public $liveDao;
     public $recordedVideoDao;
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model(LiveDao::class);
-        $this->liveDao = new LiveDao();
-        $this->load->model(RecordedVideoDao::class);
-        $this->recordedVideoDao = new RecordedVideoDao();
-    }
+    
 
-    function onPublish_post()
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
+    {
+        parent::initController($request, $response, $logger);
+        $this->liveDao = new LiveDao();
+        $this->recordedVideoDao = new RecordedVideoDao();
+}
+
+
+    function onPublish()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_ACTION, KEY_STREAM))) {
             return;
@@ -45,7 +50,7 @@ class LiveHooks extends BaseController
         echo 0;
     }
 
-    function onUnPublish_post()
+    function onUnPublish()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_ACTION, KEY_STREAM))) {
             return;
@@ -74,7 +79,7 @@ class LiveHooks extends BaseController
         return $output[1];
     }
 
-    function onDvr_post()
+    function onDvr()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_ACTION, KEY_STREAM))) {
             return;

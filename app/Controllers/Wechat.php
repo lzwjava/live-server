@@ -1,16 +1,24 @@
 <?php
-
-use AppModelsWxSessionDao;
-use AppModelsWxDao;
-use AppModelsWechatEventsDao;
-use AppModelsUserDao;
-use AppModelsSnsUserDao;
-use AppModelsSessionDao;
-use AppModelsPacketDao;
-use AppModelsLiveDao;
-use AppModelsEventsDao;
-
 namespace App\Controllers;
+use App\Models\WxSessionDao;
+use App\Models\WxDao;
+use App\Models\WechatEventsDao;
+use App\Models\UserDao;
+use App\Models\SnsUserDao;
+use App\Models\SessionDao;
+use App\Models\PacketDao;
+use App\Models\LiveDao;
+use App\Models\EventsDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\JSSDK;
+use App\Libraries\WeChatPlatform;
+use App\Libraries\WxPay;
+use App\Libraries\WxPayCallback;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -38,32 +46,24 @@ class Wechat extends BaseController
     public $wxSessionDao;
     public $wechatEventsDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->library(JSSDK::class);
+        parent::initController($request, $response, $logger);
         $this->jsSdk = new JSSDK(WECHAT_APP_ID, WECHAT_APP_SECRET);
-        $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
-        $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
-        $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
-        $this->load->library('wx/' . WxPay::class);
         $this->wxPay = new WxPay();
-        $this->load->library('wx/' . WxPayCallback::class);
         $this->notify = new WxPayCallback();
-        $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
-        $this->load->model(PacketDao::class);
         $this->packetDao = new PacketDao();
-        $this->load->model(WxDao::class);
         $this->wxDao = new WxDao();
-        $this->load->model(WxSessionDao::class);
         $this->wxSessionDao = new WxSessionDao();
-        $this->load->model(WechatEventsDao::class);
         $this->wechatEventsDao = new WechatEventsDao();
-    }
+}
+
 
     public function sign()
     {
@@ -150,7 +150,7 @@ class Wechat extends BaseController
         $this->succeed($user);
     }
 
-    function silentOauth_get()
+    function silentOauth()
     {
         if ($this->checkIfParamsNotExist($this->request->getGet(), array(KEY_CODE))) {
             return;
@@ -210,7 +210,7 @@ class Wechat extends BaseController
         $this->succeed();
     }
 
-    function webOauth_get()
+    function webOauth()
     {
         if ($this->checkIfParamsNotExist($this->request->getGet(), array(KEY_CODE))) {
             return;
@@ -285,7 +285,7 @@ class Wechat extends BaseController
         $this->succeed();
     }
 
-    function wxpayNotify_post()
+    function wxpayNotify()
     {
         $this->notify->Handle(false);
     }
@@ -474,7 +474,7 @@ class Wechat extends BaseController
         }
     }
 
-    function appOauth_get()
+    function appOauth()
     {
         $code = $this->request->getGet(KEY_CODE);
         list($error, $respData) = $this->jsSdk->appHttpGetAccessToken($code);
@@ -519,7 +519,7 @@ class Wechat extends BaseController
         return $this->jsSdk->queryIsSubscribeByOpenId($openId);
     }
 
-    function isSubscribe_get()
+    function isSubscribe()
     {
         if ($this->checkIfParamsNotExist($this->request->getGet(), array(KEY_USER_ID))) {
             return;
@@ -533,7 +533,7 @@ class Wechat extends BaseController
         $this->succeed($isSubscribe);
     }
 
-    function fixAllSubscribe_get()
+    function fixAllSubscribe()
     {
         if ($this->checkIfNotAdmin()) {
             return;
@@ -574,7 +574,7 @@ class Wechat extends BaseController
         $this->succeed($data);
     }
 
-    function createMenu_get()
+    function createMenu()
     {
         list($error, $data) = $this->jsSdk->createMenu();
         if ($error) {
@@ -584,7 +584,7 @@ class Wechat extends BaseController
         $this->succeed($data);
     }
 
-    function addNews_get()
+    function addNews()
     {
         list($error, $data) = $this->jsSdk->addNews();
         if ($error) {
@@ -594,7 +594,7 @@ class Wechat extends BaseController
         $this->succeed($data);
     }
 
-    function sendMassMsg_get()
+    function sendMassMsg()
     {
         list($error, $data) = $this->jsSdk->sendMassMsg();
         if ($error) {
@@ -604,7 +604,7 @@ class Wechat extends BaseController
         $this->succeed($data);
     }
 
-    function uploadImg_get()
+    function uploadImg()
     {
         list($error, $data) = $this->jsSdk->uploadImg();
         if ($error) {
@@ -669,7 +669,7 @@ class Wechat extends BaseController
         return false;
     }
 
-    function registerByApp_post()
+    function registerByApp()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_RAW_DATA,
             KEY_SIGNATURE, KEY_IV, KEY_ENCRYPTED_DATA, KEY_THIRD_SESSION))

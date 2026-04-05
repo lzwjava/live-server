@@ -1,17 +1,23 @@
 <?php
-
-use AppModelsVideoDao;
-use AppModelsStatusDao;
-use AppModelsLiveDao;
-use AppModelsJobHelperDao;
-use AppModelsJobDao;
-use AppModelsHelperDao;
-use AppModelsCouponDao;
-use AppModelsChargeDao;
-use AppModelsAttendanceDao;
-
 namespace App\Controllers;
+use App\Models\VideoDao;
+use App\Models\StatusDao;
+use App\Models\LiveDao;
+use App\Models\JobHelperDao;
+use App\Models\JobDao;
+use App\Models\HelperDao;
+use App\Models\CouponDao;
+use App\Models\ChargeDao;
+use App\Models\AttendanceDao;
 use Endroid\QrCode\QrCode;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\Sms;
+use App\Libraries\WeChatPlatform;
+
+
+
 /**
  * Created by PhpStorm.
  * User: lzw
@@ -33,34 +39,25 @@ class Lives extends BaseController
     public $jobDao;
     public $jobHelperDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(LiveDao::class);
+        parent::initController($request, $response, $logger);
         $this->liveDao = new LiveDao();
-        $this->load->model(StatusDao::class);
         $this->statusDao = new StatusDao();
-        $this->load->library(Sms::class);
         $this->sms = new Sms();
-        $this->load->model(AttendanceDao::class);
         $this->attendanceDao = new AttendanceDao();
-        $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
-        $this->load->model(CouponDao::class);
         $this->couponDao = new CouponDao();
-        $this->load->model(VideoDao::class);
         $this->videoDao = new VideoDao();
-        $this->load->model(ChargeDao::class);
         $this->chargeDao = new ChargeDao();
-        $this->load->library(WeChatAppClient::class);
         $this->weChatAppClient = new WeChatAppClient();
-        $this->load->library(QiniuLive::class);
         $this->qiniuLive = new QiniuLive();
-        $this->load->model(JobDao::class);
         $this->jobDao = new JobDao();
-        $this->load->model(JobHelperDao::class);
         $this->jobHelperDao = new JobHelperDao();
-    }
+}
+
 
     protected function checkIfAmountWrong($amount)
     {
@@ -171,7 +168,7 @@ class Lives extends BaseController
             return;
         }
         $originPlanTs = $live->planTs;
-        $this->liveDao->update($liveId, $data);
+        $this->liveDao->updateRow($liveId, $data);
 
         if (isset($data[KEY_PLAN_TS])) {
             $newPlanTs = $data[KEY_PLAN_TS];
@@ -184,7 +181,7 @@ class Lives extends BaseController
         $this->succeed();
     }
 
-    function updateTopic_post($liveId)
+    function updateTopic($liveId)
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_OP))) {
             return;
@@ -215,7 +212,7 @@ class Lives extends BaseController
         }
     }
 
-    function listOrderByPlanTs_get()
+    function listOrderByPlanTs()
     {
         $skip = $this->skip();
         $limit = $this->limit();
@@ -224,7 +221,7 @@ class Lives extends BaseController
         $this->succeed($lives);
     }
 
-    function listOrderByAttendance_get()
+    function listOrderByAttendance()
     {
         $skip = $this->skip();
         $limit = $this->limit();
@@ -233,7 +230,7 @@ class Lives extends BaseController
         $this->succeed($lives);
     }
 
-    function searchWithoutDetail_get()
+    function searchWithoutDetail()
     {
         $keyword=$this->request->getGet(KEY_LIVE_KEYWORD);
         $skip = $this->skip();
@@ -339,7 +336,7 @@ class Lives extends BaseController
         $this->succeed();
     }
 
-    function submitReview_get($id)
+    function submitReview($id)
     {
         $live = $this->liveDao->getLive($id);
         if ($this->checkIfObjectNotExists($live)) {
@@ -402,7 +399,7 @@ class Lives extends BaseController
         $this->succeed();
     }
 
-    function setWait_get($id)
+    function setWait($id)
     {
         $live = $this->liveDao->getLive($id);
         if ($this->checkIfObjectNotExists($live)) {
@@ -424,7 +421,7 @@ class Lives extends BaseController
         $this->succeed();
     }
 
-    function setReview_get($id)
+    function setReview($id)
     {
         $live = $this->liveDao->getLive($id);
         if ($this->checkIfObjectNotExists($live)) {
@@ -446,7 +443,7 @@ class Lives extends BaseController
         $this->succeed();
     }
 
-    function lastPrepare_get()
+    function lastPrepare()
     {
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
@@ -481,7 +478,7 @@ class Lives extends BaseController
         $this->succeed($lvs);
     }
 
-    function userLives_get()
+    function userLives()
     {
         if ($this->checkIfParamsNotExist($this->request->getGet(), array(KEY_USER_ID))) {
             return;
@@ -492,7 +489,7 @@ class Lives extends BaseController
         $this->succeed($lvs);
     }
 
-    function attendedUsers_get($liveId)
+    function attendedUsers($liveId)
     {
         $live = $this->liveDao->getLive($liveId);
         if ($this->checkIfObjectNotExists($live)) {
@@ -514,7 +511,7 @@ class Lives extends BaseController
         return null;
     }
 
-    function notifyLiveStartRecommend_get($liveId)
+    function notifyLiveStartRecommend($liveId)
     {
         if ($this->checkIfParamsNotExist($this->request->getGet(), array('relatedLiveId'))) {
 
@@ -538,7 +535,7 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($relatedUsers)));
     }
 
-    function notifyLiveStart_get($liveId)
+    function notifyLiveStart($liveId)
     {
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
@@ -561,7 +558,7 @@ class Lives extends BaseController
         $this->succeed($result);
     }
 
-    function notifyVideo_get($liveId)
+    function notifyVideo($liveId)
     {
         if ($this->checkIfNotAdmin()) {
             return;
@@ -587,7 +584,7 @@ class Lives extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => $total));
     }
 
-    function fixAttendanceCount_get()
+    function fixAttendanceCount()
     {
         $count = $this->liveDao->fixAttendanceCount();
         $this->succeed(array('succeedCount' => $count));
@@ -611,7 +608,7 @@ class Lives extends BaseController
         );
     }
 
-    function groupSend_get($liveId)
+    function groupSend($liveId)
     {
         $live = $this->liveDao->getLive($liveId);
         if ($this->checkIfObjectNotExists($live)) {
@@ -666,7 +663,7 @@ class Lives extends BaseController
         $this->succeed();
     }
 
-    function notifyNewLive_get($liveId)
+    function notifyNewLive($liveId)
     {
         if ($this->checkIfNotAdmin()) {
             return;
@@ -691,7 +688,7 @@ class Lives extends BaseController
         );
     }
 
-    function invitationCard_get($liveId)
+    function invitationCard($liveId)
     {
         if (!function_exists('imagecreate')){
             phpInfo("php不支持DG");

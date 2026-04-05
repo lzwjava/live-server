@@ -3,6 +3,12 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\CouponDao;
+use App\Libraries\LeanCloud;
+use App\Libraries\QiniuLive;
+use App\Models\StaffDao;
+use App\Models\TopicDao;
+use App\Models\UserDao;
 
 /**
  * Created by PhpStorm.
@@ -358,7 +364,7 @@ class LiveDao extends BaseDao
         }
     }
 
-    function update($id, $data)
+    function updateRow($id, $data): bool
     {
         $this->db->where(KEY_LIVE_ID, $id);
         $this->db->update(TABLE_LIVES, $data);

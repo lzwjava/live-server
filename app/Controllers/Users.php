@@ -1,11 +1,18 @@
 <?php
-
-use AppModelsUserDao;
-use AppModelsSnsUserDao;
-use AppModelsQiniuDao;
-use AppModelsLiveDao;
-
 namespace App\Controllers;
+use App\Models\UserDao;
+use App\Models\SnsUserDao;
+use App\Models\QiniuDao;
+use App\Models\LiveDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use App\Libraries\JSSDK;
+use App\Libraries\LeanCloud;
+use App\Libraries\WeChatPlatform;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -24,25 +31,21 @@ class Users extends BaseController
     public $weChatPlatform;
     public $liveDao;
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->library(LeanCloud::class);
+        parent::initController($request, $response, $logger);
         $this->leancloud = new LeanCloud();
-        $this->load->model(SnsUserDao::class);
         $this->snsUserDao = new SnsUserDao();
-        $this->load->model(QiniuDao::class);
         $this->qiniuDao = new QiniuDao();
-        $this->load->helper('string');
-        $this->load->library(JSSDK::class);
+        helper('string');
         $this->jsSdk = new JSSDK();
-        $this->load->library(WeChatPlatform::class);
         $this->weChatPlatform = new WeChatPlatform();
-        $this->load->model(LiveDao::class);
         $this->liveDao = new LiveDao();
-        $this->load->model(UserDao::class);
         $this->userDao = new UserDao();
-    }
+}
+
 
     private function checkSmsCodeWrong($mobilePhoneNumber, $smsCode)
     {
@@ -64,7 +67,7 @@ class Users extends BaseController
         }
     }
 
-    public function requestSmsCode_post()
+    public function requestSmsCode()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_MOBILE_PHONE_NUMBER))
         ) {
@@ -95,7 +98,7 @@ class Users extends BaseController
         return false;
     }
 
-    public public function register()
+    public function register()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_USERNAME,
             KEY_MOBILE_PHONE_NUMBER, KEY_SMS_CODE, KEY_AVATAR_URL))
@@ -124,7 +127,7 @@ class Users extends BaseController
         }
     }
 
-    public function registerBySns_post()
+    public function registerBySns()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_OPEN_ID, KEY_PLATFORM))
         ) {
@@ -141,7 +144,7 @@ class Users extends BaseController
     }
 
 
-    function bindPhone_post()
+    function bindPhone()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_MOBILE_PHONE_NUMBER,
             KEY_SMS_CODE))
@@ -183,7 +186,7 @@ class Users extends BaseController
         }
     }
 
-    public public function login()
+    public function login()
     {
         if ($this->checkIfParamsNotExist($this->request->getPost(), array(KEY_MOBILE_PHONE_NUMBER,
             KEY_SMS_CODE))
@@ -205,7 +208,7 @@ class Users extends BaseController
         $this->succeed($user);
     }
 
-    public public function self()
+    public function self()
     {
         $user = $this->getSessionUser();
         if ($user == null) {
@@ -217,14 +220,14 @@ class Users extends BaseController
         }
     }
 
-    public public function logout()
+    public function logout()
     {
         session_unset(KEY_COOKIE_TOKEN);
         deleteCookie(KEY_COOKIE_TOKEN);
         $this->succeed();
     }
 
-    public public function update()
+    public function update()
     {
         $keys = array(KEY_AVATAR_URL, KEY_USERNAME, KEY_LIVE_SUBSCRIBE, KEY_INCOME_SUBSCRIBE);
         if ($this->checkIfNotAtLeastOneParam($this->request->getPost(), $keys)
@@ -265,7 +268,7 @@ class Users extends BaseController
         $this->succeed($user);
     }
 
-    function isRegister_get()
+    function isRegister()
     {
         if ($this->checkIfParamsNotExist($this->request->getGet(), array(KEY_MOBILE_PHONE_NUMBER))) {
             return;
@@ -304,7 +307,7 @@ class Users extends BaseController
         $this->succeed($users);
     }
 
-    function fixAvatarUrl_get()
+    function fixAvatarUrl()
     {
         if ($this->checkIfNotAdmin()) {
             return;
@@ -324,7 +327,7 @@ class Users extends BaseController
         $this->succeed(array('succeedCount' => $succeedCount, 'total' => count($users)));
     }
 
-    function fixSystemId_get()
+    function fixSystemId()
     {
         if ($this->checkIfNotAdmin()) {
             return;
@@ -360,7 +363,7 @@ class Users extends BaseController
         $this->succeed();
     }
 
-    function userTopic_get()
+    function userTopic()
     {
         if ($this->checkIfParamsNotExist($this->request->getGet(), array(KEY_USERNAME))) {
             return;
@@ -386,7 +389,7 @@ class Users extends BaseController
         $this->succeed($topic);
     }
 
-    public function usersByUsername_get()
+    public function usersByUsername()
     {
         if ($this->checkIfNotAdmin()) {
             return;

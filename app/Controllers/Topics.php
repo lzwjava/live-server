@@ -1,8 +1,12 @@
 <?php
-
-use AppModelsTopicDao;
-
 namespace App\Controllers;
+use App\Models\TopicDao;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
+
+
 
 /**
  * Created by PhpStorm.
@@ -16,12 +20,14 @@ class Topics extends BaseController
     public $topicDao;
 
 
-    function __construct()
+    
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        parent::__construct();
-        $this->load->model(TopicDao::class);
+        parent::initController($request, $response, $logger);
         $this->topicDao = new TopicDao();
-    }
+}
+
 
     public function create()
     {
