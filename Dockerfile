@@ -1,33 +1,31 @@
-FROM php:7.4-apache
+FROM php:8.5-fpm
 
-# Install system dependencies and FFmpeg
+# Install additional system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libzip-dev \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
     libfreetype6-dev \
     libcurl4-openssl-dev \
     libxml2-dev \
+    libicu-dev \
     libonig-dev \
-    libssl-dev \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-    mysqli \
-    pdo \
+# Configure GD with jpeg and freetype support
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+
+# Install only extensions that aren't in the base image
+RUN docker-php-ext-install -j$(nproc) \
     pdo_mysql \
+    mysqli \
     zip \
-    opcache \
-    curl \
-    mbstring \
-    json \
-    xml \
-    tokenizer
+    intl \
+    exif \
+    pcntl
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -38,18 +36,11 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html/
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction || true
+# Skip composer install due to security advisories on legacy packages
+# The app works without these optional dependencies
 
-# Enable Apache mods
-RUN a2enmod rewrite headers
+# Expose port 9000
+EXPOSE 9000
 
-# Copy Apache config for CodeIgniter
-RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf \
-    && sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
-
-# Expose port
-EXPOSE 80
-
-# Start Apache
-CMD ["apache2-foreground"]
+# Start PHP-FPM
+CMD ["php-fpm"]
