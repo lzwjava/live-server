@@ -50,4 +50,7 @@ tags
 # apache file
 /.htaccess
 
-deploy-prod.sh
+deploy-prod.sh.env
+writable
+.env
+

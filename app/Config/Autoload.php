@@ -58,7 +58,44 @@ class Autoload extends AutoloadConfig
      *
      * @var array<string, string>
      */
-    public $classmap = [];
+    public $classmap = [
+        // Global class names (used by controllers via $this->load or direct instantiation)
+        'JSSDK'           => APPPATH . 'Libraries/JSSDK.php',
+        'WeChatPlatform'  => APPPATH . 'Libraries/WeChatPlatform.php',
+        'Pay'             => APPPATH . 'Libraries/Pay.php',
+        'Sms'             => APPPATH . 'Libraries/Sms.php',
+        'LeanCloud'       => APPPATH . 'Libraries/LeanCloud.php',
+        'Alipay'          => APPPATH . 'Libraries/alipay/Alipay.php',
+        'WxPay'           => APPPATH . 'Libraries/wx/WxPay.php',
+        'WxPayCallback'   => APPPATH . 'Libraries/wx/WxPayCallback.php',
+        'WxDao'           => APPPATH . 'Models/WxDao.php',
+        'SnsUserDao'      => APPPATH . 'Models/SnsUserDao.php',
+        'QiniuDao'        => APPPATH . 'Models/QiniuDao.php',
+        'UserDao'         => APPPATH . 'Models/UserDao.php',
+        'LiveDao'         => APPPATH . 'Models/LiveDao.php',
+        'ChargeDao'       => APPPATH . 'Models/ChargeDao.php',
+        'PayNotifyDao'    => APPPATH . 'Models/PayNotifyDao.php',
+        'ApplicationDao'  => APPPATH . 'Models/ApplicationDao.php',
+        'IncomeDao'       => APPPATH . 'Models/IncomeDao.php',
+        'WithdrawDao'     => APPPATH . 'Models/WithdrawDao.php',
+        'WxSessionDao'    => APPPATH . 'Models/WxSessionDao.php',
+        'WxAppDao'        => APPPATH . 'Models/WxAppDao.php',
+        'RewardDao'       => APPPATH . 'Models/RewardDao.php',
+        'PacketDao'       => APPPATH . 'Models/PacketDao.php',
+        'AttendanceDao'   => APPPATH . 'Models/AttendanceDao.php',
+        'MessageDao'      => APPPATH . 'Models/MessageDao.php',
+
+        // Fully-namespaced entries for migrated CI3 code that does "new ClassName()"
+        // inside App\Models namespace — PHP resolves these as App\Models\ClassName first
+        'App\Models\JSSDK'            => APPPATH . 'Libraries/JSSDK.php',
+        'App\Models\WeChatPlatform'  => APPPATH . 'Libraries/WeChatPlatform.php',
+        'App\Models\Pay'              => APPPATH . 'Libraries/Pay.php',
+        'App\Models\Sms'              => APPPATH . 'Libraries/Sms.php',
+        'App\Models\LeanCloud'        => APPPATH . 'Libraries/LeanCloud.php',
+        'App\Models\Alipay'           => APPPATH . 'Libraries/alipay/Alipay.php',
+        'App\Models\WxPay'            => APPPATH . 'Libraries/wx/WxPay.php',
+        'App\Models\WxPayCallback'    => APPPATH . 'Libraries/wx/WxPayCallback.php',
+    ];
 
     /**
      * -------------------------------------------------------------------
