@@ -38,3 +38,6 @@ class ParamDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\ParamDao → App\Models\ParamDao
+class_alias('App\Models\ParamDao', 'App\Libraries\ParamDao');

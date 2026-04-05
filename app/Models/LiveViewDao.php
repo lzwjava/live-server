@@ -39,3 +39,6 @@ class LiveViewDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\LiveViewDao → App\Models\LiveViewDao
+class_alias('App\Models\LiveViewDao', 'App\Libraries\LiveViewDao');

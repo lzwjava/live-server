@@ -84,7 +84,7 @@ class LiveDao extends BaseDao
                 WHERE status>=? and status != ?
                 ORDER BY planTs DESC
                 limit $limit offset $skip";
-        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->getResult();
         $ids = $this->extractLiveIds($lives);
         return $this->getLivesWithoutDetail($ids, $user, true);
     }
@@ -95,7 +95,7 @@ class LiveDao extends BaseDao
                 WHERE status>=? and status != ?
                 ORDER BY attendanceCount DESC
                 limit $limit offset $skip";
-        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+        $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->getResult();
         $ids = $this->extractLiveIds($lives);
         return $this->getLivesWithoutDetail($ids, $user, true, 'attendanceCount');
     }
@@ -104,7 +104,7 @@ class LiveDao extends BaseDao
     {
         $sql = "SELECT COUNT(*) AS count FROM lives
                 WHERE status>=? AND status != ?";
-        $count = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+        $count = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->getResult();
         return $count;
     }
 
@@ -115,7 +115,7 @@ class LiveDao extends BaseDao
                 ORDER BY planTs DESC
                 limit $limit offset $skip";
         $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT,
-            LIVE_STATUS_ERROR, $skipLiveId))->result();
+            LIVE_STATUS_ERROR, $skipLiveId))->getResult();
         $ids = $this->extractLiveIds($lives);
         return $this->getLivesWithoutDetail($ids, $user, true);
     }
@@ -129,7 +129,7 @@ class LiveDao extends BaseDao
               order by planTs desc
               limit $limit offset $skip";
 
-        return $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->result();
+        return $lives = $this->db->query($sql, array(LIVE_STATUS_WAIT, LIVE_STATUS_ERROR))->getResult();
 
     }
 
@@ -181,7 +181,7 @@ class LiveDao extends BaseDao
                 left join topics as t on t.topicId = l.topicId
                 where l . liveId in(" . implode(', ', $liveIds) . ")
                 order by $sortField desc";
-        $lives = $this->db->query($sql)->result();
+        $lives = $this->db->query($sql)->getResult();
         $this->assembleLives($lives, $user);
         return $lives;
     }
@@ -442,7 +442,7 @@ class LiveDao extends BaseDao
     {
         $sql = "SELECT liveId FROM lives WHERE ownerId =? AND status <=?";
         $binds = array($user->userId, LIVE_STATUS_ON);
-        $live = $this->db->query($sql, $binds)->row();
+        $live = $this->db->query($sql, $binds)->getRow();
         if ($live) {
             return $this->getLive($live->liveId);
         } else {
@@ -459,7 +459,7 @@ class LiveDao extends BaseDao
     {
         $sql = "SELECT a.liveId FROM attendances AS a WHERE a.userId =?";
         $binds = array($targetUserId);
-        $lives = $this->db->query($sql, $binds)->result();
+        $lives = $this->db->query($sql, $binds)->getResult();
         $ids = $this->extractLiveIds($lives);
         return $this->getLivesWithoutDetail($ids, $curUser, true);
     }
@@ -472,7 +472,7 @@ class LiveDao extends BaseDao
         }
         $sql = "SELECT liveId FROM lives AS l WHERE l . ownerId =? AND l.status>=?  ORDER BY created DESC";
         $binds = array($targetUserId, $minStatus);
-        $lives = $this->db->query($sql, $binds)->result();
+        $lives = $this->db->query($sql, $binds)->getResult();
         $ids = $this->extractLiveIds($lives);
         return $this->getLivesWithoutDetail($ids, $curUser);
     }
@@ -486,7 +486,7 @@ class LiveDao extends BaseDao
                where a . liveId =? order by a . created desc
                limit $limit OFFSET $skip";
         $binds = array($liveId);
-        $users = $this->db->query($sql, $binds)->result();
+        $users = $this->db->query($sql, $binds)->getResult();
         $this->userDao->fixUsersAvatars($users);
         return $users;
     }
@@ -494,7 +494,7 @@ class LiveDao extends BaseDao
     function fixAttendanceCount()
     {
         $sql = "SELECT liveId FROM lives";
-        $lives = $this->db->query($sql)->result();
+        $lives = $this->db->query($sql)->getResult();
         $count = 0;
         foreach ($lives as $live) {
             $liveId = $live->liveId;
@@ -514,7 +514,7 @@ class LiveDao extends BaseDao
         $sql = "SELECT count(*) AS cnt FROM lives WHERE status >= ?
                 AND status < ? AND ownerId =?";
         $binds = array(LIVE_STATUS_WAIT, LIVE_STATUS_OFF, $userId);
-        $row = $this->db->query($sql, $binds)->row();
+        $row = $this->db->query($sql, $binds)->getRow();
         return $row->cnt > 0;
     }
 
@@ -522,7 +522,7 @@ class LiveDao extends BaseDao
     {
         $sql = "SELECT liveId FROM lives WHERE status =? ORDER BY planTs ASC LIMIT 1";
         $binds = array(LIVE_STATUS_WAIT);
-        $live = $this->db->query($sql, $binds)->row();
+        $live = $this->db->query($sql, $binds)->getRow();
         if ($live) {
             return $this->getLive($live->liveId, null);
         } else {
@@ -535,9 +535,12 @@ class LiveDao extends BaseDao
         // 返回所有主播的userId
         $sql = 'SELECT DISTINCT(ownerId) FROM lives WHERE status >= ?';
         $binds = array(LIVE_STATUS_WAIT);
-        $lives = $this->db->query($sql, $binds)->result();
+        $lives = $this->db->query($sql, $binds)->getResult();
         $userIds = array_column($lives, 'ownerId');
         return $userIds;
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\LiveDao → App\Models\LiveDao
+class_alias('App\Models\LiveDao', 'App\Libraries\LiveDao');

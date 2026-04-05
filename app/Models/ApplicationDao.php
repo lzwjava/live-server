@@ -76,3 +76,5 @@ class ApplicationDao extends BaseDao
 
 
 }
+// Namespace bridge: allow App\Libraries\ApplicationDao → App\Models\ApplicationDao
+class_alias('App\Models\ApplicationDao', 'App\Libraries\ApplicationDao');

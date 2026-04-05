@@ -29,7 +29,7 @@ class WechatGroupDao extends BaseDao
     {
         $sql = "SELECT * FROM wechat_groups WHERE used = 0 AND topicId=? ORDER BY created ASC LIMIT 1";
         $binds = array($topicId);
-        $group = $this->db->query($sql, $binds)->row();
+        $group = $this->db->query($sql, $binds)->getRow();
         if ($group) {
             $this->assembleGroup($group);
         }
@@ -73,3 +73,6 @@ class WechatGroupDao extends BaseDao
         $group->qrcodeUrl = QINIU_FILE_HOST . '/' . $group->qrcodeKey;
     }
 }
+
+// Namespace bridge: allow App\Libraries\WechatGroupDao → App\Models\WechatGroupDao
+class_alias('App\Models\WechatGroupDao', 'App\Libraries\WechatGroupDao');

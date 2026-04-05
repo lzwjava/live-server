@@ -198,3 +198,6 @@ class BaseModel extends Model
         ]);
     }
 }
+
+// Namespace bridge: allow App\Libraries\BaseModel → App\Models\BaseModel
+class_alias('App\Models\BaseModel', 'App\Libraries\BaseModel');

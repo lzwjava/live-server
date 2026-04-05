@@ -74,3 +74,6 @@ class StatusDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\StatusDao → App\Models\StatusDao
+class_alias('App\Models\StatusDao', 'App\Libraries\StatusDao');

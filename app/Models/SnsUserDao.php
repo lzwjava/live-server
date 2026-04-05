@@ -34,7 +34,7 @@ class SnsUserDao extends BaseDao
         $row = $this->db->get_where(TABLE_SNS_USERS, array(
             KEY_OPEN_ID => $openId,
             KEY_PLATFORM => $platform
-        ))->row();
+        ))->getRow();
         return $row;
     }
 
@@ -63,7 +63,7 @@ class SnsUserDao extends BaseDao
     {
         $sql = "SELECT * FROM sns_users WHERE unionId=? AND platform=?";
         $binds = array($unionId, PLATFORM_WECHAT);
-        return $this->db->query($sql, $binds)->row();
+        return $this->db->query($sql, $binds)->getRow();
     }
 
     function getWeChatSnsUserByOpenId($openId)
@@ -95,7 +95,7 @@ class SnsUserDao extends BaseDao
     {
         $sql = "SELECT * FROM sns_users WHERE userId=? AND platform=?";
         $binds = array($userId, PLATFORM_WECHAT);
-        return $this->db->query($sql, $binds)->row();
+        return $this->db->query($sql, $binds)->getRow();
     }
 
     function getSnsUserByUser($user)
@@ -114,7 +114,7 @@ class SnsUserDao extends BaseDao
     {
         $sql = "SELECT * FROM sns_users WHERE unionId=? AND platform=?";
         $binds = array($unionId, PLATFORM_WXAPP);
-        return $this->db->query($sql, $binds)->row();
+        return $this->db->query($sql, $binds)->getRow();
     }
 
     private function getSnsUserByChannel($user, $channel)
@@ -144,7 +144,7 @@ class SnsUserDao extends BaseDao
     {
         $sql = "SELECT * FROM sns_users WHERE username=? AND platform = ?";
         $binds = array($username, PLATFORM_WECHAT);
-        $row = $this->db->query($sql, $binds)->row();
+        $row = $this->db->query($sql, $binds)->getRow();
         if ($row) {
             return $row->userId;
         } else {
@@ -153,3 +153,6 @@ class SnsUserDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\SnsUserDao → App\Models\SnsUserDao
+class_alias('App\Models\SnsUserDao', 'App\Libraries\SnsUserDao');

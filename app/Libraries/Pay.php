@@ -14,9 +14,9 @@ class Pay
 
     public function __construct()
     {
-        $this->wxpay = new WxPay();
-        $this->alipay = new Alipay();
-        $this->chargeDao = new ChargeDao();
+        $this->wxpay = new \App\Libraries\WxPay();
+        $this->alipay = new \App\Libraries\Alipay();
+        $this->chargeDao = new \App\Models\ChargeDao();
     }
 
     public function createChargeAndInsert($amount, $channel, $subject, $body,

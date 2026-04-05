@@ -25,3 +25,6 @@ class WechatEventsDao extends BaseDao
         return $this->getListFromTable(TABLE_WECHAT_EVENTS, 'userId', $userId);
     }
 }
+
+// Namespace bridge: allow App\Libraries\WechatEventsDao → App\Models\WechatEventsDao
+class_alias('App\Models\WechatEventsDao', 'App\Libraries\WechatEventsDao');

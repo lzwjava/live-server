@@ -45,7 +45,7 @@ class RewardDao extends BaseDao
                where r.liveId=?
                order by r.created desc";
         $binds = array(KEY_LIVE_ID => $liveId);
-        $rewards = $this->db->query($sql, $binds)->result();
+        $rewards = $this->db->query($sql, $binds)->getResult();
         $this->assembleRewards($rewards);
         return $rewards;
     }
@@ -60,3 +60,6 @@ class RewardDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\RewardDao → App\Models\RewardDao
+class_alias('App\Models\RewardDao', 'App\Libraries\RewardDao');

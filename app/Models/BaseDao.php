@@ -124,3 +124,6 @@ class BaseDao extends Model
         ]);
     }
 }
+
+// Namespace bridge: allow App\Libraries\BaseDao → App\Models\BaseDao
+class_alias('App\Models\BaseDao', 'App\Libraries\BaseDao');

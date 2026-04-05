@@ -35,3 +35,6 @@ class WxAppDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\WxAppDao → App\Models\WxAppDao
+class_alias('App\Models\WxAppDao', 'App\Libraries\WxAppDao');

@@ -40,3 +40,6 @@ class WxSessionDao extends BaseDao
         return json_decode($thirdStr);
     }
 }
+
+// Namespace bridge: allow App\Libraries\WxSessionDao → App\Models\WxSessionDao
+class_alias('App\Models\WxSessionDao', 'App\Libraries\WxSessionDao');

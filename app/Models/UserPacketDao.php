@@ -29,7 +29,7 @@ class UserPacketDao extends BaseDao
     {
         $sql = "SELECT * FROM user_packets WHERE userId=? AND packetId=?";
         $binds = array($userId, $packetId);
-        return $this->db->query($sql, $binds)->row();
+        return $this->db->query($sql, $binds)->getRow();
     }
 
     function sendSucceed($userPacketId)
@@ -47,7 +47,7 @@ class UserPacketDao extends BaseDao
                 LEFT JOIN users AS u ON up.userId = u.userId
                 WHERE packetId=? ORDER BY created DESC";
         $binds = array($packetId);
-        $userPackets = $this->db->query($sql, $binds)->result();
+        $userPackets = $this->db->query($sql, $binds)->getResult();
         return $this->assembleUserPackets($userPackets);
     }
 
@@ -60,3 +60,5 @@ class UserPacketDao extends BaseDao
         return $userPackets;
     }
 }
+// Namespace bridge: allow App\Libraries\UserPacketDao → App\Models\UserPacketDao
+class_alias('App\Models\UserPacketDao', 'App\Libraries\UserPacketDao');

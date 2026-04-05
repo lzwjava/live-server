@@ -64,7 +64,7 @@ class PayNotifyDao extends BaseDao
         $this->rewardDao = new RewardDao();
         $this->packetDao = new PacketDao();
         $this->withdrawDao = new WithdrawDao();
-        $this->pay = new Pay();
+        $this->pay = new \App\Libraries\Pay();
         $this->snsUserDao = new SnsUserDao();
         $this->weChatPlatform = new WeChatPlatform();
         $this->accountDao = new AccountDao();
@@ -384,3 +384,6 @@ class PayNotifyDao extends BaseDao
         }
     }
 }
+
+// Namespace bridge: allow App\Libraries\PayNotifyDao → App\Models\PayNotifyDao
+class_alias('App\Models\PayNotifyDao', 'App\Libraries\PayNotifyDao');

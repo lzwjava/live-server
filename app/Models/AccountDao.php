@@ -66,7 +66,7 @@ class AccountDao extends BaseDao
     function queryAccountsHaveBalance()
     {
         $sql = "SELECT * FROM accounts WHERE balance > 0";
-        $accounts = $this->db->query($sql)->result();
+        $accounts = $this->db->query($sql)->getResult();
         return $accounts;
     }
 
@@ -85,3 +85,6 @@ class AccountDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\AccountDao → App\Models\AccountDao
+class_alias('App\Models\AccountDao', 'App\Libraries\AccountDao');

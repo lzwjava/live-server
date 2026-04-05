@@ -28,7 +28,7 @@ class ShareDao extends BaseDao
     function getShare($userId, $liveId)
     {
         $binds = array($userId, $liveId);
-        return $this->db->query("SELECT * FROM shares WHERE userId=? AND liveId=?", $binds)->row();
+        return $this->db->query("SELECT * FROM shares WHERE userId=? AND liveId=?", $binds)->getRow();
     }
 
     function useToDiscount($userId, $liveId)
@@ -37,3 +37,6 @@ class ShareDao extends BaseDao
         return $this->db->query("UPDATE shares SET useToDiscount=1 WHERE userId=? AND liveId=?", $binds);
     }
 }
+
+// Namespace bridge: allow App\Libraries\ShareDao → App\Models\ShareDao
+class_alias('App\Models\ShareDao', 'App\Libraries\ShareDao');

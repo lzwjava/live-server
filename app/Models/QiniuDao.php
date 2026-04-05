@@ -88,3 +88,6 @@ class QiniuDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\QiniuDao → App\Models\QiniuDao
+class_alias('App\Models\QiniuDao', 'App\Libraries\QiniuDao');

@@ -52,7 +52,7 @@ class WithdrawDao extends BaseDao
             KEY_USER_ID => $userId,
             KEY_STATUS => WITHDRAW_STATUS_WAIT
         );
-        $row = $this->db->query($sql, $binds)->row();
+        $row = $this->db->query($sql, $binds)->getRow();
         return $row->cnt > 0;
     }
 
@@ -63,7 +63,7 @@ class WithdrawDao extends BaseDao
             KEY_USER_ID => $userId,
             KEY_STATUS => WITHDRAW_STATUS_WAIT
         );
-        $row = $this->db->query($sql, $binds)->row();
+        $row = $this->db->query($sql, $binds)->getRow();
         return $row;
     }
 
@@ -82,7 +82,7 @@ class WithdrawDao extends BaseDao
         $withdrawFields = $this->withdrawPublicFields('w');
         $userFields = $this->userPublicFields('u', true);
         $sql = "SELECT $withdrawFields,$userFields FROM withdraws AS w LEFT JOIN users AS u ON u.userId=w.userId";
-        $withdraws = $this->db->query($sql)->result();
+        $withdraws = $this->db->query($sql)->getResult();
         $this->assembleWithdraws($withdraws);
         return $withdraws;
     }
@@ -101,3 +101,6 @@ class WithdrawDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\WithdrawDao → App\Models\WithdrawDao
+class_alias('App\Models\WithdrawDao', 'App\Libraries\WithdrawDao');

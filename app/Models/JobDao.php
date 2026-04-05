@@ -19,7 +19,7 @@ class JobDao extends BaseDao
         $now = time();
         $sql = "SELECT * FROM jobs WHERE triggerTs<= ? AND status = ?";
         $binds = array($now, JOB_STATUS_WAIT);
-        $jobs = $this->db->query($sql, $binds)->result();
+        $jobs = $this->db->query($sql, $binds)->getResult();
         foreach ($jobs as $job) {
             if ($job->params) {
                 $job->params = json_decode($job->params);
@@ -131,3 +131,6 @@ class JobDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\JobDao → App\Models\JobDao
+class_alias('App\Models\JobDao', 'App\Libraries\JobDao');

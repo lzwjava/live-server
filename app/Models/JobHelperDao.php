@@ -7,6 +7,7 @@ use App\Models\AttendanceDao;
 use App\Models\ChargeDao;
 use App\Models\LiveDao;
 use App\Libraries\WeChatPlatform;
+use App\Controllers\WeChatAppClient;
 
 /**
  * Created by PhpStorm.
@@ -86,3 +87,5 @@ class JobHelperDao extends BaseDao
     }
 
 }
+// Namespace bridge: allow App\Libraries\JobHelperDao → App\Models\JobHelperDao
+class_alias('App\Models\JobHelperDao', 'App\Libraries\JobHelperDao');

@@ -15,6 +15,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use App\Libraries\Sms;
 use App\Libraries\WeChatPlatform;
+use App\Libraries\QiniuLive;
+use App\Controllers\WeChatAppClient;
 
 
 

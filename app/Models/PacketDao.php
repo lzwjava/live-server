@@ -50,7 +50,7 @@ class PacketDao extends BaseDao
                 LEFT JOIN users AS u ON u.userId=p.userId
                 WHERE p.packetId in ('" . implode("','", $packetIds) . "')
                 order by p.created desc";
-        $packets = $this->db->query($sql)->result();
+        $packets = $this->db->query($sql)->getResult();
         foreach ($packets as $packet) {
             $us = $this->prefixFields($this->userPublicRawFields(), 'u');
             $packet->user = extractFields($packet, $us, 'u');
@@ -70,7 +70,7 @@ class PacketDao extends BaseDao
     {
         $sql = "SELECT packetId FROM packets WHERE userId=? ORDER BY created DESC LIMIT 1";
         $binds = array($userId);
-        $packet = $this->db->query($sql, $binds)->row();
+        $packet = $this->db->query($sql, $binds)->getRow();
         if ($packet) {
             return $this->getPacketById($packet->packetId);
         } else {
@@ -91,9 +91,12 @@ class PacketDao extends BaseDao
     {
         $sql = "SELECT packetId FROM packets WHERE userId=?";
         $binds = array($userId);
-        $packets = $this->db->query($sql, $binds)->result();
+        $packets = $this->db->query($sql, $binds)->getResult();
         $packetIds = $this->extractPacketIds($packets);
         return $this->getPacketsByIds($packetIds);
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\PacketDao → App\Models\PacketDao
+class_alias('App\Models\PacketDao', 'App\Libraries\PacketDao');

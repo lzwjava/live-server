@@ -69,3 +69,6 @@ class VideoDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\VideoDao → App\Models\VideoDao
+class_alias('App\Models\VideoDao', 'App\Libraries\VideoDao');

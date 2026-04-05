@@ -36,6 +36,9 @@ class SubscribeDao extends BaseDao
     {
         $sql = "SELECT * FROM subscribes WHERE userId=? AND topicId=?";
         $binds = array($userId, $topicId);
-        return $this->db->query($sql, $binds)->row();
+        return $this->db->query($sql, $binds)->getRow();
     }
 }
+
+// Namespace bridge: allow App\Libraries\SubscribeDao → App\Models\SubscribeDao
+class_alias('App\Models\SubscribeDao', 'App\Libraries\SubscribeDao');

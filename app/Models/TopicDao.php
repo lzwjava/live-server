@@ -37,3 +37,6 @@ class TopicDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\TopicDao → App\Models\TopicDao
+class_alias('App\Models\TopicDao', 'App\Libraries\TopicDao');

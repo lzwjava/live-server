@@ -27,7 +27,7 @@ use App\Libraries\WxPayCallback;
  * Time: 5:26 PM
  */
 
-require_once(APPPATH . 'libraries/wxencrypt/WxBizDataCrypt.php');
+require_once(APPPATH . 'Libraries/wxencrypt/WxBizDataCrypt.php');
 
 class Wechat extends BaseController
 {
@@ -369,7 +369,7 @@ class Wechat extends BaseController
         return $extraWord;
     }
 
-    public function callback()
+    public function callbackPost()
     {
         $xmlStr = file_get_contents('php://input');
 

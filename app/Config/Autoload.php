@@ -39,6 +39,7 @@ class Autoload extends AutoloadConfig
      */
     public $psr4 = [
         APP_NAMESPACE => APPPATH,
+        'App\\Libraries' => APPPATH . 'Libraries',
     ];
 
     /**
@@ -65,9 +66,9 @@ class Autoload extends AutoloadConfig
         'Pay'             => APPPATH . 'Libraries/Pay.php',
         'Sms'             => APPPATH . 'Libraries/Sms.php',
         'LeanCloud'       => APPPATH . 'Libraries/LeanCloud.php',
-        'Alipay'          => APPPATH . 'Libraries/alipay/Alipay.php',
-        'WxPay'           => APPPATH . 'Libraries/wx/WxPay.php',
-        'WxPayCallback'   => APPPATH . 'Libraries/wx/WxPayCallback.php',
+        'Alipay'          => APPPATH . 'Libraries/Alipay.php',
+        'WxPay'           => APPPATH . 'Libraries/WxPay.php',
+        'WxPayCallback'   => APPPATH . 'Libraries/WxPayCallback.php',
         'WxDao'           => APPPATH . 'Models/WxDao.php',
         'SnsUserDao'      => APPPATH . 'Models/SnsUserDao.php',
         'QiniuDao'        => APPPATH . 'Models/QiniuDao.php',
@@ -92,9 +93,25 @@ class Autoload extends AutoloadConfig
         'App\Models\Pay'              => APPPATH . 'Libraries/Pay.php',
         'App\Models\Sms'              => APPPATH . 'Libraries/Sms.php',
         'App\Models\LeanCloud'        => APPPATH . 'Libraries/LeanCloud.php',
-        'App\Models\Alipay'           => APPPATH . 'Libraries/alipay/Alipay.php',
-        'App\Models\WxPay'            => APPPATH . 'Libraries/wx/WxPay.php',
-        'App\Models\WxPayCallback'    => APPPATH . 'Libraries/wx/WxPayCallback.php',
+        'App\Models\Alipay'           => APPPATH . 'Libraries/Alipay.php',
+        'App\Models\WxPay'            => APPPATH . 'Libraries/WxPay.php',
+        'App\Models\WxPayCallback'    => APPPATH . 'Libraries/WxPayCallback.php',
+        // Fully-namespaced for classes called from Controllers namespace
+        'App\Controllers\WeChatAppClient' => APPPATH . 'Libraries/WeChatAppClient.php',
+        'App\Controllers\WxBizDataCrypt'  => APPPATH . 'Libraries/wxencrypt/WxBizDataCrypt.php',
+        // CI3-style library classes that reference models without namespace
+        'App\Libraries\ChargeDao'     => APPPATH . 'Models/ChargeDao.php',
+        'App\Libraries\PayNotifyDao'   => APPPATH . 'Models/PayNotifyDao.php',
+        'App\Libraries\WxAppDao'       => APPPATH . 'Models/WxAppDao.php',
+        'App\Libraries\WxDao'          => APPPATH . 'Models/WxDao.php',
+        'App\Libraries\WxSessionDao'   => APPPATH . 'Models/WxSessionDao.php',
+        'App\Libraries\SnsUserDao'     => APPPATH . 'Models/SnsUserDao.php',
+        'App\Libraries\UserDao'        => APPPATH . 'Models/UserDao.php',
+        'App\Libraries\LiveDao'        => APPPATH . 'Models/LiveDao.php',
+        'App\Libraries\WxPay'          => APPPATH . 'Libraries/WxPay.php',
+        'App\Libraries\WxPayCallback'  => APPPATH . 'Libraries/WxPayCallback.php',
+        'App\Libraries\Alipay'         => APPPATH . 'Libraries/Alipay.php',
+        'App\Libraries\WxBizDataCrypt' => APPPATH . 'Libraries/wxencrypt/WxBizDataCrypt.php',
     ];
 
     /**

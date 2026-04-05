@@ -26,7 +26,7 @@ class StaffDao extends BaseDao
     private function getStaffs()
     {
         $sql = "SELECT userId FROM staffs";
-        return $this->db->query($sql)->result();
+        return $this->db->query($sql)->getResult();
     }
 
     function isStaff($userId)
@@ -44,3 +44,6 @@ class StaffDao extends BaseDao
         return $staffIds;
     }
 }
+
+// Namespace bridge: allow App\Libraries\StaffDao → App\Models\StaffDao
+class_alias('App\Models\StaffDao', 'App\Libraries\StaffDao');

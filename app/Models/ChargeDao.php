@@ -53,3 +53,6 @@ class ChargeDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\ChargeDao → App\Models\ChargeDao
+class_alias('App\Models\ChargeDao', 'App\Libraries\ChargeDao');

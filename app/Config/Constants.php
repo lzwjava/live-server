@@ -427,10 +427,13 @@ define('KEY_QRCODE_KEY', 'qrcodeKey');
 define('KEY_MEMBER_COUNT', 'memberCount');
 define('KEY_USED', 'used');
 define('KEY_QRCODE_URL', 'qrcodeUrl');
+if (getenv('CI_ENV') === 'development') {
     define('LC_APP_ID', LC_TEST_APP_ID);
     define('LC_APP_KEY', LC_TEST_APP_KEY);
+} else {
     define('LC_APP_ID', LC_PROD_APP_ID);
     define('LC_APP_KEY', LC_PROD_APP_KEY);
+}
 define('RTMP_URL_PREFIX', "rtmp://quzhiboapp.com/live/");
 define('ALIPAY_NOTIFY_URL', 'http://api.quzhiboapp.com/rewards/notify');
 define('WECHAT_APP_ID', 'wx7b5f277707699557');
@@ -458,12 +461,15 @@ define('KEY_TEXT', 'text');
 define('NOTIFY_TYPE_SMS', 'sms');
 define('NOTIFY_TYPE_WECHAT', 'wechat');
 define('ORIGIN_VIDEO_DIR', '/root/srs/trunk/objs/nginx/html/live/');
+if (getenv('CI_ENV') === 'development') {
     define('NGINX_VIDEO_DIR', '/home/www/test_videos/');
-    define('NGINX_VIDEO_DIR', '/home/www/videos/');
     define('VIDEO_WORKING_DIR', '/Users/lzw/square-root/videos/');
-    define('VIDEO_WORKING_DIR', '/home/videos/');
     define('REPLAY_WORKING_DIR', '/Users/lzw/square-root/replay_videos/');
+} else {
+    define('NGINX_VIDEO_DIR', '/home/www/videos/');
+    define('VIDEO_WORKING_DIR', '/home/videos/');
     define('REPLAY_WORKING_DIR', '/home/replay_videos/');
+}
 define('CHEER_HOST_PASSWORD', 'Quzhiboapp2046');
 define('VIDEO_HOST_PASSWORD', 'Quzhiboapp1314');
 define('FFMPEG_PATH', '/home/srs/trunk/objs/ffmpeg/bin/ffmpeg');
@@ -486,8 +492,11 @@ define('TRANSCODE_QUEUE', 100);
 define('VIDEO_HOST_URL', 'http://video-qncdn.quzhiboapp.com/');
 define('VIDEO_ALI_HOST_URL', 'https://video-cdn.quzhiboapp.com/');
 define('TMP_WECHAT_ACCESS_TOKEN',
+    'b9UqRuTXsG7vWnBOYLlA2ZVwKvQSyTYHElIScdNHKzpDMjHIc5lnOh8-Lgxd99524HTwCoKiZqyGZ5b0Mk57C6CmeMHAwHvnXhFMVzSu-xYAUAdAEADXD');
 define('TMP_WECHAT_JSAPI_TICKET',
+    'kgt8ON7yVITDhtdwci0qec2RIVDMtWfd2c6nCNNWHicobPlBpFb150TPqeHA5ga_SAhnOCe8SfNPnUts-qhK_Q');
 define('TMP_WXAPP_ACCESS_TOKEN',
+    '0K6zPlK1CkkEYCJPhyxCS0iPmQe4M2N2DX5ZG59fDJmE6_n3LLNhiQGq3m_LRInMy6ydENRIDKGVFs2B9YUx5HlbXshjlKIjSHjM3bBhHZ_bcx8bo7mL6dUIbulHO79KWPGiADAGZQ');
 define('WECHAT_API_BASE', 'https://api.weixin.qq.com/');
 define('WECHAT_API_CGIBIN', WECHAT_API_BASE . 'cgi-bin/');
 define('KEY_TO_USER_NAME', 'ToUserName');
@@ -505,8 +514,25 @@ define('EVENT_UNSUBSCRIBE', 'unsubscribe');
 define('EVENT_VIEW', 'VIEW');
 define('EVENT_SCAN', 'SCAN');
 define('WECHAT_WELCOME_WORD', <<<EOD
+欢迎关注趣直播，趣直播是知识直播平台，邀请了大咖来分享知识或经历。
+
+彩蛋: 在公众号聊天框 回复您感兴趣的直播主题或者大咖的名字  有惊喜哦! 快来试试吧!
+
+<a href="http://m.quzhiboapp.com/?liveId=0">最新直播</a>
+
+%s
+EOD
+);
+
 define('WECHAT_LIVE_WORD', <<<EOD
+欢迎参与直播，请点击进入报名：<a href="http://m.quzhiboapp.com/?liveId=%s&type=live">%s</a>
+EOD
+);
+
 define('WECHAT_PACKET_WORD', <<<EOD
+您有一个%s的红包 <a href="http://m.quzhiboapp.com/?packetId=%s&type=packet">点击我进入领取</a>
+EOD
+);
 define('ROW_MAX', 10000 * 10000);
 define('KEY_THIRD_SESSION', 'thirdSession');
 define('KEY_RAW_DATA', 'rawData');

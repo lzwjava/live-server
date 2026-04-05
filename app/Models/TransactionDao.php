@@ -101,3 +101,6 @@ class TransactionDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\TransactionDao → App\Models\TransactionDao
+class_alias('App\Models\TransactionDao', 'App\Libraries\TransactionDao');

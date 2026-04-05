@@ -49,6 +49,9 @@ define('COMPOSER_PATH', realpath(__DIR__ . '/../vendor/autoload.php'));
 require FCPATH . '../app/Config/Paths.php';
 $paths = new Paths();
 
+// CI3 get_instance() compatibility — must be before Boot
+require $paths->appDirectory . '/Config/CI3Compat.php';
+
 require $paths->systemDirectory . '/Boot.php';
 
 exit(Boot::bootWeb($paths));

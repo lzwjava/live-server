@@ -28,7 +28,7 @@ class CouponDao extends BaseDao
     {
         $sql = "SELECT count(*) AS cnt FROM coupons WHERE phone=? AND liveId=?";
         $binds = array(KEY_PHONE => sha1($phone), KEY_LIVE_ID => $liveId);
-        $result = $this->db->query($sql, $binds)->row();
+        $result = $this->db->query($sql, $binds)->getRow();
         return $result->cnt > 0;
     }
 
@@ -45,3 +45,5 @@ class CouponDao extends BaseDao
     }
 
 }
+// Namespace bridge: allow App\Libraries\CouponDao → App\Models\CouponDao
+class_alias('App\Models\CouponDao', 'App\Libraries\CouponDao');

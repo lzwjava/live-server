@@ -50,7 +50,7 @@ class RecordedVideoDao extends BaseDao
                 LEFT JOIN lives AS l ON l.liveId=v.liveId
                 WHERE v.liveId=? AND v.beginTs > ? ORDER BY v.beginTs";
         $binds = array($liveId, $planTsNum);
-        return $this->db->query($sql, $binds)->result();
+        return $this->db->query($sql, $binds)->getResult();
     }
 
     function updateVideoToTranscoded($filename, $newFileName)
@@ -63,3 +63,6 @@ class RecordedVideoDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\RecordedVideoDao → App\Models\RecordedVideoDao
+class_alias('App\Models\RecordedVideoDao', 'App\Libraries\RecordedVideoDao');

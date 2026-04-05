@@ -78,7 +78,7 @@ class AttendanceDao extends BaseDao
         $fields = $this->attendancePublicFields();
         $sql = "select $fields from attendances where userId=? and liveId=?";
         $binds = array($userId, $liveId);
-        return $this->db->query($sql, $binds)->row();
+        return $this->db->query($sql, $binds)->getRow();
     }
 
     function getAttendanceById($attendanceId)
@@ -86,7 +86,7 @@ class AttendanceDao extends BaseDao
         $fields = $this->attendancePublicFields();
         $sql = "select $fields from attendances where attendanceId=?";
         $binds = array($attendanceId);
-        return $this->db->query($sql, $binds)->row();
+        return $this->db->query($sql, $binds)->getRow();
     }
 
     private function updateRow($attendanceId, $data): bool
@@ -118,7 +118,7 @@ class AttendanceDao extends BaseDao
                 order by inviteIncome desc, inviteCount desc
                 limit $limit offset $skip";
         $binds = array($liveId);
-        $inviteUsers = $this->db->query($sql, $binds)->result();
+        $inviteUsers = $this->db->query($sql, $binds)->getResult();
         $this->userDao->fixUsersAvatars($inviteUsers);
         return $inviteUsers;
     }
@@ -135,7 +135,7 @@ class AttendanceDao extends BaseDao
                 where a.$field=?
                 limit $limit offset $skip";
         $binds = array($value);
-        $attendances = $this->db->query($sql, $binds)->result();
+        $attendances = $this->db->query($sql, $binds)->getResult();
         $this->handleAttendances($attendances);
         return $attendances;
     }
@@ -191,3 +191,6 @@ class AttendanceDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\AttendanceDao → App\Models\AttendanceDao
+class_alias('App\Models\AttendanceDao', 'App\Libraries\AttendanceDao');

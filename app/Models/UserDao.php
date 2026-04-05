@@ -151,7 +151,7 @@ class UserDao extends BaseDao
     function findUsersByUsername($username)
     {
         $sql = "SELECT * FROM users WHERE username LIKE '%{$username}%'";
-        $result = $this->db->query($sql)->result();
+        $result = $this->db->query($sql)->getResult();
         return $result;
     }
 
@@ -243,7 +243,7 @@ class UserDao extends BaseDao
     function findWxlogoUsers()
     {
         $sql = "SELECT * FROM users WHERE avatarUrl LIKE 'http://wx.qlogo.cn%'";
-        return $this->db->query($sql)->result();
+        return $this->db->query($sql)->getResult();
     }
 
     function updateWeChatSubscribe($userId, $subscribe)
@@ -344,7 +344,7 @@ class UserDao extends BaseDao
         $userFields = $this->userPublicFields('u');
         $sql = "SELECT $userFields FROM users as u WHERE userId IN (" .
             implode(',', $userIds) . ")";
-        return $this->db->query($sql)->result();
+        return $this->db->query($sql)->getResult();
     }
 
     function findAllLiveSubscribeUsers()
@@ -363,3 +363,6 @@ class UserDao extends BaseDao
     }
 
 }
+
+// Namespace bridge: allow App\Libraries\UserDao → App\Models\UserDao
+class_alias('App\Models\UserDao', 'App\Libraries\UserDao');

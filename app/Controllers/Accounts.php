@@ -15,8 +15,6 @@ class Accounts extends BaseController
 {
     protected $accountDao;
 
-    public 
-
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
