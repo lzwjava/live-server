@@ -8,6 +8,8 @@ services:
     volumes:
       - ../live-mobile-web:/app
       - frontend-dist:/app/static
+    environment:
+      - VITE_BASE_URL=/static/
     command: sh -c "npm ci --prefer-offline && npm run build"
     networks: []
 
@@ -16,7 +18,7 @@ services:
     build: .
     image: live-server
     ports:
-      - "8081:80"
+      - "8082:80"
     environment:
       - CI_ENV=production
       - DB_HOST=database
