@@ -17,8 +17,8 @@ class AccountDao extends BaseDao
     private function addAccount($userId)
     {
         $data = array(KEY_USER_ID => $userId);
-        $this->db->insert(TABLE_ACCOUNTS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_ACCOUNTS)->insert($data);
+        return $this->db->insertID();
     }
 
     private function fields()

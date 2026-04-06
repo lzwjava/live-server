@@ -17,8 +17,8 @@ class TopicDao extends BaseDao
     function addTopic($name)
     {
         $data = array(KEY_NAME => $name);
-        $this->db->insert(TABLE_TOPICS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_TOPICS)->insert($data);
+        return $this->db->insertID();
     }
 
     function getTopics()

@@ -45,16 +45,14 @@ class JobDao extends BaseDao
             KEY_TRIGGER_TS => $triggerTs,
             KEY_STATUS => JOB_STATUS_WAIT
         );
-        $this->db->insert(TABLE_JOBS, $data);
-        $jobId = $this->db->insert_id();
+        $this->db->table(TABLE_JOBS)->insert($data);
+        $jobId = $this->db->insertID();
         return $jobId;
     }
 
     private function updateJob($jobId, $data)
     {
-        $this->db->where(KEY_JOB_ID, $jobId);
-        $this->db->update(TABLE_JOBS, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_JOBS)->where(KEY_JOB_ID, $jobId)->update($data) !== false;
     }
 
     function updateJobStatus($jobId, $status)
@@ -74,13 +72,10 @@ class JobDao extends BaseDao
 
     private function cancelOneNotifyJob($params)
     {
-        $this->db->where(KEY_PARAMS, json_encode($params));
-        $this->db->where(KEY_NAME, JOB_NAME_NOTIFY_LIVE_START);
         $data = array(
             KEY_STATUS => JOB_STATUS_CANCEL
         );
-        $this->db->update(TABLE_JOBS, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_JOBS)->where(KEY_PARAMS, json_encode($params))->where(KEY_NAME, JOB_NAME_NOTIFY_LIVE_START)->update($data) !== false;
     }
 
     function cancelNotifyJobs($live)

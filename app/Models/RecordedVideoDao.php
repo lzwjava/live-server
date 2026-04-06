@@ -33,8 +33,8 @@ class RecordedVideoDao extends BaseDao
             KEY_FILE_NAME => $fileName,
             KEY_BEGIN_TS => $beginTs
         );
-        $this->db->insert(TABLE_RECORDED_VIDEOS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_RECORDED_VIDEOS)->insert($data);
+        return $this->db->insertID();
     }
 
     function getVideosByLiveId($liveId)

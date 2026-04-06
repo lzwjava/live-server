@@ -44,8 +44,8 @@ class AttendanceDao extends BaseDao
         if ($fromUserId) {
             $data[KEY_FROM_USER_ID] = $fromUserId;
         }
-        $this->db->insert(TABLE_ATTENDANCES, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_ATTENDANCES)->insert($data);
+        return $this->db->insertID();
     }
 
     function addAttendanceAndIncreaseCount($userId, $liveId, $orderNo, $fromUserId)
@@ -91,8 +91,7 @@ class AttendanceDao extends BaseDao
 
     private function updateRow($attendanceId, $data): bool
     {
-        $this->db->where(KEY_ATTENDANCE_ID, $attendanceId);
-        return $this->db->update(TABLE_ATTENDANCES, $data);
+        return $this->db->table(TABLE_ATTENDANCES)->where(KEY_ATTENDANCE_ID, $attendanceId)->update($data) !== false;
     }
 
     function getAttendancesByUserId($userId, $skip, $limit)
@@ -160,10 +159,7 @@ class AttendanceDao extends BaseDao
 
     private function updateAttendance($userId, $liveId, $data)
     {
-        $this->db->where(KEY_USER_ID, $userId);
-        $this->db->where(KEY_LIVE_ID, $liveId);;
-        $this->db->update(TABLE_ATTENDANCES, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_ATTENDANCES)->where(KEY_USER_ID, $userId)->where(KEY_LIVE_ID, $liveId)->update($data) !== false;
     }
 
     function updateToPreNotified($userId, $liveId)

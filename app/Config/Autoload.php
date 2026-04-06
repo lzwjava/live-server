@@ -142,5 +142,5 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $helpers = ['base'];
+    public $helpers = ['base', 'text'];
 }

@@ -28,16 +28,14 @@ class ChargeDao extends BaseDao
             KEY_META_DATA => json_encode($metaData),
             KEY_PREPAY_ID => $prepayId
         );
-        $this->db->insert(TABLE_CHARGES, $data);
-        $insertId = $this->db->insert_id();
+        $this->db->table(TABLE_CHARGES)->insert($data);
+        $insertId = $this->db->insertID();
         return $insertId;
     }
 
     function updateChargeToPaid($orderNo)
     {
-        $this->db->where(KEY_ORDER_NO, $orderNo);
-        $this->db->update(TABLE_CHARGES, array(KEY_PAID => 1));
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_CHARGES)->where(KEY_ORDER_NO, $orderNo)->update(array(KEY_PAID => 1)) !== false;
     }
 
     function getOneByOrderNo($orderNo)
@@ -47,9 +45,7 @@ class ChargeDao extends BaseDao
 
     function updateRemark($orderNo, $remark)
     {
-        $this->db->where(KEY_ORDER_NO, $orderNo);
-        $this->db->update(TABLE_CHARGES, array(KEY_REMARK => $remark));
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_CHARGES)->where(KEY_ORDER_NO, $orderNo)->update(array(KEY_REMARK => $remark)) !== false;
     }
 
 }

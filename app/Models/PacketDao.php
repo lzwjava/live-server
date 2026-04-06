@@ -26,8 +26,8 @@ class PacketDao extends BaseDao
             KEY_REMAIN_COUNT => $totalCount,
             KEY_BALANCE => $totalAmount
         );
-        $this->db->insert(TABLE_PACKETS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_PACKETS)->insert($data);
+        return $this->db->insertID();
     }
 
     function getPacketById($packetId)

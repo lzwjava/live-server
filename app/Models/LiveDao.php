@@ -65,8 +65,8 @@ class LiveDao extends BaseDao
             KEY_MAX_PEOPLE => LIVE_INIT_MAX_PEOPLE,
             KEY_CONVERSATION_ID => $conversationId
         );
-        $this->db->insert(TABLE_LIVES, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_LIVES)->insert($data);
+        return $this->db->insertID();
     }
 
     function getLive($id, $user = null)
@@ -366,9 +366,7 @@ class LiveDao extends BaseDao
 
     function updateRow($id, $data): bool
     {
-        $this->db->where(KEY_LIVE_ID, $id);
-        $this->db->update(TABLE_LIVES, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_LIVES)->where(KEY_LIVE_ID, $id)->update($data) !== false;
     }
 
     function updateTopic($liveId, $topicId)
@@ -379,10 +377,7 @@ class LiveDao extends BaseDao
 
     function removeTopic($liveId)
     {
-        $this->db->set(KEY_TOPIC_ID, 'NULL', false);
-        $this->db->where(KEY_LIVE_ID, $liveId);
-        $this->db->update(TABLE_LIVES);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_LIVES)->set(KEY_TOPIC_ID, 'NULL', false)->where(KEY_LIVE_ID, $liveId)->update() !== false;
     }
 
     function setLiveTranscode($id)

@@ -23,19 +23,17 @@ class LiveViewDao extends BaseDao
             KEY_PLATFORM => $platform,
             KEY_LIVE_STATUS => $liveStatus
         );
-        $this->db->insert(TABLE_LIVE_VIEWS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_LIVE_VIEWS)->insert($data);
+        return $this->db->insertID();
     }
 
     function endLiveView($liveViewId)
     {
-        $this->db->where(KEY_LIVE_VIEW_ID, $liveViewId);
         $data = array(
             KEY_ENDED => 1,
             KEY_END_TS => date('Y-m-d H:i:s')
         );
-        $this->db->update(TABLE_LIVE_VIEWS, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_LIVE_VIEWS)->where(KEY_LIVE_VIEW_ID, $liveViewId)->update($data) !== false;
     }
 
 }

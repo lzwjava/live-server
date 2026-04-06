@@ -20,8 +20,8 @@ class CouponDao extends BaseDao
             KEY_LIVE_ID => $liveId,
             KEY_PHONE => $phone
         );
-        $this->db->insert(TABLE_COUPONS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_COUPONS)->insert($data);
+        return $this->db->insertID();
     }
 
     function haveCoupon($phone, $liveId)

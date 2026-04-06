@@ -75,8 +75,8 @@ class BaseDao extends Model
     protected function attendanceFields(): array
     {
         return [
-            'attendance_id', 'user_id', 'live_id', 'from_user_id', 'first_notified',
-            'pre_notified', 'notified', 'wechat_notified', 'video_notified', 'order_no',
+            'attendanceId', 'userId', 'liveId', 'fromUserId', 'firstNotified',
+            'preNotified', 'notified', 'wechatNotified', 'videoNotified', 'orderNo',
             'created', 'updated'
         ];
     }
@@ -89,10 +89,10 @@ class BaseDao extends Model
     protected function liveFields(): array
     {
         return [
-            'live_id', 'subject', 'rtmp_key', 'attendance_count', 'need_pay',
-            'cover_url', 'courseware_key', 'live_qrcode_key', 'preview_url', 'amount',
-            'max_people', 'conversation_id', 'status', 'plan_ts', 'begin_ts', 'end_ts',
-            'owner_id', 'speaker_intro', 'detail', 'notice', 'share_icon', 'created', 'updated'
+            'liveId', 'subject', 'rtmpKey', 'attendanceCount', 'needPay',
+            'coverUrl', 'coursewareKey', 'liveQrcodeKey', 'previewUrl', 'amount',
+            'maxPeople', 'conversationId', 'status', 'planTs', 'beginTs', 'endTs',
+            'ownerId', 'speakerIntro', 'detail', 'notice', 'shareIcon', 'created', 'updated'
         ];
     }
 
@@ -103,7 +103,7 @@ class BaseDao extends Model
 
     protected function userPublicRawFields(): array
     {
-        return ['user_id', 'avatar_url', 'username'];
+        return ['userId', 'avatarUrl', 'username'];
     }
 
     protected function userPublicFields(string $prefix = 'users.', bool $alias = false): string

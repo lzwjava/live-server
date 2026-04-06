@@ -19,8 +19,8 @@ class StaffDao extends BaseDao
         $data = array(
             KEY_USER_ID => $userId
         );
-        $this->db->insert(TABLE_STAFFS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_STAFFS)->insert($data);
+        return $this->db->insertID();
     }
 
     private function getStaffs()

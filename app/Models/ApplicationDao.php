@@ -24,15 +24,13 @@ class ApplicationDao extends BaseDao
             KEY_INTRODUCTION => $introduction,
             KEY_STATUS => APPLICATION_STATUS_REVIEWING
         );
-        $this->db->insert(TABLE_APPLICATIONS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_APPLICATIONS)->insert($data);
+        return $this->db->insertID();
     }
 
     function updateData($applicationId, $data)
     {
-        $this->db->where(KEY_APPLICATION_ID, $applicationId);
-        $this->db->update(TABLE_APPLICATIONS, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_APPLICATIONS)->where(KEY_APPLICATION_ID, $applicationId)->update($data) !== false;
     }
 
     function getApplication($applicationId)

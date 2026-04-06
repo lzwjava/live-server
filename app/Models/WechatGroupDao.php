@@ -21,8 +21,8 @@ class WechatGroupDao extends BaseDao
             KEY_QRCODE_KEY => $qrcodeKey,
             KEY_TOPIC_ID => $topicId
         );
-        $this->db->insert(TABLE_WECHAT_GROUPS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_WECHAT_GROUPS)->insert($data);
+        return $this->db->insertID();
     }
 
     function currentGroup($topicId)
@@ -48,9 +48,7 @@ class WechatGroupDao extends BaseDao
 
     private function updateRow($groupUserName, $data): bool
     {
-        $this->db->where(KEY_GROUP_USER_NAME, $groupUserName);
-        $this->db->update(TABLE_WECHAT_GROUPS, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_WECHAT_GROUPS)->where(KEY_GROUP_USER_NAME, $groupUserName)->update($data) !== false;
     }
 
     function setUsed($groupUsername)

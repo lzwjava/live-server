@@ -22,8 +22,8 @@ class VideoDao extends BaseDao
             KEY_FILE_NAME => $fileName,
             KEY_TYPE => $type
         );
-        $this->db->insert(TABLE_VIDEOS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_VIDEOS)->insert($data);
+        return $this->db->insertID();
     }
 
     function addVideoByLive($live)
@@ -63,9 +63,7 @@ class VideoDao extends BaseDao
 
     function mp4Ready($liveId)
     {
-        $this->db->where(KEY_LIVE_ID, $liveId);
-        $this->db->update(TABLE_VIDEOS, array(KEY_TYPE => VIDEO_TYPE_MP4));
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_VIDEOS)->where(KEY_LIVE_ID, $liveId)->update(array(KEY_TYPE => VIDEO_TYPE_MP4)) !== false;
     }
 
 }

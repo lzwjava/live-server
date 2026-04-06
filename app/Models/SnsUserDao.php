@@ -25,8 +25,8 @@ class SnsUserDao extends BaseDao
             KEY_UNION_ID => $unionId,
             KEY_USER_ID => $userId
         );
-        $this->db->insert(TABLE_SNS_USERS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_SNS_USERS)->insert($data);
+        return $this->db->insertID();
     }
 
     function getSnsUser($openId, $platform)

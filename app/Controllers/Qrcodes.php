@@ -59,7 +59,7 @@ class Qrcodes extends BaseController
 
     public function isQrcodeScanned()
     {
-        return $this->response->setJSON([KEY_IS_SCANNED => false]);
+        return $this->responseJSON([KEY_IS_SCANNED => false]);
     }
 
     public function png()
@@ -73,7 +73,7 @@ class Qrcodes extends BaseController
 
     public function scanQrcode()
     {
-        return $this->response->setJSON(["scanned" => false]);
+        return $this->responseJSON(["scanned" => false]);
     }
 
 }

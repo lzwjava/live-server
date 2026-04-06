@@ -20,8 +20,8 @@ class SubscribeDao extends BaseDao
             KEY_USER_ID => $userId,
             KEY_TOPIC_ID => $topicId
         );
-        $this->db->insert(TABLE_SUBSCRIBES, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_SUBSCRIBES)->insert($data);
+        return $this->db->insertID();
     }
 
     function unsubscribeTopic($userId, $topicId)

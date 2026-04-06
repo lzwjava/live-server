@@ -21,8 +21,8 @@ class WithdrawDao extends BaseDao
             KEY_AMOUNT => $amount,
             KEY_STATUS => WITHDRAW_STATUS_WAIT
         );
-        $this->db->insert(TABLE_WITHDRAWS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_WITHDRAWS)->insert($data);
+        return $this->db->insertID();
     }
 
     function finishWithdraw($withdrawId)
@@ -35,9 +35,7 @@ class WithdrawDao extends BaseDao
         $data = array(
             KEY_STATUS => $status
         );
-        $this->db->where(KEY_WITHDRAW_ID, $withdrawId);
-        $this->db->update(TABLE_WITHDRAWS, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_WITHDRAWS)->where(KEY_WITHDRAW_ID, $withdrawId)->update($data) !== false;
     }
 
     function rejectWithdraw($withdrawId)

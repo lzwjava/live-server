@@ -99,6 +99,8 @@ abstract class BaseController extends Controller
         // CI3 compat: controllers call succeed()/failure() without return.
         // Echo the body so CI4 output buffering captures it.
         echo $response->getBody();
+        // Clear body on the response so CI4's gatherOutput doesn't duplicate it.
+        $response->setBody('');
 
         return $response;
     }
@@ -111,6 +113,7 @@ abstract class BaseController extends Controller
             ->setJSON($obj);
 
         echo $response->getBody();
+        $response->setBody('');
 
         return $response;
     }

@@ -33,7 +33,7 @@ class UserDao extends BaseDao
     {
         $sql = "SELECT * FROM users WHERE $field =?";
         $array[] = $value;
-        return $this->db->query($sql, $array)->num_rows() > 0;
+        return $this->db->query($sql, $array)->getNumRows() > 0;
     }
 
     function isUsernameUsed($username)
@@ -58,8 +58,8 @@ class UserDao extends BaseDao
         if ($mobilePhoneNumber) {
             $data[KEY_MOBILE_PHONE_NUMBER] = $mobilePhoneNumber;
         }
-        $this->db->insert(TABLE_USERS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_USERS)->insert($data);
+        return $this->db->insertID();
     }
 
     private function genId()
@@ -77,7 +77,7 @@ class UserDao extends BaseDao
         $sql = "SELECT * FROM users WHERE mobilePhoneNumber=? AND password=?";
         $array[] = $mobilePhoneNumber;
         $array[] = sha1($password);
-        return $this->db->query($sql, $array)->num_rows() == 1;
+        return $this->db->query($sql, $array)->getNumRows() == 1;
     }
 
     private function findUser($field, $value, $cleanFields = true)
@@ -203,9 +203,7 @@ class UserDao extends BaseDao
 
     function updateUser($userId, $data)
     {
-        $this->db->where(KEY_USER_ID, $userId);
-        $this->db->update(TABLE_USERS, $data);
-        return $this->db->affected_rows() > 0;
+        return $this->db->table(TABLE_USERS)->where(KEY_USER_ID, $userId)->update($data) !== false;
     }
 
     function updateUserAndGet($user, $data)

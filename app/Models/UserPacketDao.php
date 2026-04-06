@@ -21,8 +21,8 @@ class UserPacketDao extends BaseDao
             KEY_PACKET_ID => $packetId,
             KEY_AMOUNT => $amount
         );
-        $this->db->insert(TABLE_USER_PACKETS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_USER_PACKETS)->insert($data);
+        return $this->db->insertID();
     }
 
     function getUserPacket($userId, $packetId)

@@ -33,8 +33,8 @@ class TransactionDao extends BaseDao
             KEY_RELATED_ID => $relatedId,
             KEY_REMARK => $remark
         );
-        $this->db->insert(TABLE_TRANSACTIONS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_TRANSACTIONS)->insert($data);
+        return $this->db->insertID();
     }
 
     // must in transaction

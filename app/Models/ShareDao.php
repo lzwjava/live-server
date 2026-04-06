@@ -22,7 +22,7 @@ class ShareDao extends BaseDao
             KEY_SHARE_TS => $shareTs,
             KEY_CHANNEL => $channel
         );
-        return $this->db->insert(TABLE_SHARES, $data);
+        return $this->db->table(TABLE_SHARES)->insert($data);
     }
 
     function getShare($userId, $liveId)

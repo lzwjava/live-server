@@ -21,8 +21,8 @@ class RewardDao extends BaseDao
             KEY_LIVE_ID => $liveId,
             KEY_ORDER_NO => $orderNo
         );
-        $this->db->insert(TABLE_REWARDS, $data);
-        return $this->db->insert_id();
+        $this->db->table(TABLE_REWARDS)->insert($data);
+        return $this->db->insertID();
     }
 
     private function publicFields()
