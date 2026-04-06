@@ -464,6 +464,10 @@ class Lives extends BaseController
         $userId = $this->request->getGet(KEY_USER_ID);
         $curUser = $this->getSessionUser();
         if (!$userId) {
+            if (!$curUser) {
+                $this->failure(ERROR_NOT_IN_SESSION);
+                return;
+            }
             $userId = $curUser->userId;
         }
         $lvs = $this->liveDao->getAttendedLivesOfUser($userId, $curUser);

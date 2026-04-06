@@ -91,18 +91,28 @@ abstract class BaseController extends Controller
             $arr['total'] = $total;
         }
 
-        return $this->response
+        $response = $this->response
             ->setStatusCode(self::HTTP_OK)
             ->setContentType('application/json')
             ->setJSON($arr);
+
+        // CI3 compat: controllers call succeed()/failure() without return.
+        // Echo the body so CI4 output buffering captures it.
+        echo $response->getBody();
+
+        return $response;
     }
 
     protected function responseJSON($obj)
     {
-        return $this->response
+        $response = $this->response
             ->setStatusCode(200)
             ->setContentType('application/json')
             ->setJSON($obj);
+
+        echo $response->getBody();
+
+        return $response;
     }
 
     protected function succeed($resultData = null, $total = null)
