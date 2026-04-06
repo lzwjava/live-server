@@ -25,13 +25,13 @@ class WeChatClient
     private function parseResponse($respStr)
     {
         if ($respStr === false) {
-            return ['error' => 'curl error', 'data' => null];
+            return ['curl error', null];
         }
         $respData = json_decode($respStr);
         if (isset($respData->errcode) && $respData->errcode != 0) {
-            return ['error' => $respData->errmsg, 'data' => $respData->errcode];
+            return [$respData->errmsg, $respData->errcode];
         }
-        return ['error' => null, 'data' => $respData];
+        return [null, $respData];
     }
 
     public function httpPost($baseUrl, $data = [])

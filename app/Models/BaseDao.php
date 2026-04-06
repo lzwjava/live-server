@@ -115,7 +115,7 @@ class BaseDao extends Model
     {
         return new PredisClient([
             'scheme' => 'tcp',
-            'host' => getenv('redis.host') ?: '127.0.0.1',
+            'host' => getenv('REDIS_HOST') ?: getenv('redis.host') ?: '127.0.0.1',
             'port' => 6379,
             'password' => getenv('redis.password') ?: null,
             'database' => $database,

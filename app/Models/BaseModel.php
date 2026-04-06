@@ -80,7 +80,7 @@ class BaseModel extends Model
      */
     protected function extractFields($object, $fields)
     {
-        $newObj = new \StdClass();
+        $newObj = new \stdClass();
         foreach ($fields as $field) {
             $newObj->$field = $object->$field;
             unset($object->$field);
@@ -189,9 +189,9 @@ class BaseModel extends Model
     {
         return new \Predis\Client([
             'scheme' => 'tcp',
-            'host' => '127.0.0.1',
+            'host' => getenv('REDIS_HOST') ?: 'redis',
             'port' => 6379,
-            'password' => 'my_redis',
+            'password' => getenv('redis.password') ?: null,
             'database' => $database
         ], [
             'prefix' => $prefix

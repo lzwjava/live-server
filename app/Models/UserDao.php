@@ -269,7 +269,7 @@ class UserDao extends BaseDao
 
     function count()
     {
-        return $this->db->count_all(TABLE_USERS);
+        return $this->db->table(TABLE_USERS)->countAllResults();
     }
 
     function createUserByOpenId($openId, $platform)

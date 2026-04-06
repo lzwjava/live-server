@@ -41,10 +41,10 @@ class Qrcodes extends BaseController
             ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
             ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
             ->setWriterByName('png');
+        http_response_code(200);
         header('Content-Type: ' . $qrCode->getContentType());
-        $this->output->set_status_header(200)
-            ->set_content_type($qrCode->getContentType(), 'utf-8')
-            ->set_output($qrCode->writeString());
+        echo $qrCode->writeString();
+        exit;
       
     }
 
@@ -55,6 +55,25 @@ class Qrcodes extends BaseController
         }
         $text = $this->request->getGet(KEY_TEXT);
         $this->renderQrcode($text);
+    }
+
+    public function isQrcodeScanned()
+    {
+        return $this->response->setJSON([KEY_IS_SCANNED => false]);
+    }
+
+    public function png()
+    {
+        if ($this->checkIfParamsNotExist($this->request->getGet(), array(KEY_TEXT))) {
+            return;
+        }
+        $text = $this->request->getGet(KEY_TEXT);
+        $this->renderQrcode($text);
+    }
+
+    public function scanQrcode()
+    {
+        return $this->response->setJSON(["scanned" => false]);
     }
 
 }

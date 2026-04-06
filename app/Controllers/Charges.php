@@ -164,9 +164,9 @@ class Charges extends BaseController
         }
         if (isDebug()) {
             logInfo("in debug, real data: " . json_encode($data));
-            $debugData = new StdClass;
+            $debugData = new \stdClass;
             $debugData->status = 0;
-            $debugData->receipt = new StdClass;
+            $debugData->receipt = new \stdClass;
             $debugData->receipt->quantity = 1;
             return $debugData;
         }

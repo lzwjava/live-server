@@ -30,7 +30,7 @@ class QiniuDao extends BaseDao
     {
         $upToken = $this->getUpToken();
         $bucketUrl = QINIU_FILE_HOST;
-        $result = new StdClass;
+        $result = new \stdClass;
         $result->key = getToken(6);
         $result->uptoken = $upToken;
         $result->bucketUrl = $bucketUrl;
