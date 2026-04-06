@@ -8,8 +8,6 @@ services:
     volumes:
       - ../live-mobile-web:/app
       - frontend-dist:/app/static
-    environment:
-      - NODE_ENV=production
     command: sh -c "npm ci --prefer-offline && npm run build"
     networks: []
 
